@@ -1,8 +1,9 @@
 import 'dart:io' as io;
+
 import 'package:cricket_app/models/get_player_list.dart';
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DBHelper {
   static Database? _db;
@@ -35,7 +36,6 @@ class DBHelper {
   }
 
   Future<void> insertAll(List<getPlayerList> playerList) async {
-    print('INSERTION CALLING===>>>>');
     try {
       var dbClient = await db;
 
@@ -101,7 +101,7 @@ class DBHelper {
 
   Future<int> delete(int id) async {
     var dbClient = await db;
-    return await dbClient!.delete('Cricket', where: 'id=?', whereArgs: [id]);
+    return await dbClient.delete('Cricket', where: 'id=?', whereArgs: [id]);
   }
 
   Future<void> deleteAll() async {
