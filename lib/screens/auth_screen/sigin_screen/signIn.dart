@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class SiginScreen extends StatelessWidget {
-  const SiginScreen({super.key});
+class SigninScreen extends StatelessWidget {
+  const SigninScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,6 @@ class SiginScreen extends StatelessWidget {
           return Scaffold(
             backgroundColor: Color(0XFFFBFBFB),
             appBar: AppBar(),
-            // ignore: prefer_const_constructors
             body: Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
               child: SingleChildScrollView(

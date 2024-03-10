@@ -337,7 +337,7 @@ class _HomeState extends State<Home> {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => SiginScreen()));
+                                        builder: (context) => SigninScreen()));
                                 Global().removeUserId();
                                 Global().deleteIds();
                                 Global().logoutUser();
