@@ -1,3 +1,4 @@
+import 'package:cricket_app/constent/app_color.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -12,7 +13,7 @@ class CustomButton extends StatelessWidget {
     required this.buttonText,
     this.onTap,
     this.widthFactor = 0.9,
-    this.backgroundColor = Colors.blue, // Default background color
+    this.backgroundColor = AppColor.blueColor, // Default background color
     this.textStyle = const TextStyle(
       // Default text style
       color: Colors.white,

@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cricket_app/constent/app_color.dart';
 import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constent/global.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
@@ -214,14 +217,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     CustomButton(
                         backgroundColor: AppColor.blueColor,
-                        onTap: () {
+                        onTap: () async {
                           if (formKey.currentState!.validate()) {
                             user.name = nameController.text;
                             user.email = emailController.text;
                             user.phoneNumber = phoneController.text;
                             user.password = passwordController.text;
 
-                            context.read<AuthCubit>().signup(user);
+                            // set user info
+                            await Global().setAllUserInfo(
+                              "${user.name}",
+                              "${user.email}",
+                              "${user.phoneNumber}",
+                              "${user.password}",
+                            );
+
+                            BlocProvider.of<AuthCubit>(context).signup();
                           }
                         },
                         buttonText: 'Create Account'),

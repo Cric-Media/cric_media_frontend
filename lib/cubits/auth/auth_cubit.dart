@@ -1,7 +1,5 @@
-import 'package:cricket_app/constent/global.dart';
 import 'package:cricket_app/controllers/auth/auth_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
-import 'package:cricket_app/models/user.dart';
 import 'package:cricket_app/utils/network.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,21 +10,13 @@ class AuthCubit extends Cubit<AuthState> {
 
   final auth = AuthController();
 
-  void signup(User user) async {
+  void signup() async {
     emit(AuthLoading());
     try {
       var network = await Network.check();
       if (network) {
-        // set user info
-        await Global().setAllUserInfo(
-          "${user.name}",
-          "${user.email}",
-          "${user.phoneNumber}",
-          "${user.password}",
-        );
-
         // try signup
-        var response = await auth.signup(user.email.toString());
+        var response = await auth.signup();
         emit(AuthSignup(response));
       } else {
         emit(AuthError('No internet connection'));

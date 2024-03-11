@@ -3,8 +3,9 @@ import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 
 class AuthController {
-  Future<ApiResponse> signup(String email) async {
+  Future<ApiResponse> signup() async {
     final url = "";
+    final email = await Global().getEmail();
     final body = {"email": email};
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.postRequest(body, url, headers: headers);
