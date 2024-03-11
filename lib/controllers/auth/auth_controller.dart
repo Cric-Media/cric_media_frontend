@@ -1,10 +1,11 @@
+import 'package:cricket_app/constent/app_url.dart';
 import 'package:cricket_app/constent/global.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 
 class AuthController {
   Future<ApiResponse> signup() async {
-    final url = "";
+    final url = AuthUrl.signup;
     final email = await Global().getEmail();
     final body = {"email": email};
     final headers = {"Content-Type": "application/json"};
@@ -13,7 +14,7 @@ class AuthController {
   }
 
   Future<ApiResponse> verifyEmail(otp) async {
-    final url = "";
+    final url = AuthUrl.verifyEmail;
     // Get all user info
     String? name = await Global().getName();
     String? email = await Global().getEmail();
@@ -34,7 +35,7 @@ class AuthController {
   }
 
   Future<ApiResponse> signin(String email, String password) async {
-    final url = '';
+    final url = AuthUrl.signin;
     final body = {"email": email, "password": password};
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.postRequest(body, url, headers: headers);
