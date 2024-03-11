@@ -76,7 +76,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         ),
                         CustomTextField(
                           isPassword: false,
-                          hintText: 'example@example.com',
+                          hintText: 'abc@example.com',
                           iconImagePath: AppIcons.email,
                           controller: value.emailController,
                           validator: (value) {

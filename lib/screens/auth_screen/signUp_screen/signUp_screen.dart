@@ -25,6 +25,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool isLoading = false;
 
+  var formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -38,6 +40,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Stack(
             children: [
               Form(
+                key: formKey,
+                // autovalidateMode: AutovalidateMode.onUserInteraction,
+                canPop: true,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     CustomTextField(
                       isPassword: false,
-                      hintText: 'user321@gmail.com',
+                      hintText: 'abc@example.com',
                       iconImagePath: AppIcons.email,
                       controller: emailController,
                       validator: (value) {
@@ -198,7 +203,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         if (confirmPassword == null ||
                             confirmPassword.isEmpty) {
                           return 'Please confirm your password';
-                        } else if (confirmPassword != passwordController) {
+                        } else if (confirmPassword != passwordController.text) {
                           return 'Passwords do not match';
                         }
                         return null;
@@ -210,12 +215,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     CustomButton(
                         backgroundColor: AppColor.blueColor,
                         onTap: () {
-                          user.name = nameController.text;
-                          user.email = emailController.text;
-                          user.phoneNumber = phoneController.text;
-                          user.password = passwordController.text;
+                          if (formKey.currentState!.validate()) {
+                            user.name = nameController.text;
+                            user.email = emailController.text;
+                            user.phoneNumber = phoneController.text;
+                            user.password = passwordController.text;
 
-                          context.read<AuthCubit>().signup(user);
+                            context.read<AuthCubit>().signup(user);
+                          }
                         },
                         buttonText: 'Create Account'),
                     SizedBox(height: screenHeight * 0.045),

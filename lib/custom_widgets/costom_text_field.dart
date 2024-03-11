@@ -27,50 +27,44 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Color(0XFFFBFBFB),
-            borderRadius: BorderRadius.circular(7),
-          ),
-          width: screenWidth * 0.95,
-          child: Container(
-            color: AppColor.textfieldColor.withOpacity(0.5),
-            height: 50,
-            child: TextFormField(
-              cursorHeight: 25,
-              cursorColor: AppColor.blueColor,
-              cursorWidth: 2,
-              controller: controller,
-              obscureText: isPassword,
-              validator: validator,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                prefixIcon: iconImagePath != null
-                    ? Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: ExtendedImage.asset(
-                          '${iconImagePath}',
-                          width: 24,
-                          height: 24,
-                        ),
-                      )
-                    : null,
-                hintText: hintText,
-                hintStyle: TextStyle(
-                  color: AppColor.hintColor.withOpacity(0.7),
-                  fontSize: screenWidth * 0.040,
-                ),
-                fillColor: AppColor.textfieldColor.withOpacity(0.5),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(7),
-                  borderSide: BorderSide(color: AppColor.grayColor, width: 0.2),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(7),
-                  borderSide: BorderSide(color: AppColor.grayColor, width: 0.2),
-                ),
-              ),
+        TextFormField(
+          cursorHeight: 25,
+          cursorColor: AppColor.blueColor,
+          cursorWidth: 2,
+          controller: controller,
+          obscureText: isPassword,
+          validator: validator,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            prefixIcon: iconImagePath != null
+                ? Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: ExtendedImage.asset(
+                      '${iconImagePath}',
+                      width: 24,
+                      height: 24,
+                    ),
+                  )
+                : null,
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: AppColor.hintColor.withOpacity(0.8),
+              fontSize: screenWidth * 0.040,
+            ),
+            fillColor: AppColor.textfieldColor,
+            filled: true,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(7),
+              borderSide: BorderSide(color: AppColor.blueColor, width: 0.5),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(7),
+              borderSide: BorderSide(color: AppColor.redColor, width: 0.5),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(7),
+              borderSide: BorderSide(color: AppColor.grayColor, width: 0.5),
             ),
           ),
         ),
