@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_brace_in_string_interps
-
 import 'package:cricket_app/constent/app_color.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
@@ -39,9 +37,9 @@ class CustomTextField extends StatelessWidget {
             disabledBorder: InputBorder.none,
             prefixIcon: iconImagePath != null
                 ? Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: ExtendedImage.asset(
-                      '${iconImagePath}',
+                      '$iconImagePath',
                       width: 24,
                       height: 24,
                     ),
@@ -56,15 +54,18 @@ class CustomTextField extends StatelessWidget {
             filled: true,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(7),
-              borderSide: BorderSide(color: AppColor.blueColor, width: 0.5),
+              borderSide:
+                  const BorderSide(color: AppColor.blueColor, width: 0.5),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(7),
-              borderSide: BorderSide(color: AppColor.redColor, width: 0.5),
+              borderSide:
+                  const BorderSide(color: AppColor.redColor, width: 0.5),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(7),
-              borderSide: BorderSide(color: AppColor.grayColor, width: 0.5),
+              borderSide:
+                  const BorderSide(color: AppColor.grayColor, width: 0.5),
             ),
           ),
         ),
