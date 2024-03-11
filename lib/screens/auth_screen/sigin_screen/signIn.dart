@@ -6,14 +6,18 @@ import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:cricket_app/providers/user_login_provider.dart';
 import 'package:cricket_app/screens/auth_screen/forget_password/forget_password.dart';
-import 'package:cricket_app/screens/auth_screen/signUp_screen/signUp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class SigninScreen extends StatelessWidget {
+class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
 
+  @override
+  State<SigninScreen> createState() => _SigninScreenState();
+}
+
+class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -36,9 +40,7 @@ class SigninScreen extends StatelessWidget {
                         Container(
                           width: screenWidth,
                           height: screenHeight * 0.20,
-                          child: Image.asset(
-                            'assets/icons/logo.jpeg',
-                          ),
+                          child: Image.asset('assets/icons/logo.jpeg'),
                         ),
                         Text('Welcome In Cricket World',
                             style: GoogleFonts.inter(
@@ -47,9 +49,7 @@ class SigninScreen extends StatelessWidget {
                               fontSize: screenWidth * 0.060,
                               color: AppColor.blueColor,
                             ))),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         Text(
                           'Sign in to continue',
                           style: GoogleFonts.inter(
@@ -59,9 +59,7 @@ class SigninScreen extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           )),
                         ),
-                        SizedBox(
-                          height: screenHeight * 0.050,
-                        ),
+                        SizedBox(height: screenHeight * 0.050),
                         Align(
                           alignment: Alignment.topLeft,
                           child: Text(
@@ -78,7 +76,7 @@ class SigninScreen extends StatelessWidget {
                         ),
                         CustomTextField(
                           isPassword: false,
-                          hintText: 'user321@gmail.com',
+                          hintText: 'example@example.com',
                           iconImagePath: AppIcons.email,
                           controller: value.emailController,
                           validator: (value) {
@@ -108,7 +106,7 @@ class SigninScreen extends StatelessWidget {
                         ),
                         CustomTextField(
                           isPassword: true,
-                          hintText: '00000000',
+                          hintText: '**********',
                           iconImagePath: AppIcons.password,
                           controller: value.passwordController,
                           validator: (value) {
@@ -173,10 +171,7 @@ class SigninScreen extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SignUpScreen()));
+                                Navigator.pushNamed(context, '/signup');
                               },
                               child: Text(
                                 ' create a new account',

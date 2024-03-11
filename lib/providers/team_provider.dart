@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cricket_app/apis_servies/api_servies.dart';
-import 'package:cricket_app/constent/Global.dart';
+import 'package:cricket_app/constent/global.dart';
 import 'package:cricket_app/models/add_new_team_model.dart';
 import 'package:cricket_app/models/get_all_team_model.dart';
 import 'package:flutter/foundation.dart';

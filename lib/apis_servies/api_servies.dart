@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:cricket_app/constent/Global.dart';
+import 'package:cricket_app/constent/global.dart';
 import 'package:cricket_app/models/add_new_player_model.dart';
 import 'package:cricket_app/models/add_new_team_model.dart';
 import 'package:cricket_app/models/get_all_team_model.dart';

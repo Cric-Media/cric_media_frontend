@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, unused_import, avoid_unnecessary_containers, unnecessary_string_interpolations, use_key_in_widget_constructors, sized_box_for_whitespace
 
-import 'package:cricket_app/constent/Global.dart';
 import 'package:cricket_app/constent/app_color.dart';
 import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constent/global.dart';
 import 'package:cricket_app/screens/auth_screen/sigin_screen/signIn.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/home_tab.dart';

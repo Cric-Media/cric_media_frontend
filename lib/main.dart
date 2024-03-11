@@ -1,11 +1,12 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:cricket_app/constent/app_color.dart';
 import 'package:cricket_app/providers/add_new_player_provider.dart';
 import 'package:cricket_app/providers/registration_provider.dart';
 import 'package:cricket_app/providers/team_provider.dart';
 import 'package:cricket_app/providers/user_login_provider.dart';
+import 'package:cricket_app/routes.dart';
 import 'package:cricket_app/screens/splash_screen.dart/splash_provider.dart';
-import 'package:cricket_app/screens/splash_screen.dart/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
@@ -31,12 +32,12 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Cric Media',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: AppColor.blueColor),
           useMaterial3: true,
         ),
-        home: const SplashScreen(),
-        // onGenerateRoute: Routes.onGenerateRoute,
-        // initialRoute: '/',
+        // home: const SplashScreen(),
+        onGenerateRoute: Routes.onGenerateRoute,
+        initialRoute: '/',
       ),
     );
   }

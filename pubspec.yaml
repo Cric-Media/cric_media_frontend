@@ -52,6 +52,7 @@ dependencies:
   sqflite: ^2.0.0+3
   path: ^1.8.0
   flutter_bloc: ^8.1.4
+  connectivity_plus: ^5.0.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

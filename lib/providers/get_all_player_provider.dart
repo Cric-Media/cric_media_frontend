@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cricket_app/apis_servies/database.dart'; // Make sure this is correctly imported
-import 'package:cricket_app/constent/Global.dart';
+import 'package:cricket_app/constent/global.dart';
 import 'package:cricket_app/models/get_player_list.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;

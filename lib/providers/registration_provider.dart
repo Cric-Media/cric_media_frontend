@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:cricket_app/constent/Global.dart';
+import 'package:cricket_app/constent/global.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // Ensure you have GetX added to your pubspec.yaml
