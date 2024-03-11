@@ -1,5 +1,3 @@
-// ignore_for_file: unused_local_variable
-
 import 'package:cricket_app/constent/app_color.dart';
 import 'package:cricket_app/providers/add_new_player_provider.dart';
 import 'package:cricket_app/providers/registration_provider.dart';
