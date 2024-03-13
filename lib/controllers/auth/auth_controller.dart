@@ -8,7 +8,7 @@ import 'package:cricket_app/utils/api_manager.dart';
 
 class AuthController {
   Future<ApiResponse> sendOtpForSignup() async {
-    final url = AuthUrl.signup;
+    final url = AuthUrl.sendOtpForSignup;
     final email = await Global().getEmail();
     final body = {"email": email};
     final headers = {"Content-Type": "application/json"};
@@ -18,7 +18,7 @@ class AuthController {
   }
 
   Future<ApiResponse> verifyEmailAndSignup(otp) async {
-    final url = AuthUrl.verifyEmail;
+    final url = AuthUrl.verifyEmailAndSignup;
     // Get all user info
     String? name = await Global().getName();
     String? email = await Global().getEmail();

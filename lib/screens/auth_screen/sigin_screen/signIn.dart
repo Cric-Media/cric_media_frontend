@@ -7,6 +7,7 @@ import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:cricket_app/screens/auth_screen/forget_password/forget_password.dart';
+import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -221,6 +222,7 @@ class _SigninScreenState extends State<SigninScreen> {
                   }
                   if (state is AuthError) {
                     isLoading = false;
+                    showSnack(context, message: state.message);
                   }
                 },
               )
