@@ -232,7 +232,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               "${user.password}",
                             );
 
-                            BlocProvider.of<AuthCubit>(context).signup();
+                            BlocProvider.of<AuthCubit>(context)
+                                .sendOtpForSignup();
                           }
                         },
                         buttonText: 'Create Account'),
@@ -289,7 +290,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   if (state is AuthLoading) {
                     isLoading = true;
                   }
-                  if (state is AuthSignup) {
+                  if (state is AuthSendOtpForSignup) {
                     isLoading = false;
                     Navigator.pushNamed(context, '/verify-email');
                   }

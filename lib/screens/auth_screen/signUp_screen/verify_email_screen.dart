@@ -130,7 +130,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                             onPressed: () {
                               // resent opt and start timer
                               setState(() {
-                                BlocProvider.of<AuthCubit>(context).signup();
+                                BlocProvider.of<AuthCubit>(context)
+                                    .sendOtpForSignup();
                                 otpTiming = 60;
                                 startTimer();
                               });
@@ -153,7 +154,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                     CustomButton(
                       buttonText: 'Verify',
                       onTap: () {
-                        BlocProvider.of<AuthCubit>(context).verifyEmail(
+                        BlocProvider.of<AuthCubit>(context)
+                            .verifyEmailAndSignup(
                           otpController.text,
                         );
                       },
@@ -184,7 +186,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 if (state is AuthLoading) {
                   isLoading = true;
                 }
-                if (state is AuthVerifyEmail) {
+                if (state is AuthVerifyOtpAndSignup) {
                   isLoading = false;
                   Navigator.pushNamed(context, '/signin');
                 }

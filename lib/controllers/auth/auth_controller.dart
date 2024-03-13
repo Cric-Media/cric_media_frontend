@@ -7,7 +7,7 @@ import 'package:cricket_app/models/user.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 
 class AuthController {
-  Future<ApiResponse> signup() async {
+  Future<ApiResponse> sendOtpForSignup() async {
     final url = AuthUrl.signup;
     final email = await Global().getEmail();
     final body = {"email": email};
@@ -17,7 +17,7 @@ class AuthController {
     return ApiManager.returnModel(response);
   }
 
-  Future<ApiResponse> verifyEmail(otp) async {
+  Future<ApiResponse> verifyEmailAndSignup(otp) async {
     final url = AuthUrl.verifyEmail;
     // Get all user info
     String? name = await Global().getName();
@@ -55,7 +55,6 @@ class AuthController {
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
     var resBody = jsonDecode(response.body);
-    print(resBody);
     return ApiResponse.fromJson(
         resBody, (p0) => User.fromJson(resBody['data']));
   }

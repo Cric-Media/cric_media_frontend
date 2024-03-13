@@ -14,13 +14,13 @@ class AuthCubit extends Cubit<AuthState> {
 
   User get user => _user;
 
-  void signup() async {
+  void sendOtpForSignup() async {
     emit(AuthLoading());
     try {
       var network = await Network.check();
       if (network) {
-        var response = await auth.signup();
-        emit(AuthSignup(response));
+        var response = await auth.sendOtpForSignup();
+        emit(AuthSendOtpForSignup(response));
       } else {
         emit(AuthError('No internet connection'));
       }
@@ -29,13 +29,13 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void verifyEmail(otp) async {
+  void verifyEmailAndSignup(otp) async {
     emit(AuthLoading());
     try {
       var network = await Network.check();
       if (network) {
-        var response = await auth.verifyEmail(otp);
-        emit(AuthVerifyEmail(response));
+        var response = await auth.verifyEmailAndSignup(otp);
+        emit(AuthVerifyOtpAndSignup(response));
       } else {
         emit(AuthError('No internet connection'));
       }

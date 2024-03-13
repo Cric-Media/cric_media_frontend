@@ -6,14 +6,14 @@ class AuthInitial extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
-class AuthSignup extends AuthState {
+class AuthSendOtpForSignup extends AuthState {
   final ApiResponse response;
-  AuthSignup(this.response);
+  AuthSendOtpForSignup(this.response);
 }
 
-class AuthVerifyEmail extends AuthState {
+class AuthVerifyOtpAndSignup extends AuthState {
   final ApiResponse response;
-  AuthVerifyEmail(this.response);
+  AuthVerifyOtpAndSignup(this.response);
 }
 
 class AuthSignin extends AuthState {
