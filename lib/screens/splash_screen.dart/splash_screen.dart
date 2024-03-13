@@ -1,15 +1,9 @@
-// ignore_for_file: prefer_const_constructors, unused_import, unnecessary_null_comparison, use_build_context_synchronously
-
-import 'dart:async';
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/constants/global.dart';
-import 'package:cricket_app/screens/auth_screen/sigin_screen/signIn.dart';
-import 'package:cricket_app/screens/dashbord_screen/dashboard_screen.dart';
-// ignore: depend_on_referenced_packages
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -29,18 +23,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigateBasedOnUserId() async {
     final userId = await Global().getUserId();
+    final token = await Global().getToken();
 
-    print(' user id  ====.>>>>>${userId}');
-    if (userId != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => DashBoardScreen()),
-      );
+    if (userId != null && token != null) {
+      Navigator.of(context).pushNamed('/dashboard');
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => SigninScreen()),
-      );
+      Navigator.of(context).pushNamed('/signin');
     }
   }
 
@@ -53,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Container(
       width: screenWidth,
       height: screenHeight,
-      decoration: BoxDecoration(),
+      decoration: const BoxDecoration(),
       child: ExtendedImage.asset(
         'assets/image/splash_screen.webp',
         fit: BoxFit.cover,
