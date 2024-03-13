@@ -1,12 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names
 
 import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/menu.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/news.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/series.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/video.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({Key? key}) : super(key: key);
@@ -26,6 +28,13 @@ class _MainPageState extends State<DashBoardScreen> {
   ];
 
   int value = 0;
+
+  @override
+  void initState() {
+    BlocProvider.of<AuthCubit>(context).getUser();
+    super.initState();
+  }
+
   getVlaue(int x) {
     value = x;
     setState(() {});

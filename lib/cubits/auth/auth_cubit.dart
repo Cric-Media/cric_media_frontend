@@ -10,7 +10,7 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   final auth = AuthController();
-  final User _user = User();
+  User _user = User();
 
   User get user => _user;
 
@@ -62,7 +62,14 @@ class AuthCubit extends Cubit<AuthState> {
   void getUser() async {
     emit(AuthLoading());
     try {
-      var response = await auth.getUser();
+      var network = await Network.check();
+      if (network) {
+        var response = await auth.getUser();
+        _user = response.data as User;
+        emit(AuthGetUser(response.data));
+      } else {
+        emit(AuthError('No internet connection'));
+      }
     } catch (err) {
       emit(AuthError(err.toString()));
     }

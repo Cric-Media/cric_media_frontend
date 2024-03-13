@@ -49,5 +49,14 @@ class AuthController {
         resBody, (p0) => User.fromJson(resBody['data']));
   }
 
-  Future<void> getUser() async {}
+  Future<ApiResponse> getUser() async {
+    final userId = await Global().getUserId();
+    final url = "${AuthUrl.getUser}/$userId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    print(resBody);
+    return ApiResponse.fromJson(
+        resBody, (p0) => User.fromJson(resBody['data']));
+  }
 }
