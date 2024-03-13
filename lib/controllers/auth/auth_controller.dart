@@ -43,10 +43,13 @@ class AuthController {
     final body = {"email": email, "password": password};
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.postRequest(body, url, headers: headers);
-    print(response.body);
     var resBody = jsonDecode(response.body);
-    return ApiResponse.fromJson(
-        resBody, (p0) => User.fromJson(resBody['data']));
+    if (resBody['success']) {
+      return ApiResponse.fromJson(
+          resBody, (p0) => User.fromJson(resBody['data']));
+    } else {
+      throw Exception(resBody['message']);
+    }
   }
 
   Future<ApiResponse> getUser() async {
@@ -55,7 +58,11 @@ class AuthController {
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
     var resBody = jsonDecode(response.body);
-    return ApiResponse.fromJson(
-        resBody, (p0) => User.fromJson(resBody['data']));
+    if (resBody['success']) {
+      return ApiResponse.fromJson(
+          resBody, (p0) => User.fromJson(resBody['data']));
+    } else {
+      throw Exception(resBody['message']);
+    }
   }
 }

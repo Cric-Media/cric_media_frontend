@@ -360,11 +360,7 @@ class _HomeState extends State<Home> {
                                 InkWell(
                                   onTap: () {
                                     indexes(5);
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SigninScreen()));
+                                    Navigator.pushNamed(context, '/signin');
                                     Global().removeUserId();
                                     Global().deleteIds();
                                     Global().logoutUser();
