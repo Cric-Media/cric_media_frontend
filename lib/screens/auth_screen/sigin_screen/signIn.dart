@@ -1,7 +1,7 @@
 // ignore_for_file: unused_local_variable, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_const_constructors
 
-import 'package:cricket_app/constent/app_color.dart';
-import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:cricket_app/providers/user_login_provider.dart';

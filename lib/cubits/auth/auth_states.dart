@@ -21,6 +21,11 @@ class AuthSignin extends AuthState {
   AuthSignin(this.response);
 }
 
+class AuthGetUser extends AuthState {
+  final User user;
+  AuthGetUser(this.user);
+}
+
 class AuthError extends AuthState {
   final String message;
 

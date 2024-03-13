@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cricket_app/constent/app_color.dart';
+import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

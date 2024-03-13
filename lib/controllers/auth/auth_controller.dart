@@ -1,5 +1,5 @@
-import 'package:cricket_app/constent/app_url.dart';
-import 'package:cricket_app/constent/global.dart';
+import 'package:cricket_app/constants/app_url.dart';
+import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 
@@ -10,6 +10,7 @@ class AuthController {
     final body = {"email": email};
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.postRequest(body, url, headers: headers);
+    print(response.body);
     return ApiManager.returnModel(response);
   }
 
@@ -41,4 +42,6 @@ class AuthController {
     final response = await ApiManager.postRequest(body, url, headers: headers);
     return ApiManager.returnModel(response);
   }
+
+  Future<void> getUser() async {}
 }

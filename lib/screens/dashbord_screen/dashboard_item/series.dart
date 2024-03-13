@@ -1,4 +1,4 @@
-import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/up_coming_series_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/match_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/player_item.dart';

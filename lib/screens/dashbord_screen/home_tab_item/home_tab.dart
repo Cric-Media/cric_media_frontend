@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:cricket_app/constent/app_color.dart';
-import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/custom_widgets/custom_contanor_trading_news.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
 import 'package:cricket_app/custom_widgets/onging_series.dart';

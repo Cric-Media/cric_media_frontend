@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names
 
-import 'package:cricket_app/constent/app_color.dart';
+import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/menu.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/news.dart';

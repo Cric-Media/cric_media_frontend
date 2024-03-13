@@ -1,5 +1,6 @@
 import 'package:cricket_app/controllers/auth/auth_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
+import 'package:cricket_app/models/user.dart';
 import 'package:cricket_app/utils/network.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,13 +10,15 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   final auth = AuthController();
+  final User _user = User();
+
+  User get user => _user;
 
   void signup() async {
     emit(AuthLoading());
     try {
       var network = await Network.check();
       if (network) {
-        // try signup
         var response = await auth.signup();
         emit(AuthSignup(response));
       } else {
@@ -55,4 +58,15 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthError(err.toString()));
     }
   }
+
+  void getUser() async {
+    emit(AuthLoading());
+    try {
+      var response = await auth.getUser();
+    } catch (err) {
+      emit(AuthError(err.toString()));
+    }
+  }
+
+  // Reset password
 }

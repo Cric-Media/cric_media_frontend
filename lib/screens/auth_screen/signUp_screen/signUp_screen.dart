@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cricket_app/constent/app_color.dart';
-import 'package:cricket_app/constent/app_images.dart';
-import 'package:cricket_app/constent/global.dart';
+import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
@@ -290,7 +290,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     isLoading = true;
                   }
                   if (state is AuthSignup) {
+                    isLoading = false;
                     Navigator.pushNamed(context, '/signin');
+                  }
+                  if (state is AuthError) {
+                    isLoading = false;
                   }
                 },
               )

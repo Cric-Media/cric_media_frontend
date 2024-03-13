@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, prefer_final_fields
 import 'dart:io';
 
-import 'package:cricket_app/constent/app_color.dart';
-import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

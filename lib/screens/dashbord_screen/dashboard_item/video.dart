@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
-import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/custom_widgets/video_card.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/video_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/match_item.dart';

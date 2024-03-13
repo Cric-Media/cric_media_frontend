@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class Routes {
   static Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case '/':
+      case '/verify-email':
         return MaterialPageRoute(
           builder: (context) => BlocProvider<AuthCubit>(
             create: (context) => AuthCubit(),
@@ -16,7 +16,7 @@ class Routes {
           ),
         );
 
-      case '/login':
+      case '/signin':
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => AuthCubit(),
@@ -24,7 +24,7 @@ class Routes {
           ),
         );
 
-      case '/signup':
+      case '/':
         return MaterialPageRoute(
           builder: (context) => BlocProvider<AuthCubit>(
             create: (context) => AuthCubit(),

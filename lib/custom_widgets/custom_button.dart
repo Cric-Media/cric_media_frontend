@@ -1,4 +1,4 @@
-import 'package:cricket_app/constent/app_color.dart';
+import 'package:cricket_app/constants/app_color.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
