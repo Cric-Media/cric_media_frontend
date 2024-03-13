@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/api_response.dart';
+import 'package:cricket_app/models/user.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 
 class AuthController {
@@ -10,7 +13,7 @@ class AuthController {
     final body = {"email": email};
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.postRequest(body, url, headers: headers);
-    print(response.body);
+
     return ApiManager.returnModel(response);
   }
 
@@ -23,11 +26,11 @@ class AuthController {
     String? password = await Global().getPassword();
 
     final body = {
-      "otp": otp,
-      "name": "$name",
-      "email": "$email",
-      "phone": "$phone",
-      "password": "$password"
+      "email": email,
+      "code": otp,
+      "password": password,
+      "phone": phone,
+      "fullname": name,
     };
 
     final headers = {"Content-Type": "application/json"};
@@ -40,7 +43,10 @@ class AuthController {
     final body = {"email": email, "password": password};
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.postRequest(body, url, headers: headers);
-    return ApiManager.returnModel(response);
+    print(response.body);
+    var resBody = jsonDecode(response.body);
+    return ApiResponse.fromJson(
+        resBody, (p0) => User.fromJson(resBody['data']));
   }
 
   Future<void> getUser() async {}

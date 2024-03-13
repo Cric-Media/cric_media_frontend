@@ -16,6 +16,16 @@ class Global {
     prefs.remove('user_id');
   }
 
+  Future<void> saveToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', token);
+  }
+
+  Future<String?> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+
   void deleteIds() async {
     final id = await getUserId();
 

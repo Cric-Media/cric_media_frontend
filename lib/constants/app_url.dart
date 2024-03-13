@@ -7,6 +7,6 @@ abstract class AppUrl {
 
 abstract class AuthUrl {
   static final signup = "${AppUrl.baseUrl}/signup";
-  static final verifyEmail = "${AppUrl.baseUrl}/verify-email";
-  static final signin = "${AppUrl.baseUrl}/signin";
+  static final verifyEmail = "${AppUrl.baseUrl}/emailVrifyOtp";
+  static final signin = "${AppUrl.baseUrl}/Login";
 }

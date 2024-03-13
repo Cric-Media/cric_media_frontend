@@ -291,7 +291,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   }
                   if (state is AuthSignup) {
                     isLoading = false;
-                    Navigator.pushNamed(context, '/signin');
+                    Navigator.pushNamed(context, '/verify-email');
                   }
                   if (state is AuthError) {
                     isLoading = false;

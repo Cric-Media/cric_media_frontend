@@ -54,7 +54,10 @@ class ApiManager {
   static Future<ApiResponse> returnModel(var response, {var model}) async {
     final body = jsonDecode(response.body);
     if (body['success'] == true) {
-      return ApiResponse.fromJson(body, (data) => model);
+      if (model != null) {
+        return ApiResponse.fromJson(body, (p0) => model.fromJson(body['data']));
+      }
+      return ApiResponse.fromJson(body, (data) => null);
     } else {
       throw Exception(body['message']);
     }
