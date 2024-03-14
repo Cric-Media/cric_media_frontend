@@ -70,6 +70,16 @@ class AuthController {
     return ApiManager.returnModel(response);
   }
 
+  Future<ApiResponse> changePassword(password) async {
+    final url = AuthUrl.changePassword;
+    final email = await Global().getEmail();
+    final body = {"email": email, "password": password};
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.postRequest(body, url, headers: headers);
+    print(response.body);
+    return ApiManager.returnModel(response);
+  }
+
   Future<ApiResponse> getUser() async {
     final userId = await Global().getUserId();
     final url = "${AuthUrl.getUser}/$userId";

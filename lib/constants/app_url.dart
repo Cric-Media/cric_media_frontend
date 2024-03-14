@@ -1,6 +1,8 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 abstract class AppUrl {
-  static String developmentUrl = "http://213.199.42.191:3001";
-  static String productionUrl = "http://213.199.42.191:3001";
+  static String developmentUrl = dotenv.env['DEVELOPMENT_URL']!;
+  static String productionUrl = dotenv.env['PRODUCTION_URL']!;
 
   static String baseUrl = developmentUrl;
 }

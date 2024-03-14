@@ -89,13 +89,13 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void changePassword() async {
+  void changePassword(password) async {
     emit(AuthLoading());
     try {
       var network = await Network.check();
       if (network) {
-        // var response = await auth.verifyEmailForPassword(otp);
-        // emit(AuthVerifyOtpForPassword(response));
+        var response = await auth.changePassword(password);
+        emit(AuthSuccess(response));
       } else {
         emit(AuthError('No internet connection'));
       }

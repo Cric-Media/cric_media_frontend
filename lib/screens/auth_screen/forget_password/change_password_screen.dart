@@ -78,6 +78,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       CustomTextField(
                         hintText: "**********",
                         controller: passwordController,
+                        isPassword: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your email';
@@ -125,7 +126,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               CustomButton(
                 buttonText: "Continue",
                 onTap: () {
-                  BlocProvider.of<AuthCubit>(context).changePassword();
+                  BlocProvider.of<AuthCubit>(context)
+                      .changePassword(passwordController.text);
                 },
               ),
               SizedBox(height: screenHeight * 0.2),
