@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
@@ -33,22 +33,22 @@ class _SigninScreenState extends State<SigninScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color(0XFFFBFBFB),
+      backgroundColor: const Color(0XFFFBFBFB),
       appBar: AppBar(),
       body: Form(
         key: formKey,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 30),
           child: SingleChildScrollView(
             child: Stack(
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: screenWidth,
                       height: screenHeight * 0.20,
-                      child: Image.asset('assets/icons/logo.jpeg'),
+                      child: Image.asset(AppIcons.logo),
                     ),
                     Text('Welcome In Cricket World',
                         style: GoogleFonts.inter(
@@ -57,7 +57,7 @@ class _SigninScreenState extends State<SigninScreen> {
                           fontSize: screenWidth * 0.060,
                           color: AppColor.blueColor,
                         ))),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       'Sign in to continue',
                       style: GoogleFonts.inter(
@@ -79,7 +79,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                 color: AppColor.blackColor)),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     CustomTextField(
@@ -95,7 +95,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     Align(
@@ -109,7 +109,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                 color: AppColor.blackColor)),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     CustomTextField(
@@ -125,7 +125,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         return null;
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Align(

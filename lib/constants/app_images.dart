@@ -42,4 +42,5 @@ class AppIcons {
   static final String add = 'assets/image/add.png';
   static final String pak1 = 'assets/image/pak1.png';
   static final String profile9 = 'assets/image/profile9.png';
+  static final String logo = 'assets/image/logo.png';
 }

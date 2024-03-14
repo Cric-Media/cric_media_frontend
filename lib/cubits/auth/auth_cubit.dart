@@ -1,6 +1,7 @@
 import 'package:cricket_app/controllers/auth/auth_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/user.dart';
+import 'package:cricket_app/utils/app_exception.dart';
 import 'package:cricket_app/utils/network.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,7 +26,12 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthError('No internet connection'));
       }
     } catch (err) {
-      emit(AuthError(err.toString()));
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(AuthError('Something went wrong'));
+      } else {
+        emit(AuthError(err.toString()));
+      }
     }
   }
 
@@ -40,7 +46,11 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthError('No internet connection'));
       }
     } catch (err) {
-      emit(AuthError(err.toString()));
+      if (err is! AppException) {
+        emit(AuthError('Something went wrong'));
+      } else {
+        emit(AuthError(err.toString()));
+      }
     }
   }
 
@@ -55,7 +65,11 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthError('No internet connection'));
       }
     } catch (err) {
-      emit(AuthError(err.toString()));
+      if (err is! AppException) {
+        emit(AuthError('Something went wrong'));
+      } else {
+        emit(AuthError(err.toString()));
+      }
     }
   }
 
@@ -70,7 +84,11 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthError('No internet connection'));
       }
     } catch (err) {
-      emit(AuthError(err.toString()));
+      if (err is! AppException) {
+        emit(AuthError('Something went wrong'));
+      } else {
+        emit(AuthError(err.toString()));
+      }
     }
   }
 
@@ -85,7 +103,11 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthError('No internet connection'));
       }
     } catch (err) {
-      emit(AuthError(err.toString()));
+      if (err is! AppException) {
+        emit(AuthError('Something went wrong'));
+      } else {
+        emit(AuthError(err.toString()));
+      }
     }
   }
 
@@ -100,7 +122,11 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthError('No internet connection'));
       }
     } catch (err) {
-      emit(AuthError(err.toString()));
+      if (err is! AppException) {
+        emit(AuthError('Something went wrong'));
+      } else {
+        emit(AuthError(err.toString()));
+      }
     }
   }
 
@@ -116,7 +142,11 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthError('No internet connection'));
       }
     } catch (err) {
-      emit(AuthError(err.toString()));
+      if (err is! AppException) {
+        emit(AuthError('Something went wrong'));
+      } else {
+        emit(AuthError(err.toString()));
+      }
     }
   }
 }
