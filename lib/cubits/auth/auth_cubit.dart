@@ -20,7 +20,7 @@ class AuthCubit extends Cubit<AuthState> {
       var network = await Network.check();
       if (network) {
         var response = await auth.sendOtpForSignup();
-        emit(AuthSendOtpForSignup(response));
+        emit(AuthSuccess(response));
       } else {
         emit(AuthError('No internet connection'));
       }
@@ -35,7 +35,7 @@ class AuthCubit extends Cubit<AuthState> {
       var network = await Network.check();
       if (network) {
         var response = await auth.verifyEmailAndSignup(otp);
-        emit(AuthVerifyOtpAndSignup(response));
+        emit(AuthSuccess(response));
       } else {
         emit(AuthError('No internet connection'));
       }
@@ -65,7 +65,7 @@ class AuthCubit extends Cubit<AuthState> {
       var network = await Network.check();
       if (network) {
         var response = await auth.sendOtpForPasswordChange();
-        emit(AuthSendOtpForPasswordChange(response));
+        emit(AuthSuccess(response));
       } else {
         emit(AuthError('No internet connection'));
       }
@@ -80,7 +80,7 @@ class AuthCubit extends Cubit<AuthState> {
       var network = await Network.check();
       if (network) {
         var response = await auth.verifyEmailForPassword(otp);
-        emit(AuthVerifyOtpForPassword(response));
+        emit(AuthSuccess(response));
       } else {
         emit(AuthError('No internet connection'));
       }

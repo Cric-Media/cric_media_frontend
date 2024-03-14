@@ -3,6 +3,7 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/constants/global.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
@@ -291,9 +292,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   if (state is AuthLoading) {
                     isLoading = true;
                   }
-                  if (state is AuthSendOtpForSignup) {
+                  if (state is AuthSuccess) {
                     isLoading = false;
-                    Navigator.pushNamed(context, '/verify-email');
+                    Navigator.pushNamed(context, verifyEmail);
                   }
                   if (state is AuthError) {
                     isLoading = false;

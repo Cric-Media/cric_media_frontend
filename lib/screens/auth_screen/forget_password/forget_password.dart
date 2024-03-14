@@ -3,6 +3,7 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/constants/global.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
@@ -128,7 +129,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           )),
                         ),
                         InkWell(
-                          onTap: () => Navigator.pushNamed(context, '/signup'),
+                          onTap: () => Navigator.pushNamed(context, signup),
                           child: Text(
                             ' create a new account',
                             style: GoogleFonts.inter(
@@ -166,12 +167,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 if (state is AuthLoading) {
                   isLoading = true;
                 }
-                if (state is AuthSendOtpForPasswordChange) {
+                if (state is AuthSuccess) {
                   isLoading = false;
-                  Navigator.pushNamed(
-                    context,
-                    '/verify-email-for-password-screen',
-                  );
+                  Navigator.pushNamed(context, verifyEmailForPassword);
                 }
                 if (state is AuthError) {
                   isLoading = false;

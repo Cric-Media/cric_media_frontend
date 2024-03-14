@@ -2,6 +2,7 @@
 
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
@@ -151,9 +152,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               if (state is AuthLoading) {
                 isLoading = true;
               }
-              if (state is AuthChangePassword) {
+              if (state is AuthSuccess) {
                 isLoading = false;
-                Navigator.pushReplacementNamed(context, '/signin');
+                Navigator.pushReplacementNamed(context, signin);
               }
               if (state is AuthError) {
                 isLoading = false;

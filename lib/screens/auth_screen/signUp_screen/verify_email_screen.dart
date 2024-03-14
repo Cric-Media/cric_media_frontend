@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:cricket_app/utils/snackbars.dart';
@@ -188,9 +189,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                       if (state is AuthLoading) {
                         isLoading = true;
                       }
-                      if (state is AuthVerifyOtpAndSignup) {
+                      if (state is AuthSuccess) {
                         isLoading = false;
-                        Navigator.pushNamed(context, '/signin');
+                        Navigator.pushNamed(context, signin);
                       }
                       if (state is AuthError) {
                         isLoading = false;

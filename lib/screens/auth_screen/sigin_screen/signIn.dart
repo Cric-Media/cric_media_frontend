@@ -3,10 +3,10 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/constants/global.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
-import 'package:cricket_app/screens/auth_screen/forget_password/forget_password.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -131,12 +131,8 @@ class _SigninScreenState extends State<SigninScreen> {
                     Align(
                       alignment: Alignment.topRight,
                       child: InkWell(
-                        onTap: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ForgetPassword()))
-                        },
+                        onTap: () =>
+                            Navigator.pushNamed(context, forgetPassword),
                         child: Text(
                           'Forgot Password?',
                           style: GoogleFonts.inter(
@@ -181,7 +177,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.pushNamed(context, '/signup');
+                            Navigator.pushNamed(context, signup);
                           },
                           child: Text(
                             ' create a new account',
@@ -226,7 +222,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       await Global().saveUserId(userId);
                       await Global().saveToken(token);
 
-                      Navigator.pushReplacementNamed(context, '/dashboard');
+                      Navigator.pushReplacementNamed(context, dashboard);
                     }
                     if (state is AuthError) {
                       isLoading = false;
