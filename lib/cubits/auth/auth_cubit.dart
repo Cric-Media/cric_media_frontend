@@ -11,9 +11,9 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   final auth = AuthController();
-  User _user = User();
+  User? _user;
 
-  User get user => _user;
+  User? get user => _user;
 
   void sendOtpForSignup() async {
     emit(AuthLoading());

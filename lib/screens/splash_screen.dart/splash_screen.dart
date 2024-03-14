@@ -2,6 +2,7 @@
 
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/constants/global.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
@@ -26,9 +27,9 @@ class _SplashScreenState extends State<SplashScreen> {
     final token = await Global().getToken();
 
     if (userId != null && token != null) {
-      Navigator.of(context).pushNamed('/dashboard');
+      Navigator.of(context).pushNamed(dashboard);
     } else {
-      Navigator.of(context).pushNamed('/signin');
+      Navigator.of(context).pushNamed(dashboard);
     }
   }
 

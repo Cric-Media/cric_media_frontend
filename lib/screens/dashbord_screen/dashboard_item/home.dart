@@ -3,7 +3,9 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/constants/global.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
+import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:cricket_app/models/user.dart';
 import 'package:cricket_app/screens/auth_screen/sigin_screen/signIn.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_screen.dart';
@@ -29,7 +31,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int indix = 0;
-  User user = User();
+  User? user;
 
   @override
   void initState() {
@@ -107,300 +109,339 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                   drawer: Container(
-                    child: Drawer(
-                        backgroundColor: Colors.white,
-                        shadowColor: Colors.white,
-                        child: SingleChildScrollView(
-                          child: Column(children: [
-                            DrawerHeader(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image:
-                                      AssetImage('assets/image/drawericon.jpg'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              child: Align(
-                                alignment: Alignment
-                                    .bottomLeft, // Position text at the bottom left
-                                child: Container(
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .end, // Use minimum space needed by the children
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          user.name ?? "",
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        Text(
-                                          user.email ?? "",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Column(
+                    child: user == null
+                        ? Drawer(
+                            backgroundColor: Colors.white,
+                            shadowColor: Colors.white,
+                            child: Column(
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    indexes(0);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfileItem()));
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    width: screenWidth,
-                                    decoration: BoxDecoration(
-                                        color: indix == 0
-                                            ? Colors.grey.withOpacity(0.5)
-                                            : Colors.transparent),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                            child: ListTile(
-                                          leading: Image.asset(
-                                            AppIcons.profile3,
-                                            width: 25,
-                                          ),
-                                          title: Text(
-                                            'Profile',
-                                            style: GoogleFonts.inter(
-                                                textStyle: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ),
-                                        ))
-                                      ],
-                                    ),
+                                DrawerHeader(
+                                  child: Image.asset(
+                                    'assets/image/drawericon.jpg',
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    indexes(1);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                PlayerItem()));
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    width: screenWidth,
-                                    decoration: BoxDecoration(
-                                        color: indix == 1
-                                            ? Colors.grey.withOpacity(0.5)
-                                            : Colors.transparent),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                            child: ListTile(
-                                          leading: Image.asset(
-                                            AppIcons.player5,
-                                            width: 25,
-                                          ),
-                                          title: Text(
-                                            'Add player',
-                                            style: GoogleFonts.inter(
-                                                textStyle: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ),
-                                        ))
-                                      ],
-                                    ),
+                                Text(
+                                  "Want to become admin?",
+                                  style: TextStyle(
+                                    color: AppColor.blueColor,
+                                    fontSize: 18,
                                   ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    indexes(2);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => teamItem()));
+                                SizedBox(height: 20),
+                                OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, signin);
                                   },
-                                  child: Container(
-                                    height: 50,
-                                    width: screenWidth,
-                                    decoration: BoxDecoration(
-                                        color: indix == 2
-                                            ? Colors.grey.withOpacity(0.5)
-                                            : Colors.transparent),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                            child: ListTile(
-                                          leading: Image.asset(
-                                            AppIcons.team,
-                                            width: 25,
-                                          ),
-                                          title: Text(
-                                            'Add Team',
-                                            style: GoogleFonts.inter(
-                                                textStyle: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ),
-                                        ))
-                                      ],
-                                    ),
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: AppColor.blueColor,
+                                      width: 2,
+                                    ), // this sets the border
                                   ),
+                                  child: const Text('Sign in'),
                                 ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    indexes(3);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => MatchItem()));
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    width: screenWidth,
-                                    decoration: BoxDecoration(
-                                        color: indix == 3
-                                            ? Colors.grey.withOpacity(0.5)
-                                            : Colors.transparent),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                            child: ListTile(
-                                          leading: Image.asset(
-                                            AppIcons.startmatch,
-                                            width: 25,
-                                          ),
-                                          title: Text(
-                                            'Start Match',
-                                            style: GoogleFonts.inter(
-                                                textStyle: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ),
-                                        ))
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    indexes(4);
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                TornamentItem()));
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    width: screenWidth,
-                                    decoration: BoxDecoration(
-                                        color: indix == 4
-                                            ? Colors.grey.withOpacity(0.5)
-                                            : Colors.transparent),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                            child: ListTile(
-                                          leading: Image.asset(
-                                            AppIcons.tornament,
-                                            width: 25,
-                                          ),
-                                          title: Text(
-                                            'Add Tournaments',
-                                            style: GoogleFonts.inter(
-                                                textStyle: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ),
-                                        ))
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    indexes(5);
-                                    Navigator.pushNamed(context, '/signin');
-                                    Global().removeUserId();
-                                    Global().deleteIds();
-                                    Global().logoutUser();
-                                  },
-                                  child: Container(
-                                    height: 50,
-                                    width: screenWidth,
-                                    decoration: BoxDecoration(
-                                        color: indix == 5
-                                            ? Colors.grey.withOpacity(0.5)
-                                            : Colors.transparent),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                            child: ListTile(
-                                          leading: Image.asset(
-                                            AppIcons.logout,
-                                            width: 22,
-                                          ),
-                                          title: Text(
-                                            'Log out',
-                                            style: GoogleFonts.inter(
-                                                textStyle: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ),
-                                        ))
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
+                                Expanded(child: Container()),
                               ],
-                            )
-                          ]),
-                        )),
+                            ),
+                          )
+                        : Drawer(
+                            backgroundColor: Colors.white,
+                            shadowColor: Colors.white,
+                            child: SingleChildScrollView(
+                              child: Column(children: [
+                                DrawerHeader(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                        user!.imageUrl.toString(),
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment
+                                        .bottomLeft, // Position text at the bottom left
+                                    child: Container(
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .end, // Use minimum space needed by the children
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              user?.name ?? "",
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold,
+                                                color: AppColor.blueColor,
+                                              ),
+                                            ),
+                                            Text(
+                                              user?.email ?? "",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        indexes(0);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProfileItem()));
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: screenWidth,
+                                        decoration: BoxDecoration(
+                                            color: indix == 0
+                                                ? Colors.grey.withOpacity(0.5)
+                                                : Colors.transparent),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: ListTile(
+                                              leading: Image.asset(
+                                                AppIcons.profile3,
+                                                width: 25,
+                                              ),
+                                              title: Text(
+                                                'Profile',
+                                                style: GoogleFonts.inter(
+                                                    textStyle: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ),
+                                            ))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        indexes(1);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PlayerItem()));
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: screenWidth,
+                                        decoration: BoxDecoration(
+                                            color: indix == 1
+                                                ? Colors.grey.withOpacity(0.5)
+                                                : Colors.transparent),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: ListTile(
+                                              leading: Image.asset(
+                                                AppIcons.player5,
+                                                width: 25,
+                                              ),
+                                              title: Text(
+                                                'Add player',
+                                                style: GoogleFonts.inter(
+                                                    textStyle: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ),
+                                            ))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        indexes(2);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    teamItem()));
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: screenWidth,
+                                        decoration: BoxDecoration(
+                                            color: indix == 2
+                                                ? Colors.grey.withOpacity(0.5)
+                                                : Colors.transparent),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: ListTile(
+                                              leading: Image.asset(
+                                                AppIcons.team,
+                                                width: 25,
+                                              ),
+                                              title: Text(
+                                                'Add Team',
+                                                style: GoogleFonts.inter(
+                                                    textStyle: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ),
+                                            ))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        indexes(3);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MatchItem()));
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: screenWidth,
+                                        decoration: BoxDecoration(
+                                            color: indix == 3
+                                                ? Colors.grey.withOpacity(0.5)
+                                                : Colors.transparent),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: ListTile(
+                                              leading: Image.asset(
+                                                AppIcons.startmatch,
+                                                width: 25,
+                                              ),
+                                              title: Text(
+                                                'Start Match',
+                                                style: GoogleFonts.inter(
+                                                    textStyle: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ),
+                                            ))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        indexes(4);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TornamentItem()));
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: screenWidth,
+                                        decoration: BoxDecoration(
+                                            color: indix == 4
+                                                ? Colors.grey.withOpacity(0.5)
+                                                : Colors.transparent),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: ListTile(
+                                              leading: Image.asset(
+                                                AppIcons.tornament,
+                                                width: 25,
+                                              ),
+                                              title: Text(
+                                                'Add Tournaments',
+                                                style: GoogleFonts.inter(
+                                                    textStyle: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ),
+                                            ))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        indexes(5);
+                                        Navigator.pushNamed(context, '/signin');
+                                        Global().removeUserId();
+                                        Global().deleteIds();
+                                        Global().logoutUser();
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: screenWidth,
+                                        decoration: BoxDecoration(
+                                            color: indix == 5
+                                                ? Colors.grey.withOpacity(0.5)
+                                                : Colors.transparent),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: ListTile(
+                                              leading: Image.asset(
+                                                AppIcons.logout,
+                                                width: 22,
+                                              ),
+                                              title: Text(
+                                                'Log out',
+                                                style: GoogleFonts.inter(
+                                                    textStyle: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500)),
+                                              ),
+                                            ))
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                  ],
+                                )
+                              ]),
+                            )),
                   ),
                 )));
       },

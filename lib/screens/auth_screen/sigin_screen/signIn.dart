@@ -21,11 +21,18 @@ class SigninScreen extends StatefulWidget {
 
 class _SigninScreenState extends State<SigninScreen> {
   bool isLoading = false;
-
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
-
   var formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    isLoading = false;
+    emailController.dispose();
+    passwordController.dispose();
+    formKey.currentState?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
