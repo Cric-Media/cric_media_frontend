@@ -4,7 +4,6 @@ import 'package:cricket_app/providers/registration_provider.dart';
 import 'package:cricket_app/providers/team_provider.dart';
 import 'package:cricket_app/providers/user_login_provider.dart';
 import 'package:cricket_app/routes.dart';
-import 'package:cricket_app/screens/splash_screen.dart/splash_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -23,7 +22,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => SplashScreenProvider()),
         ChangeNotifierProvider(create: (context) => UserLoginProvider()),
         ChangeNotifierProvider(create: (context) => RegistrationProvider()),
         ChangeNotifierProvider(create: (context) => AddNewPlayerProvider()),
