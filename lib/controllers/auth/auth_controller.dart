@@ -5,6 +5,7 @@ import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/user.dart';
 import 'package:cricket_app/utils/api_manager.dart';
+import 'package:cricket_app/utils/app_exception.dart';
 
 class AuthController {
   Future<ApiResponse> sendOtpForSignup() async {
@@ -48,7 +49,7 @@ class AuthController {
       return ApiResponse.fromJson(
           resBody, (p0) => User.fromJson(resBody['data']));
     } else {
-      throw Exception(resBody['message']);
+      throw AppException(resBody['message']);
     }
   }
 
@@ -76,7 +77,6 @@ class AuthController {
     final body = {"email": email, "password": password};
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.postRequest(body, url, headers: headers);
-    print(response.body);
     return ApiManager.returnModel(response);
   }
 
@@ -90,7 +90,7 @@ class AuthController {
       return ApiResponse.fromJson(
           resBody, (p0) => User.fromJson(resBody['data']));
     } else {
-      throw Exception(resBody['message']);
+      throw AppException(resBody['message']);
     }
   }
 }
