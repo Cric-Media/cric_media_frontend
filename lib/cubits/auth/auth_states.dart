@@ -6,19 +6,19 @@ class AuthInitial extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
-class AuthSignup extends AuthState {
+class AuthSuccess extends AuthState {
   final ApiResponse response;
-  AuthSignup(this.response);
-}
-
-class AuthVerifyEmail extends AuthState {
-  final ApiResponse response;
-  AuthVerifyEmail(this.response);
+  AuthSuccess(this.response);
 }
 
 class AuthSignin extends AuthState {
   final ApiResponse response;
   AuthSignin(this.response);
+}
+
+class AuthGetUser extends AuthState {
+  final User user;
+  AuthGetUser(this.user);
 }
 
 class AuthError extends AuthState {

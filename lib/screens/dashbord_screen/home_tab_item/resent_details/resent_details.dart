@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:cricket_app/constent/app_color.dart';
-import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/resent_details/r_info.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/resent_details/recent_live.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/resent_details/recent_point_table.dart';

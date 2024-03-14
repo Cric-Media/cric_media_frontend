@@ -2,8 +2,8 @@
 
 import 'dart:io';
 
-import 'package:cricket_app/constent/app_color.dart';
-import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/models/get_player_list.dart';
 import 'package:cricket_app/providers/get_all_player_provider.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/add_new_player_Screen.dart';

@@ -1,12 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cricket_app/constent/app_color.dart';
-import 'package:cricket_app/constent/app_images.dart';
-import 'package:cricket_app/constent/global.dart';
+import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/constants/global.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:cricket_app/models/user.dart';
+import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -232,7 +234,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               "${user.password}",
                             );
 
-                            BlocProvider.of<AuthCubit>(context).signup();
+                            BlocProvider.of<AuthCubit>(context)
+                                .sendOtpForSignup();
                           }
                         },
                         buttonText: 'Create Account'),
@@ -289,8 +292,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   if (state is AuthLoading) {
                     isLoading = true;
                   }
-                  if (state is AuthSignup) {
-                    Navigator.pushNamed(context, '/signin');
+                  if (state is AuthSuccess) {
+                    isLoading = false;
+                    Navigator.pushNamed(context, verifyEmail);
+                  }
+                  if (state is AuthError) {
+                    isLoading = false;
+                    showSnack(context, message: state.message);
                   }
                 },
               )

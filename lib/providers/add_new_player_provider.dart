@@ -5,7 +5,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cricket_app/apis_servies/api_servies.dart';
-import 'package:cricket_app/constent/global.dart';
+import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/add_new_player_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

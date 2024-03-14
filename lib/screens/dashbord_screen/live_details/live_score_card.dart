@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
 
-import 'package:cricket_app/constent/app_color.dart';
+import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/custom_widgets/recent_live_bolling_Card.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/resent_details/recent_team_card.dart';
 import 'package:flutter/material.dart';

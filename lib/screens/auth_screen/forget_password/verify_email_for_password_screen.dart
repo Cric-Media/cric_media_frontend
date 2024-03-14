@@ -10,14 +10,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class VerifyEmailScreen extends StatefulWidget {
-  const VerifyEmailScreen({super.key});
+class VerifyEmailForPasswordScreen extends StatefulWidget {
+  const VerifyEmailForPasswordScreen({super.key});
 
   @override
-  State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();
+  State<VerifyEmailForPasswordScreen> createState() =>
+      _VerifyEmailForPasswordScreenState();
 }
 
-class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+class _VerifyEmailForPasswordScreenState
+    extends State<VerifyEmailForPasswordScreen> {
   int otpTiming = 60;
   var otpController = TextEditingController();
   bool isLoading = false;
@@ -135,7 +137,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                                   // resent opt and start timer
                                   setState(() {
                                     BlocProvider.of<AuthCubit>(context)
-                                        .sendOtpForSignup();
+                                        .sendOtpForPasswordChange();
                                     otpTiming = 60;
                                     startTimer();
                                   });
@@ -159,9 +161,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                           buttonText: 'Verify',
                           onTap: () {
                             BlocProvider.of<AuthCubit>(context)
-                                .verifyEmailAndSignup(
-                              otpController.text,
-                            );
+                                .verifyEmailForPassword(otpController.text);
                           },
                           widthFactor: 1,
                         ),
@@ -191,7 +191,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                       }
                       if (state is AuthSuccess) {
                         isLoading = false;
-                        Navigator.pushNamed(context, signin);
+                        Navigator.pushNamed(context, changePassword);
                       }
                       if (state is AuthError) {
                         isLoading = false;

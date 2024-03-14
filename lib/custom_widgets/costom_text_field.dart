@@ -1,4 +1,4 @@
-import 'package:cricket_app/constent/app_color.dart';
+import 'package:cricket_app/constants/app_color.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 

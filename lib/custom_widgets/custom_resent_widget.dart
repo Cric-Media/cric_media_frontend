@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, sized_box_for_whitespace
 
-import 'package:cricket_app/constent/app_color.dart';
-import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

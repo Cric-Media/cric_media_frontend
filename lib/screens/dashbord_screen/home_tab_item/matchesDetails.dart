@@ -7,8 +7,8 @@ import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../constent/app_color.dart';
-import '../../../constent/app_images.dart';
+import '../../../constants/app_color.dart';
+import '../../../constants/app_images.dart';
 import '../../../custom_widgets/custom_up_coming_matches_card.dart';
 
 class MatcheDetails extends StatefulWidget {

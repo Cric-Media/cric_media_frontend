@@ -1,5 +1,6 @@
 import 'package:cricket_app/controllers/auth/auth_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
+import 'package:cricket_app/models/user.dart';
 import 'package:cricket_app/utils/network.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,15 +10,17 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   final auth = AuthController();
+  User _user = User();
 
-  void signup() async {
+  User get user => _user;
+
+  void sendOtpForSignup() async {
     emit(AuthLoading());
     try {
       var network = await Network.check();
       if (network) {
-        // try signup
-        var response = await auth.signup();
-        emit(AuthSignup(response));
+        var response = await auth.sendOtpForSignup();
+        emit(AuthSuccess(response));
       } else {
         emit(AuthError('No internet connection'));
       }
@@ -26,13 +29,13 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void verifyEmail(otp) async {
+  void verifyEmailAndSignup(otp) async {
     emit(AuthLoading());
     try {
       var network = await Network.check();
       if (network) {
-        var response = await auth.verifyEmail(otp);
-        emit(AuthVerifyEmail(response));
+        var response = await auth.verifyEmailAndSignup(otp);
+        emit(AuthSuccess(response));
       } else {
         emit(AuthError('No internet connection'));
       }
@@ -48,6 +51,67 @@ class AuthCubit extends Cubit<AuthState> {
       if (network) {
         var response = await auth.signin(email, password);
         emit(AuthSignin(response));
+      } else {
+        emit(AuthError('No internet connection'));
+      }
+    } catch (err) {
+      emit(AuthError(err.toString()));
+    }
+  }
+
+  void sendOtpForPasswordChange() async {
+    emit(AuthLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await auth.sendOtpForPasswordChange();
+        emit(AuthSuccess(response));
+      } else {
+        emit(AuthError('No internet connection'));
+      }
+    } catch (err) {
+      emit(AuthError(err.toString()));
+    }
+  }
+
+  void verifyEmailForPassword(otp) async {
+    emit(AuthLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await auth.verifyEmailForPassword(otp);
+        emit(AuthSuccess(response));
+      } else {
+        emit(AuthError('No internet connection'));
+      }
+    } catch (err) {
+      emit(AuthError(err.toString()));
+    }
+  }
+
+  void changePassword(password) async {
+    emit(AuthLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await auth.changePassword(password);
+        emit(AuthSuccess(response));
+      } else {
+        emit(AuthError('No internet connection'));
+      }
+    } catch (err) {
+      emit(AuthError(err.toString()));
+    }
+  }
+
+  void getUser() async {
+    emit(AuthLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await auth.getUser();
+        _user = response.data as User;
+        emit(AuthGetUser(response.data));
       } else {
         emit(AuthError('No internet connection'));
       }

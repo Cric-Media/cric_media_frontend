@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace
 
-import 'package:cricket_app/constent/app_images.dart';
+import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/custom_widgets/profile_Card2.dart';
 import 'package:cricket_app/custom_widgets/profile_card.dart';
 import 'package:cricket_app/custom_widgets/profile_card4.dart';

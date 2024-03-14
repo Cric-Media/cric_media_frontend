@@ -1,13 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, sized_box_for_whitespace
 
-import 'package:cricket_app/constent/app_color.dart';
+import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/custom_widgets/days_contanar.dart';
 import 'package:cricket_app/custom_widgets/days_contanor2.dart';
 import 'package:cricket_app/custom_widgets/grid_view_contanor.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../constent/app_images.dart';
+import '../constants/app_images.dart';
 
 class LiveCustomWidgt extends StatelessWidget {
   const LiveCustomWidgt({super.key});
