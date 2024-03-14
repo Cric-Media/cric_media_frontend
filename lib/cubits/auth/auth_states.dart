@@ -21,6 +21,21 @@ class AuthSignin extends AuthState {
   AuthSignin(this.response);
 }
 
+class AuthSendOtpForPasswordChange extends AuthState {
+  final ApiResponse response;
+  AuthSendOtpForPasswordChange(this.response);
+}
+
+class AuthVerifyOtpForPassword extends AuthState {
+  final ApiResponse response;
+  AuthVerifyOtpForPassword(this.response);
+}
+
+class AuthChangePassword extends AuthState {
+  final ApiResponse response;
+  AuthChangePassword(this.response);
+}
+
 class AuthGetUser extends AuthState {
   final User user;
   AuthGetUser(this.user);

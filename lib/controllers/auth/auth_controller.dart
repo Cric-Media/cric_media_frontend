@@ -52,6 +52,24 @@ class AuthController {
     }
   }
 
+  Future<ApiResponse> sendOtpForPasswordChange() async {
+    final url = AuthUrl.sendOtpForPasswordChange;
+    final email = await Global().getEmail();
+    final body = {"email": email};
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.postRequest(body, url, headers: headers);
+    return ApiManager.returnModel(response);
+  }
+
+  Future<ApiResponse> verifyEmailForPassword(otp) async {
+    final url = AuthUrl.verifyOtpForPasswordChange;
+    final email = await Global().getEmail();
+    final body = {"email": email, "code": otp};
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.postRequest(body, url, headers: headers);
+    return ApiManager.returnModel(response);
+  }
+
   Future<ApiResponse> getUser() async {
     final userId = await Global().getUserId();
     final url = "${AuthUrl.getUser}/$userId";

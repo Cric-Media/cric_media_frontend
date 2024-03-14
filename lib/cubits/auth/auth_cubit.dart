@@ -59,6 +59,51 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  void sendOtpForPasswordChange() async {
+    emit(AuthLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await auth.sendOtpForPasswordChange();
+        emit(AuthSendOtpForPasswordChange(response));
+      } else {
+        emit(AuthError('No internet connection'));
+      }
+    } catch (err) {
+      emit(AuthError(err.toString()));
+    }
+  }
+
+  void verifyEmailForPassword(otp) async {
+    emit(AuthLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await auth.verifyEmailForPassword(otp);
+        emit(AuthVerifyOtpForPassword(response));
+      } else {
+        emit(AuthError('No internet connection'));
+      }
+    } catch (err) {
+      emit(AuthError(err.toString()));
+    }
+  }
+
+  void changePassword() async {
+    emit(AuthLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        // var response = await auth.verifyEmailForPassword(otp);
+        // emit(AuthVerifyOtpForPassword(response));
+      } else {
+        emit(AuthError('No internet connection'));
+      }
+    } catch (err) {
+      emit(AuthError(err.toString()));
+    }
+  }
+
   void getUser() async {
     emit(AuthLoading());
     try {
@@ -74,6 +119,4 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthError(err.toString()));
     }
   }
-
-  // Reset password
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_const_constructors
+// ignore_for_file: unused_local_variable, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, prefer_const_constructors, use_build_context_synchronously
 
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
@@ -214,7 +214,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       return const SizedBox.shrink();
                     }
                   },
-                  listener: (context, state) {
+                  listener: (context, state) async {
                     if (state is AuthLoading) {
                       isLoading = true;
                     }
@@ -222,10 +222,11 @@ class _SigninScreenState extends State<SigninScreen> {
                       isLoading = false;
                       var userId = state.response.data.id;
                       var token = state.response.data.accessToken;
-                      Global().saveUserId(userId);
-                      Global().saveToken(token);
+                      await Global().deleteAllUserInfo();
+                      await Global().saveUserId(userId);
+                      await Global().saveToken(token);
 
-                      Navigator.of(context).pushNamed('/dashboard');
+                      Navigator.pushReplacementNamed(context, '/dashboard');
                     }
                     if (state is AuthError) {
                       isLoading = false;
