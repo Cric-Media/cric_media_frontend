@@ -17,7 +17,7 @@ class AuthSignin extends AuthState {
 }
 
 class AuthGetUser extends AuthState {
-  final User user;
+  final Admin user;
   AuthGetUser(this.user);
 }
 

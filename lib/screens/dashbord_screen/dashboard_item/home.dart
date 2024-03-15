@@ -6,7 +6,7 @@ import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
-import 'package:cricket_app/models/user.dart';
+import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/screens/auth_screen/sigin_screen/signIn.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/home_tab.dart';
@@ -31,7 +31,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int indix = 0;
-  User? user;
+  Admin? user;
 
   @override
   void initState() {

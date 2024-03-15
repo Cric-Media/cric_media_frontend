@@ -1,6 +1,6 @@
 import 'package:cricket_app/controllers/auth/auth_controller.dart';
+import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/api_response.dart';
-import 'package:cricket_app/models/user.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 import 'package:cricket_app/utils/network.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,9 +11,9 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   final auth = AuthController();
-  User? _user;
+  Admin? _user;
 
-  User? get user => _user;
+  Admin? get user => _user;
 
   void sendOtpForSignup() async {
     emit(AuthLoading());
@@ -136,7 +136,7 @@ class AuthCubit extends Cubit<AuthState> {
       var network = await Network.check();
       if (network) {
         var response = await auth.getUser();
-        _user = response.data as User;
+        _user = response.data as Admin;
         emit(AuthGetUser(response.data));
       } else {
         emit(AuthError('No internet connection'));

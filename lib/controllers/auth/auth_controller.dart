@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/constants/global.dart';
+import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/api_response.dart';
-import 'package:cricket_app/models/user.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 
@@ -47,7 +47,7 @@ class AuthController {
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(
-          resBody, (p0) => User.fromJson(resBody['data']));
+          resBody, (p0) => Admin.fromJson(resBody['data']));
     } else {
       throw AppException(resBody['message']);
     }
@@ -88,7 +88,7 @@ class AuthController {
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(
-          resBody, (p0) => User.fromJson(resBody['data']));
+          resBody, (p0) => Admin.fromJson(resBody['data']));
     } else {
       throw AppException(resBody['message']);
     }

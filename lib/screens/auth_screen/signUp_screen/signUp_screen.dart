@@ -7,7 +7,7 @@ import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
-import 'package:cricket_app/models/user.dart';
+import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +21,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final user = User();
+  final user = Admin();
 
   var nameController = TextEditingController();
   var emailController = TextEditingController();
