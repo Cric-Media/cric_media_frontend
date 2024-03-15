@@ -1,4 +1,4 @@
-class User {
+class Admin {
   String? id,
       name,
       email,
@@ -7,7 +7,7 @@ class User {
       password,
       accessToken,
       profileImage;
-  User({
+  Admin({
     this.id,
     this.name,
     this.email,
@@ -18,8 +18,8 @@ class User {
     this.profileImage,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory Admin.fromJson(Map<String, dynamic> json) {
+    return Admin(
       id: json['_id'],
       name: json['fullname'],
       email: json['email'],
