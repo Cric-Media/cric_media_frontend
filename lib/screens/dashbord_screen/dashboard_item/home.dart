@@ -153,9 +153,16 @@ class _HomeState extends State<Home> {
                               child: Column(children: [
                                 DrawerHeader(
                                   decoration: BoxDecoration(
+                                    // image: DecorationImage(
+                                    //   image:
+                                    //   CachedNetworkImageProvider(
+                                    //     user!.imageUrl.toString(),
+                                    //   ),
+                                    //   fit: BoxFit.cover,
+                                    // ),
                                     image: DecorationImage(
-                                      image: CachedNetworkImageProvider(
-                                        user!.imageUrl.toString(),
+                                      image: AssetImage(
+                                        AppIcons.profile3,
                                       ),
                                       fit: BoxFit.cover,
                                     ),
