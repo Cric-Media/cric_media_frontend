@@ -1,6 +1,6 @@
 import 'package:cricket_app/controllers/auth/auth_controller.dart';
-import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/admin.dart';
+import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 import 'package:cricket_app/utils/network.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,9 +11,9 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   final auth = AuthController();
-  Admin _user = Admin();
+  Admin? _user;
 
-  Admin get user => _user;
+  Admin? get user => _user;
 
   void sendOtpForSignup() async {
     emit(AuthLoading());

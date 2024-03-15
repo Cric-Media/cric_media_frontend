@@ -25,6 +25,14 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   bool isLoading = false;
 
   @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    formKey.currentState?.dispose();
+    isLoading = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -106,6 +114,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     CustomButton(
                       buttonText: 'Send',
                       onTap: () {
+                        if (!formKey.currentState!.validate()) {
+                          return;
+                        }
                         var email = emailController.text;
                         Global().setAllUserInfo('', email, '', '').then((_) {
                           BlocProvider.of<AuthCubit>(context)

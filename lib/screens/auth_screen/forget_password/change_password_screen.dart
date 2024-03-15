@@ -21,6 +21,14 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   var passwordController = TextEditingController();
   bool isLoading = false;
+  var formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    isLoading = false;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +43,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: Form(
+                  key: formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,6 +135,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               CustomButton(
                 buttonText: "Continue",
                 onTap: () {
+                  if (!formKey.currentState!.validate()) {
+                    return;
+                  }
                   BlocProvider.of<AuthCubit>(context)
                       .changePassword(passwordController.text);
                 },

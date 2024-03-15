@@ -27,15 +27,24 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AddNewPlayerProvider()),
         ChangeNotifierProvider(create: (context) => TeamProvider()),
       ],
-      child: GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Cric Media',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: AppColor.blueColor),
-          useMaterial3: true,
+      child: GestureDetector(
+        onTap: () {
+          // hide keyboard whenever we click on the any part of the app
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Cric Media',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: AppColor.blueColor),
+            useMaterial3: true,
+          ),
+          onGenerateRoute: Routes.onGenerateRoute,
+          initialRoute: '/',
         ),
-        onGenerateRoute: Routes.onGenerateRoute,
-        initialRoute: '/',
       ),
     );
   }
