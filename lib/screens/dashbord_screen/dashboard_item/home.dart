@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, unused_import, avoid_unnecessary_containers, unnecessary_string_interpolations, use_key_in_widget_constructors, sized_box_for_whitespace
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/constants/global.dart';
@@ -153,7 +154,7 @@ class _HomeState extends State<Home> {
                                 DrawerHeader(
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
-                                      image: NetworkImage(
+                                      image: CachedNetworkImageProvider(
                                         user!.imageUrl.toString(),
                                       ),
                                       fit: BoxFit.cover,
@@ -401,7 +402,10 @@ class _HomeState extends State<Home> {
                                     InkWell(
                                       onTap: () {
                                         indexes(5);
-                                        Navigator.pushNamed(context, '/signin');
+                                        Navigator.pushReplacementNamed(
+                                          context,
+                                          dashboard,
+                                        );
                                         Global().removeUserId();
                                         Global().deleteIds();
                                         Global().logoutUser();

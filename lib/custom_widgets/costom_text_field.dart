@@ -2,7 +2,7 @@ import 'package:cricket_app/constants/app_color.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final String hintText;
   final String? iconImagePath;
   final TextEditingController? controller;
@@ -19,6 +19,19 @@ class CustomTextField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  bool obscureText = false;
+
+  showVisibility() {
+    setState(() {
+      obscureText = !obscureText;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -29,23 +42,33 @@ class CustomTextField extends StatelessWidget {
           cursorHeight: 25,
           cursorColor: AppColor.blueColor,
           cursorWidth: 2,
-          controller: controller,
-          obscureText: isPassword,
-          validator: validator,
+          controller: widget.controller,
+          obscureText: obscureText,
+          validator: widget.validator,
           decoration: InputDecoration(
             border: InputBorder.none,
             disabledBorder: InputBorder.none,
-            prefixIcon: iconImagePath != null
+            suffixIcon: widget.isPassword == true
+                ? IconButton(
+                    onPressed: showVisibility,
+                    icon: Icon(
+                      obscureText == true
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                  )
+                : null,
+            prefixIcon: widget.iconImagePath != null
                 ? Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ExtendedImage.asset(
-                      '$iconImagePath',
+                      '${widget.iconImagePath}',
                       width: 24,
                       height: 24,
                     ),
                   )
                 : null,
-            hintText: hintText,
+            hintText: widget.hintText,
             hintStyle: TextStyle(
               color: AppColor.hintColor.withOpacity(0.8),
               fontSize: screenWidth * 0.040,
