@@ -51,6 +51,10 @@ class _PlayerItemState extends State<PlayerItem> {
             return const Center(
               child: CircularProgressIndicator(),
             );
+          } else if (state is PlayerEmptyState) {
+            return const Center(
+              child: Text("No Players Found"),
+            );
           }
           return Column(
             children: [

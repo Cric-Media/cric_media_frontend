@@ -43,7 +43,11 @@ class PlayerCubit extends Cubit<PlayerState> {
       var network = await Network.check();
       if (network) {
         var response = await adminController.getAllPlayers();
-        emit(PlayerGetInitial(response));
+        if (response.data.length > 0) {
+          emit(PlayerGetInitial(response));
+        } else {
+          emit(PlayerEmptyState());
+        }
       } else {
         emit(PlayerGetError('No internet connection'));
       }

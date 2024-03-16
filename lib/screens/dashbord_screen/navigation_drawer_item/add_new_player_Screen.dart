@@ -123,6 +123,9 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                       } else if (state is PlayerAddError) {
                         isLoading = false;
                         showSnack(context, message: state.message);
+                      } else if (state is PlayerUpdateError) {
+                        isLoading = false;
+                        showSnack(context, message: state.message);
                       } else if (state is PlayerGetPlayer) {
                         player = state.response.data;
 
@@ -410,7 +413,6 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                         backgroundColor: AppColor.blueColor,
                         onTap: () {
                           if (player != null) {
-                            print("updating");
                             update();
                           } else {
                             add();
@@ -435,7 +437,15 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    BlocProvider.of<PlayerCubit>(context).updatePlayer(player!, image);
+    Player p = Player(
+      id: player!.id,
+      name: nameController.text.trim(),
+      location: locationController.text.trim(),
+      role: selectedRole,
+      age: ageController.text,
+      additionalInfo: informationController.text.trim(),
+    );
+    BlocProvider.of<PlayerCubit>(context).updatePlayer(p, image);
   }
 
   add() {
