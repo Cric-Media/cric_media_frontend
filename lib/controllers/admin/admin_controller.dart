@@ -31,7 +31,6 @@ class AdminController {
         filename: imageFile.path.split('/').last,
       ),
     );
-    print(player.toJson());
     // send other fields
     request.fields["name"] = player.name.toString();
     request.fields["location"] = player.location.toString();
@@ -45,7 +44,6 @@ class AdminController {
     // print response
     var json = await response.stream.bytesToString();
     var body = jsonDecode(json);
-    print(json);
     if (body['success'] == true) {
       return ApiResponse.fromJson(
         body,
@@ -62,7 +60,6 @@ class AdminController {
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
     var resBody = jsonDecode(response.body);
-    print(resBody['data']);
     if (resBody['success']) {
       List<Player> players = [];
       for (var player in resBody['data']) {
@@ -123,6 +120,7 @@ class AdminController {
     }
 
     // send other fields
+    request.fields["playerId"] = player.id.toString();
     request.fields["name"] = player.name.toString();
     request.fields["location"] = player.location.toString();
     request.fields["role"] = player.role.toString();

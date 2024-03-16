@@ -405,23 +405,17 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                       const SizedBox(
                         height: 30,
                       ),
-                      InkWell(
+                      CustomButton(
+                        buttonText: player != null ? 'Update' : 'Submit',
+                        backgroundColor: AppColor.blueColor,
                         onTap: () {
-                          // value.addNewPlayerMethod(context);
-                          // value.setLoading(true);
-                          if (_formKey.currentState!.validate() &&
-                              image != null) {
-                            if (player != null) {
-                              update();
-                            } else {
-                              add();
-                            }
+                          if (player != null) {
+                            print("updating");
+                            update();
+                          } else {
+                            add();
                           }
                         },
-                        child: CustomButton(
-                          buttonText: player != null ? 'Update' : 'Submit',
-                          backgroundColor: AppColor.blueColor,
-                        ),
                       ),
                       const SizedBox(
                         height: 20,
@@ -438,10 +432,16 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
   }
 
   update() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
     BlocProvider.of<PlayerCubit>(context).updatePlayer(player!, image);
   }
 
   add() {
+    if (!_formKey.currentState!.validate() && image == null) {
+      return;
+    }
     Player player = Player(
       name: nameController.text.trim(),
       location: locationController.text.trim(),
