@@ -62,7 +62,7 @@ class AddNewPlayerProvider extends ChangeNotifier {
 
   Future<void> addNewPlayerMethod(BuildContext context) async {
     setLoading(true);
-    final id = await Global().getUserId();
+    final id = await Global().getAdminId();
     int? userId = int.tryParse(id.toString());
 
     int? age = int.tryParse(playerAge.text);

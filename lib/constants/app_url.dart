@@ -18,3 +18,7 @@ abstract class AuthUrl {
       "${AppUrl.baseUrl}/password-otp-varify";
   static final changePassword = "${AppUrl.baseUrl}/changePassword";
 }
+
+abstract class AdminUrl {
+  static final addPlayer = '${AppUrl.baseUrl}/add-players';
+}

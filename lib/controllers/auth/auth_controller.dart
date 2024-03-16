@@ -81,7 +81,7 @@ class AuthController {
   }
 
   Future<ApiResponse> getUser() async {
-    final userId = await Global().getUserId();
+    final userId = await Global().getAdminId();
     final url = "${AuthUrl.getUser}/$userId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);

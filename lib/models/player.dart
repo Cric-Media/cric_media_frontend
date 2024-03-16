@@ -47,9 +47,9 @@ class Player {
 }
 
 class Stats {
-  String? sixes;
-  String? fours;
-  String? wickets;
+  int? sixes;
+  int? fours;
+  int? wickets;
 
   Stats({this.sixes, this.fours, this.wickets});
 

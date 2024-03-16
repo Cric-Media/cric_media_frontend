@@ -4,15 +4,15 @@ import 'dart:io';
 
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/models/get_player_list.dart';
 import 'package:cricket_app/providers/get_all_player_provider.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/add_new_player_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class PlayerItem extends StatefulWidget {
-  PlayerItem({super.key});
+  const PlayerItem({super.key});
 
   @override
   State<PlayerItem> createState() => _PlayerItemState();
@@ -402,13 +402,7 @@ class _PlayerItemState extends State<PlayerItem> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                print('ONtAP');
-                // DBHelper().deleteAll();
-                // DBHelper().printAllDataAndCheckEmpty();
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AddNewPlayerScreen()));
+                Navigator.pushNamed(context, addNewPlayer);
               },
               backgroundColor: AppColor.blueColor,
               child: Icon(

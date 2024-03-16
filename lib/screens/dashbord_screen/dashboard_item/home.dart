@@ -50,10 +50,10 @@ class _HomeState extends State<Home> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHieght = MediaQuery.of(context).size.height;
 
-    user = BlocProvider.of<AuthCubit>(context).user;
+    user = BlocProvider.of<AuthCubit>(context).admin;
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
-        user = BlocProvider.of<AuthCubit>(context).user;
+        user = BlocProvider.of<AuthCubit>(context).admin;
       },
       builder: (context, state) {
         return Container(

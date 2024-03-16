@@ -20,7 +20,7 @@ class TeamProvider extends ChangeNotifier {
   }
 
   init() async {
-    String? userId = await Global().getUserId();
+    String? userId = await Global().getAdminId();
     if (userId != null) {
       getTeamsList(userId);
     } else {
@@ -80,7 +80,7 @@ class TeamProvider extends ChangeNotifier {
     setLoading(true);
 
     try {
-      final id = await Global().getUserId();
+      final id = await Global().getAdminId();
       int? userId = int.tryParse(id.toString());
 
       if (_pickedImage == null) {

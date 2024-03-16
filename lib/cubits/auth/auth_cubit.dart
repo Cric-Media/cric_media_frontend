@@ -11,9 +11,9 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
   final auth = AuthController();
-  Admin? _user;
+  Admin? _admin;
 
-  Admin? get user => _user;
+  Admin? get admin => _admin;
 
   void sendOtpForSignup() async {
     emit(AuthLoading());
@@ -136,7 +136,7 @@ class AuthCubit extends Cubit<AuthState> {
       var network = await Network.check();
       if (network) {
         var response = await auth.getUser();
-        _user = response.data as Admin;
+        _admin = response.data as Admin;
         emit(AuthGetUser(response.data));
       } else {
         emit(AuthError('No internet connection'));

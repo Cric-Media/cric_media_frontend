@@ -8,6 +8,8 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final bool isPassword;
   final String? Function(String?)? validator;
+  final Widget? prefixIcon;
+  final bool? enabled;
 
   const CustomTextField({
     Key? key,
@@ -16,6 +18,8 @@ class CustomTextField extends StatefulWidget {
     this.controller,
     this.isPassword = false,
     this.validator,
+    this.prefixIcon,
+    this.enabled,
   }) : super(key: key);
 
   @override
@@ -40,6 +44,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       children: [
         TextFormField(
           cursorHeight: 25,
+          enabled: widget.enabled,
           cursorColor: AppColor.blueColor,
           cursorWidth: 2,
           controller: widget.controller,
@@ -67,7 +72,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       height: 24,
                     ),
                   )
-                : null,
+                : widget.prefixIcon,
             hintText: widget.hintText,
             hintStyle: TextStyle(
               color: AppColor.hintColor.withOpacity(0.8),
@@ -75,21 +80,21 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
             fillColor: AppColor.textfieldColor,
             filled: true,
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(7),
-              borderSide:
-                  const BorderSide(color: AppColor.blueColor, width: 0.5),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(7),
-              borderSide:
-                  const BorderSide(color: AppColor.redColor, width: 0.5),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(7),
-              borderSide:
-                  const BorderSide(color: AppColor.grayColor, width: 0.5),
-            ),
+            // focusedBorder: OutlineInputBorder(
+            //   borderRadius: BorderRadius.circular(7),
+            //   borderSide:
+            //       const BorderSide(color: AppColor.blueColor, width: 0.5),
+            // ),
+            // errorBorder: OutlineInputBorder(
+            //   borderRadius: BorderRadius.circular(7),
+            //   borderSide:
+            //       const BorderSide(color: AppColor.redColor, width: 0.5),
+            // ),
+            // enabledBorder: OutlineInputBorder(
+            //   borderRadius: BorderRadius.circular(7),
+            //   borderSide:
+            //       const BorderSide(color: AppColor.grayColor, width: 0.5),
+            // ),
           ),
         ),
         // Show validation error message if validation fails
