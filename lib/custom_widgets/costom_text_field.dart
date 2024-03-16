@@ -9,7 +9,7 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
   final String? Function(String?)? validator;
   final Widget? prefixIcon;
-  final bool? enabled;
+  final bool? readOnly;
 
   const CustomTextField({
     Key? key,
@@ -19,7 +19,7 @@ class CustomTextField extends StatefulWidget {
     this.isPassword = false,
     this.validator,
     this.prefixIcon,
-    this.enabled,
+    this.readOnly,
   }) : super(key: key);
 
   @override
@@ -44,7 +44,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       children: [
         TextFormField(
           cursorHeight: 25,
-          enabled: widget.enabled,
+          readOnly: widget.readOnly ?? false,
           cursorColor: AppColor.blueColor,
           cursorWidth: 2,
           controller: widget.controller,

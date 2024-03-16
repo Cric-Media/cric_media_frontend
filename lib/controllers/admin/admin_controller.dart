@@ -73,4 +73,32 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> getPlayer(String playerId) async {
+    final url = AdminUrl.getPlayerDetail;
+    final body = {"playerId": playerId};
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.postRequest(body, url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      Player player = Player.fromJson(resBody['data']);
+      return ApiResponse.fromJson(resBody, (data) => player);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> deletePlayer(String playerId) async {
+    final url = AdminUrl.deletePlayer;
+    final headers = {"Content-Type": "application/json"};
+    final body = {"playerId": playerId};
+    final response =
+        await ApiManager.deleteWithBodyRequest(body, url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }

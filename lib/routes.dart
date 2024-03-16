@@ -80,8 +80,11 @@ class Routes {
         );
 
       case addNewPlayer:
+        final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (context) => const AddNewPlayerScreen(),
+          builder: (context) => AddNewPlayerScreen(
+            playerId: args['playerId'],
+          ),
         );
 
       default:

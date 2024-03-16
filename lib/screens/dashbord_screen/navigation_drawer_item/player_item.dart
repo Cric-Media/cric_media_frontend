@@ -3,6 +3,8 @@ import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/models/player.dart';
+import 'package:cricket_app/utils/app_dialog.dart';
+import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,6 +36,14 @@ class _PlayerItemState extends State<PlayerItem> {
         listener: (context, state) {
           if (state is PlayerGetInitial) {
             players = state.response.data;
+          } else if (state is PlayerDeleteLoading) {
+            AppDialogs.loadingDialog(context);
+          } else if (state is PlayerDeleteSuccess) {
+            Navigator.pop(context);
+            BlocProvider.of<PlayerCubit>(context).getInitialPlayers();
+          } else if (state is PlayerDeleteError) {
+            Navigator.pop(context);
+            showSnack(context, message: state.message);
           }
         },
         builder: (context, state) {
@@ -60,7 +70,11 @@ class _PlayerItemState extends State<PlayerItem> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, addNewPlayer);
+          Navigator.pushNamed(
+            context,
+            addNewPlayer,
+            arguments: {"playerId": null},
+          );
         },
         backgroundColor: AppColor.blueColor,
         child: const Icon(
@@ -112,13 +126,16 @@ class PlayerTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // name
-                        Text(player.name.toString()),
+                        Text(
+                          player.name.toString(),
+                          style: const TextStyle(fontWeight: FontWeight.w700),
+                        ),
                         // role
                         Text("Role: ${player.role}"),
                         // id
                         Row(
                           children: [
-                            Text("ID: ${player.id!.substring(0, 5)}"),
+                            Text("ID: ${player.id!.substring(0, 7)}"),
                             const Spacer(),
                             IconButton(
                               onPressed: () {},
@@ -137,11 +154,23 @@ class PlayerTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, addNewPlayer,
+                              arguments: {"playerId": player.id!});
+                        },
                         icon: const Icon(Icons.edit_square),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          AppDialogs.showConfirmationDialog(context,
+                              title: "Delete Player?",
+                              message:
+                                  "Do you really want to delete this player?",
+                              onPressed: () {
+                            BlocProvider.of<PlayerCubit>(context)
+                                .deletePlayer(player.id!);
+                          });
+                        },
                         icon: const Icon(
                           Icons.delete,
                           color: Colors.red,

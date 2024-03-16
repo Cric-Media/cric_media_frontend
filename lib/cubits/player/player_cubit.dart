@@ -56,4 +56,44 @@ class PlayerCubit extends Cubit<PlayerState> {
       }
     }
   }
+
+  void getPlayer(String playerId) async {
+    emit(PlayerGetPlayerLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.getPlayer(playerId);
+        emit(PlayerGetPlayer(response));
+      } else {
+        emit(PlayerGetError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(PlayerGetError('Something went wrong'));
+      } else {
+        emit(PlayerGetError(err.toString()));
+      }
+    }
+  }
+
+  deletePlayer(String playerId) async {
+    emit(PlayerDeleteLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.deletePlayer(playerId);
+        emit(PlayerDeleteSuccess(response));
+      } else {
+        emit(PlayerDeleteError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(PlayerDeleteError('Something went wrong'));
+      } else {
+        emit(PlayerDeleteError(err.toString()));
+      }
+    }
+  }
 }

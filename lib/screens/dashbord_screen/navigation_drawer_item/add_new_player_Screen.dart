@@ -15,7 +15,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class AddNewPlayerScreen extends StatefulWidget {
-  const AddNewPlayerScreen({super.key});
+  final String? playerId;
+  const AddNewPlayerScreen({super.key, this.playerId});
 
   @override
   State<AddNewPlayerScreen> createState() => _AddNewPlayerScreenState();
@@ -40,8 +41,16 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
   // Other Variables
   String? selectedRole;
   File? image;
-  PlayerCubit playerCubit = PlayerCubit();
   bool isLoading = false;
+  Player? player;
+
+  @override
+  void initState() {
+    if (widget.playerId != null) {
+      BlocProvider.of<PlayerCubit>(context).getPlayer(widget.playerId!);
+    } else {}
+    super.initState();
+  }
 
   pickImage() async {
     var img = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -97,7 +106,6 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
               child: Stack(
                 children: [
                   BlocConsumer<PlayerCubit, PlayerState>(
-                    bloc: playerCubit,
                     listener: (context, state) {
                       if (state is PlayerAddLoading) {
                         isLoading = true;
@@ -109,6 +117,15 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                       } else if (state is PlayerAddError) {
                         isLoading = false;
                         showSnack(context, message: state.message);
+                      } else if (state is PlayerGetPlayer) {
+                        player = state.response.data;
+
+                        nameController.text = player!.name.toString();
+                        locationController.text = player!.location.toString();
+                        ageController.text = player!.age.toString();
+                        informationController.text =
+                            player!.additionalInfo.toString();
+                        selectedRole = player!.role;
                       }
                     },
                     builder: (context, state) {
@@ -318,7 +335,7 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                       CustomTextField(
                         controller: ageController,
                         hintText: "Player's date of birth",
-                        enabled: true,
+                        readOnly: true,
                         prefixIcon: IconButton(
                           icon: const Icon(
                             Icons.calendar_today_outlined,
@@ -391,7 +408,7 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                               age: ageController.text,
                               additionalInfo: informationController.text.trim(),
                             );
-                            playerCubit.addPlayer(
+                            BlocProvider.of<PlayerCubit>(context).addPlayer(
                               player: player,
                               playerImage: image!,
                             );
