@@ -5,6 +5,7 @@ class Player {
   String? role;
   String? age;
   String? additionalInfo;
+  String? imageUrl;
   List<String>? admins;
   Stats? stats;
 
@@ -15,6 +16,7 @@ class Player {
     this.role,
     this.age,
     this.additionalInfo,
+    this.imageUrl,
     this.admins,
     this.stats,
   });
@@ -26,6 +28,7 @@ class Player {
     role = json['role'];
     age = json['age'];
     additionalInfo = json['additionalInfo'];
+    imageUrl = json['Image'];
     admins = json['admins'].cast<String>();
     stats = json['stats'] != null ? Stats.fromJson(json['stats']) : null;
   }
@@ -38,6 +41,7 @@ class Player {
     data['role'] = role;
     data['age'] = age;
     data['additionalInfo'] = additionalInfo;
+    data['Image'] = imageUrl;
     data['admins'] = admins;
     if (stats != null) {
       data['stats'] = stats!.toJson();

@@ -55,7 +55,6 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return Consumer<AddNewPlayerProvider>(
         builder: (BuildContext context, value, child) {
       return Scaffold(
@@ -102,6 +101,8 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                     listener: (context, state) {
                       if (state is PlayerAddLoading) {
                         isLoading = true;
+                        BlocProvider.of<PlayerCubit>(context)
+                            .getInitialPlayers();
                       } else if (state is PlayerAddSuccess) {
                         isLoading = false;
                         Navigator.pop(context);

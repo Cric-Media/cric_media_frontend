@@ -47,10 +47,10 @@ class _PlayerItemState extends State<PlayerItem> {
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: 10,
+                  itemCount: players.length,
                   // Adjusted for simplicity
                   itemBuilder: (context, index) {
-                    return const PlayerTile();
+                    return PlayerTile(player: players[index]);
                   },
                 ),
               )
@@ -74,8 +74,10 @@ class _PlayerItemState extends State<PlayerItem> {
 }
 
 class PlayerTile extends StatelessWidget {
+  final Player player;
   const PlayerTile({
     super.key,
+    required this.player,
   });
 
   @override
@@ -89,13 +91,14 @@ class PlayerTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Expanded(
+            Expanded(
               flex: 1,
               child: Center(
                 child: CircleAvatar(
                   radius: 40,
                   backgroundImage: CachedNetworkImageProvider(
-                      'https://www.w3schools.com/w3images/avatar2.png'),
+                    player.imageUrl.toString(),
+                  ),
                 ),
               ),
             ),
@@ -109,13 +112,13 @@ class PlayerTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // name
-                        const Text("Wasim Zaman"),
+                        Text(player.name.toString()),
                         // role
-                        const Text("All Rounder"),
+                        Text("Role: ${player.role}"),
                         // id
                         Row(
                           children: [
-                            const Text("ID: 12345"),
+                            Text("ID: ${player.id!.substring(0, 5)}"),
                             const Spacer(),
                             IconButton(
                               onPressed: () {},
