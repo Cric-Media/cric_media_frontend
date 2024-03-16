@@ -96,4 +96,27 @@ class PlayerCubit extends Cubit<PlayerState> {
       }
     }
   }
+
+  void updatePlayer(Player player, File? image) async {
+    emit(PlayerUpdateLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.updatePlayer(
+          player: player,
+          imageFile: image,
+        );
+        emit(PlayerUpdateSuccess(response));
+      } else {
+        emit(PlayerUpdateError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(PlayerUpdateError('Something went wrong'));
+      } else {
+        emit(PlayerUpdateError(err.toString()));
+      }
+    }
+  }
 }

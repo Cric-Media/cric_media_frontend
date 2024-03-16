@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
@@ -111,8 +112,13 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                         isLoading = true;
                         BlocProvider.of<PlayerCubit>(context)
                             .getInitialPlayers();
-                      } else if (state is PlayerAddSuccess) {
+                      } else if (state is PlayerUpdateLoading) {
+                        isLoading = true;
+                      } else if (state is PlayerAddSuccess ||
+                          state is PlayerUpdateSuccess) {
                         isLoading = false;
+                        BlocProvider.of<PlayerCubit>(context)
+                            .getInitialPlayers();
                         Navigator.pop(context);
                       } else if (state is PlayerAddError) {
                         isLoading = false;
@@ -165,8 +171,12 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                                   image: image != null
                                       ? FileImage(File(image!.path))
                                           as ImageProvider<Object>
-                                      : AssetImage(AppIcons.azam)
-                                          as ImageProvider<Object>,
+                                      : player != null
+                                          ? CachedNetworkImageProvider(
+                                              player!.imageUrl.toString(),
+                                            )
+                                          : AssetImage(AppIcons.azam)
+                                              as ImageProvider<Object>,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -401,21 +411,15 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                           // value.setLoading(true);
                           if (_formKey.currentState!.validate() &&
                               image != null) {
-                            Player player = Player(
-                              name: nameController.text.trim(),
-                              location: locationController.text.trim(),
-                              role: selectedRole,
-                              age: ageController.text,
-                              additionalInfo: informationController.text.trim(),
-                            );
-                            BlocProvider.of<PlayerCubit>(context).addPlayer(
-                              player: player,
-                              playerImage: image!,
-                            );
+                            if (player != null) {
+                              update();
+                            } else {
+                              add();
+                            }
                           }
                         },
-                        child: const CustomButton(
-                          buttonText: 'Submit',
+                        child: CustomButton(
+                          buttonText: player != null ? 'Update' : 'Submit',
                           backgroundColor: AppColor.blueColor,
                         ),
                       ),
@@ -431,6 +435,24 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
         ),
       );
     });
+  }
+
+  update() {
+    BlocProvider.of<PlayerCubit>(context).updatePlayer(player!, image);
+  }
+
+  add() {
+    Player player = Player(
+      name: nameController.text.trim(),
+      location: locationController.text.trim(),
+      role: selectedRole,
+      age: ageController.text,
+      additionalInfo: informationController.text.trim(),
+    );
+    BlocProvider.of<PlayerCubit>(context).addPlayer(
+      player: player,
+      playerImage: image!,
+    );
   }
 
   @override

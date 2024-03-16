@@ -101,4 +101,47 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> updatePlayer({
+    required Player player,
+    File? imageFile,
+  }) async {
+    final url = AdminUrl.updatePlayer;
+    final adminId = await Global().getAdminId();
+    var request = MultipartRequest('PUT', Uri.parse(url));
+
+    // If an image file is provided, add it to the request
+    if (imageFile != null) {
+      request.files.add(
+        MultipartFile(
+          'Image',
+          imageFile.readAsBytes().asStream(),
+          imageFile.lengthSync(),
+          filename: imageFile.path.split('/').last,
+        ),
+      );
+    }
+
+    // send other fields
+    request.fields["name"] = player.name.toString();
+    request.fields["location"] = player.location.toString();
+    request.fields["role"] = player.role.toString();
+    request.fields["age"] = player.age.toString();
+    request.fields["additionalInfo"] = player.additionalInfo.toString();
+    request.fields["admins[0]"] = adminId.toString();
+
+    // send request
+    var response = await request.send();
+    // print response
+    var json = await response.stream.bytesToString();
+    var body = jsonDecode(json);
+    if (body['success'] == true) {
+      return ApiResponse.fromJson(
+        body,
+        (data) => Player.fromJson(body['data']),
+      );
+    } else {
+      throw AppException(body['message']);
+    }
+  }
 }
