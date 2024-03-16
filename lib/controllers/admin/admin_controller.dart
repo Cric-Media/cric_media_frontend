@@ -5,6 +5,7 @@ import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/player.dart';
+import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 import 'package:http/http.dart';
 
@@ -52,6 +53,24 @@ class AdminController {
       );
     } else {
       throw AppException(body['message']);
+    }
+  }
+
+  Future<ApiResponse> getAllPlayers() async {
+    final adminId = await Global().getAdminId();
+    final url = "${AdminUrl.getAllPlayers}/$adminId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    print(resBody['data']);
+    if (resBody['success']) {
+      List<Player> players = [];
+      for (var player in resBody['data']) {
+        players.add(Player.fromJson(player));
+      }
+      return ApiResponse.fromJson(resBody, (data) => players);
+    } else {
+      throw AppException(resBody['message']);
     }
   }
 }

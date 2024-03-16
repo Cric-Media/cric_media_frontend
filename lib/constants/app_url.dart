@@ -21,4 +21,5 @@ abstract class AuthUrl {
 
 abstract class AdminUrl {
   static final addPlayer = '${AppUrl.baseUrl}/add-players';
+  static final getAllPlayers = '${AppUrl.baseUrl}/get-player-detail-by-adminid';
 }

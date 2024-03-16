@@ -15,7 +15,7 @@ class PlayerCubit extends Cubit<PlayerState> {
   var adminController = AdminController();
 
   void addPlayer({required Player player, required File playerImage}) async {
-    emit(PlayerLoading());
+    emit(PlayerAddLoading());
     try {
       var network = await Network.check();
       if (network) {
@@ -33,6 +33,26 @@ class PlayerCubit extends Cubit<PlayerState> {
         emit(PlayerAddError('Something went wrong'));
       } else {
         emit(PlayerAddError(err.toString()));
+      }
+    }
+  }
+
+  getInitialPlayers() async {
+    emit(PlayerGetInitialLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.getAllPlayers();
+        emit(PlayerGetInitial(response));
+      } else {
+        emit(PlayerGetError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(PlayerGetError('Something went wrong'));
+      } else {
+        emit(PlayerGetError(err.toString()));
       }
     }
   }
