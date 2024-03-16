@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unnecessary_string_interpolations, unnecessary_brace_in_string_interps, avoid_print, use_build_context_synchronously
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
@@ -26,9 +24,9 @@ class _PlayerItemState extends State<PlayerItem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0XFFFBFBFB),
+      backgroundColor: const Color(0XFFFBFBFB),
       appBar: AppBar(
-        title: Text("Players"),
+        title: const Text("Players"),
         backgroundColor: AppColor.blueColor,
         foregroundColor: Colors.white,
       ),
@@ -40,7 +38,7 @@ class _PlayerItemState extends State<PlayerItem> {
         },
         builder: (context, state) {
           if (state is PlayerGetInitialLoading) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -52,7 +50,7 @@ class _PlayerItemState extends State<PlayerItem> {
                   itemCount: 10,
                   // Adjusted for simplicity
                   itemBuilder: (context, index) {
-                    return PlayerTile();
+                    return const PlayerTile();
                   },
                 ),
               )
@@ -65,7 +63,7 @@ class _PlayerItemState extends State<PlayerItem> {
           Navigator.pushNamed(context, addNewPlayer);
         },
         backgroundColor: AppColor.blueColor,
-        child: Icon(
+        child: const Icon(
           Icons.add,
           size: 20,
           color: Colors.white,
@@ -86,12 +84,12 @@ class PlayerTile extends StatelessWidget {
       color: Colors.grey.shade100,
       elevation: 2,
       child: Container(
-        margin: EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(
+            const Expanded(
               flex: 1,
               child: Center(
                 child: CircleAvatar(
@@ -101,7 +99,7 @@ class PlayerTile extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Expanded(
               flex: 3,
               child: Row(
@@ -111,17 +109,17 @@ class PlayerTile extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // name
-                        Text("Wasim Zaman"),
+                        const Text("Wasim Zaman"),
                         // role
-                        Text("All Rounder"),
+                        const Text("All Rounder"),
                         // id
                         Row(
                           children: [
-                            Text("ID: 12345"),
-                            Spacer(),
+                            const Text("ID: 12345"),
+                            const Spacer(),
                             IconButton(
                               onPressed: () {},
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.person_add_alt,
                                 color: AppColor.blueColor,
                               ),
@@ -137,18 +135,18 @@ class PlayerTile extends StatelessWidget {
                     children: [
                       IconButton(
                         onPressed: () {},
-                        icon: Icon(Icons.edit_square),
+                        icon: const Icon(Icons.edit_square),
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.delete,
                           color: Colors.red,
                         ),
                       ),
                       IconButton(
                         onPressed: () {},
-                        icon: Icon(Icons.add_box),
+                        icon: const Icon(Icons.add_box),
                       ),
                     ],
                   ))
