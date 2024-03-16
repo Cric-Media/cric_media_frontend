@@ -6,7 +6,7 @@ class Global {
     prefs.setString('user_id', userId);
   }
 
-  Future<String?> getUserId() async {
+  Future<String?> getAdminId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('user_id');
   }
@@ -27,7 +27,7 @@ class Global {
   }
 
   void deleteIds() async {
-    final id = await getUserId();
+    final id = await getAdminId();
 
     print('user id deleted ===>>>> $id');
   }

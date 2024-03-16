@@ -1,19 +1,23 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, unnecessary_cast
-
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/cubits/player/player_cubit.dart';
+import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
+import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/providers/add_new_player_provider.dart';
+import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../../custom_widgets/costom_text_field.dart';
-
 class AddNewPlayerScreen extends StatefulWidget {
-  const AddNewPlayerScreen({super.key});
+  final String? playerId;
+  const AddNewPlayerScreen({super.key, this.playerId});
 
   @override
   State<AddNewPlayerScreen> createState() => _AddNewPlayerScreenState();
@@ -21,16 +25,52 @@ class AddNewPlayerScreen extends StatefulWidget {
 
 class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
   final _formKey = GlobalKey<FormState>();
+  // Controllers
+  var nameController = TextEditingController();
+  var locationController = TextEditingController();
+  var ageController = TextEditingController();
+  var informationController = TextEditingController();
+
+  // Lists
+  List<String> roles = [
+    'Batsman',
+    'Bowler',
+    'All Rounder',
+    'Wicket Keeper',
+  ];
+
+  // Other Variables
+  String? selectedRole;
+  File? image;
+  bool isLoading = false;
+  Player? player;
+
+  @override
+  void initState() {
+    if (widget.playerId != null) {
+      BlocProvider.of<PlayerCubit>(context).getPlayer(widget.playerId!);
+    } else {}
+    super.initState();
+  }
+
+  pickImage() async {
+    var img = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (img != null) {
+      setState(() {
+        image = File(img.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return Consumer<AddNewPlayerProvider>(
         builder: (BuildContext context, value, child) {
       return Scaffold(
-        backgroundColor: Color(0XFFFBFBFB),
+        backgroundColor: const Color(0XFFFBFBFB),
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(60),
+          preferredSize: const Size.fromHeight(60),
           child: Container(
             // extra container for custom bottom shadows
             decoration: BoxDecoration(
@@ -39,7 +79,7 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                   color: Colors.black.withOpacity(0.5),
                   spreadRadius: 5,
                   blurRadius: 5,
-                  offset: Offset(0, -2),
+                  offset: const Offset(0, -2),
                 ),
               ],
             ),
@@ -47,22 +87,14 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
               foregroundColor: Colors.white,
               backgroundColor: AppColor.blueColor,
               automaticallyImplyLeading: true,
-              actions: [
-                Padding(
-                    padding: const EdgeInsets.only(right: 20.0),
-                    child: Image.asset(
-                      AppIcons.search,
-                      width: 25,
-                      color: Colors.white,
-                    )),
-              ],
               title: Text(
-                'Add Players',
+                'Add Player',
                 style: GoogleFonts.inter(
-                    textStyle: TextStyle(
-                        fontSize: 19,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600)),
+                  textStyle: const TextStyle(
+                      fontSize: 19,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600),
+                ),
               ),
             ),
           ),
@@ -74,16 +106,53 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
               key: _formKey,
               child: Stack(
                 children: [
-                  if (value.isLoading) // Show indicator if loading
-                    Positioned.fill(
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    ),
+                  BlocConsumer<PlayerCubit, PlayerState>(
+                    listener: (context, state) {
+                      if (state is PlayerAddLoading) {
+                        isLoading = true;
+                        BlocProvider.of<PlayerCubit>(context)
+                            .getInitialPlayers();
+                      } else if (state is PlayerUpdateLoading) {
+                        isLoading = true;
+                      } else if (state is PlayerAddSuccess ||
+                          state is PlayerUpdateSuccess) {
+                        isLoading = false;
+                        BlocProvider.of<PlayerCubit>(context)
+                            .getInitialPlayers();
+                        Navigator.pop(context);
+                      } else if (state is PlayerAddError) {
+                        isLoading = false;
+                        showSnack(context, message: state.message);
+                      } else if (state is PlayerUpdateError) {
+                        isLoading = false;
+                        showSnack(context, message: state.message);
+                      } else if (state is PlayerGetPlayer) {
+                        player = state.response.data;
+
+                        nameController.text = player!.name.toString();
+                        locationController.text = player!.location.toString();
+                        ageController.text = player!.age.toString();
+                        informationController.text =
+                            player!.additionalInfo.toString();
+                        selectedRole = player!.role;
+                      }
+                    },
+                    builder: (context, state) {
+                      if (isLoading) {
+                        return const Positioned.fill(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      } else {
+                        return Container();
+                      }
+                    },
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Center(
@@ -95,19 +164,22 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                               height: 120,
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: value.pickedImagePath == null
+                                  color: image == null
                                       ? Colors.red
                                       : AppColor.blueColor,
                                   width: 2,
                                 ),
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
-                                  image: value.pickedImagePath != null
-                                      ? FileImage(File(value.pickedImagePath))
+                                  image: image != null
+                                      ? FileImage(File(image!.path))
                                           as ImageProvider<Object>
-                                      : AssetImage(
-                                              'assets/image/babar_azam.png')
-                                          as ImageProvider<Object>,
+                                      : player != null
+                                          ? CachedNetworkImageProvider(
+                                              player!.imageUrl.toString(),
+                                            )
+                                          : AssetImage(AppIcons.azam)
+                                              as ImageProvider<Object>,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -117,16 +189,16 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                                   const EdgeInsets.only(right: 5.0, bottom: 5),
                               child: GestureDetector(
                                 onTap: () {
-                                  value.pickImage();
+                                  pickImage();
                                 },
                                 child: Container(
                                   width: 25,
                                   height: 25,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: AppColor.blueColor,
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.add,
                                     color: Colors.white,
                                   ),
@@ -136,25 +208,24 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(
                           'Player Name',
                           style: GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                  fontSize: screenWidth * 0.035,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColor.blackColor)),
+                            textStyle: TextStyle(
+                                fontSize: screenWidth * 0.035,
+                                fontWeight: FontWeight.w800,
+                                color: AppColor.blackColor),
+                          ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomTextField(
-                        controller: value.playerNameController,
+                        controller: nameController,
                         hintText: 'Enter player name',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -163,7 +234,7 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Align(
@@ -177,11 +248,11 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                                   color: AppColor.blackColor)),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomTextField(
-                        controller: value.playerLocation,
+                        controller: locationController,
                         hintText: 'Enter player location',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -190,13 +261,13 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          'Select player type ',
+                          'Select player role ',
                           style: GoogleFonts.inter(
                               textStyle: TextStyle(
                                   fontSize: screenWidth * 0.035,
@@ -204,7 +275,7 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                                   color: AppColor.blackColor)),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(7),
@@ -212,13 +283,15 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                         width: screenWidth * 0.95,
                         height: 65,
                         child: DropdownButtonFormField<String>(
-                          value: value.selectedBookingFor,
+                          value: selectedRole,
+                          hint: const Text('Select player role'),
                           onChanged: (newValue) {
                             if (newValue != null) {
-                              value.selectedBookingFor = newValue;
+                              selectedRole = newValue;
+                              // value.selectedBookingFor = newValue;
                             }
                           },
-                          items: ['boller', 'matsman']
+                          items: roles
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -228,7 +301,7 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                                 ),
                                 child: Text(
                                   value,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     color: Colors.grey,
                                     fontWeight: FontWeight.w500,
@@ -238,17 +311,17 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                             );
                           }).toList(),
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(bottom: 2),
+                            contentPadding: const EdgeInsets.only(bottom: 2),
                             filled: true,
                             fillColor: AppColor.textfieldColor.withOpacity(0.4),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(7.0),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                   color: AppColor.grayColor, width: 0.2),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(7.0),
-                              borderSide: BorderSide(
+                              borderSide: const BorderSide(
                                   color: AppColor.grayColor, width: 0.2),
                             ),
                             border: OutlineInputBorder(
@@ -269,23 +342,43 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                                   color: AppColor.blackColor)),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomTextField(
-                        controller: value.playerAge,
-                        hintText: 'Enter player age',
+                        controller: ageController,
+                        hintText: "Player's date of birth",
+                        readOnly: true,
+                        prefixIcon: IconButton(
+                          icon: const Icon(
+                            Icons.calendar_today_outlined,
+                            color: AppColor.blueColor,
+                          ),
+                          onPressed: () async {
+                            final DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime.now(),
+                            );
+                            if (pickedDate != null) {
+                              // Store date in DD-MM-YY format
+                              ageController.text =
+                                  '${pickedDate.day}-${pickedDate.month}-${pickedDate.year}';
+                            }
+                          },
+                        ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter player age';
                           }
-                          if (int.tryParse(value) == null) {
-                            return 'Age must be a number';
-                          }
+                          // if (int.tryParse(value) == null) {
+                          //   return 'Age must be a number';
+                          // }
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Align(
@@ -299,11 +392,11 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                                   color: AppColor.blackColor)),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       CustomTextField(
-                        controller: value.playerInformation,
+                        controller: informationController,
                         hintText: 'Enter additional information',
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -312,20 +405,21 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
-                      InkWell(
+                      CustomButton(
+                        buttonText: player != null ? 'Update' : 'Submit',
+                        backgroundColor: AppColor.blueColor,
                         onTap: () {
-                          value.addNewPlayerMethod(context);
-                          value.setLoading(true);
+                          if (player != null) {
+                            update();
+                          } else {
+                            add();
+                          }
                         },
-                        child: CustomButton(
-                          buttonText: 'Submit',
-                          backgroundColor: AppColor.blueColor,
-                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                     ],
@@ -337,5 +431,48 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
         ),
       );
     });
+  }
+
+  update() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    Player p = Player(
+      id: player!.id,
+      name: nameController.text.trim(),
+      location: locationController.text.trim(),
+      role: selectedRole,
+      age: ageController.text,
+      additionalInfo: informationController.text.trim(),
+    );
+    BlocProvider.of<PlayerCubit>(context).updatePlayer(p, image);
+  }
+
+  add() {
+    if (!_formKey.currentState!.validate() && image == null) {
+      return;
+    }
+    Player player = Player(
+      name: nameController.text.trim(),
+      location: locationController.text.trim(),
+      role: selectedRole,
+      age: ageController.text,
+      additionalInfo: informationController.text.trim(),
+    );
+    BlocProvider.of<PlayerCubit>(context).addPlayer(
+      player: player,
+      playerImage: image!,
+    );
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    locationController.dispose();
+    ageController.dispose();
+    informationController.dispose();
+
+    _formKey.currentState?.dispose();
+    super.dispose();
   }
 }

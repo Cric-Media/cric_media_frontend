@@ -1,10 +1,12 @@
 import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/providers/add_new_player_provider.dart';
 import 'package:cricket_app/providers/registration_provider.dart';
 import 'package:cricket_app/providers/team_provider.dart';
 import 'package:cricket_app/providers/user_login_provider.dart';
 import 'package:cricket_app/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
@@ -35,15 +37,22 @@ class MyApp extends StatelessWidget {
             currentFocus.unfocus();
           }
         },
-        child: GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Cric Media',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: AppColor.blueColor),
-            useMaterial3: true,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<PlayerCubit>(
+              create: (context) => PlayerCubit(),
+            ),
+          ],
+          child: GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Cric Media',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: AppColor.blueColor),
+              useMaterial3: true,
+            ),
+            onGenerateRoute: Routes.onGenerateRoute,
+            initialRoute: '/',
           ),
-          onGenerateRoute: Routes.onGenerateRoute,
-          initialRoute: '/',
         ),
       ),
     );

@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigateBasedOnUserId() async {
-    final userId = await Global().getUserId();
+    final userId = await Global().getAdminId();
     final token = await Global().getToken();
 
     if (userId != null && token != null) {

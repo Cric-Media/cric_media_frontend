@@ -29,7 +29,7 @@ class GetAllPlayerProvider extends ChangeNotifier {
 
   init() async {
     print('Provider initializing...');
-    String? userId = await Global().getUserId();
+    String? userId = await Global().getAdminId();
     if (userId != null) {
       await fetchAndUpdateData(userId);
     } else {
