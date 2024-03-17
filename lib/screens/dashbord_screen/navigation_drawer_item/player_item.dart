@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
+import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
+import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/utils/app_dialog.dart';
 import 'package:cricket_app/utils/snackbars.dart';
@@ -91,12 +93,43 @@ class _PlayerItemState extends State<PlayerItem> {
   }
 }
 
-class PlayerTile extends StatelessWidget {
+class PlayerTile extends StatefulWidget {
   final Player player;
   const PlayerTile({
     super.key,
     required this.player,
   });
+
+  @override
+  State<PlayerTile> createState() => _PlayerTileState();
+}
+
+class _PlayerTileState extends State<PlayerTile> {
+  List<Admin> admins = [];
+  String search = '';
+
+  // Scroll controller
+  final ScrollController _scrollController = ScrollController();
+  int page = 1;
+  int limit = 20;
+
+  @override
+  void initState() {
+    BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        page++;
+        BlocProvider.of<AdminCubit>(context).getMoreOtherAdmins(
+          search: search,
+          page: page,
+          limit: limit,
+        );
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +148,7 @@ class PlayerTile extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 40,
                   backgroundImage: CachedNetworkImageProvider(
-                    player.imageUrl.toString(),
+                    widget.player.imageUrl.toString(),
                   ),
                 ),
               ),
@@ -131,18 +164,20 @@ class PlayerTile extends StatelessWidget {
                       children: [
                         // name
                         Text(
-                          player.name.toString(),
+                          widget.player.name.toString(),
                           style: const TextStyle(fontWeight: FontWeight.w700),
                         ),
                         // role
-                        Text("Role: ${player.role}"),
+                        Text("Role: ${widget.player.role}"),
                         // id
                         Row(
                           children: [
-                            Text("ID: ${player.id!.substring(0, 7)}"),
+                            Text("ID: ${widget.player.id!.substring(0, 7)}"),
                             const Spacer(),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                showBottomSheet(context);
+                              },
                               icon: const Icon(
                                 Icons.person_add_alt,
                                 color: AppColor.blueColor,
@@ -160,7 +195,7 @@ class PlayerTile extends StatelessWidget {
                       IconButton(
                         onPressed: () {
                           Navigator.pushNamed(context, addNewPlayer,
-                              arguments: {"playerId": player.id!});
+                              arguments: {"playerId": widget.player.id!});
                         },
                         icon: const Icon(Icons.edit_square),
                       ),
@@ -172,7 +207,7 @@ class PlayerTile extends StatelessWidget {
                                   "Do you really want to delete this player?",
                               onPressed: () {
                             BlocProvider.of<PlayerCubit>(context)
-                                .deletePlayer(player.id!);
+                                .deletePlayer(widget.player.id!);
                           });
                         },
                         icon: const Icon(
@@ -192,6 +227,75 @@ class PlayerTile extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: const InputDecoration(
+                  labelText: "Search",
+                  hintText: "Search Users",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  ),
+                ),
+                onChanged: (value) {
+                  search = value;
+                  BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins(
+                    search: search,
+                  );
+                },
+              ),
+            ),
+            Expanded(
+              child: BlocConsumer<AdminCubit, AdminState>(
+                listener: (context, state) {
+                  if (state is AdminGetOtherAdminsSuccess) {
+                    admins = state.response.data;
+                  } else if (state is AdminGetOtherMoreAdminsSuccess) {
+                    admins.addAll(state.response.data);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is AdminLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: admins.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(
+                            admins[index].imageUrl.toString(),
+                          ),
+                          onBackgroundImageError: (exception, stackTrace) =>
+                              const Icon(Icons.person),
+                        ),
+                        title: Text(admins[index].name.toString()),
+                        trailing: TextButton(
+                          onPressed: () {},
+                          child: const Text("Share access"),
+                        ),
+                        // Other properties of ListTile
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

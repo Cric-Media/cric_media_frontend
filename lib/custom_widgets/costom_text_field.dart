@@ -27,7 +27,7 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  bool obscureText = false;
+  bool obscureText = true;
 
   showVisibility() {
     setState(() {

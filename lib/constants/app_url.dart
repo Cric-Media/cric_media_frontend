@@ -26,4 +26,5 @@ abstract class AdminUrl {
       '${AppUrl.baseUrl}/get-player-detail-by-playerid';
   static final updatePlayer = '${AppUrl.baseUrl}/update-player';
   static final deletePlayer = '${AppUrl.baseUrl}/delete-player-byid';
+  static final getOtherAdmins = '${AppUrl.baseUrl}/get-other-admin-by-adminid';
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/constants/global.dart';
+import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/utils/api_manager.dart';
@@ -10,6 +11,34 @@ import 'package:cricket_app/utils/app_exception.dart';
 import 'package:http/http.dart';
 
 class AdminController {
+  Future<ApiResponse> getOtherAdmins({
+    int page = 1,
+    int limit = 20,
+    String? search,
+  }) async {
+    final url = AdminUrl.getOtherAdmins;
+    final adminId = await Global().getAdminId();
+    final body = {
+      "adminID": adminId,
+      "page": page,
+      "limit": limit,
+      "search": search,
+    };
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.postRequest(body, url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    print(resBody);
+    if (resBody['success']) {
+      List<Admin> admins = [];
+      for (var admin in resBody['data']) {
+        admins.add(Admin.fromJson(admin));
+      }
+      return ApiResponse.fromJson(resBody, (data) => admins);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
   Future<ApiResponse> addPlayer({
     required Player player,
     required File imageFile,

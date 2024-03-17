@@ -48,9 +48,8 @@ class AppDialogs {
             TextButton(
               child: const Text('Confirm'),
               onPressed: () {
+                Navigator.pop(context);
                 onPressed();
-                Navigator.of(context)
-                    .pop(true); // Dismiss dialog and return true
               },
             ),
           ],
