@@ -233,6 +233,8 @@ class _PlayerTileState extends State<PlayerTile> {
 
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.white,
+      useSafeArea: true,
       builder: (context) {
         return Column(
           children: <Widget>[
