@@ -409,48 +409,49 @@ class _HomeState extends State<Home> {
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        indexes(5);
-                                        user == null
-                                            ? signinConfirmation()
-                                            : Navigator.pushReplacementNamed(
-                                                context,
-                                                dashboard,
-                                              );
-                                        Global().removeUserId();
-                                        Global().deleteIds();
-                                        Global().logoutUser();
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        width: screenWidth,
-                                        decoration: BoxDecoration(
-                                            color: indix == 5
-                                                ? Colors.grey.withOpacity(0.5)
-                                                : Colors.transparent),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                                child: ListTile(
-                                              leading: Image.asset(
-                                                AppIcons.logout,
-                                                width: 22,
-                                              ),
-                                              title: Text(
-                                                'Log out',
-                                                style: GoogleFonts.inter(
-                                                    textStyle: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w500)),
-                                              ),
-                                            ))
-                                          ],
+                                    if (user != null)
+                                      InkWell(
+                                        onTap: () {
+                                          indexes(5);
+                                          user == null
+                                              ? signinConfirmation()
+                                              : Navigator.pushReplacementNamed(
+                                                  context,
+                                                  dashboard,
+                                                );
+                                          Global().removeUserId();
+                                          Global().deleteIds();
+                                          Global().logoutUser();
+                                        },
+                                        child: Container(
+                                          height: 50,
+                                          width: screenWidth,
+                                          decoration: BoxDecoration(
+                                              color: indix == 5
+                                                  ? Colors.grey.withOpacity(0.5)
+                                                  : Colors.transparent),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                  child: ListTile(
+                                                leading: Image.asset(
+                                                  AppIcons.logout,
+                                                  width: 22,
+                                                ),
+                                                title: Text(
+                                                  'Log out',
+                                                  style: GoogleFonts.inter(
+                                                      textStyle: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w500)),
+                                                ),
+                                              ))
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
                                     SizedBox(
                                       height: 10,
                                     ),
