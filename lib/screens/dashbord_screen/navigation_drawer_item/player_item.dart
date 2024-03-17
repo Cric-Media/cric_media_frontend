@@ -115,8 +115,6 @@ class _PlayerTileState extends State<PlayerTile> {
 
   @override
   void initState() {
-    BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins();
-
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -231,6 +229,8 @@ class _PlayerTileState extends State<PlayerTile> {
   }
 
   void showBottomSheet(BuildContext context) {
+    BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins();
+
     showModalBottomSheet(
       context: context,
       builder: (context) {
