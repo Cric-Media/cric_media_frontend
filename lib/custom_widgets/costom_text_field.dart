@@ -27,11 +27,11 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  bool obscureText = true;
+  bool? obscureText;
 
   showVisibility() {
     setState(() {
-      obscureText = !obscureText;
+      obscureText = !obscureText!;
     });
   }
 
@@ -48,7 +48,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           cursorColor: AppColor.blueColor,
           cursorWidth: 2,
           controller: widget.controller,
-          obscureText: obscureText,
+          obscureText: obscureText ?? widget.isPassword,
           validator: widget.validator,
           decoration: InputDecoration(
             border: InputBorder.none,

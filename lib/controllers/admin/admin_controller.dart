@@ -172,4 +172,23 @@ class AdminController {
       throw AppException(body['message']);
     }
   }
+
+  Future<ApiResponse> sharePlayer(String playerId, String otherAdminId) async {
+    final url = AdminUrl.sharePlayer;
+    final myAdminId = await Global().getAdminId();
+    final headers = {"Content-Type": "application/json"};
+    final body = {
+      "playerId": playerId,
+      "adminId": myAdminId,
+      "newAdmins": [otherAdminId]
+    };
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    print(resBody);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }

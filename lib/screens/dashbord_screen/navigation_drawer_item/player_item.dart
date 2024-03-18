@@ -61,8 +61,9 @@ class _PlayerItemState extends State<PlayerItem> {
           return Column(
             children: [
               Expanded(
-                child: ListView.builder(
+                child: ListView.separated(
                   shrinkWrap: true,
+                  separatorBuilder: (context, index) => const Divider(),
                   itemCount: players.length,
                   // Adjusted for simplicity
                   itemBuilder: (context, index) {
@@ -131,99 +132,86 @@ class _PlayerTileState extends State<PlayerTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+      // margin: const EdgeInsets.only(bottom: 10),
       color: Colors.grey.shade100,
-      elevation: 2,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Center(
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundImage: CachedNetworkImageProvider(
-                    widget.player.imageUrl.toString(),
-                  ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Center(
+            child: CircleAvatar(
+              radius: 50,
+              backgroundImage: CachedNetworkImageProvider(
+                widget.player.imageUrl.toString(),
+              ),
+            ),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // name
+                Text(
+                  widget.player.name.toString(),
+                  style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
-              ),
-            ),
-            const SizedBox(width: 20),
-            Expanded(
-              flex: 3,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // name
-                        Text(
-                          widget.player.name.toString(),
-                          style: const TextStyle(fontWeight: FontWeight.w700),
-                        ),
-                        // role
-                        Text("Role: ${widget.player.role}"),
-                        // id
-                        Row(
-                          children: [
-                            Text("ID: ${widget.player.id!.substring(0, 7)}"),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: () {
-                                showBottomSheet(context);
-                              },
-                              icon: const Icon(
-                                Icons.person_add_alt,
-                                color: AppColor.blueColor,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
+                // role
+                Text("Role: ${widget.player.role}"),
+                // id
+                Row(
+                  children: [
+                    Text("ID: ${widget.player.id!.substring(0, 7)}"),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        showBottomSheet(context);
+                      },
+                      icon: const Icon(
+                        Icons.person_add_alt,
+                        color: AppColor.blueColor,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, addNewPlayer,
-                              arguments: {"playerId": widget.player.id!});
-                        },
-                        icon: const Icon(Icons.edit_square),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          AppDialogs.showConfirmationDialog(context,
-                              title: "Delete Player?",
-                              message:
-                                  "Do you really want to delete this player?",
-                              onPressed: () {
-                            BlocProvider.of<PlayerCubit>(context)
-                                .deletePlayer(widget.player.id!);
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.add_box),
-                      ),
-                    ],
-                  ))
-                ],
-              ),
+                  ],
+                )
+              ],
             ),
-          ],
-        ),
+          ),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, addNewPlayer,
+                      arguments: {"playerId": widget.player.id!});
+                },
+                icon: const Icon(Icons.edit),
+              ),
+              IconButton(
+                onPressed: () {
+                  AppDialogs.showConfirmationDialog(context,
+                      title: "Delete Player?",
+                      message: "Do you really want to delete this player?",
+                      onPressed: () {
+                    BlocProvider.of<PlayerCubit>(context)
+                        .deletePlayer(widget.player.id!);
+                  });
+                },
+                icon: const Icon(Icons.delete, color: Colors.red),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.add_circle_outline_outlined),
+              ),
+            ],
+          )),
+        ],
       ),
     );
   }
@@ -264,6 +252,9 @@ class _PlayerTileState extends State<PlayerTile> {
                     admins = state.response.data;
                   } else if (state is AdminGetOtherMoreAdminsSuccess) {
                     admins.addAll(state.response.data);
+                  } else if (state is AdminSharePlayerSuccess) {
+                    Navigator.pop(context);
+                    showSnack(context, message: state.response.message);
                   }
                 },
                 builder: (context, state) {
@@ -272,8 +263,10 @@ class _PlayerTileState extends State<PlayerTile> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  return ListView.builder(
+                  return ListView.separated(
+                    controller: _scrollController,
                     itemCount: admins.length,
+                    separatorBuilder: (context, index) => const Divider(),
                     itemBuilder: (context, index) {
                       return ListTile(
                         leading: CircleAvatar(
@@ -285,7 +278,12 @@ class _PlayerTileState extends State<PlayerTile> {
                         ),
                         title: Text(admins[index].name.toString()),
                         trailing: TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            BlocProvider.of<AdminCubit>(context).sharePlayer(
+                              playerId: widget.player.id.toString(),
+                              adminId: admins[index].id.toString(),
+                            );
+                          },
                           child: const Text("Share access"),
                         ),
                         // Other properties of ListTile
