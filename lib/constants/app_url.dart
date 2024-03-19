@@ -28,4 +28,8 @@ abstract class AdminUrl {
   static final deletePlayer = '${AppUrl.baseUrl}/delete-player-byid';
   static final getOtherAdmins = '${AppUrl.baseUrl}/get-other-admin-by-adminid';
   static final sharePlayer = '${AppUrl.baseUrl}/share-player';
+
+  // Team URLs
+  static final createTeam = '${AppUrl.baseUrl}/add-team';
+  static final getTeams = '${AppUrl.baseUrl}/get-team-by-adminid';
 }

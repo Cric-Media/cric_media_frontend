@@ -6,6 +6,7 @@ import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/player.dart';
+import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 import 'package:http/http.dart';
@@ -189,6 +190,42 @@ class AdminController {
       return ApiResponse.fromJson(resBody, (data) => null);
     } else {
       throw AppException(resBody['message']);
+    }
+  }
+
+  // !TEAM SECTION //
+  Future<ApiResponse> addTeam(
+      {required Team team, required File imageFile}) async {
+    final url = AdminUrl.createTeam;
+    final adminId = await Global().getAdminId();
+    var request = MultipartRequest('POST', Uri.parse(url));
+
+    request.files.add(
+      MultipartFile(
+        'image',
+        imageFile.readAsBytes().asStream(),
+        imageFile.lengthSync(),
+        filename: imageFile.path.split('/').last,
+      ),
+    );
+    // send other fields
+    request.fields["name"] = team.name.toString();
+    request.fields["location"] = team.location.toString();
+    request.fields["admin"] = adminId.toString();
+
+    // send request
+    var response = await request.send();
+    // print response
+    var json = await response.stream.bytesToString();
+    var body = jsonDecode(json);
+    print(body);
+    if (body['success'] == true) {
+      return ApiResponse.fromJson(
+        body,
+        (data) => Team.fromJson(body['data']),
+      );
+    } else {
+      throw AppException(body['message']);
     }
   }
 }

@@ -153,6 +153,7 @@ class _PlayerTileState extends State<PlayerTile> {
             flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 // name
                 Text(

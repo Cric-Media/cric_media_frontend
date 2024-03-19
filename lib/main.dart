@@ -1,6 +1,7 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
+import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/providers/add_new_player_provider.dart';
 import 'package:cricket_app/providers/registration_provider.dart';
 import 'package:cricket_app/providers/team_provider.dart';
@@ -40,8 +41,9 @@ class MyApp extends StatelessWidget {
         },
         child: MultiBlocProvider(
           providers: [
-            BlocProvider<PlayerCubit>(create: (context) => PlayerCubit()),
             BlocProvider<AdminCubit>(create: (context) => AdminCubit()),
+            BlocProvider<PlayerCubit>(create: (context) => PlayerCubit()),
+            BlocProvider<TeamCubit>(create: (context) => TeamCubit()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
