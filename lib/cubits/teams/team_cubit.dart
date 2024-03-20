@@ -104,4 +104,24 @@ class TeamCubit extends Cubit<TeamState> {
       }
     }
   }
+
+  void addPlayerToTeam(String teamId, String playerId) async {
+    emit(TeamAddPlayerLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.addPlayerToTeam(playerId, teamId);
+        emit(TeamAddPlayerSuccess(response));
+      } else {
+        emit(TeamAddPlayerError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(TeamAddPlayerError('Something went wrong'));
+      } else {
+        emit(TeamAddPlayerError(err.toString()));
+      }
+    }
+  }
 }

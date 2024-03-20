@@ -17,6 +17,8 @@ class TeamUpdateLoading extends TeamState {}
 
 class TeamDeleteLoading extends TeamState {}
 
+class TeamAddPlayerLoading extends TeamState {}
+
 // Success states
 class TeamAddSuccess extends TeamState {
   final ApiResponse response;
@@ -43,6 +45,11 @@ class TeamGetInitial extends TeamState {
   TeamGetInitial(this.response);
 }
 
+class TeamAddPlayerSuccess extends TeamState {
+  final ApiResponse response;
+  TeamAddPlayerSuccess(this.response);
+}
+
 // Error states
 class TeamAddError extends TeamState {
   final String message;
@@ -67,4 +74,9 @@ class TeamDeleteError extends TeamState {
 class TeamGetTeamError extends TeamState {
   final String message;
   TeamGetTeamError(this.message);
+}
+
+class TeamAddPlayerError extends TeamState {
+  final String message;
+  TeamAddPlayerError(this.message);
 }

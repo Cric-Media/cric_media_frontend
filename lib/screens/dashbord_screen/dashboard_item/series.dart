@@ -29,289 +29,287 @@ class _SeriesState extends State<Series> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Color(0XFFFBFBFB),
-      drawer: Container(
-        child: Drawer(
-            backgroundColor: Colors.white,
-            shadowColor: Colors.white,
-            child: Column(children: [
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/image/drawericon.jpg'),
-                    fit: BoxFit.cover,
-                  ),
+      backgroundColor: const Color(0XFFFBFBFB),
+      drawer: Drawer(
+          backgroundColor: Colors.white,
+          shadowColor: Colors.white,
+          child: Column(children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/image/drawericon.jpg'),
+                  fit: BoxFit.cover,
                 ),
-                child: Align(
-                  alignment:
-                      Alignment.bottomLeft, // Position text at the bottom left
+              ),
+              child: Align(
+                alignment:
+                    Alignment.bottomLeft, // Position text at the bottom left
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment
+                      .end, // Use minimum space needed by the children
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'luqman ali',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      'email@example.com',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    indexes(0);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ProfileItem()));
+                  },
                   child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment
-                          .end, // Use minimum space needed by the children
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    height: 50,
+                    width: screenWidth,
+                    decoration: BoxDecoration(
+                        color: indix == 0
+                            ? Colors.grey.withOpacity(0.5)
+                            : Colors.transparent),
+                    child: Row(
                       children: [
-                        Text(
-                          'luqman ali',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                        Expanded(
+                            child: ListTile(
+                          leading: Image.asset(
+                            AppIcons.profile3,
+                            width: 25,
                           ),
-                        ),
-                        Text(
-                          'email@example.com',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
+                          title: Text(
+                            'Profile',
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500)),
                           ),
-                        ),
+                        ))
                       ],
                     ),
                   ),
                 ),
-              ),
-              Column(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      indexes(0);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileItem()));
-                    },
-                    child: Container(
-                      height: 50,
-                      width: screenWidth,
-                      decoration: BoxDecoration(
-                          color: indix == 0
-                              ? Colors.grey.withOpacity(0.5)
-                              : Colors.transparent),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: ListTile(
-                            leading: Image.asset(
-                              AppIcons.profile3,
-                              width: 25,
-                            ),
-                            title: Text(
-                              'Profile',
-                              style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500)),
-                            ),
-                          ))
-                        ],
-                      ),
+                const SizedBox(
+                  height: 5,
+                ),
+                InkWell(
+                  onTap: () {
+                    indexes(1);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PlayerItem()));
+                  },
+                  child: Container(
+                    height: 50,
+                    width: screenWidth,
+                    decoration: BoxDecoration(
+                        color: indix == 1
+                            ? Colors.grey.withOpacity(0.5)
+                            : Colors.transparent),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: ListTile(
+                          leading: Image.asset(
+                            AppIcons.player5,
+                            width: 25,
+                          ),
+                          title: Text(
+                            'Add player',
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                        ))
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      indexes(1);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PlayerItem()));
-                    },
-                    child: Container(
-                      height: 50,
-                      width: screenWidth,
-                      decoration: BoxDecoration(
-                          color: indix == 1
-                              ? Colors.grey.withOpacity(0.5)
-                              : Colors.transparent),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: ListTile(
-                            leading: Image.asset(
-                              AppIcons.player5,
-                              width: 25,
-                            ),
-                            title: Text(
-                              'Add player',
-                              style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500)),
-                            ),
-                          ))
-                        ],
-                      ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                InkWell(
+                  onTap: () {
+                    indexes(2);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TeamsScreen()));
+                  },
+                  child: Container(
+                    height: 50,
+                    width: screenWidth,
+                    decoration: BoxDecoration(
+                        color: indix == 2
+                            ? Colors.grey.withOpacity(0.5)
+                            : Colors.transparent),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: ListTile(
+                          leading: Image.asset(
+                            AppIcons.team,
+                            width: 25,
+                          ),
+                          title: Text(
+                            'Add Team',
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                        ))
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      indexes(2);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TeamsScreen()));
-                    },
-                    child: Container(
-                      height: 50,
-                      width: screenWidth,
-                      decoration: BoxDecoration(
-                          color: indix == 2
-                              ? Colors.grey.withOpacity(0.5)
-                              : Colors.transparent),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: ListTile(
-                            leading: Image.asset(
-                              AppIcons.team,
-                              width: 25,
-                            ),
-                            title: Text(
-                              'Add Team',
-                              style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500)),
-                            ),
-                          ))
-                        ],
-                      ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                InkWell(
+                  onTap: () {
+                    indexes(3);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MatchItem()));
+                  },
+                  child: Container(
+                    height: 50,
+                    width: screenWidth,
+                    decoration: BoxDecoration(
+                        color: indix == 3
+                            ? Colors.grey.withOpacity(0.5)
+                            : Colors.transparent),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: ListTile(
+                          leading: Image.asset(
+                            AppIcons.startmatch,
+                            width: 25,
+                          ),
+                          title: Text(
+                            'Start Match',
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                        ))
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      indexes(3);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MatchItem()));
-                    },
-                    child: Container(
-                      height: 50,
-                      width: screenWidth,
-                      decoration: BoxDecoration(
-                          color: indix == 3
-                              ? Colors.grey.withOpacity(0.5)
-                              : Colors.transparent),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: ListTile(
-                            leading: Image.asset(
-                              AppIcons.startmatch,
-                              width: 25,
-                            ),
-                            title: Text(
-                              'Start Match',
-                              style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500)),
-                            ),
-                          ))
-                        ],
-                      ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                InkWell(
+                  onTap: () {
+                    indexes(4);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const TornamentItem()));
+                  },
+                  child: Container(
+                    height: 50,
+                    width: screenWidth,
+                    decoration: BoxDecoration(
+                        color: indix == 4
+                            ? Colors.grey.withOpacity(0.5)
+                            : Colors.transparent),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: ListTile(
+                          leading: Image.asset(
+                            AppIcons.tornament,
+                            width: 25,
+                          ),
+                          title: Text(
+                            'Add Tournaments',
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                        ))
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      indexes(4);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TornamentItem()));
-                    },
-                    child: Container(
-                      height: 50,
-                      width: screenWidth,
-                      decoration: BoxDecoration(
-                          color: indix == 4
-                              ? Colors.grey.withOpacity(0.5)
-                              : Colors.transparent),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: ListTile(
-                            leading: Image.asset(
-                              AppIcons.tornament,
-                              width: 25,
-                            ),
-                            title: Text(
-                              'Add Tournaments',
-                              style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500)),
-                            ),
-                          ))
-                        ],
-                      ),
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                InkWell(
+                  onTap: () {
+                    indexes(5);
+                  },
+                  child: Container(
+                    height: 50,
+                    width: screenWidth,
+                    decoration: BoxDecoration(
+                        color: indix == 5
+                            ? Colors.grey.withOpacity(0.5)
+                            : Colors.transparent),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: ListTile(
+                          leading: Image.asset(
+                            AppIcons.logout,
+                            width: 22,
+                          ),
+                          title: Text(
+                            'Log out',
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                        ))
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      indexes(5);
-                    },
-                    child: Container(
-                      height: 50,
-                      width: screenWidth,
-                      decoration: BoxDecoration(
-                          color: indix == 5
-                              ? Colors.grey.withOpacity(0.5)
-                              : Colors.transparent),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: ListTile(
-                            leading: Image.asset(
-                              AppIcons.logout,
-                              width: 22,
-                            ),
-                            title: Text(
-                              'Log out',
-                              style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500)),
-                            ),
-                          ))
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
-              )
-            ])),
-      ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+              ],
+            )
+          ])),
       appBar: AppBar(
         automaticallyImplyLeading: true,
         centerTitle: true,
         title: Text(
           'Series'.toUpperCase(),
           style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                   fontSize: 17,
                   color: Colors.black,
                   fontWeight: FontWeight.w700)),
@@ -328,7 +326,7 @@ class _SeriesState extends State<Series> {
         ],
       ),
       body: Column(children: [
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         Expanded(
@@ -343,7 +341,8 @@ class _SeriesState extends State<Series> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UpCommingSeriesScreen()));
+                              builder: (context) =>
+                                  const UpCommingSeriesScreen()));
                     },
                     child: Card(
                       elevation: 2,
@@ -371,29 +370,29 @@ class _SeriesState extends State<Series> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 2,
                                       ),
                                       Text(
                                         'South Africa vs England',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 2,
                                       ),
-                                      Text('Start Date  2024/2/30',
+                                      const Text('Start Date  2024/2/30',
                                           style: TextStyle(
                                               fontSize: 11,
                                               color: Colors.black,
                                               fontWeight: FontWeight.w400)),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 4,
                                       ),
-                                      Row(
+                                      const Row(
                                         children: [
                                           Text('End Date  2024/3/17',
                                               style: TextStyle(

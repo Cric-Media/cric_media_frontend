@@ -317,4 +317,23 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> addPlayerToTeam(String playerId, String teamId) async {
+    final url = AdminUrl.addPlayerToTeam;
+    final headers = {"Content-Type": "application/json"};
+    final teamAdmin = await Global().getAdminId();
+    final body = {
+      "teamID": teamId,
+      "adminId": teamAdmin,
+      "newPlayers": [playerId]
+    };
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    print(resBody);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }

@@ -8,6 +8,7 @@ import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/team.dart';
+import 'package:cricket_app/utils/app_dialog.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,6 +81,14 @@ class _TeamsScreenState extends State<TeamsScreen> {
             teams = state.response.data;
           } else if (state is TeamGetError) {
             print(state.message);
+          } else if (state is TeamDeleteLoading) {
+            AppDialogs.loadingDialog(context);
+          } else if (state is TeamDeleteError) {
+            Navigator.pop(context);
+            showSnack(context, message: state.message);
+          } else if (state is TeamDeleteSuccess) {
+            Navigator.pop(context);
+            BlocProvider.of<TeamCubit>(context).getInitialTeams();
           }
         },
         builder: (context, state) {
@@ -104,7 +113,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
           Navigator.pushNamed(
             context,
             addTeam,
-            arguments: {"team", null},
+            arguments: {'team': null},
           );
         },
         backgroundColor: AppColor.blueColor,
@@ -212,6 +221,7 @@ class _TeamTileState extends State<TeamTile> {
                               const Icon(Icons.person),
                         ),
                         title: Text(admins[index].name.toString()),
+
                         trailing: TextButton(
                           onPressed: () {
                             BlocProvider.of<AdminCubit>(context).shareTeam(
@@ -302,7 +312,7 @@ class _TeamTileState extends State<TeamTile> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: 5,
+                                  height: 8,
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10.0),
@@ -315,19 +325,34 @@ class _TeamTileState extends State<TeamTile> {
                                             fontWeight: FontWeight.w600)),
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 20,
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Text(
+                                    'Total players:${widget.team.players?.length}',
+                                    style: GoogleFonts.inter(
+                                        textStyle: TextStyle(
+                                      fontSize: 12,
+                                      color: AppColor.blackColor,
+                                    )),
+                                  ),
                                 ),
+                                SizedBox(height: 10),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 5),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      showBottomSheet(context);
-                                    },
-                                    child: Image.asset(
-                                      'assets/image/invite.png',
-                                      width: 20,
-                                    ),
+                                  child: Row(
+                                    children: [
+                                      Text("Share access"),
+                                      SizedBox(width: 10),
+                                      GestureDetector(
+                                        onTap: () {
+                                          showBottomSheet(context);
+                                        },
+                                        child: Image.asset(
+                                          'assets/image/invite.png',
+                                          width: 20,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],

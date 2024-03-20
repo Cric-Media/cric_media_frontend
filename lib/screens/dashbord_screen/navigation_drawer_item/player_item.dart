@@ -3,8 +3,10 @@ import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
+import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/player.dart';
+import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/app_dialog.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -107,6 +109,7 @@ class PlayerTile extends StatefulWidget {
 
 class _PlayerTileState extends State<PlayerTile> {
   List<Admin> admins = [];
+  List<Team> teams = [];
   String search = '';
 
   // Scroll controller
@@ -169,7 +172,7 @@ class _PlayerTileState extends State<PlayerTile> {
                     const Spacer(),
                     IconButton(
                       onPressed: () {
-                        showBottomSheet(context);
+                        showAdminsSheet(context);
                       },
                       icon: const Icon(
                         Icons.person_add_alt,
@@ -207,7 +210,9 @@ class _PlayerTileState extends State<PlayerTile> {
                 icon: const Icon(Icons.delete, color: Colors.red),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showTeams(context);
+                },
                 icon: const Icon(Icons.add_circle_outline_outlined),
               ),
             ],
@@ -217,7 +222,7 @@ class _PlayerTileState extends State<PlayerTile> {
     );
   }
 
-  void showBottomSheet(BuildContext context) {
+  void showAdminsSheet(BuildContext context) {
     BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins();
 
     showModalBottomSheet(
@@ -286,6 +291,91 @@ class _PlayerTileState extends State<PlayerTile> {
                             );
                           },
                           child: const Text("Share access"),
+                        ),
+                        // Other properties of ListTile
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showTeams(BuildContext context) {
+    BlocProvider.of<TeamCubit>(context).getInitialTeams();
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      useSafeArea: true,
+      builder: (context) {
+        return Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: const InputDecoration(
+                  labelText: "Search",
+                  hintText: "Search Users",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  ),
+                ),
+                onChanged: (value) {
+                  search = value;
+                  // BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins(
+                  //   search: search,
+                  // );
+                },
+              ),
+            ),
+            Expanded(
+              child: BlocConsumer<TeamCubit, TeamState>(
+                listener: (context, state) {
+                  if (state is TeamGetInitial) {
+                    teams = state.response.data;
+                  } else if (state is TeamAddPlayerLoading) {
+                    AppDialogs.loadingDialog(context);
+                  } else if (state is TeamAddPlayerSuccess) {
+                    Navigator.pop(context);
+                    showSnack(context, message: state.response.message);
+                  } else if (state is TeamAddPlayerError) {
+                    Navigator.pop(context);
+                    showSnack(context, message: state.message);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is TeamGetInitialLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.separated(
+                    itemCount: teams.length,
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(
+                            teams[index].image.toString(),
+                          ),
+                          onBackgroundImageError: (exception, stackTrace) =>
+                              const Icon(Icons.person),
+                        ),
+                        title: Text(teams[index].name ?? ''),
+                        trailing: TextButton(
+                          onPressed: () {
+                            BlocProvider.of<TeamCubit>(context).addPlayerToTeam(
+                              teams[index].id.toString(),
+                              widget.player.id.toString(),
+                            );
+                          },
+                          child: const Text("Add Player"),
                         ),
                         // Other properties of ListTile
                       );

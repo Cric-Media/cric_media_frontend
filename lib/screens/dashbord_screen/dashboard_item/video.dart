@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Video extends StatefulWidget {
-  Video({super.key});
+  const Video({super.key});
 
   @override
   State<Video> createState() => _VideoState();

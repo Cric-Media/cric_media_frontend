@@ -35,4 +35,5 @@ abstract class AdminUrl {
   static final getTeams = '${AppUrl.baseUrl}/get-teams';
   static final updateTeam = '${AppUrl.baseUrl}/update-team';
   static final deleteTeam = '${AppUrl.baseUrl}/delete-team-byid';
+  static final addPlayerToTeam = '${AppUrl.baseUrl}/in-team-add-player';
 }
