@@ -10,3 +10,6 @@ const changePassword = '/change-password';
 // Dashboard
 const dashboard = '/dashboard';
 const addNewPlayer = '/add-new-player';
+const playerItem = '/player-item';
+const teams = '/teams';
+const addTeam = '/add-team';

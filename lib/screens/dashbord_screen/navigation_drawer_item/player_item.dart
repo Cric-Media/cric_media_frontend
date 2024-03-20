@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
+import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
+import 'package:cricket_app/cubits/teams/team_cubit.dart';
+import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/player.dart';
+import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/app_dialog.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -59,8 +63,9 @@ class _PlayerItemState extends State<PlayerItem> {
           return Column(
             children: [
               Expanded(
-                child: ListView.builder(
+                child: ListView.separated(
                   shrinkWrap: true,
+                  separatorBuilder: (context, index) => const Divider(),
                   itemCount: players.length,
                   // Adjusted for simplicity
                   itemBuilder: (context, index) {
@@ -91,7 +96,7 @@ class _PlayerItemState extends State<PlayerItem> {
   }
 }
 
-class PlayerTile extends StatelessWidget {
+class PlayerTile extends StatefulWidget {
   final Player player;
   const PlayerTile({
     super.key,
@@ -99,99 +104,289 @@ class PlayerTile extends StatelessWidget {
   });
 
   @override
+  State<PlayerTile> createState() => _PlayerTileState();
+}
+
+class _PlayerTileState extends State<PlayerTile> {
+  List<Admin> admins = [];
+  List<Team> teams = [];
+  String search = '';
+
+  // Scroll controller
+  final ScrollController _scrollController = ScrollController();
+  int page = 1;
+  int limit = 20;
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        page++;
+        BlocProvider.of<AdminCubit>(context).getMoreOtherAdmins(
+          search: search,
+          page: page,
+          limit: limit,
+        );
+      }
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Card(
+    return Container(
+      // margin: const EdgeInsets.only(bottom: 10),
       color: Colors.grey.shade100,
-      elevation: 2,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Center(
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundImage: CachedNetworkImageProvider(
-                    player.imageUrl.toString(),
-                  ),
-                ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Center(
+            child: CircleAvatar(
+              radius: 50,
+              backgroundImage: CachedNetworkImageProvider(
+                widget.player.imageUrl.toString(),
               ),
             ),
-            const SizedBox(width: 20),
-            Expanded(
-              flex: 3,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // name
-                        Text(
-                          player.name.toString(),
-                          style: const TextStyle(fontWeight: FontWeight.w700),
-                        ),
-                        // role
-                        Text("Role: ${player.role}"),
-                        // id
-                        Row(
-                          children: [
-                            Text("ID: ${player.id!.substring(0, 7)}"),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.person_add_alt,
-                                color: AppColor.blueColor,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // name
+                Text(
+                  widget.player.name.toString(),
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+                // role
+                Text("Role: ${widget.player.role}"),
+                // id
+                Row(
+                  children: [
+                    Text("ID: ${widget.player.id!.substring(0, 7)}"),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        showAdminsSheet(context);
+                      },
+                      icon: const Icon(
+                        Icons.person_add_alt,
+                        color: AppColor.blueColor,
+                      ),
                     ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, addNewPlayer,
+                      arguments: {"playerId": widget.player.id!});
+                },
+                icon: const Icon(Icons.edit),
+              ),
+              IconButton(
+                onPressed: () {
+                  AppDialogs.showConfirmationDialog(context,
+                      title: "Delete Player?",
+                      message: "Do you really want to delete this player?",
+                      onPressed: () {
+                    BlocProvider.of<PlayerCubit>(context)
+                        .deletePlayer(widget.player.id!);
+                  });
+                },
+                icon: const Icon(Icons.delete, color: Colors.red),
+              ),
+              IconButton(
+                onPressed: () {
+                  showTeams(context);
+                },
+                icon: const Icon(Icons.add_circle_outline_outlined),
+              ),
+            ],
+          )),
+        ],
+      ),
+    );
+  }
+
+  void showAdminsSheet(BuildContext context) {
+    BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins();
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      useSafeArea: true,
+      builder: (context) {
+        return Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: const InputDecoration(
+                  labelText: "Search",
+                  hintText: "Search Users",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, addNewPlayer,
-                              arguments: {"playerId": player.id!});
-                        },
-                        icon: const Icon(Icons.edit_square),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          AppDialogs.showConfirmationDialog(context,
-                              title: "Delete Player?",
-                              message:
-                                  "Do you really want to delete this player?",
-                              onPressed: () {
-                            BlocProvider.of<PlayerCubit>(context)
-                                .deletePlayer(player.id!);
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
+                ),
+                onChanged: (value) {
+                  search = value;
+                  BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins(
+                    search: search,
+                  );
+                },
+              ),
+            ),
+            Expanded(
+              child: BlocConsumer<AdminCubit, AdminState>(
+                listener: (context, state) {
+                  if (state is AdminGetOtherAdminsSuccess) {
+                    admins = state.response.data;
+                  } else if (state is AdminGetOtherMoreAdminsSuccess) {
+                    admins.addAll(state.response.data);
+                  } else if (state is AdminSharePlayerSuccess) {
+                    Navigator.pop(context);
+                    showSnack(context, message: state.response.message);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is AdminLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.separated(
+                    controller: _scrollController,
+                    itemCount: admins.length,
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(
+                            admins[index].imageUrl.toString(),
+                          ),
+                          onBackgroundImageError: (exception, stackTrace) =>
+                              const Icon(Icons.person),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.add_box),
-                      ),
-                    ],
-                  ))
-                ],
+                        title: Text(admins[index].name.toString()),
+                        trailing: TextButton(
+                          onPressed: () {
+                            BlocProvider.of<AdminCubit>(context).sharePlayer(
+                              playerId: widget.player.id.toString(),
+                              adminId: admins[index].id.toString(),
+                            );
+                          },
+                          child: const Text("Share access"),
+                        ),
+                        // Other properties of ListTile
+                      );
+                    },
+                  );
+                },
               ),
             ),
           ],
-        ),
-      ),
+        );
+      },
+    );
+  }
+
+  void showTeams(BuildContext context) {
+    BlocProvider.of<TeamCubit>(context).getInitialTeams();
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      useSafeArea: true,
+      builder: (context) {
+        return Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: const InputDecoration(
+                  labelText: "Search",
+                  hintText: "Search Users",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  ),
+                ),
+                onChanged: (value) {
+                  search = value;
+                  // BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins(
+                  //   search: search,
+                  // );
+                },
+              ),
+            ),
+            Expanded(
+              child: BlocConsumer<TeamCubit, TeamState>(
+                listener: (context, state) {
+                  if (state is TeamGetInitial) {
+                    teams = state.response.data;
+                  } else if (state is TeamAddPlayerLoading) {
+                    AppDialogs.loadingDialog(context);
+                  } else if (state is TeamAddPlayerSuccess) {
+                    Navigator.pop(context);
+                    showSnack(context, message: state.response.message);
+                  } else if (state is TeamAddPlayerError) {
+                    Navigator.pop(context);
+                    showSnack(context, message: state.message);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is TeamGetInitialLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.separated(
+                    itemCount: teams.length,
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(
+                            teams[index].image.toString(),
+                          ),
+                          onBackgroundImageError: (exception, stackTrace) =>
+                              const Icon(Icons.person),
+                        ),
+                        title: Text(teams[index].name ?? ''),
+                        trailing: TextButton(
+                          onPressed: () {
+                            BlocProvider.of<TeamCubit>(context).addPlayerToTeam(
+                              teams[index].id.toString(),
+                              widget.player.id.toString(),
+                            );
+                          },
+                          child: const Text("Add Player"),
+                        ),
+                        // Other properties of ListTile
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

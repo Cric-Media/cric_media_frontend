@@ -17,8 +17,9 @@ import 'package:cricket_app/screens/dashbord_screen/home_tab_item/upcomingTab.da
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/match_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/player_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/profile_item.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teamsitem.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teams_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tornament_item.dart';
+import 'package:cricket_app/utils/app_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -110,59 +111,54 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                   drawer: Container(
-                    child: user == null
-                        ? Drawer(
-                            backgroundColor: Colors.white,
-                            shadowColor: Colors.white,
-                            child: Column(
-                              children: [
-                                DrawerHeader(
-                                  child: Image.asset(
-                                    'assets/image/drawericon.jpg',
-                                  ),
-                                ),
-                                Text(
-                                  "Want to become admin?",
-                                  style: TextStyle(
-                                    color: AppColor.blueColor,
-                                    fontSize: 18,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: 20),
-                                OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, signin);
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    side: BorderSide(
-                                      color: AppColor.blueColor,
-                                      width: 2,
-                                    ), // this sets the border
-                                  ),
-                                  child: const Text('Sign in'),
-                                ),
-                                Expanded(child: Container()),
-                              ],
-                            ),
-                          )
-                        : Drawer(
+                    child:
+                        // user == null
+                        //     ? Drawer(
+                        //         backgroundColor: Colors.white,
+                        //         shadowColor: Colors.white,
+                        //         child: Column(
+                        //           children: [
+                        //             DrawerHeader(
+                        //               child: Image.asset(
+                        //                 'assets/image/drawericon.jpg',
+                        //               ),
+                        //             ),
+                        //             Text(
+                        //               "Want to become admin?",
+                        //               style: TextStyle(
+                        //                 color: AppColor.blueColor,
+                        //                 fontSize: 18,
+                        //               ),
+                        //               textAlign: TextAlign.center,
+                        //             ),
+                        //             SizedBox(height: 20),
+                        //             OutlinedButton(
+                        //               onPressed: () {
+                        //                 Navigator.pushNamed(context, signin);
+                        //               },
+                        //               style: OutlinedButton.styleFrom(
+                        //                 side: BorderSide(
+                        //                   color: AppColor.blueColor,
+                        //                   width: 2,
+                        //                 ), // this sets the border
+                        //               ),
+                        //               child: const Text('Sign in'),
+                        //             ),
+                        //             Expanded(child: Container()),
+                        //           ],
+                        //         ),
+                        //       )
+                        //     :
+                        Drawer(
                             backgroundColor: Colors.white,
                             shadowColor: Colors.white,
                             child: SingleChildScrollView(
                               child: Column(children: [
                                 DrawerHeader(
                                   decoration: BoxDecoration(
-                                    // image: DecorationImage(
-                                    //   image:
-                                    //   CachedNetworkImageProvider(
-                                    //     user!.imageUrl.toString(),
-                                    //   ),
-                                    //   fit: BoxFit.cover,
-                                    // ),
                                     image: DecorationImage(
                                       image: AssetImage(
-                                        AppIcons.profile3,
+                                        AppIcons.logo,
                                       ),
                                       fit: BoxFit.cover,
                                     ),
@@ -204,11 +200,13 @@ class _HomeState extends State<Home> {
                                     InkWell(
                                       onTap: () {
                                         indexes(0);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProfileItem()));
+                                        user == null
+                                            ? signinConfirmation()
+                                            : Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ProfileItem()));
                                       },
                                       child: Container(
                                         height: 50,
@@ -245,11 +243,10 @@ class _HomeState extends State<Home> {
                                     InkWell(
                                       onTap: () {
                                         indexes(1);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PlayerItem()));
+                                        user == null
+                                            ? signinConfirmation()
+                                            : Navigator.pushNamed(
+                                                context, playerItem);
                                       },
                                       child: Container(
                                         height: 50,
@@ -286,11 +283,12 @@ class _HomeState extends State<Home> {
                                     InkWell(
                                       onTap: () {
                                         indexes(2);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    teamItem()));
+                                        user == null
+                                            ? signinConfirmation()
+                                            : Navigator.pushNamed(
+                                                context,
+                                                teams,
+                                              );
                                       },
                                       child: Container(
                                         height: 50,
@@ -327,11 +325,13 @@ class _HomeState extends State<Home> {
                                     InkWell(
                                       onTap: () {
                                         indexes(3);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    MatchItem()));
+                                        user == null
+                                            ? signinConfirmation()
+                                            : Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MatchItem()));
                                       },
                                       child: Container(
                                         height: 50,
@@ -368,11 +368,13 @@ class _HomeState extends State<Home> {
                                     InkWell(
                                       onTap: () {
                                         indexes(4);
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    TornamentItem()));
+                                        user == null
+                                            ? signinConfirmation()
+                                            : Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        TornamentItem()));
                                       },
                                       child: Container(
                                         height: 50,
@@ -406,46 +408,49 @@ class _HomeState extends State<Home> {
                                     SizedBox(
                                       height: 5,
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        indexes(5);
-                                        Navigator.pushReplacementNamed(
-                                          context,
-                                          dashboard,
-                                        );
-                                        Global().removeUserId();
-                                        Global().deleteIds();
-                                        Global().logoutUser();
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        width: screenWidth,
-                                        decoration: BoxDecoration(
-                                            color: indix == 5
-                                                ? Colors.grey.withOpacity(0.5)
-                                                : Colors.transparent),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                                child: ListTile(
-                                              leading: Image.asset(
-                                                AppIcons.logout,
-                                                width: 22,
-                                              ),
-                                              title: Text(
-                                                'Log out',
-                                                style: GoogleFonts.inter(
-                                                    textStyle: TextStyle(
-                                                        fontSize: 16,
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w500)),
-                                              ),
-                                            ))
-                                          ],
+                                    if (user != null)
+                                      InkWell(
+                                        onTap: () {
+                                          indexes(5);
+                                          user == null
+                                              ? signinConfirmation()
+                                              : Navigator.pushReplacementNamed(
+                                                  context,
+                                                  dashboard,
+                                                );
+                                          Global().removeUserId();
+                                          Global().deleteIds();
+                                          Global().logoutUser();
+                                        },
+                                        child: Container(
+                                          height: 50,
+                                          width: screenWidth,
+                                          decoration: BoxDecoration(
+                                              color: indix == 5
+                                                  ? Colors.grey.withOpacity(0.5)
+                                                  : Colors.transparent),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                  child: ListTile(
+                                                leading: Image.asset(
+                                                  AppIcons.logout,
+                                                  width: 22,
+                                                ),
+                                                title: Text(
+                                                  'Log out',
+                                                  style: GoogleFonts.inter(
+                                                      textStyle: TextStyle(
+                                                          fontSize: 16,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w500)),
+                                                ),
+                                              ))
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
                                     SizedBox(
                                       height: 10,
                                     ),
@@ -457,5 +462,12 @@ class _HomeState extends State<Home> {
                 )));
       },
     );
+  }
+
+  signinConfirmation() {
+    AppDialogs.showConfirmationDialog(context,
+        title: "Sign in", message: "Do you want to sign in?", onPressed: () {
+      Navigator.pushNamed(context, signin);
+    });
   }
 }

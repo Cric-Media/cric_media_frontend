@@ -8,6 +8,9 @@ import 'package:cricket_app/screens/auth_screen/signUp_screen/signUp_screen.dart
 import 'package:cricket_app/screens/auth_screen/signUp_screen/verify_email_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/add_new_player_screen.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/player_item.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/add_new_team.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teams_screen.dart';
 import 'package:cricket_app/screens/splash_screen.dart/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,11 +82,27 @@ class Routes {
           ),
         );
 
+      case playerItem:
+        return MaterialPageRoute(
+          builder: (context) => const PlayerItem(),
+        );
+
       case addNewPlayer:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) => AddNewPlayerScreen(
             playerId: args['playerId'],
+          ),
+        );
+
+      case teams:
+        return MaterialPageRoute(builder: (context) => const TeamsScreen());
+
+      case addTeam:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) => AddNewTeam(
+            team: args['team'],
           ),
         );
 
