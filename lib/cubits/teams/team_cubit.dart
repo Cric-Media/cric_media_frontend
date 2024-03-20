@@ -62,45 +62,25 @@ class TeamCubit extends Cubit<TeamState> {
     }
   }
 
-  // void getTeam(String teamId) async {
-  //   emit(TeamGetTeamLoading());
-  //   try {
-  //     var network = await Network.check();
-  //     if (network) {
-  //       var response = await adminController.getTeam(teamId);
-  //       emit(TeamGetTeam(response));
-  //     } else {
-  //       emit(TeamGetError('No internet connection'));
-  //     }
-  //   } catch (err) {
-  //     // if exception type is not AppException then emit "Something went wrong"
-  //     if (err is! AppException) {
-  //       emit(TeamGetError('Something went wrong'));
-  //     } else {
-  //       emit(TeamGetError(err.toString()));
-  //     }
-  //   }
-  // }
-
-  // deleteTeam(String teamId) async {
-  //   emit(TeamDeleteLoading());
-  //   try {
-  //     var network = await Network.check();
-  //     if (network) {
-  //       var response = await adminController.deleteTeam(teamId);
-  //       emit(TeamDeleteSuccess(response));
-  //     } else {
-  //       emit(TeamDeleteError('No internet connection'));
-  //     }
-  //   } catch (err) {
-  //     // if exception type is not AppException then emit "Something went wrong"
-  //     if (err is! AppException) {
-  //       emit(TeamDeleteError('Something went wrong'));
-  //     } else {
-  //       emit(TeamDeleteError(err.toString()));
-  //     }
-  //   }
-  // }
+  deleteTeam(String teamId) async {
+    emit(TeamDeleteLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.deleteTeam(teamId);
+        emit(TeamDeleteSuccess(response));
+      } else {
+        emit(TeamDeleteError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(TeamDeleteError('Something went wrong'));
+      } else {
+        emit(TeamDeleteError(err.toString()));
+      }
+    }
+  }
 
   void updateTeam(Team team, File? image) async {
     emit(TeamUpdateLoading());

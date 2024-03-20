@@ -250,7 +250,7 @@ class AdminController {
   }
 
   Future<ApiResponse> updateTeam({required Team team, File? imageFile}) async {
-    final url = AdminUrl.createTeam;
+    final url = AdminUrl.updateTeam;
     var request = MultipartRequest('POST', Uri.parse(url));
 
     if (imageFile != null) {
@@ -280,6 +280,41 @@ class AdminController {
       return ApiResponse.fromJson(body, (data) => null);
     } else {
       throw AppException(body['message']);
+    }
+  }
+
+  Future<ApiResponse> deleteTeam(String teamId) async {
+    final url = AdminUrl.deleteTeam;
+    final headers = {"Content-Type": "application/json"};
+    final body = {"teamID": teamId};
+    final response = await ApiManager.deleteWithBodyRequest(
+      body,
+      url,
+      headers: headers,
+    );
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> shareTeam(String teamId, newAdminId) async {
+    final url = AdminUrl.shareTeam;
+    final myAdminId = await Global().getAdminId();
+    final headers = {"Content-Type": "application/json"};
+    final body = {
+      "teamID": teamId,
+      "adminId": myAdminId,
+      "newAdmins": [newAdminId]
+    };
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
     }
   }
 }

@@ -50,4 +50,14 @@ class AdminCubit extends Cubit<AdminState> {
       emit(AdminSharePlayerError(e.toString()));
     }
   }
+
+  Future<void> shareTeam(String teamId, String newAdminId) async {
+    emit(AdminShareTeamLoading());
+    try {
+      final response = await adminController.shareTeam(teamId, newAdminId);
+      emit(AdminShareTeamSuccess(response));
+    } catch (e) {
+      emit(AdminShareTeamError(e.toString()));
+    }
+  }
 }
