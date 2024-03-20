@@ -238,17 +238,18 @@ class _AddNewTeam extends State<AddNewTeam> {
                         } else if (!formKey.currentState!.validate()) {
                           return;
                         } else if (updatedTeam != null) {
-                          return BlocProvider.of<TeamCubit>(context)
+                          BlocProvider.of<TeamCubit>(context)
                               .updateTeam(updatedTeam!, image);
-                        }
-                        // Create team
-                        final team = Team(
-                          name: nameController.text.trim(),
-                          location: locationController.text.trim(),
-                        );
+                        } else {
+                          // Create team
+                          final team = Team(
+                            name: nameController.text.trim(),
+                            location: locationController.text.trim(),
+                          );
 
-                        BlocProvider.of<TeamCubit>(context)
-                            .addTeam(team: team, teamImage: image!);
+                          BlocProvider.of<TeamCubit>(context)
+                              .addTeam(team: team, teamImage: image!);
+                        }
                       },
                     )
                   ],
