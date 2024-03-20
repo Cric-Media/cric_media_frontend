@@ -102,26 +102,26 @@ class TeamCubit extends Cubit<TeamState> {
   //   }
   // }
 
-  // void updateTeam(Team team, File? image) async {
-  //   emit(TeamUpdateLoading());
-  //   try {
-  //     var network = await Network.check();
-  //     if (network) {
-  //       var response = await adminController.updateTeam(
-  //         team: team,
-  //         imageFile: image,
-  //       );
-  //       emit(TeamUpdateSuccess(response));
-  //     } else {
-  //       emit(TeamUpdateError('No internet connection'));
-  //     }
-  //   } catch (err) {
-  //     // if exception type is not AppException then emit "Something went wrong"
-  //     if (err is! AppException) {
-  //       emit(TeamUpdateError('Something went wrong'));
-  //     } else {
-  //       emit(TeamUpdateError(err.toString()));
-  //     }
-  //   }
-  // }
+  void updateTeam(Team team, File? image) async {
+    emit(TeamUpdateLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.updateTeam(
+          team: team,
+          imageFile: image,
+        );
+        emit(TeamUpdateSuccess(response));
+      } else {
+        emit(TeamUpdateError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(TeamUpdateError('Something went wrong'));
+      } else {
+        emit(TeamUpdateError(err.toString()));
+      }
+    }
+  }
 }

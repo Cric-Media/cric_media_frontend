@@ -285,11 +285,10 @@ class _HomeState extends State<Home> {
                                         indexes(2);
                                         user == null
                                             ? signinConfirmation()
-                                            : Navigator.push(
+                                            : Navigator.pushNamed(
                                                 context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        TeamsScreen()));
+                                                teams,
+                                              );
                                       },
                                       child: Container(
                                         height: 50,

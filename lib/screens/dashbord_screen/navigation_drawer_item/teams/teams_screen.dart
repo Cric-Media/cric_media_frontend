@@ -3,9 +3,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/models/team.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/add_new_team.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -127,9 +127,9 @@ class _TeamsScreenState extends State<TeamsScreen> {
                                   margin: EdgeInsets.only(top: 10, left: 10),
                                   height: 75,
                                   width: 75,
-                                  decoration: BoxDecoration(),
-                                  child: CachedNetworkImage(
-                                    imageUrl: teams[index].image ?? "",
+                                  child: CircleAvatar(
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        teams[index].image ?? ''),
                                   ),
                                 ),
                                 SizedBox(width: 10),
@@ -202,9 +202,20 @@ class _TeamsScreenState extends State<TeamsScreen> {
                                             SizedBox(
                                               height: 5,
                                             ),
-                                            Image.asset(
-                                              AppIcons.edit,
-                                              width: 20,
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.pushNamed(
+                                                  context,
+                                                  addTeam,
+                                                  arguments: {
+                                                    'team': teams[index]
+                                                  },
+                                                );
+                                              },
+                                              child: Image.asset(
+                                                AppIcons.edit,
+                                                width: 20,
+                                              ),
                                             ),
                                             SizedBox(
                                               height: 15,
@@ -241,9 +252,11 @@ class _TeamsScreenState extends State<TeamsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print('ONtAP');
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AddNewTeam()));
+          Navigator.pushNamed(
+            context,
+            addTeam,
+            arguments: {"team", null},
+          );
         },
         backgroundColor: AppColor.blueColor,
         child: Icon(

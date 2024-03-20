@@ -211,7 +211,7 @@ class AdminController {
 
     request.fields["name"] = team.name.toString();
     request.fields["location"] = team.location.toString();
-    request.fields["admin"] = adminId.toString();
+    request.fields["admin[0]"] = adminId.toString();
 
     // send request
     var response = await request.send();
@@ -249,5 +249,37 @@ class AdminController {
     }
   }
 
-  // Future<ApiResponse> updateTeam()
+  Future<ApiResponse> updateTeam({required Team team, File? imageFile}) async {
+    final url = AdminUrl.createTeam;
+    var request = MultipartRequest('POST', Uri.parse(url));
+
+    if (imageFile != null) {
+      request.files.add(
+        MultipartFile(
+          'image',
+          imageFile.readAsBytes().asStream(),
+          imageFile.lengthSync(),
+          filename: imageFile.path.split('/').last,
+        ),
+      );
+    }
+    // send other fields
+
+    request.fields["teamID"] = team.id.toString();
+    request.fields["name"] = team.name.toString();
+    request.fields["location"] = team.location.toString();
+
+    // send request
+    var response = await request.send();
+    // print response
+    var json = await response.stream.bytesToString();
+    print(json);
+
+    var body = jsonDecode(json);
+    if (body['success'] == true) {
+      return ApiResponse.fromJson(body, (data) => null);
+    } else {
+      throw AppException(body['message']);
+    }
+  }
 }

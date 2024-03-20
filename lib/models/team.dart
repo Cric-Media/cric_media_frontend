@@ -6,7 +6,7 @@ class Team {
   String? name;
   String? location;
   String? image;
-  Admin? admin;
+  List<Admin>? admins;
   List<Player>? players;
 
   Team({
@@ -14,7 +14,7 @@ class Team {
     this.name,
     this.location,
     this.image,
-    this.admin,
+    this.admins,
     this.players,
   });
 
@@ -23,7 +23,12 @@ class Team {
     name = json['name'];
     location = json['location'];
     image = json['image'];
-    admin = json['admin'] != null ? Admin.fromJson(json['admin']) : null;
+    if (json['admin'] != null) {
+      admins = <Admin>[];
+      json['admin'].forEach((v) {
+        admins!.add(Admin.fromJson(v));
+      });
+    }
     if (json['players'] != null) {
       players = <Player>[];
       json['players'].forEach((v) {
@@ -38,8 +43,8 @@ class Team {
     data['name'] = name;
     data['location'] = location;
     data['image'] = image;
-    if (admin != null) {
-      data['admin'] = admin!.toJson();
+    if (admins != null) {
+      data['admin'] = admins!.map((admin) => admin.toJson()).toList();
     }
     if (players != null) {
       data['players'] = players!.map((player) => player.toJson()).toList();

@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
@@ -15,7 +16,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddNewTeam extends StatefulWidget {
-  const AddNewTeam({super.key});
+  final Team? team;
+  const AddNewTeam({super.key, this.team});
 
   @override
   State<AddNewTeam> createState() => _AddNewTeam();
@@ -31,6 +33,18 @@ class _AddNewTeam extends State<AddNewTeam> {
   ImagePicker imagePicker = ImagePicker();
   File? image;
 
+  Team? updatedTeam;
+
+  @override
+  void initState() {
+    updatedTeam = widget.team;
+    if (updatedTeam != null) {
+      nameController.text = updatedTeam!.name!;
+      locationController.text = updatedTeam!.location!;
+    }
+    super.initState();
+  }
+
   void pickImage() async {
     var img = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (img != null) {
@@ -44,6 +58,7 @@ class _AddNewTeam extends State<AddNewTeam> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Color(0XFFFBFBFB),
       appBar: PreferredSize(
@@ -64,15 +79,15 @@ class _AddNewTeam extends State<AddNewTeam> {
             foregroundColor: Colors.white,
             backgroundColor: AppColor.blueColor,
             automaticallyImplyLeading: true,
-            actions: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: Image.asset(
-                    AppIcons.search,
-                    width: 25,
-                    color: Colors.white,
-                  )),
-            ],
+            // actions: [
+            //   Padding(
+            //       padding: const EdgeInsets.only(right: 20.0),
+            //       child: Image.asset(
+            //         AppIcons.search,
+            //         width: 25,
+            //         color: Colors.white,
+            //       )),
+            // ],
             title: Text(
               'Add Team',
               style: GoogleFonts.inter(
@@ -113,10 +128,14 @@ class _AddNewTeam extends State<AddNewTeam> {
                               ),
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                image: image != null
-                                    ? FileImage(image!) as ImageProvider<Object>
-                                    : AssetImage(AppIcons.profile)
-                                        as ImageProvider<Object>,
+                                image: updatedTeam != null
+                                    ? CachedNetworkImageProvider(
+                                        updatedTeam?.image ?? '')
+                                    : image != null
+                                        ? FileImage(image!)
+                                            as ImageProvider<Object>
+                                        : AssetImage(AppIcons.team)
+                                            as ImageProvider<Object>,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -214,10 +233,13 @@ class _AddNewTeam extends State<AddNewTeam> {
                       buttonText: 'Submit',
                       backgroundColor: AppColor.blueColor,
                       onTap: () async {
-                        if (image == null) {
+                        if (updatedTeam == null && image == null) {
                           showSnack(context, message: "Please choose an image");
                         } else if (!formKey.currentState!.validate()) {
                           return;
+                        } else if (updatedTeam != null) {
+                          return BlocProvider.of<TeamCubit>(context)
+                              .updateTeam(updatedTeam!, image);
                         }
                         // Create team
                         final team = Team(
@@ -233,16 +255,19 @@ class _AddNewTeam extends State<AddNewTeam> {
                 ),
                 BlocConsumer<TeamCubit, TeamState>(
                   listener: (context, state) {
-                    if (state is TeamAddLoading) {
+                    if (state is TeamAddLoading || state is TeamUpdateLoading) {
                       isLoading = true;
-                      // BlocProvider.of<TeamCubit>(context).getInitialTeams();
                     } else if (state is TeamAddError) {
                       isLoading = false;
                       showSnack(context, message: state.message);
-                    } else if (state is TeamAddSuccess) {
+                    } else if (state is TeamAddSuccess ||
+                        state is TeamUpdateSuccess) {
                       isLoading = false;
                       BlocProvider.of<TeamCubit>(context).getInitialTeams();
                       Navigator.pop(context);
+                    } else if (state is TeamUpdateError) {
+                      isLoading = false;
+                      showSnack(context, message: state.message);
                     }
                   },
                   builder: (context, state) {
