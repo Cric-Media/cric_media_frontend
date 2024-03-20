@@ -31,5 +31,5 @@ abstract class AdminUrl {
 
   // Team URLs
   static final createTeam = '${AppUrl.baseUrl}/add-team';
-  static final getTeams = '${AppUrl.baseUrl}/get-team-by-adminid';
+  static final getTeams = '${AppUrl.baseUrl}/get-teams';
 }

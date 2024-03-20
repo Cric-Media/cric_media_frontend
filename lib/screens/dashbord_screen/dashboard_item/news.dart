@@ -3,7 +3,7 @@ import 'package:cricket_app/custom_widgets/news_card.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/match_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/player_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/profile_item.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teamsitem.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teams_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tornament_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/new_details.dart';
 import 'package:flutter/material.dart';
@@ -182,8 +182,10 @@ class _NewsState extends State<News> {
                   InkWell(
                     onTap: () {
                       indexes(2);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => teamItem()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TeamsScreen()));
                     },
                     child: Container(
                       height: 50,

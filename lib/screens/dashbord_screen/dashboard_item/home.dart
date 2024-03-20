@@ -17,7 +17,7 @@ import 'package:cricket_app/screens/dashbord_screen/home_tab_item/upcomingTab.da
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/match_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/player_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/profile_item.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teamsitem.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teams_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tornament_item.dart';
 import 'package:cricket_app/utils/app_dialog.dart';
 import 'package:flutter/material.dart';
@@ -289,7 +289,7 @@ class _HomeState extends State<Home> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        teamItem()));
+                                                        TeamsScreen()));
                                       },
                                       child: Container(
                                         height: 50,

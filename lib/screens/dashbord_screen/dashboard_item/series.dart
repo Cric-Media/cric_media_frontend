@@ -3,7 +3,7 @@ import 'package:cricket_app/screens/dashbord_screen/home_tab_item/up_coming_seri
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/match_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/player_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/profile_item.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teamsitem.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teams_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tornament_item.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -154,8 +154,10 @@ class _SeriesState extends State<Series> {
                   InkWell(
                     onTap: () {
                       indexes(2);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => teamItem()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TeamsScreen()));
                     },
                     child: Container(
                       height: 50,

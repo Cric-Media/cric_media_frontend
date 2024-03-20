@@ -29,7 +29,6 @@ class TeamCubit extends Cubit<TeamState> {
       }
     } catch (err) {
       // if exception type is not AppException then emit "Something went wrong"
-      print(err);
       if (err is! AppException) {
         emit(TeamAddError('Something went wrong'));
       } else {
@@ -38,29 +37,30 @@ class TeamCubit extends Cubit<TeamState> {
     }
   }
 
-  // getInitialTeams() async {
-  //   emit(TeamGetInitialLoading());
-  //   try {
-  //     var network = await Network.check();
-  //     if (network) {
-  //       var response = await adminController.getAllTeams();
-  //       if (response.data.length > 0) {
-  //         emit(TeamGetInitial(response));
-  //       } else {
-  //         emit(TeamEmptyState());
-  //       }
-  //     } else {
-  //       emit(TeamGetError('No internet connection'));
-  //     }
-  //   } catch (err) {
-  //     // if exception type is not AppException then emit "Something went wrong"
-  //     if (err is! AppException) {
-  //       emit(TeamGetError('Something went wrong'));
-  //     } else {
-  //       emit(TeamGetError(err.toString()));
-  //     }
-  //   }
-  // }
+  getInitialTeams() async {
+    emit(TeamGetInitialLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.getTeams();
+        if (response.data.length > 0) {
+          emit(TeamGetInitial(response));
+        } else {
+          emit(TeamEmptyState());
+        }
+      } else {
+        emit(TeamGetError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      print(err);
+      if (err is! AppException) {
+        emit(TeamGetError('Something went wrong'));
+      } else {
+        emit(TeamGetError(err.toString()));
+      }
+    }
+  }
 
   // void getTeam(String teamId) async {
   //   emit(TeamGetTeamLoading());

@@ -6,7 +6,7 @@ import 'package:cricket_app/screens/dashbord_screen/dashboard_item/video_details
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/match_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/player_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/profile_item.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teamsitem.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teams_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tornament_item.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -153,7 +153,7 @@ class _VideoState extends State<Video> {
                   onTap: () {
                     indexes(2);
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => teamItem()));
+                        MaterialPageRoute(builder: (context) => TeamsScreen()));
                   },
                   child: Container(
                     height: 50,

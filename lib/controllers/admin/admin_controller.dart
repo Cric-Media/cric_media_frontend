@@ -185,7 +185,6 @@ class AdminController {
     };
     final response = await ApiManager.putRequest(body, url, headers: headers);
     var resBody = jsonDecode(response.body);
-    print(resBody);
     if (resBody['success']) {
       return ApiResponse.fromJson(resBody, (data) => null);
     } else {
@@ -209,6 +208,7 @@ class AdminController {
       ),
     );
     // send other fields
+
     request.fields["name"] = team.name.toString();
     request.fields["location"] = team.location.toString();
     request.fields["admin"] = adminId.toString();
@@ -217,15 +217,37 @@ class AdminController {
     var response = await request.send();
     // print response
     var json = await response.stream.bytesToString();
+    print(json);
+
     var body = jsonDecode(json);
-    print(body);
     if (body['success'] == true) {
       return ApiResponse.fromJson(
         body,
-        (data) => Team.fromJson(body['data']),
+        (data) => null,
       );
     } else {
       throw AppException(body['message']);
     }
   }
+
+  Future<ApiResponse> getTeams() async {
+    final adminId = await Global().getAdminId();
+    final url = AdminUrl.getTeams;
+    final headers = {"Content-Type": "application/json"};
+    final body = {"adminId": adminId};
+    final response = await ApiManager.postRequest(body, url, headers: headers);
+    print(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<Team> teams = [];
+      for (var team in resBody['data']) {
+        teams.add(Team.fromJson(team));
+      }
+      return ApiResponse.fromJson(resBody, (data) => teams);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  // Future<ApiResponse> updateTeam()
 }

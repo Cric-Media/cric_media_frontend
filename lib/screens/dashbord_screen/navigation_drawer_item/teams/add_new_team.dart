@@ -42,7 +42,6 @@ class _AddNewTeam extends State<AddNewTeam> {
 
   @override
   Widget build(BuildContext context) {
-    print('rebuild');
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -221,9 +220,10 @@ class _AddNewTeam extends State<AddNewTeam> {
                           return;
                         }
                         // Create team
-                        final team = Team();
-                        team.name = nameController.text.trim();
-                        team.location = locationController.text.trim();
+                        final team = Team(
+                          name: nameController.text.trim(),
+                          location: locationController.text.trim(),
+                        );
 
                         BlocProvider.of<TeamCubit>(context)
                             .addTeam(team: team, teamImage: image!);
@@ -241,7 +241,7 @@ class _AddNewTeam extends State<AddNewTeam> {
                       showSnack(context, message: state.message);
                     } else if (state is TeamAddSuccess) {
                       isLoading = false;
-                      // BlocProvider.of<TeamCubit>(context).getInitialTeams();
+                      BlocProvider.of<TeamCubit>(context).getInitialTeams();
                       Navigator.pop(context);
                     }
                   },
