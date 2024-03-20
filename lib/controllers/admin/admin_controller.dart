@@ -251,7 +251,7 @@ class AdminController {
 
   Future<ApiResponse> updateTeam({required Team team, File? imageFile}) async {
     final url = AdminUrl.updateTeam;
-    var request = MultipartRequest('POST', Uri.parse(url));
+    var request = MultipartRequest('PUT', Uri.parse(url));
 
     if (imageFile != null) {
       request.files.add(
