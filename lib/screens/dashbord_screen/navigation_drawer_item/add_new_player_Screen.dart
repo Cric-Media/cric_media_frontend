@@ -111,14 +111,14 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                       if (state is PlayerAddLoading) {
                         isLoading = true;
                         BlocProvider.of<PlayerCubit>(context)
-                            .getInitialPlayers();
+                            .getPlayersByAdminId();
                       } else if (state is PlayerUpdateLoading) {
                         isLoading = true;
                       } else if (state is PlayerAddSuccess ||
                           state is PlayerUpdateSuccess) {
                         isLoading = false;
                         BlocProvider.of<PlayerCubit>(context)
-                            .getInitialPlayers();
+                            .getPlayersByAdminId();
                         Navigator.pop(context);
                       } else if (state is PlayerAddError) {
                         isLoading = false;

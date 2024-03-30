@@ -84,7 +84,7 @@ class AdminController {
     }
   }
 
-  Future<ApiResponse> getAllPlayers() async {
+  Future<ApiResponse> getPlayersByAdminId() async {
     final adminId = await Global().getAdminId();
     final url = "${AdminUrl.getAllPlayers}/$adminId";
     final headers = {"Content-Type": "application/json"};
@@ -94,6 +94,27 @@ class AdminController {
       List<Player> players = [];
       for (var player in resBody['data']) {
         players.add(Player.fromJson(player));
+      }
+      return ApiResponse.fromJson(resBody, (data) => players);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> getPlayersByTeamId(String teamId) async {
+    final url = "${AdminUrl.getAllPlayersByTeamId}/$teamId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<Player> players = [];
+      for (var player in resBody['data']) {
+        players.add(Player(
+          name: player['name'],
+          location: player['location'],
+          role: player['role'],
+          imageUrl: player['Image'],
+        ));
       }
       return ApiResponse.fromJson(resBody, (data) => players);
     } else {
@@ -236,7 +257,6 @@ class AdminController {
     final headers = {"Content-Type": "application/json"};
     final body = {"adminId": adminId};
     final response = await ApiManager.postRequest(body, url, headers: headers);
-    print(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       List<Team> teams = [];
@@ -336,4 +356,6 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  // * MATCH SECTION
 }

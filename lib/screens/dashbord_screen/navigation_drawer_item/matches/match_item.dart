@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/add_new_matche.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/complete_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/live_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/upcoming_item.dart';
@@ -94,8 +94,7 @@ class _MatchItemState extends State<MatchItem> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             print('ONtAP');
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => AddNewMatche()));
+            Navigator.pushNamed(context, startMatch);
           },
           backgroundColor: AppColor.blueColor,
           child: Icon(

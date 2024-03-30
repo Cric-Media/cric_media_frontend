@@ -23,7 +23,7 @@ class _PlayerItemState extends State<PlayerItem> {
   List<Player> players = [];
   @override
   void initState() {
-    BlocProvider.of<PlayerCubit>(context).getInitialPlayers();
+    BlocProvider.of<PlayerCubit>(context).getPlayersByAdminId();
     super.initState();
   }
 
@@ -44,7 +44,7 @@ class _PlayerItemState extends State<PlayerItem> {
             AppDialogs.loadingDialog(context);
           } else if (state is PlayerDeleteSuccess) {
             Navigator.pop(context);
-            BlocProvider.of<PlayerCubit>(context).getInitialPlayers();
+            BlocProvider.of<PlayerCubit>(context).getPlayersByAdminId();
           } else if (state is PlayerDeleteError) {
             Navigator.pop(context);
             showSnack(context, message: state.message);

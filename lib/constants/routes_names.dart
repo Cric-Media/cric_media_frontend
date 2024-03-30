@@ -13,3 +13,4 @@ const addNewPlayer = '/add-new-player';
 const playerItem = '/player-item';
 const teams = '/teams';
 const addTeam = '/add-team';
+const startMatch = '/start-match';

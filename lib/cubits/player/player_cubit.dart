@@ -11,10 +11,10 @@ part 'player_states.dart';
 
 class PlayerCubit extends Cubit<PlayerState> {
   PlayerCubit() : super(PlayerInit());
-
+  static PlayerCubit get(context) => BlocProvider.of<PlayerCubit>(context);
   var adminController = AdminController();
 
-  void addPlayer({required Player player, required File playerImage}) async {
+  addPlayer({required Player player, required File playerImage}) async {
     emit(PlayerAddLoading());
     try {
       var network = await Network.check();
@@ -37,12 +37,12 @@ class PlayerCubit extends Cubit<PlayerState> {
     }
   }
 
-  getInitialPlayers() async {
+  getPlayersByAdminId() async {
     emit(PlayerGetInitialLoading());
     try {
       var network = await Network.check();
       if (network) {
-        var response = await adminController.getAllPlayers();
+        var response = await adminController.getPlayersByAdminId();
         if (response.data.length > 0) {
           emit(PlayerGetInitial(response));
         } else {
@@ -61,7 +61,30 @@ class PlayerCubit extends Cubit<PlayerState> {
     }
   }
 
-  void getPlayer(String playerId) async {
+  getPlayersByTeamId(String teamId) async {
+    emit(PlayerGetPlayerLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.getPlayersByTeamId(teamId);
+        if (response.data.length > 0) {
+          emit(PlayerGetInitial(response));
+        } else {
+          emit(PlayerEmptyState());
+        }
+      } else {
+        emit(PlayerGetError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(PlayerGetError('Something went wrong'));
+      } else {
+        emit(PlayerGetError(err.toString()));
+      }
+    }
+  }
+
+  getPlayer(String playerId) async {
     emit(PlayerGetPlayerLoading());
     try {
       var network = await Network.check();
@@ -101,7 +124,7 @@ class PlayerCubit extends Cubit<PlayerState> {
     }
   }
 
-  void updatePlayer(Player player, File? image) async {
+  updatePlayer(Player player, File? image) async {
     emit(PlayerUpdateLoading());
     try {
       var network = await Network.check();
