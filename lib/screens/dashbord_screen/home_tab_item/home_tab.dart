@@ -5,13 +5,14 @@ import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/custom_widgets/custom_contanor_trading_news.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
 import 'package:cricket_app/custom_widgets/onging_series.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/matchesDetails.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/new_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../custom_widgets/custom_home_card.dart';
+import '../../../custom_widgets/match_details_live_card.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -52,7 +53,9 @@ class HomeTab extends StatelessWidget {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LiveDetails()));
                 },
-                child: CustomHomeCard()),
+                child: MatchDetailsLiveCard(
+                  matchDetails: MatchDetails(),
+                )),
             SizedBox(
               height: screenWidth * 0.026,
             ),
@@ -196,7 +199,7 @@ class HomeTab extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: 800,
               child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),

@@ -1,7 +1,8 @@
+import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:flutter/material.dart';
 
-import '../../../custom_widgets/custom_home_card.dart';
+import '../../../custom_widgets/match_details_live_card.dart';
 
 class LiveTab extends StatelessWidget {
   const LiveTab({super.key});
@@ -29,7 +30,9 @@ class LiveTab extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) => LiveDetails()));
                       },
-                      child: CustomHomeCard()),
+                      child: MatchDetailsLiveCard(
+                        matchDetails: MatchDetails(),
+                      )),
                 );
               }),
         ),

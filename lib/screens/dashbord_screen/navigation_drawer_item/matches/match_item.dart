@@ -93,7 +93,6 @@ class _MatchItemState extends State<MatchItem> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            print('ONtAP');
             Navigator.pushNamed(context, startMatch);
           },
           backgroundColor: AppColor.blueColor,

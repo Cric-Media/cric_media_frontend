@@ -19,6 +19,9 @@ class MatchCubit extends Cubit<MatchState> {
 
   static MatchCubit get(context) => BlocProvider.of<MatchCubit>(context);
   var adminController = AdminController();
+  List<MatchDetails> liveMatchDetailsList = [];
+  List<MatchDetails> upcomingMatchDetailsList = [];
+  List<MatchDetails> completedMatchDetailsList = [];
 
   // variables
   Team? team1, team2;
