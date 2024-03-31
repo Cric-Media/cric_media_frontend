@@ -6,6 +6,8 @@ import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/custom_widgets/dropdown_widget.dart';
 import 'package:cricket_app/models/team.dart';
+import 'package:cricket_app/utils/app_dialog.dart';
+import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -576,8 +578,16 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                     height: 50,
                     child: BlocConsumer<MatchCubit, MatchState>(
                       listener: (context, state) {
-                        if (state is MatchAddDetailsSuccess) {
-                          print('added');
+                        if (state is MatchAddDetailsLoading) {
+                          AppDialogs.loadingDialog(context);
+                        } else if (state is MatchAddDetailsSuccess) {
+                          AppDialogs.closeDialog(context);
+                          Navigator.pop(context);
+                          showSnack(context, message: state.res.message);
+                        }
+                        if (state is MatchAddDetailsError) {
+                          AppDialogs.closeDialog(context);
+                          showSnack(context, message: state.message);
                         }
                       },
                       builder: (context, state) {
@@ -588,7 +598,6 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                         }
                         return ElevatedButton(
                           onPressed: () {
-                            print('loading');
                             MatchCubit.get(context).addMatchDetails();
                           },
                           child: const Text('Add'),

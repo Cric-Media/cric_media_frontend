@@ -5,6 +5,7 @@ import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/controllers/admin/admin_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/api_manager.dart';
@@ -30,6 +31,7 @@ class MatchCubit extends Cubit<MatchState> {
 
   // functions
   addMatchDetails() async {
+    emit(MatchAddDetailsLoading());
     final url = AdminUrl.addMatchDetails;
     final myAdminId = await Global().getAdminId();
     final headers = {"Content-Type": "application/json"};
@@ -40,10 +42,6 @@ class MatchCubit extends Cubit<MatchState> {
       whoWinsToss = team2?.id;
     }
 
-    print(teamAToss);
-    print(teamBToss);
-    print(teamABat);
-    print(teamBBat);
     if (teamAToss == true && teamABat == true) {
       tossDetails = "Team ${team1?.name} won the toss and elected to bat first";
     } else if (teamAToss == true && teamABowl == true) {
@@ -56,8 +54,6 @@ class MatchCubit extends Cubit<MatchState> {
           "Team ${team2?.name} won the toss and elected to bowl first";
     }
 
-    print(tossDetails);
-
     try {
       final body = {
         "admin": myAdminId.toString(),
@@ -66,16 +62,16 @@ class MatchCubit extends Cubit<MatchState> {
         "matchType": matchType.toString(),
         "ballType": ballType.toString(),
         "pitchType": pitchType.toString(),
-        "numberOfOvers": numberOfOvers?.toInt(),
-        "oversPerBowler": oversPerBowler?.toInt(),
+        "numberOfOvers": numberOfOvers ?? 0,
+        "oversPerBowler": oversPerBowler ?? 0,
         "cityOrTown": cityTown.toString(),
         "ground": ground.toString(),
         "matchDateTime": matchDateTime.toString(),
         "whoWinsTheToss": whoWinsToss.toString(),
-        "tossDetails": tossDetails.toString(),
+        "tossDetails": tossDetails,
         "matchStatus": 0,
-        "squad1": [...squad1.map((e) => e.id.toString()).toList()],
-        "squad2": [...squad2.map((e) => e.id.toString()).toList()],
+        "squad1": squad1.map((e) => e.id.toString()).toList(),
+        "squad2": squad2.map((e) => e.id.toString()).toList(),
         "team1Batting": teamABat ?? false,
         "team2Batting": teamBBat ?? false,
         "team1toss": teamAToss ?? false,
@@ -98,12 +94,16 @@ class MatchCubit extends Cubit<MatchState> {
       var resBody = jsonDecode(response.body);
       log(resBody);
       if (resBody['success']) {
-        MatchAddDetailsSuccess(ApiResponse.fromJson(resBody, (data) => null));
+        MatchAddDetailsSuccess(
+          ApiResponse.fromJson(
+            resBody,
+            (data) => MatchDetails.fromJson(resBody['data']),
+          ),
+        );
       } else {
         throw AppException(resBody['message']);
       }
     } catch (err) {
-      print(err);
       if (err is! AppException) {
         emit(
           MatchAddDetailsError("Something went wrong, please try again later"),
