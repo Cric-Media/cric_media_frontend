@@ -110,6 +110,7 @@ class AdminController {
       List<Player> players = [];
       for (var player in resBody['data']) {
         players.add(Player(
+          id: player['_id'],
           name: player['name'],
           location: player['location'],
           role: player['role'],
@@ -213,7 +214,7 @@ class AdminController {
     }
   }
 
-  // !TEAM SECTION //
+  // *TEAM SECTION //
   Future<ApiResponse> addTeam(
       {required Team team, required File imageFile}) async {
     final url = AdminUrl.createTeam;
@@ -358,4 +359,8 @@ class AdminController {
   }
 
   // * MATCH SECTION
+  Future<void> addMatchDetails({
+    required String team1,
+    required String team2,
+  }) async {}
 }

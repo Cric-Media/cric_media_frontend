@@ -11,6 +11,7 @@ part 'team_states.dart';
 
 class TeamCubit extends Cubit<TeamState> {
   TeamCubit() : super(TeamInit());
+  static TeamCubit get(context) => BlocProvider.of<TeamCubit>(context);
 
   var adminController = AdminController();
 

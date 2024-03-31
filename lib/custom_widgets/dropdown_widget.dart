@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DropdownWidget extends StatefulWidget {
-  const DropdownWidget({Key? key, required this.items, this.hint, this.value})
+  const DropdownWidget(
+      {Key? key, required this.items, this.hint, this.value, this.onChanged})
       : super(key: key);
 
   final List<String> items;
   final String? hint;
   final String? value;
-
+  final void Function(String?)? onChanged;
   @override
   State<DropdownWidget> createState() => _DropdownWidgetState();
 }
@@ -38,11 +39,7 @@ class _DropdownWidgetState extends State<DropdownWidget> {
                 widget.hint!,
                 style: const TextStyle(color: Colors.white),
               ),
-        onChanged: (v) {
-          setState(() {
-            value = v;
-          });
-        },
+        onChanged: widget.onChanged,
         items: widget.items.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,

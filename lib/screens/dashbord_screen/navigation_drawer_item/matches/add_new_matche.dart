@@ -52,7 +52,7 @@ class _AddNewMatcheState extends State<AddNewMatche> {
             DateFormat('EEEE, MMMM d, y - HH:mm').format(selectedDateTime);
 
         setState(() {
-          MatchCubit.get(context).selectedDateTime = formattedDateTime;
+          MatchCubit.get(context).matchDateTime = formattedDateTime;
         });
       }
     }
@@ -174,6 +174,11 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                     ],
                     value: MatchCubit.get(context).matchType,
                     hint: "Select a match type please.",
+                    onChanged: (v) {
+                      setState(() {
+                        MatchCubit.get(context).matchType = v;
+                      });
+                    },
                   ),
                   Align(
                     alignment: Alignment.topLeft,
@@ -196,6 +201,11 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                     ],
                     value: MatchCubit.get(context).ballType,
                     hint: "Select a ball type please.",
+                    onChanged: (v) {
+                      setState(() {
+                        MatchCubit.get(context).ballType = v;
+                      });
+                    },
                   ),
                   Align(
                     alignment: Alignment.topLeft,
@@ -222,6 +232,11 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                     ],
                     value: MatchCubit.get(context).pitchType,
                     hint: "Select a pitch type please.",
+                    onChanged: (v) {
+                      setState(() {
+                        MatchCubit.get(context).pitchType = v;
+                      });
+                    },
                   ),
                   const SizedBox(
                     height: 20,
@@ -307,9 +322,7 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 5),
                   Row(
                     children: [
                       Column(
@@ -416,9 +429,9 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          MatchCubit.get(context).selectedDateTime == null
+                          MatchCubit.get(context).matchDateTime == null
                               ? 'Select time'
-                              : 'Selected: ${MatchCubit.get(context).selectedDateTime.toString()}',
+                              : 'Selected: ${MatchCubit.get(context).matchDateTime.toString()}',
                           style: const TextStyle(
                               fontSize: 15, color: Colors.black),
                         ),
@@ -439,9 +452,7 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 3,
-                  ),
+                  const SizedBox(height: 3),
                   SizedBox(
                     height: 30,
                     child: Row(
@@ -458,7 +469,7 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                           },
                         ),
                         const Text(
-                          'Team A',
+                          'Team 1',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.black,
@@ -483,7 +494,7 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                           },
                         ),
                         const Text(
-                          'Team B Toss',
+                          'Team 2',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.black,
@@ -516,11 +527,13 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                             setState(() {
                               MatchCubit.get(context).teamABat = value!;
                               MatchCubit.get(context).teamBBat = !value;
+                              MatchCubit.get(context).teamABowl = !value;
+                              MatchCubit.get(context).teamBBowl = value;
                             });
                           },
                         ),
                         const Text(
-                          'Team A Batting',
+                          'Team 1 Batting',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.black,
@@ -540,17 +553,47 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                             setState(() {
                               MatchCubit.get(context).teamBBat = value!;
                               MatchCubit.get(context).teamABat = !value;
+                              MatchCubit.get(context).teamBBowl = !value;
+                              MatchCubit.get(context).teamABowl = value;
                             });
                           },
                         ),
                         const Text(
-                          'Team B Batting',
+                          'Team 2 Batting',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.black,
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: BlocConsumer<MatchCubit, MatchState>(
+                      listener: (context, state) {
+                        if (state is MatchAddDetailsSuccess) {
+                          print('added');
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is MatchAddDetailsLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return ElevatedButton(
+                          onPressed: () {
+                            print('loading');
+                            MatchCubit.get(context).addMatchDetails();
+                          },
+                          child: const Text('Add'),
+                        );
+                      },
                     ),
                   ),
                 ]),
@@ -692,9 +735,6 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
                 }
               },
               builder: (context, state) {
-                // if (state is PlayerGetInitialLoading) {
-                //   return const Center(child: CircularProgressIndicator());
-                // }
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
