@@ -12,7 +12,9 @@ part 'player_states.dart';
 class PlayerCubit extends Cubit<PlayerState> {
   PlayerCubit() : super(PlayerInit());
   static PlayerCubit get(context) => BlocProvider.of<PlayerCubit>(context);
+
   var adminController = AdminController();
+  List<Player> players = [];
 
   addPlayer({required Player player, required File playerImage}) async {
     emit(PlayerAddLoading());
