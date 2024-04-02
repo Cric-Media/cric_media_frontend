@@ -22,6 +22,8 @@ abstract class AuthUrl {
 abstract class AdminUrl {
   static final addPlayer = '${AppUrl.baseUrl}/add-players';
   static final getAllPlayers = '${AppUrl.baseUrl}/get-player-detail-by-adminid';
+  static final getAllPlayersByTeamId =
+      '${AppUrl.baseUrl}/get-players-by-teamId';
   static final getPlayerDetail =
       '${AppUrl.baseUrl}/get-player-detail-by-playerid';
   static final updatePlayer = '${AppUrl.baseUrl}/update-player';
@@ -36,4 +38,13 @@ abstract class AdminUrl {
   static final updateTeam = '${AppUrl.baseUrl}/update-team';
   static final deleteTeam = '${AppUrl.baseUrl}/delete-team-byid';
   static final addPlayerToTeam = '${AppUrl.baseUrl}/in-team-add-player';
+
+  // * MATCH URLs
+  static final addMatchDetails = "${AppUrl.baseUrl}/add-match-details";
+  static final getUncomingMatchesByAdmin =
+      "${AppUrl.baseUrl}/get-upcoming-matches";
+  static final getUpcomingMatches =
+      "${AppUrl.baseUrl}/get-upcoming-matches-for-user";
+  static final getLiveMatches = "${AppUrl.baseUrl}/get-live-matches-for-user";
+  static final getLiveAdminMatches = "${AppUrl.baseUrl}/get-live-matches";
 }

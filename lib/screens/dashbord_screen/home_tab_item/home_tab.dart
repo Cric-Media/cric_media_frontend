@@ -11,7 +11,7 @@ import 'package:cricket_app/screens/dashbord_screen/new_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../custom_widgets/custom_home_card.dart';
+import '../../../custom_widgets/match_details_live_card.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -52,7 +52,7 @@ class HomeTab extends StatelessWidget {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LiveDetails()));
                 },
-                child: CustomHomeCard()),
+                child: MatchDetailsLiveCard()),
             SizedBox(
               height: screenWidth * 0.026,
             ),
@@ -61,7 +61,7 @@ class HomeTab extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    'UpComing',
+                    'Up Coming',
                     style: GoogleFonts.inter(
                         textStyle: TextStyle(
                             fontSize: screenWidth * 0.038,
@@ -196,7 +196,7 @@ class HomeTab extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: 800,
               child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),

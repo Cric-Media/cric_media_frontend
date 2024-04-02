@@ -2,7 +2,8 @@
 
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
-import 'package:cricket_app/custom_widgets/custom_home_card.dart';
+import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_info.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_live.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_point_table.dart';
@@ -62,7 +63,7 @@ class _LiveDetails extends State<LiveDetails> {
                 SizedBox(
                   height: 5,
                 ),
-                CustomHomeCard(),
+                MatchDetailsLiveCard(match: MatchDetails()),
                 SizedBox(
                   height: 5,
                 ),

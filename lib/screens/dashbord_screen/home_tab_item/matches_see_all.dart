@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/custom_widgets/custom_home_card.dart';
+import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -39,7 +40,7 @@ class MatchesSeeAll extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: CustomHomeCard(),
+                  child: MatchDetailsLiveCard(match: MatchDetails()),
                 );
               }),
         )

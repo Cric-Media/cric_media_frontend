@@ -12,4 +12,6 @@ const dashboard = '/dashboard';
 const addNewPlayer = '/add-new-player';
 const playerItem = '/player-item';
 const teams = '/teams';
+const teamPlayers = '/team-players';
 const addTeam = '/add-team';
+const startMatch = '/start-match';

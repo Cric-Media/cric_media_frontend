@@ -1,5 +1,6 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
+import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/providers/add_new_player_provider.dart';
@@ -7,15 +8,21 @@ import 'package:cricket_app/providers/registration_provider.dart';
 import 'package:cricket_app/providers/team_provider.dart';
 import 'package:cricket_app/providers/user_login_provider.dart';
 import 'package:cricket_app/routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 
+import 'firebase_options.dart';
+
 void main() async {
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -46,6 +53,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<TeamCubit>(
               create: (context) => TeamCubit()..getInitialTeams(),
             ),
+            BlocProvider<MatchCubit>(create: (context) => MatchCubit()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

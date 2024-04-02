@@ -11,6 +11,7 @@ part 'team_states.dart';
 
 class TeamCubit extends Cubit<TeamState> {
   TeamCubit() : super(TeamInit());
+  static TeamCubit get(context) => BlocProvider.of<TeamCubit>(context);
 
   var adminController = AdminController();
 
@@ -53,7 +54,6 @@ class TeamCubit extends Cubit<TeamState> {
       }
     } catch (err) {
       // if exception type is not AppException then emit "Something went wrong"
-      print(err);
       if (err is! AppException) {
         emit(TeamGetError('Something went wrong'));
       } else {

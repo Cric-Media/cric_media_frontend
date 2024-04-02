@@ -29,7 +29,7 @@ class Player {
     age = json['age'];
     additionalInfo = json['additionalInfo'];
     imageUrl = json['Image'];
-    admins = json['admins'].cast<String>();
+    admins = json['admins']?.cast<String>();
     stats = json['stats'] != null ? Stats.fromJson(json['stats']) : null;
   }
 
@@ -47,6 +47,35 @@ class Player {
       data['stats'] = stats!.toJson();
     }
     return data;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Player &&
+        other.id == id &&
+        other.name == name &&
+        other.location == location &&
+        other.role == role &&
+        other.age == age &&
+        other.additionalInfo == additionalInfo &&
+        other.imageUrl == imageUrl &&
+        other.admins == admins &&
+        other.stats == stats;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        name.hashCode ^
+        location.hashCode ^
+        role.hashCode ^
+        age.hashCode ^
+        additionalInfo.hashCode ^
+        imageUrl.hashCode ^
+        admins.hashCode ^
+        stats.hashCode;
   }
 }
 
@@ -69,5 +98,20 @@ class Stats {
     data['fours'] = fours;
     data['wickets'] = wickets;
     return data;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Stats &&
+        other.sixes == sixes &&
+        other.fours == fours &&
+        other.wickets == wickets;
+  }
+
+  @override
+  int get hashCode {
+    return sixes.hashCode ^ fours.hashCode ^ wickets.hashCode;
   }
 }

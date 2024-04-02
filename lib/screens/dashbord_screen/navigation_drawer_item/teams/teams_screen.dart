@@ -5,8 +5,10 @@ import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
+import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/models/admin.dart';
+import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/app_dialog.dart';
 import 'package:cricket_app/utils/snackbars.dart';
@@ -27,15 +29,12 @@ class _TeamsScreenState extends State<TeamsScreen> {
 
   @override
   void initState() {
-    BlocProvider.of<TeamCubit>(context).getInitialTeams();
+    TeamCubit.get(context).getInitialTeams();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: Color(0XFFFBFBFB),
       appBar: PreferredSize(
@@ -56,17 +55,8 @@ class _TeamsScreenState extends State<TeamsScreen> {
             foregroundColor: Colors.white,
             backgroundColor: AppColor.blueColor,
             automaticallyImplyLeading: true,
-            actions: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: Image.asset(
-                    AppIcons.search,
-                    width: 25,
-                    color: Colors.white,
-                  )),
-            ],
             title: Text(
-              'Team',
+              'Teams',
               style: GoogleFonts.inter(
                   textStyle: TextStyle(
                       fontSize: 19,
@@ -89,6 +79,14 @@ class _TeamsScreenState extends State<TeamsScreen> {
         } else if (state is TeamDeleteSuccess) {
           Navigator.pop(context);
           BlocProvider.of<TeamCubit>(context).getInitialTeams();
+        } else if (state is TeamAddPlayerLoading) {
+          AppDialogs.loadingDialog(context);
+        } else if (state is TeamAddPlayerSuccess) {
+          AppDialogs.closeDialog(context);
+          TeamCubit.get(context).getInitialTeams();
+        } else if (state is TeamAddPlayerError) {
+          AppDialogs.closeDialog(context);
+          showSnack(context, message: state.message);
         }
       }, builder: (context, state) {
         if (state is TeamGetInitialLoading) {
@@ -117,7 +115,9 @@ class _TeamsScreenState extends State<TeamsScreen> {
                     .toList();
               },
               builder: (context, index, item) {
-                return TeamTile(team: item);
+                return Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: TeamTile(team: item));
               }),
         );
       }),
@@ -150,8 +150,12 @@ class TeamTile extends StatefulWidget {
 
 class _TeamTileState extends State<TeamTile> {
   List<Admin> admins = [];
+  List<Player> playerList = [];
   String search = '';
 
+  // Cubits
+  PlayerCubit playerCubit = PlayerCubit();
+  late TeamCubit teamCubit;
   // Scroll controller
   final ScrollController _scrollController = ScrollController();
   int page = 1;
@@ -159,6 +163,7 @@ class _TeamTileState extends State<TeamTile> {
 
   @override
   void initState() {
+    teamCubit = TeamCubit.get(context);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -173,7 +178,7 @@ class _TeamTileState extends State<TeamTile> {
     super.initState();
   }
 
-  void showBottomSheet(BuildContext context) {
+  adminsSheet(BuildContext context) {
     BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins();
 
     showModalBottomSheet(
@@ -257,163 +262,256 @@ class _TeamTileState extends State<TeamTile> {
     );
   }
 
+  playersSheet() {
+    playerCubit.getPlayersByAdminId();
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      showDragHandle: true,
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(),
+      builder: (context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.7,
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: BlocConsumer<PlayerCubit, PlayerState>(
+              bloc: playerCubit,
+              listener: (context, state) {
+                if (state is PlayerGetInitial) {
+                  playerList = state.response.data;
+                }
+              },
+              builder: (context, state) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: SearchableList(
+                          searchFieldEnabled: true,
+                          closeKeyboardWhenScrolling: true,
+                          inputDecoration: InputDecoration(
+                            hintText: 'Search',
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          initialList: playerList,
+                          filter: (query) {
+                            return playerList
+                                .where((team) => team.name!
+                                    .toLowerCase()
+                                    .contains(query.toLowerCase()))
+                                .toList();
+                          },
+                          builder: (context, index, item) {
+                            return ListTile(
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: CachedNetworkImageProvider(
+                                  playerList[index].imageUrl ?? '',
+                                ),
+                              ),
+                              title: Text(playerList[index].name ?? ''),
+                              subtitle: Text(playerList[index].role ?? ''),
+                              trailing: ElevatedButton(
+                                onPressed: () {
+                                  teamCubit.addPlayerToTeam(
+                                    widget.team.id.toString(),
+                                    playerList[index].id.toString(),
+                                  );
+                                },
+                                child: Text("Add"),
+                              ),
+                            );
+                          }),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 120,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.7),
-                spreadRadius: 2,
-                blurRadius: 2,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 10, left: 10),
-                      height: 75,
-                      width: 75,
-                      child: CircleAvatar(
-                        backgroundImage:
-                            CachedNetworkImageProvider(widget.team.image ?? ''),
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(
+          context,
+          teamPlayers,
+          arguments: {'teamId': widget.team.id.toString()},
+        );
+      },
+      child: Column(
+        children: [
+          Container(
+            height: 120,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.7),
+                  spreadRadius: 2,
+                  blurRadius: 2,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 10, left: 10),
+                        height: 75,
+                        width: 75,
+                        child: CircleAvatar(
+                          backgroundImage: CachedNetworkImageProvider(
+                              widget.team.image ?? ''),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      flex: 3,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 12,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Text(
-                                  widget.team.name ?? '',
-                                  style: GoogleFonts.inter(
-                                      textStyle: TextStyle(
-                                          fontSize: 16,
-                                          color: AppColor.blackColor,
-                                          fontWeight: FontWeight.w700)),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Text(
-                                  'ID:${widget.team.id?.substring(0, 7)}',
-                                  style: GoogleFonts.inter(
-                                      textStyle: TextStyle(
-                                          fontSize: 15,
-                                          color: AppColor.blackColor,
-                                          fontWeight: FontWeight.w600)),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Text(
-                                  'Total players:${widget.team.players?.length}',
-                                  style: GoogleFonts.inter(
-                                      textStyle: TextStyle(
-                                    fontSize: 12,
-                                    color: AppColor.blackColor,
-                                  )),
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 5),
-                                child: Row(
-                                  children: [
-                                    Text("Share access"),
-                                    SizedBox(width: 10),
-                                    GestureDetector(
-                                      onTap: () {
-                                        showBottomSheet(context);
-                                      },
-                                      child: Image.asset(
-                                        'assets/image/invite.png',
-                                        width: 20,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Spacer(),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Column(
+                      SizedBox(width: 10),
+                      Expanded(
+                        flex: 3,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  height: 5,
+                                  height: 12,
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      addTeam,
-                                      arguments: {'team': widget.team},
-                                    );
-                                  },
-                                  child: Image.asset(AppIcons.edit, width: 20),
-                                ),
-                                SizedBox(height: 15),
-                                GestureDetector(
-                                  onTap: () {
-                                    BlocProvider.of<TeamCubit>(context)
-                                        .deleteTeam(
-                                      widget.team.id.toString(),
-                                    );
-                                  },
-                                  child:
-                                      Image.asset(AppIcons.delete, width: 20),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Text(
+                                    widget.team.name ?? '',
+                                    style: GoogleFonts.inter(
+                                        textStyle: TextStyle(
+                                            fontSize: 16,
+                                            color: AppColor.blackColor,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
                                 ),
                                 SizedBox(
-                                  height: 15,
+                                  height: 8,
                                 ),
-                                Image.asset(
-                                  AppIcons.add,
-                                  width: 20,
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Text(
+                                    'ID:${widget.team.id?.substring(0, 7)}',
+                                    style: GoogleFonts.inter(
+                                        textStyle: TextStyle(
+                                            fontSize: 15,
+                                            color: AppColor.blackColor,
+                                            fontWeight: FontWeight.w600)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10.0),
+                                  child: Text(
+                                    'Total players:${widget.team.players?.length}',
+                                    style: GoogleFonts.inter(
+                                        textStyle: TextStyle(
+                                      fontSize: 12,
+                                      color: AppColor.blackColor,
+                                    )),
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: Row(
+                                    children: [
+                                      Text("Share access"),
+                                      SizedBox(width: 10),
+                                      GestureDetector(
+                                        onTap: () {
+                                          adminsSheet(context);
+                                        },
+                                        child: Image.asset(
+                                          'assets/image/invite.png',
+                                          width: 20,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+                            Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        addTeam,
+                                        arguments: {'team': widget.team},
+                                      );
+                                    },
+                                    child:
+                                        Image.asset(AppIcons.edit, width: 20),
+                                  ),
+                                  SizedBox(height: 15),
+                                  GestureDetector(
+                                    onTap: () {
+                                      BlocProvider.of<TeamCubit>(context)
+                                          .deleteTeam(
+                                        widget.team.id.toString(),
+                                      );
+                                    },
+                                    child:
+                                        Image.asset(AppIcons.delete, width: 20),
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      playersSheet();
+                                    },
+                                    child: Image.asset(
+                                      AppIcons.add,
+                                      width: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        )
-      ],
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
