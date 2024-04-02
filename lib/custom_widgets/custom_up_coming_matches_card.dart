@@ -1,12 +1,16 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, unnecessary_string_interpolations
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UpCommingMachesCard extends StatelessWidget {
-  const UpCommingMachesCard({super.key});
+  final MatchDetails? match;
+  final bool? isAdmin;
+  const UpCommingMachesCard({super.key, this.match, this.isAdmin});
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +41,14 @@ class UpCommingMachesCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Asia Cup 2023',
-                            style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: AppColor.hintColor,
-                                    fontWeight: FontWeight.w500)),
-                          ),
+                          // Text(
+                          //   'Asia Cup 2023',
+                          //   style: GoogleFonts.inter(
+                          //       textStyle: TextStyle(
+                          //           fontSize: 15,
+                          //           color: AppColor.hintColor,
+                          //           fontWeight: FontWeight.w500)),
+                          // ),
                           SizedBox(
                             height: screenHeight * 0.015,
                           ),
@@ -53,43 +57,60 @@ class UpCommingMachesCard extends StatelessWidget {
                               Container(
                                 width: 35,
                                 height: 35,
-                                child: Image.asset('${AppIcons.pak}'),
+                                child: match != null
+                                    ? CircleAvatar(
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                          match!.team1!.image!,
+                                        ),
+                                      )
+                                    : Image.asset('${AppIcons.pak}'),
                               ),
                               SizedBox(
                                 width: 15,
                               ),
-                              Text(
-                                'PAK',
-                                style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.blackColor,
-                                  fontWeight: FontWeight.w700,
-                                )),
+                              Expanded(
+                                child: Text(
+                                  match != null ? match!.team1!.name! : 'PAK',
+                                  style: GoogleFonts.inter(
+                                      textStyle: TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.blackColor,
+                                    fontWeight: FontWeight.w700,
+                                  )),
+                                ),
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 12,
-                          ),
+                          SizedBox(height: 12),
                           Row(
                             children: [
                               Container(
                                 width: 35,
                                 height: 35,
-                                child: Image.asset('${AppIcons.afg}'),
+                                child: match != null
+                                    ? CircleAvatar(
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                          match!.team2!.image!,
+                                        ),
+                                      )
+                                    : Image.asset('${AppIcons.afg}'),
                               ),
                               SizedBox(
                                 width: 15,
                               ),
-                              Text(
-                                'AFG',
-                                style: GoogleFonts.inter(
+                              Expanded(
+                                child: Text(
+                                  match != null ? match!.team2!.name! : 'AFG',
+                                  style: GoogleFonts.inter(
                                     textStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.blackColor,
-                                  fontWeight: FontWeight.w700,
-                                )),
+                                      fontSize: 14,
+                                      color: AppColor.blackColor,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
                           )
@@ -132,17 +153,19 @@ class UpCommingMachesCard extends StatelessWidget {
                           height: 8,
                         ),
                         Text(
-                          '6:00 pm',
+                          match != null
+                              ? match!.matchDateTime!.split("-").first
+                              : '6:00 pm',
                           style: TextStyle(
                               fontSize: 13,
                               color: AppColor.blackColor,
                               fontWeight: FontWeight.w700),
                         ),
-                        SizedBox(
-                          height: 7,
-                        ),
+                        SizedBox(height: 7),
                         Text(
-                          '09-04-2023',
+                          match != null
+                              ? match!.matchDateTime!.split("-").last
+                              : '09-04-2023',
                           style: TextStyle(
                               fontSize: 14,
                               color: AppColor.blackColor,

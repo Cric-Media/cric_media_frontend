@@ -9,7 +9,6 @@ import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -583,6 +582,7 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                           // AppDialogs.closeDialog(context);
                           // Navigator.pop(context);
                           showSnack(context, message: state.res.message);
+                          Navigator.pop(context);
                         }
                         if (state is MatchAddDetailsError) {
                           // AppDialogs.closeDialog(context);
@@ -757,15 +757,27 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
                         itemBuilder: (context, index) => GestureDetector(
                           onTap: () {
                             if (widget.teamNo == 1) {
-                              matchCubit.squad1.addIf(
-                                  !matchCubit.squad1
-                                      .contains(matchCubit.playerList[index]),
-                                  matchCubit.playerList[index]);
+                              if (!matchCubit.squad1
+                                  .contains(matchCubit.playerList[index])) {
+                                print(
+                                    'Adding player ${matchCubit.playerList[index].name} to squad1');
+                                matchCubit.squad1
+                                    .add(matchCubit.playerList[index]);
+                              } else {
+                                print(
+                                    'Player ${matchCubit.playerList[index].name} is already in squad1');
+                              }
                             } else {
-                              matchCubit.squad2.addIf(
-                                  !matchCubit.squad2
-                                      .contains(matchCubit.playerList[index]),
-                                  matchCubit.playerList[index]);
+                              if (!matchCubit.squad2
+                                  .contains(matchCubit.playerList[index])) {
+                                print(
+                                    'Adding player ${matchCubit.playerList[index].name} to squad2');
+                                matchCubit.squad2
+                                    .add(matchCubit.playerList[index]);
+                              } else {
+                                print(
+                                    'Player ${matchCubit.playerList[index].name} is already in squad2');
+                              }
                             }
                             playerCubit.getPlayersByTeamId(teamId);
                           },

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cricket_app/constants/app_url.dart';
@@ -365,8 +366,9 @@ class AdminController {
     final url = "${AdminUrl.getUncomingMatchesByAdmin}/$adminId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
-    print(response.statusCode);
+    log(response.body);
     var resBody = jsonDecode(response.body);
+
     if (resBody['success']) {
       List<MatchDetails> matches = [];
       for (var match in resBody['data']) {

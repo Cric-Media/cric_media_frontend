@@ -95,11 +95,9 @@ class MatchCubit extends Cubit<MatchState> {
           await ApiManager.postRequest(body, url, headers: headers);
       log(response.body);
       var resBody = jsonDecode(response.body);
-      log(resBody);
       if (resBody['success']) {
-        MatchAddDetailsSuccess(
-          ApiResponse.fromJson(resBody, (data) => null),
-        );
+        emit(MatchAddDetailsSuccess(
+            ApiResponse.fromJson(resBody, (data) => null)));
       } else {
         throw AppException(resBody['message']);
       }
@@ -121,11 +119,7 @@ class MatchCubit extends Cubit<MatchState> {
       var network = await Network.check();
       if (network) {
         var response = await adminController.getUpcomingMatchesByAdminId();
-        if (response.data.length > 0) {
-          emit(MatchUpcommingSuccess(response));
-        } else {
-          // emit(PlayerEmptyState());
-        }
+        emit(MatchUpcommingSuccess(response));
       } else {
         emit(MatchUpcommingError('No internet connection'));
       }

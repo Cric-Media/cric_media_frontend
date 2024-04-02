@@ -32,6 +32,10 @@ class _UpComingItem extends State<UpComingItem> {
           return const Center(
             child: CircularProgressIndicator(),
           );
+        } else if (state is MatchUpcommingError) {
+          return Center(
+            child: Text(state.message),
+          );
         }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,10 +46,12 @@ class _UpComingItem extends State<UpComingItem> {
                 itemCount:
                     MatchCubit.get(context).upcomingMatchDetailsList.length,
                 itemBuilder: (ctx, index) {
+                  var match =
+                      MatchCubit.get(ctx).upcomingMatchDetailsList[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10.0, vertical: 5),
-                    child: UpCommingMachesCard(),
+                    child: UpCommingMachesCard(match: match),
                   );
                 },
               ),
