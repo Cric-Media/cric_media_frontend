@@ -30,7 +30,7 @@ class _LiveItem extends State<LiveItem> {
                 return Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                  child: MatchDetailsLiveCard(matchDetails: record),
+                  child: MatchDetailsLiveCard(match: record),
                 );
               },
             ),

@@ -5,7 +5,6 @@ import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/custom_widgets/custom_contanor_trading_news.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
 import 'package:cricket_app/custom_widgets/onging_series.dart';
-import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/matchesDetails.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/new_details.dart';
@@ -53,9 +52,7 @@ class HomeTab extends StatelessWidget {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => LiveDetails()));
                 },
-                child: MatchDetailsLiveCard(
-                  matchDetails: MatchDetails(),
-                )),
+                child: MatchDetailsLiveCard()),
             SizedBox(
               height: screenWidth * 0.026,
             ),
@@ -64,7 +61,7 @@ class HomeTab extends StatelessWidget {
               child: Row(
                 children: [
                   Text(
-                    'UpComing',
+                    'Up Coming',
                     style: GoogleFonts.inter(
                         textStyle: TextStyle(
                             fontSize: screenWidth * 0.038,

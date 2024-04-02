@@ -63,7 +63,7 @@ class _LiveDetails extends State<LiveDetails> {
                 SizedBox(
                   height: 5,
                 ),
-                MatchDetailsLiveCard(matchDetails: MatchDetails()),
+                MatchDetailsLiveCard(match: MatchDetails()),
                 SizedBox(
                   height: 5,
                 ),

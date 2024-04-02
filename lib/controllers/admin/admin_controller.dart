@@ -381,4 +381,25 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> getLiveMatches({bool user = false}) async {
+    final adminId = await Global().getAdminId();
+    final url = user
+        ? AdminUrl.getLiveMatches
+        : "${AdminUrl.getLiveAdminMatches}/$adminId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+
+    if (resBody['success']) {
+      List<MatchDetails> matches = [];
+      for (var match in resBody['data']) {
+        matches.add(MatchDetails.fromJson(match));
+      }
+      return ApiResponse.fromJson(resBody, (data) => matches);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }

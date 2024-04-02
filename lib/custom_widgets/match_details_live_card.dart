@@ -1,12 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MatchDetailsLiveCard extends StatelessWidget {
-  final MatchDetails matchDetails;
-  const MatchDetailsLiveCard({super.key, required this.matchDetails});
+  final MatchDetails? match;
+  const MatchDetailsLiveCard({super.key, this.match});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class MatchDetailsLiveCard extends StatelessWidget {
               ),
               const SizedBox(height: 3),
               Text(
-                'At ${matchDetails.cityOrTown}',
+                match == null ? 'At Kabul' : 'At ${match?.cityOrTown}',
                 style: GoogleFonts.inter(
                     textStyle: const TextStyle(
                         fontSize: 14,
@@ -73,13 +73,17 @@ class MatchDetailsLiveCard extends StatelessWidget {
                   SizedBox(
                     width: 35,
                     height: 35,
-                    child: Image.asset(AppIcons.pak),
+                    child: match == null
+                        ? Image.asset("assets/image/pak1.png")
+                        : CircleAvatar(
+                            backgroundImage: CachedNetworkImageProvider(
+                              match?.team1?.image ?? '',
+                            ),
+                          ),
                   ),
-                  const SizedBox(
-                    width: 15,
-                  ),
+                  const SizedBox(width: 15),
                   Text(
-                    'PAK',
+                    match?.team1?.name ?? '',
                     style: GoogleFonts.inter(
                         textStyle: const TextStyle(
                       fontSize: 14,
@@ -89,7 +93,9 @@ class MatchDetailsLiveCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '${matchDetails.team1Score}/${matchDetails.team1Outs}',
+                    match == null
+                        ? '0/0'
+                        : '${match?.team1Score}/${match?.team1Outs}',
                     style: GoogleFonts.inter(
                         textStyle: const TextStyle(
                             fontSize: 14,
@@ -97,7 +103,9 @@ class MatchDetailsLiveCard extends StatelessWidget {
                             color: AppColor.blackColor)),
                   ),
                   Text(
-                    '(${matchDetails.team1Overs}.${matchDetails.team1Balls} Overs)',
+                    match == null
+                        ? ' (0/0 Overs)'
+                        : ' (${match?.team1Overs}.${match?.team1Balls} Overs)',
                     style: GoogleFonts.inter(
                         textStyle: const TextStyle(
                             fontSize: 14,
@@ -106,21 +114,25 @@ class MatchDetailsLiveCard extends StatelessWidget {
                   )
                 ],
               ),
-              const SizedBox(
-                height: 13,
-              ),
+              const SizedBox(height: 13),
               Row(
                 children: [
                   SizedBox(
                     width: 35,
                     height: 35,
-                    child: Image.asset(AppIcons.afg),
+                    child: match == null
+                        ? Image.asset("assets/image/pak1.png")
+                        : CircleAvatar(
+                            backgroundImage: CachedNetworkImageProvider(
+                              match?.team2?.image ?? '',
+                            ),
+                          ),
                   ),
                   const SizedBox(
                     width: 15,
                   ),
                   Text(
-                    'AFG',
+                    match?.team1?.name ?? '',
                     style: GoogleFonts.inter(
                         textStyle: const TextStyle(
                       fontSize: 14,
@@ -130,7 +142,9 @@ class MatchDetailsLiveCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '${matchDetails.team2Score}/${matchDetails.team2Outs}',
+                    match == null
+                        ? '0/0'
+                        : '${match?.team2Score}/${match?.team2Outs}',
                     style: GoogleFonts.inter(
                         textStyle: const TextStyle(
                             fontSize: 14,
@@ -138,12 +152,15 @@ class MatchDetailsLiveCard extends StatelessWidget {
                             color: AppColor.blackColor)),
                   ),
                   Text(
-                    '(${matchDetails.team2Overs}.${matchDetails.team2Balls} Overs)',
+                    match == null
+                        ? ' (0/0 Overs)'
+                        : ' (${match?.team2Overs}.${match?.team2Balls} Overs)',
                     style: GoogleFonts.inter(
                       textStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColor.hintColor),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: AppColor.hintColor,
+                      ),
                     ),
                   )
                 ],
@@ -151,14 +168,14 @@ class MatchDetailsLiveCard extends StatelessWidget {
               const SizedBox(
                 height: 12,
               ),
-              Text(
-                'AFG Need by 110 runs',
-                style: GoogleFonts.inter(
-                    textStyle: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: AppColor.blueColor)),
-              )
+              // Text(
+              //   'AFG Need by 110 runs',
+              //   style: GoogleFonts.inter(
+              //       textStyle: const TextStyle(
+              //           fontSize: 15,
+              //           fontWeight: FontWeight.w600,
+              //           color: AppColor.blueColor)),
+              // )
             ],
           ),
         ),
