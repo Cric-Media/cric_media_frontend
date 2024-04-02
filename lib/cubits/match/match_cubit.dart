@@ -102,7 +102,6 @@ class MatchCubit extends Cubit<MatchState> {
         throw AppException(resBody['message']);
       }
     } catch (err) {
-      print(err);
       if (err is! AppException) {
         emit(
           MatchAddDetailsError("Something went wrong, please try again later"),
@@ -113,12 +112,12 @@ class MatchCubit extends Cubit<MatchState> {
     }
   }
 
-  getUpcomingAdminMatches() async {
+  getUpcomingMatches({bool user = false}) async {
     emit(MatchUpcommingLoading());
     try {
       var network = await Network.check();
       if (network) {
-        var response = await adminController.getUpcomingMatchesByAdminId();
+        var response = await adminController.getUpcomingMatches(user: user);
         emit(MatchUpcommingSuccess(response));
       } else {
         emit(MatchUpcommingError('No internet connection'));

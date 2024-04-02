@@ -361,9 +361,11 @@ class AdminController {
   }
 
   // * MATCH SECTION
-  Future<ApiResponse> getUpcomingMatchesByAdminId() async {
+  Future<ApiResponse> getUpcomingMatches({bool user = false}) async {
     final adminId = await Global().getAdminId();
-    final url = "${AdminUrl.getUncomingMatchesByAdmin}/$adminId";
+    final url = user
+        ? AdminUrl.getUpcomingMatches
+        : "${AdminUrl.getUncomingMatchesByAdmin}/$adminId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
     log(response.body);

@@ -15,7 +15,7 @@ class UpComingItem extends StatefulWidget {
 class _UpComingItem extends State<UpComingItem> {
   @override
   void initState() {
-    MatchCubit.get(context).getUpcomingAdminMatches();
+    MatchCubit.get(context).getUpcomingMatches();
     super.initState();
   }
 

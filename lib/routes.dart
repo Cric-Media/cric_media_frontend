@@ -80,8 +80,13 @@ class Routes {
 
       case dashboard:
         return MaterialPageRoute(
-          builder: (context) => BlocProvider(
-            create: (context) => AuthCubit(),
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => AuthCubit(),
+              ),
+              BlocProvider<MatchCubit>(create: (context) => MatchCubit()),
+            ],
             child: const DashBoardScreen(),
           ),
         );
