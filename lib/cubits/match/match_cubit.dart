@@ -10,6 +10,7 @@ import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
+import 'package:cricket_app/utils/network.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'match_states.dart';
@@ -19,6 +20,7 @@ class MatchCubit extends Cubit<MatchState> {
 
   static MatchCubit get(context) => BlocProvider.of<MatchCubit>(context);
   var adminController = AdminController();
+
   List<MatchDetails> liveMatchDetailsList = [];
   List<MatchDetails> upcomingMatchDetailsList = [];
   List<MatchDetails> completedMatchDetailsList = [];
@@ -89,8 +91,6 @@ class MatchCubit extends Cubit<MatchState> {
         "team2Outs": 0
       };
 
-      log(jsonEncode(body));
-
       final response =
           await ApiManager.postRequest(body, url, headers: headers);
       log(response.body);
@@ -98,21 +98,43 @@ class MatchCubit extends Cubit<MatchState> {
       log(resBody);
       if (resBody['success']) {
         MatchAddDetailsSuccess(
-          ApiResponse.fromJson(
-            resBody,
-            (data) => MatchDetails.fromJson(resBody['data']),
-          ),
+          ApiResponse.fromJson(resBody, (data) => null),
         );
       } else {
         throw AppException(resBody['message']);
       }
     } catch (err) {
+      print(err);
       if (err is! AppException) {
         emit(
           MatchAddDetailsError("Something went wrong, please try again later"),
         );
       } else {
-        MatchAddDetailsError(err.toString());
+        emit(MatchAddDetailsError(err.toString()));
+      }
+    }
+  }
+
+  getUpcomingAdminMatches() async {
+    emit(MatchUpcommingLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.getUpcomingMatchesByAdminId();
+        if (response.data.length > 0) {
+          emit(MatchUpcommingSuccess(response));
+        } else {
+          // emit(PlayerEmptyState());
+        }
+      } else {
+        emit(MatchUpcommingError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(MatchUpcommingError('Something went wrong'));
+      } else {
+        emit(MatchUpcommingError(err.toString()));
       }
     }
   }

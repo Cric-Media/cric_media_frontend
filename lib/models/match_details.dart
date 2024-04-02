@@ -1,7 +1,10 @@
+import 'package:cricket_app/models/player.dart';
+import 'package:cricket_app/models/team.dart';
+
 class MatchDetails {
   String? admin;
-  String? team1;
-  String? team2;
+  Team? team1;
+  Team? team2;
   String? matchType;
   String? ballType;
   String? pitchType;
@@ -17,6 +20,7 @@ class MatchDetails {
   bool? team2Batting;
   bool? team1toss;
   bool? team2toss;
+  Player? manOfTheMatch;
   int? team1Score;
   int? team2Score;
   int? team1Overs;
@@ -25,8 +29,8 @@ class MatchDetails {
   int? team2Balls;
   int? team1Outs;
   int? team2Outs;
-  List<String>? squad1;
-  List<String>? squad2;
+  List<Player>? squad1;
+  List<Player>? squad2;
   String? sId;
   String? createdAt;
   String? updatedAt;
@@ -51,6 +55,7 @@ class MatchDetails {
       this.team2Batting,
       this.team1toss,
       this.team2toss,
+      this.manOfTheMatch,
       this.team1Score,
       this.team2Score,
       this.team1Overs,
@@ -68,8 +73,8 @@ class MatchDetails {
 
   MatchDetails.fromJson(Map<String, dynamic> json) {
     admin = json['admin'];
-    team1 = json['team1'];
-    team2 = json['team2'];
+    team1 = json['team1'] == null ? null : Team.fromJson(json['team1']);
+    team2 = json['team2'] == null ? null : Team.fromJson(json['team2']);
     matchType = json['matchType'];
     ballType = json['ballType'];
     pitchType = json['pitchType'];
@@ -85,6 +90,9 @@ class MatchDetails {
     team2Batting = json['team2Batting'];
     team1toss = json['team1toss'];
     team2toss = json['team2toss'];
+    manOfTheMatch = json['manOfTheMatch'] != null
+        ? Player.fromJson(json['manOfTheMatch'])
+        : null;
     team1Score = json['team1Score'];
     team2Score = json['team2Score'];
     team1Overs = json['team1Overs'];
@@ -93,8 +101,18 @@ class MatchDetails {
     team2Balls = json['team2Balls'];
     team1Outs = json['team1Outs'];
     team2Outs = json['team2Outs'];
-    squad1 = json['squad1'].cast<String>();
-    squad2 = json['squad2'].cast<String>();
+    if (json['squad1'] != null) {
+      squad1 = <Player>[];
+      json['squad1'].forEach((v) {
+        squad1!.add(Player.fromJson(v));
+      });
+    }
+    if (json['squad2'] != null) {
+      squad2 = <Player>[];
+      json['squad2'].forEach((v) {
+        squad2!.add(Player.fromJson(v));
+      });
+    }
     sId = json['_id'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -121,6 +139,7 @@ class MatchDetails {
     data['team2Batting'] = team2Batting;
     data['team1toss'] = team1toss;
     data['team2toss'] = team2toss;
+    data['manOfTheMatch'] = manOfTheMatch;
     data['team1Score'] = team1Score;
     data['team2Score'] = team2Score;
     data['team1Overs'] = team1Overs;

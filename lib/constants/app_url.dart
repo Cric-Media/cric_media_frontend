@@ -41,4 +41,8 @@ abstract class AdminUrl {
 
   // * MATCH URLs
   static final addMatchDetails = "${AppUrl.baseUrl}/add-match-details";
+  static final getUncomingMatchesByAdmin =
+      "${AppUrl.baseUrl}/get-upcoming-matches";
+  static final getUpcomingMatches =
+      "${AppUrl.baseUrl}/get-upcoming-matches-for-user";
 }

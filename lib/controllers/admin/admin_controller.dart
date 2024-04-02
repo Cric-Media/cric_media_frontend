@@ -5,6 +5,7 @@ import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/api_response.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/api_manager.dart';
@@ -359,8 +360,21 @@ class AdminController {
   }
 
   // * MATCH SECTION
-  Future<void> addMatchDetails({
-    required String team1,
-    required String team2,
-  }) async {}
+  Future<ApiResponse> getUpcomingMatchesByAdminId() async {
+    final adminId = await Global().getAdminId();
+    final url = "${AdminUrl.getUncomingMatchesByAdmin}/$adminId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    print(response.statusCode);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<MatchDetails> matches = [];
+      for (var match in resBody['data']) {
+        matches.add(MatchDetails.fromJson(match));
+      }
+      return ApiResponse.fromJson(resBody, (data) => matches);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }
