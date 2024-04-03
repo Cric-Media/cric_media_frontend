@@ -582,28 +582,26 @@ class _StartMatchScreenState extends State<StartMatchScreen> {
                     height: 50,
                     child: BlocConsumer<MatchCubit, MatchState>(
                       listener: (context, state) {
-                        if (state is MatchAddDetailsLoading) {
-                          // AppDialogs.loadingDialog(context);
-                        } else if (state is MatchAddDetailsSuccess) {
-                          // AppDialogs.closeDialog(context);
-                          // Navigator.pop(context);
+                        if (state is MatchStartLoading) {
+                        } else if (state is MatchStartSuccess) {
                           showSnack(context, message: state.res.message);
                           Navigator.pop(context);
                         }
-                        if (state is MatchAddDetailsError) {
-                          // AppDialogs.closeDialog(context);
+                        if (state is MatchStartError) {
                           showSnack(context, message: state.message);
                         }
                       },
                       builder: (context, state) {
-                        if (state is MatchAddDetailsLoading) {
+                        if (state is MatchStartLoading) {
                           return const Center(
                             child: CircularProgressIndicator(),
                           );
                         }
                         return ElevatedButton(
                           onPressed: () {
-                            MatchCubit.get(context).addMatchDetails();
+                            MatchCubit.get(context).startMatch(
+                              widget.match.sId.toString(),
+                            );
                           },
                           child: const Text('Start Match'),
                         );
@@ -729,7 +727,7 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
 
   playersSheet(String teamId) {
     playerCubit.getPlayersByTeamId(teamId);
-    // playerCubit.getPlayersByAdminId();
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,

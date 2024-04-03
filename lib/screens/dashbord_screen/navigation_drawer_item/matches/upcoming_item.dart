@@ -32,7 +32,7 @@ class _UpComingItem extends State<UpComingItem> {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is MatchUpcommingError) {
+        } else if (state is MatchGetUpcommingError) {
           return Center(
             child: Text(state.message),
           );
