@@ -32,7 +32,7 @@ class _UpComingItem extends State<UpComingItem> {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is MatchUpcommingError) {
+        } else if (state is MatchGetUpcommingError) {
           return Center(
             child: Text(state.message),
           );
@@ -51,7 +51,7 @@ class _UpComingItem extends State<UpComingItem> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10.0, vertical: 5),
-                    child: UpCommingMachesCard(match: match),
+                    child: UpCommingMachesCard(match: match, admin: true),
                   );
                 },
               ),

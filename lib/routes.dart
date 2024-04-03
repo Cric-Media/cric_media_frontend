@@ -10,7 +10,8 @@ import 'package:cricket_app/screens/auth_screen/signUp_screen/signUp_screen.dart
 import 'package:cricket_app/screens/auth_screen/signUp_screen/verify_email_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/add_new_player_screen.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/add_new_matche.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/add_match_screen.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/start_match_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/player_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/add_new_team.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/team_players_screen.dart';
@@ -115,11 +116,20 @@ class Routes {
           ),
         );
 
-      case startMatch:
+      case addMatch:
         return MaterialPageRoute(
           builder: (context) => BlocProvider<MatchCubit>(
             create: (context) => MatchCubit(),
-            child: const AddNewMatche(),
+            child: const AddMatchScreen(),
+          ),
+        );
+
+      case startMatch:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider<MatchCubit>(
+            create: (context) => MatchCubit(),
+            child: StartMatchScreen(match: args['match']),
           ),
         );
 

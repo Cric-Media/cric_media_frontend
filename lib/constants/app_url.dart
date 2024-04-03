@@ -47,4 +47,5 @@ abstract class AdminUrl {
       "${AppUrl.baseUrl}/get-upcoming-matches-for-user";
   static final getLiveMatches = "${AppUrl.baseUrl}/get-live-matches-for-user";
   static final getLiveAdminMatches = "${AppUrl.baseUrl}/get-live-matches";
+  static final startMatch = "${AppUrl.baseUrl}/start-match";
 }

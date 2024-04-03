@@ -35,10 +35,10 @@ class MatchCubit extends Cubit<MatchState> {
   bool? teamAToss, teamBToss, teamABat, teamBBat, teamABowl, teamBBowl;
 
   // functions
-  addMatchDetails() async {
-    emit(MatchAddDetailsLoading());
-    final url = AdminUrl.addMatchDetails;
-    final myAdminId = await Global().getAdminId();
+  startMatch(String matchId) async {
+    emit(MatchStartLoading());
+    final url = "${AdminUrl.startMatch}/$matchId";
+    print(matchId);
     final headers = {"Content-Type": "application/json"};
 
     if (teamAToss == true) {
@@ -60,8 +60,83 @@ class MatchCubit extends Cubit<MatchState> {
     }
 
     try {
+      // final body = {
+      //   "admin": myAdminId.toString(),
+      //   "team1": team1?.id.toString(),
+      //   "team2": team2?.id.toString(),
+      //   "matchType": matchType.toString(),
+      //   "ballType": ballType.toString(),
+      //   "pitchType": pitchType.toString(),
+      //   "numberOfOvers": numberOfOvers ?? 0,
+      //   "oversPerBowler": oversPerBowler ?? 0,
+      //   "cityOrTown": cityTown.toString(),
+      //   "ground": ground.toString(),
+      //   "matchDateTime": matchDateTime.toString(),
+      //   "whoWinsTheToss": whoWinsToss.toString(),
+      //   "tossDetails": tossDetails,
+      //   "matchStatus": 0,
+      //   "squad1": squad1.map((e) => e.id.toString()).toList(),
+      //   "squad2": squad2.map((e) => e.id.toString()).toList(),
+      //   "team1Batting": teamABat ?? false,
+      //   "team2Batting": teamBBat ?? false,
+      //   "team1toss": teamAToss ?? false,
+      //   "team2toss": teamBToss ?? false,
+      //   "team1Score": 0,
+      //   "team2Score": 0,
+      //   "team1Overs": 0,
+      //   "team2Overs": 0,
+      //   "team1Balls": 0,
+      //   "team2Balls": 0,
+      //   "team1Outs": 0,
+      //   "team2Outs": 0
+      // };
+
       final body = {
-        "admin": myAdminId.toString(),
+        "whoWinsTheToss": whoWinsToss.toString(),
+        "matchStatus": 1,
+        "tossDetails": tossDetails.toString(),
+        "squad1": squad1.map((e) => e.id.toString()).toList(),
+        "squad2": squad2.map((e) => e.id.toString()).toList(),
+        "team1Batting": teamABat ?? false,
+        "team2Batting": teamBBat ?? false,
+        "team1toss": teamAToss ?? false,
+        "team2toss": teamBToss ?? false
+      };
+
+      log(jsonEncode(body));
+
+      final response = await ApiManager.putRequest(body, url, headers: headers);
+      log(response.body);
+      var resBody = jsonDecode(response.body);
+      if (resBody['success']) {
+        emit(
+          MatchStartSuccess(
+            ApiResponse.fromJson(resBody, (data) => null),
+          ),
+        );
+      } else {
+        throw AppException(resBody['message']);
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(
+          MatchStartError("Something went wrong, please try again later"),
+        );
+      } else {
+        emit(MatchStartError(err.toString()));
+      }
+    }
+  }
+
+  addMatchDetails() async {
+    emit(MatchAddDetailsLoading());
+    final url = AdminUrl.addMatchDetails;
+    final adminId = await Global().getAdminId();
+    final headers = {"Content-Type": "application/json"};
+
+    try {
+      final body = {
+        "admin": adminId.toString(),
         "team1": team1?.id.toString(),
         "team2": team2?.id.toString(),
         "matchType": matchType.toString(),
@@ -72,27 +147,13 @@ class MatchCubit extends Cubit<MatchState> {
         "cityOrTown": cityTown.toString(),
         "ground": ground.toString(),
         "matchDateTime": matchDateTime.toString(),
-        "whoWinsTheToss": whoWinsToss.toString(),
-        "tossDetails": tossDetails,
-        "matchStatus": 0,
-        "squad1": squad1.map((e) => e.id.toString()).toList(),
-        "squad2": squad2.map((e) => e.id.toString()).toList(),
-        "team1Batting": teamABat ?? false,
-        "team2Batting": teamBBat ?? false,
-        "team1toss": teamAToss ?? false,
-        "team2toss": teamBToss ?? false,
-        "team1Score": 0,
-        "team2Score": 0,
-        "team1Overs": 0,
-        "team2Overs": 0,
-        "team1Balls": 0,
-        "team2Balls": 0,
-        "team1Outs": 0,
-        "team2Outs": 0
       };
 
-      final response =
-          await ApiManager.postRequest(body, url, headers: headers);
+      final response = await ApiManager.postRequest(
+        body,
+        url,
+        headers: headers,
+      );
       log(response.body);
       var resBody = jsonDecode(response.body);
       if (resBody['success']) {
@@ -120,14 +181,14 @@ class MatchCubit extends Cubit<MatchState> {
         var response = await adminController.getUpcomingMatches(user: user);
         emit(MatchUpcommingSuccess(response));
       } else {
-        emit(MatchUpcommingError('No internet connection'));
+        emit(MatchGetUpcommingError('No internet connection'));
       }
     } catch (err) {
       // if exception type is not AppException then emit "Something went wrong"
       if (err is! AppException) {
-        emit(MatchUpcommingError('Something went wrong'));
+        emit(MatchGetUpcommingError('Something went wrong'));
       } else {
-        emit(MatchUpcommingError(err.toString()));
+        emit(MatchGetUpcommingError(err.toString()));
       }
     }
   }
@@ -139,16 +200,16 @@ class MatchCubit extends Cubit<MatchState> {
       var network = await Network.check();
       if (network) {
         var response = await adminController.getLiveMatches(user: user);
-        emit(MatchLiveSuccess(response));
+        emit(MatchGetLiveSuccess(response));
       } else {
-        emit(MatchLiveError('No internet connection'));
+        emit(MatchGetLiveError('No internet connection'));
       }
     } catch (err) {
       // if exception type is not AppException then emit "Something went wrong"
       if (err is! AppException) {
-        emit(MatchLiveError('Something went wrong'));
+        emit(MatchGetLiveError('Something went wrong'));
       } else {
-        emit(MatchLiveError(err.toString()));
+        emit(MatchGetLiveError(err.toString()));
       }
     }
   }
