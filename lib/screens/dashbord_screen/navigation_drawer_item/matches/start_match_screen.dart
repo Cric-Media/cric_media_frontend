@@ -585,6 +585,7 @@ class _StartMatchScreenState extends State<StartMatchScreen> {
                         if (state is MatchStartLoading) {
                         } else if (state is MatchStartSuccess) {
                           showSnack(context, message: state.res.message);
+                          MatchCubit.get(context).getUpcomingMatches();
                           Navigator.pop(context);
                         }
                         if (state is MatchStartError) {
@@ -599,9 +600,7 @@ class _StartMatchScreenState extends State<StartMatchScreen> {
                         }
                         return ElevatedButton(
                           onPressed: () {
-                            MatchCubit.get(context).startMatch(
-                              widget.match.sId.toString(),
-                            );
+                            startMatch();
                           },
                           child: const Text('Start Match'),
                         );
@@ -615,6 +614,22 @@ class _StartMatchScreenState extends State<StartMatchScreen> {
         ),
       ),
     );
+  }
+
+  startMatch() {
+    MatchCubit.get(context);
+    if (MatchCubit.get(context).squad1.isEmpty ||
+        MatchCubit.get(context).squad2.isEmpty ||
+        (MatchCubit.get(context).teamAToss == null ||
+            MatchCubit.get(context).teamBToss == null) ||
+        (MatchCubit.get(context).teamABat == null ||
+            MatchCubit.get(context).teamBBat == null)) {
+      showSnack(context, message: "Required fields are missing");
+    } else {
+      MatchCubit.get(context).startMatch(
+        widget.match.sId.toString(),
+      );
+    }
   }
 }
 
