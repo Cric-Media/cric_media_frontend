@@ -3,14 +3,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UpCommingMachesCard extends StatelessWidget {
   final MatchDetails? match;
-  final bool? isAdmin;
-  const UpCommingMachesCard({super.key, this.match, this.isAdmin});
+  final bool? admin;
+  const UpCommingMachesCard({super.key, this.match, this.admin});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +27,9 @@ class UpCommingMachesCard extends StatelessWidget {
           width: screenWidth,
           height: 150,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(25)
-              // Apply gradient here
-              ),
+            color: Colors.white, borderRadius: BorderRadius.circular(25),
+            // Apply gradient here
+          ),
           child: Row(
             children: [
               Expanded(
@@ -49,9 +50,7 @@ class UpCommingMachesCard extends StatelessWidget {
                           //           color: AppColor.hintColor,
                           //           fontWeight: FontWeight.w500)),
                           // ),
-                          SizedBox(
-                            height: screenHeight * 0.015,
-                          ),
+                          SizedBox(height: screenHeight * 0.015),
                           Row(
                             children: [
                               Container(
@@ -66,9 +65,7 @@ class UpCommingMachesCard extends StatelessWidget {
                                       )
                                     : Image.asset('${AppIcons.pak}'),
                               ),
-                              SizedBox(
-                                width: 15,
-                              ),
+                              SizedBox(width: 15),
                               Expanded(
                                 child: Text(
                                   match != null ? match!.team1!.name! : 'PAK',
@@ -78,6 +75,8 @@ class UpCommingMachesCard extends StatelessWidget {
                                     color: AppColor.blackColor,
                                     fontWeight: FontWeight.w700,
                                   )),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],
@@ -97,9 +96,7 @@ class UpCommingMachesCard extends StatelessWidget {
                                       )
                                     : Image.asset('${AppIcons.afg}'),
                               ),
-                              SizedBox(
-                                width: 15,
-                              ),
+                              SizedBox(width: 15),
                               Expanded(
                                 child: Text(
                                   match != null ? match!.team2!.name! : 'AFG',
@@ -110,10 +107,33 @@ class UpCommingMachesCard extends StatelessWidget {
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ],
-                          )
+                          ),
+                          admin == null
+                              ? SizedBox.shrink()
+                              : Expanded(
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        startMatch,
+                                        arguments: {'match': match},
+                                      );
+                                    },
+                                    child: Text(
+                                      "Start Match",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: AppColor.blueColor,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                )
                         ],
                       ),
                     ),

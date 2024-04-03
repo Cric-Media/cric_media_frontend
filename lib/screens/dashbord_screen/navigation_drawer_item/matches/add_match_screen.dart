@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
@@ -12,14 +11,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-class AddNewMatche extends StatefulWidget {
-  const AddNewMatche({super.key});
+class AddMatchScreen extends StatefulWidget {
+  const AddMatchScreen({super.key});
 
   @override
-  State<AddNewMatche> createState() => _AddNewMatcheState();
+  State<AddMatchScreen> createState() => _AddMatchScreenState();
 }
 
-class _AddNewMatcheState extends State<AddNewMatche> {
+class _AddMatchScreenState extends State<AddMatchScreen> {
   late DateTime selectedDateTime =
       DateTime.now(); // Initialize with current time
   bool checkBoxValue = false;
@@ -438,139 +437,7 @@ class _AddNewMatcheState extends State<AddNewMatche> {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Who won the toss',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColor.hintColor,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 3),
-                  SizedBox(
-                    height: 30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .start, // or MainAxisAlignment.spaceBetween
-                      children: [
-                        Checkbox(
-                          value: MatchCubit.get(context).teamAToss ?? false,
-                          onChanged: (value) {
-                            setState(() {
-                              MatchCubit.get(context).teamAToss = value!;
-                              MatchCubit.get(context).teamBToss = !value;
-                            });
-                          },
-                        ),
-                        const Text(
-                          'Team 1',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 35,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .start, // or MainAxisAlignment.spaceBetween
-                      children: [
-                        Checkbox(
-                          value: MatchCubit.get(context).teamBToss ?? false,
-                          onChanged: (value) {
-                            setState(() {
-                              MatchCubit.get(context).teamBToss = value!;
-                              MatchCubit.get(context).teamAToss = !value;
-                            });
-                          },
-                        ),
-                        const Text(
-                          'Team 2',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Toss Details',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: AppColor.hintColor,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 3),
-                  SizedBox(
-                    height: 30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .start, // or MainAxisAlignment.spaceBetween
-                      children: [
-                        Checkbox(
-                          value: MatchCubit.get(context).teamABat ?? false,
-                          onChanged: (value) {
-                            setState(() {
-                              MatchCubit.get(context).teamABat = value!;
-                              MatchCubit.get(context).teamBBat = !value;
-                              MatchCubit.get(context).teamABowl = !value;
-                              MatchCubit.get(context).teamBBowl = value;
-                            });
-                          },
-                        ),
-                        const Text(
-                          'Team 1 Batting',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 35,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                          value: MatchCubit.get(context).teamBBat ?? false,
-                          onChanged: (value) {
-                            setState(() {
-                              MatchCubit.get(context).teamBBat = value!;
-                              MatchCubit.get(context).teamABat = !value;
-                              MatchCubit.get(context).teamBBowl = !value;
-                              MatchCubit.get(context).teamABowl = value;
-                            });
-                          },
-                        ),
-                        const Text(
-                          'Team 2 Batting',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 10),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
@@ -688,9 +555,23 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
                             trailing: TextButton(
                               onPressed: () {
                                 if (widget.teamNo == 1) {
-                                  matchCubit.team1 = team;
+                                  if (team.id != matchCubit.team2?.id) {
+                                    matchCubit.team1 = team;
+                                  } else {
+                                    showSnack(
+                                      context,
+                                      message: 'Team already selected',
+                                    );
+                                  }
                                 } else {
-                                  matchCubit.team2 = team;
+                                  if (team.id != matchCubit.team1?.id) {
+                                    matchCubit.team2 = team;
+                                  } else {
+                                    showSnack(
+                                      context,
+                                      message: 'Team already selected',
+                                    );
+                                  }
                                 }
                                 setState(() {});
                                 Navigator.pop(context);
@@ -721,142 +602,6 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
         });
   }
 
-  playersSheet(String teamId) {
-    playerCubit.getPlayersByTeamId(teamId);
-    // playerCubit.getPlayersByAdminId();
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      isScrollControlled: true,
-      showDragHandle: true,
-      useSafeArea: true,
-      shape: const RoundedRectangleBorder(),
-      builder: (context) {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: BlocConsumer<PlayerCubit, PlayerState>(
-              listener: (context, state) {
-                if (state is PlayerGetInitial) {
-                  matchCubit.playerList = state.response.data;
-                }
-              },
-              builder: (context, state) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                        ),
-                        itemBuilder: (context, index) => GestureDetector(
-                          onTap: () {
-                            if (widget.teamNo == 1) {
-                              if (!matchCubit.squad1
-                                  .contains(matchCubit.playerList[index])) {
-                                print(
-                                    'Adding player ${matchCubit.playerList[index].name} to squad1');
-                                matchCubit.squad1
-                                    .add(matchCubit.playerList[index]);
-                              } else {
-                                print(
-                                    'Player ${matchCubit.playerList[index].name} is already in squad1');
-                              }
-                            } else {
-                              if (!matchCubit.squad2
-                                  .contains(matchCubit.playerList[index])) {
-                                print(
-                                    'Adding player ${matchCubit.playerList[index].name} to squad2');
-                                matchCubit.squad2
-                                    .add(matchCubit.playerList[index]);
-                              } else {
-                                print(
-                                    'Player ${matchCubit.playerList[index].name} is already in squad2');
-                              }
-                            }
-                            playerCubit.getPlayersByTeamId(teamId);
-                          },
-                          child: Column(
-                            children: [
-                              CircleAvatar(
-                                radius: 40,
-                                backgroundImage: CachedNetworkImageProvider(
-                                    matchCubit.playerList[index].imageUrl ??
-                                        ''),
-                              ),
-                              Text(matchCubit.playerList[index].name ?? ''),
-                            ],
-                          ),
-                        ),
-                        itemCount: matchCubit.playerList.length,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                      ),
-                    ),
-                    const Divider(),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: widget.teamNo == 1
-                            ? matchCubit.squad1.length
-                            : matchCubit.squad2.length,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          var player = widget.teamNo == 1
-                              ? matchCubit.squad1.elementAt(index)
-                              : matchCubit.squad2.elementAt(index);
-                          return Container(
-                            height: 60,
-                            margin: const EdgeInsets.only(right: 8),
-                            child: Stack(
-                              children: [
-                                CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      player.imageUrl ?? ''),
-                                ),
-                                Positioned(
-                                  right: 0,
-                                  child: CloseButton(
-                                    color: Colors.red,
-                                    onPressed: () {
-                                      if (widget.teamNo == 1) {
-                                        matchCubit.squad1.remove(player);
-                                      } else {
-                                        matchCubit.squad2.remove(player);
-                                      }
-                                      playerCubit.getPlayersByTeamId(teamId);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const Divider(),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Done'),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     var team = widget.teamNo == 1
@@ -878,8 +623,8 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
               teamsSheet();
             },
             child: Container(
-              width: 70,
-              height: 70,
+              width: 100,
+              height: 100,
               decoration: BoxDecoration(
                 image: team != null
                     ? DecorationImage(
@@ -894,30 +639,9 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
             ),
           ),
           Text(
-            team?.name ?? 'Team Name',
+            team?.name ?? 'Team ${widget.teamNo == 1 ? 1 : 2}',
             style: const TextStyle(fontWeight: FontWeight.w700),
           ),
-          GestureDetector(
-            onTap: () {
-              playersSheet(team?.id ?? '');
-            },
-            child: Container(
-              alignment: Alignment.center,
-              width: 120,
-              height: 30,
-              decoration: BoxDecoration(
-                color: AppColor.blueColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Text(
-                'Squade(0)',
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-          )
         ],
       ),
     );
