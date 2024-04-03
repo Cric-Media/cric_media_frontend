@@ -28,23 +28,22 @@ class _LiveTabState extends State<LiveTab> {
         Expanded(
           child: BlocConsumer<MatchCubit, MatchState>(
             listener: (context, state) {
-              if (state is MatchUpcommingSuccess) {
-                MatchCubit.get(context).upcomingMatchDetailsList =
-                    state.res.data;
+              if (state is MatchGetLiveSuccess) {
+                MatchCubit.get(context).liveMatchDetailsList = state.res.data;
               }
             },
             builder: (context, state) {
-              if (state is MatchUpcommingLoading) {
+              if (state is MatchLiveLoading) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
               return ListView.builder(
                   itemCount:
-                      MatchCubit.get(context).upcomingMatchDetailsList.length,
+                      MatchCubit.get(context).liveMatchDetailsList.length,
                   itemBuilder: (context, index) {
                     var match =
-                        MatchCubit.get(context).upcomingMatchDetailsList[index];
+                        MatchCubit.get(context).liveMatchDetailsList[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       child: InkWell(
