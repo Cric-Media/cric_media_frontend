@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_info.dart';
@@ -12,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LiveDetails extends StatefulWidget {
-  LiveDetails({super.key});
+  final MatchDetails? match;
+  const LiveDetails({super.key, this.match});
 
   @override
   State<LiveDetails> createState() => _LiveDetails();
@@ -43,16 +43,16 @@ class _LiveDetails extends State<LiveDetails> {
                   fontWeight: FontWeight.w700),
             ),
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Image.asset(
-                '${AppIcons.search}',
-                width: 24,
-                height: 24,
-              ),
-            )
-          ],
+          // actions: [
+          //   Padding(
+          //     padding: const EdgeInsets.only(right: 20.0),
+          //     child: Image.asset(
+          //       '${AppIcons.search}',
+          //       width: 24,
+          //       height: 24,
+          //     ),
+          //   )
+          // ],
           centerTitle: true,
         ),
         body: Padding(
@@ -60,13 +60,9 @@ class _LiveDetails extends State<LiveDetails> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
-                  height: 5,
-                ),
-                MatchDetailsLiveCard(match: MatchDetails()),
-                SizedBox(
-                  height: 5,
-                ),
+                SizedBox(height: 5),
+                MatchDetailsLiveCard(match: widget.match),
+                SizedBox(height: 5),
                 Card(
                   color: Colors.white,
                   elevation: 2,
@@ -78,23 +74,22 @@ class _LiveDetails extends State<LiveDetails> {
                           color: Colors.white),
                       child: Row(
                         children: [
-                          SizedBox(
-                            width: 25,
-                          ),
+                          SizedBox(width: 25),
                           InkWell(
-                              onTap: () {
-                                getVlaue(0);
-                              },
-                              child: Text(
-                                'Info',
-                                style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
-                                        fontSize: 16,
-                                        color: value == 0
-                                            ? Colors.black
-                                            : Colors.grey,
-                                        fontWeight: FontWeight.w700)),
-                              )),
+                            onTap: () {
+                              getVlaue(0);
+                            },
+                            child: Text(
+                              'Info',
+                              style: GoogleFonts.inter(
+                                textStyle: TextStyle(
+                                    fontSize: 16,
+                                    color:
+                                        value == 0 ? Colors.black : Colors.grey,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ),
                           SizedBox(
                             width: 30,
                           ),
@@ -163,7 +158,9 @@ class _LiveDetails extends State<LiveDetails> {
                       ),
                 ),
                 value == 0
-                    ? LiveInfo()
+                    ? LiveInfo(
+                        match: widget.match,
+                      )
                     : value == 1
                         ? LiveLive()
                         : value == 2

@@ -49,9 +49,11 @@ class _LiveTabState extends State<LiveTab> {
                       child: InkWell(
                           onTap: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LiveDetails()));
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LiveDetails(match: match),
+                              ),
+                            );
                           },
                           child: MatchDetailsLiveCard(match: match)),
                     );

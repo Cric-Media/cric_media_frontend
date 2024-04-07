@@ -1,12 +1,17 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/profile_Screen/player_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class GridViewContanor extends StatelessWidget {
+  final MatchDetails? match;
+  const GridViewContanor({super.key, this.match});
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -46,7 +51,7 @@ class GridViewContanor extends StatelessWidget {
                         .copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
                       title: Text(
-                        'Afghanistan',
+                        match != null ? "${match?.team1?.name}" : 'Afghanistan',
                         style: GoogleFonts.inter(
                           textStyle: TextStyle(
                             fontSize: 16,
@@ -65,7 +70,9 @@ class GridViewContanor extends StatelessWidget {
                             crossAxisSpacing: 20.0,
                             mainAxisSpacing: 20.0,
                           ),
-                          itemCount: 10, // Example number of items
+                          itemCount: match != null
+                              ? match?.squad1?.length
+                              : 10, // Example number of items
                           itemBuilder: (BuildContext context, int index) {
                             return InkWell(
                               onTap: () {
@@ -89,11 +96,15 @@ class GridViewContanor extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                            height: 85,
-                                            decoration: BoxDecoration(),
-                                            child: Image.asset(
-                                              AppIcons.profile2,
-                                            )),
+                                          height: 85,
+                                          decoration: BoxDecoration(),
+                                          alignment: Alignment.center,
+                                          // child:  Image.asset(AppIcons.profile2),
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                match!.squad1![index].imageUrl!,
+                                          ),
+                                        ),
                                         Text(
                                           'Rashid Khan (vc)',
                                           style: GoogleFonts.inter(
