@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, file_names
 
 import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RecentLiveBollingCard extends StatelessWidget {
-  const RecentLiveBollingCard({super.key});
+  final MatchDetails? match;
+  const RecentLiveBollingCard({super.key, this.match});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,9 @@ class RecentLiveBollingCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'M Nabi',
+                      match?.openingBowler != null
+                          ? match!.openingBowler!.name.toString()
+                          : 'M Nabi',
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.black,

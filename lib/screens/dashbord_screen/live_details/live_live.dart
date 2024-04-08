@@ -3,12 +3,14 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/custom_widgets/recent_live_batsman_card.dart';
 import 'package:cricket_app/custom_widgets/recent_live_bolling_Card.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/resent_details/recent_live_more_infomation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LiveLive extends StatelessWidget {
-  const LiveLive({super.key});
+  final MatchDetails? match;
+  const LiveLive({super.key, this.match});
 
   @override
   Widget build(BuildContext context) {
@@ -213,11 +215,7 @@ class LiveLive extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      RecentLiveBatsmanCard(),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      RecentLiveBatsmanCard(),
+                      RecentLiveBatsmanCard(match: match),
                       SizedBox(
                         height: 20,
                       ),
@@ -354,7 +352,7 @@ class LiveLive extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  RecentLiveBollingCard(),
+                  RecentLiveBollingCard(match: match),
                 ],
               ),
             ),

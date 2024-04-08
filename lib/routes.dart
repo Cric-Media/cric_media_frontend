@@ -11,6 +11,7 @@ import 'package:cricket_app/screens/auth_screen/signUp_screen/verify_email_scree
 import 'package:cricket_app/screens/dashbord_screen/dashboard_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/add_new_player_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/add_match_screen.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/set_openings_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/start_match_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/player_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/add_new_team.dart';
@@ -142,6 +143,20 @@ class Routes {
                 args['teamId'],
               ),
             child: const TeamPlayersScreen(),
+          ),
+        );
+
+      case setOpenings:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) => SetOpeningsScreen(
+            matchId: args['matchId'],
+            teamABatting: args['teamABatting'],
+            teamBBatting: args['teamBBatting'],
+            teamAId: args['teamAId'],
+            teamBId: args['teamBId'],
+            squad1: args['squad1'],
+            squad2: args['squad2'],
           ),
         );
 

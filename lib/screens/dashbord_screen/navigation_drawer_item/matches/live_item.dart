@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,20 @@ class _LiveItem extends State<LiveItem> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10.0, vertical: 5),
-                      child: MatchDetailsLiveCard(match: record),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, setOpenings, arguments: {
+                            "matchId": record.sId.toString(),
+                            "teamABatting": record.team1Batting,
+                            "teamBBatting": record.team2Batting,
+                            "teamAId": record.team1?.id.toString(),
+                            "teamBId": record.team2?.id.toString(),
+                            "squad1": record.squad1 ?? [],
+                            "squad2": record.squad2 ?? [],
+                          });
+                        },
+                        child: MatchDetailsLiveCard(match: record),
+                      ),
                     );
                   },
                 );

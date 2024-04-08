@@ -34,11 +34,17 @@ class MatchCubit extends Cubit<MatchState> {
   String? cityTown, ground, matchDateTime, whoWinsToss, tossDetails;
   bool? teamAToss, teamBToss, teamABat, teamBBat, teamABowl, teamBBowl;
 
+  // Set openings
+  List<Player> batsmen = [];
+  List<Player> bowlers = [];
+
+  Player? selectedStriker, selectedNonStriker, selectedBowler;
+  String? teamBatting;
+
   // functions
   startMatch(String matchId) async {
     emit(MatchStartLoading());
     final url = "${AdminUrl.startMatch}/$matchId";
-    print(matchId);
     final headers = {"Content-Type": "application/json"};
 
     if (teamAToss == true) {
@@ -210,6 +216,70 @@ class MatchCubit extends Cubit<MatchState> {
         emit(MatchGetLiveError('Something went wrong'));
       } else {
         emit(MatchGetLiveError(err.toString()));
+      }
+    }
+  }
+
+  setOpenings(String matchId) async {
+    emit(MatchStartLoading());
+    final url = AdminUrl.setOpenings;
+    final headers = {"Content-Type": "application/json"};
+
+    try {
+      final body = {
+        "matchId": matchId,
+        "teamBatting": teamBatting.toString(),
+        "openingBatsmen": [
+          selectedStriker?.id.toString(),
+          selectedNonStriker?.id.toString(),
+        ],
+        "openingBowler": selectedBowler?.id.toString()
+      };
+
+      log(jsonEncode(body));
+
+      final response = await ApiManager.postRequest(
+        body,
+        url,
+        headers: headers,
+      );
+      log(response.body);
+      var resBody = jsonDecode(response.body);
+      if (resBody['success']) {
+        emit(
+          MatchSetOpeningsSuccess(
+            ApiResponse.fromJson(resBody, (data) => null),
+          ),
+        );
+      } else {
+        throw AppException(resBody['message']);
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(
+          MatchStartError("Something went wrong, please try again later"),
+        );
+      } else {
+        emit(MatchStartError(err.toString()));
+      }
+    }
+  }
+
+  getMatch(String matchId) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.getMatch(matchId);
+        emit(MatchGetSuccess(response));
+      } else {
+        emit(MatchGetError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(MatchGetError('Something went wrong'));
+      } else {
+        emit(MatchGetError(err.toString()));
       }
     }
   }

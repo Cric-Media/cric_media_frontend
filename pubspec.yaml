@@ -58,6 +58,7 @@ dependencies:
   searchable_listview: ^2.11.0
   firebase_core: ^2.27.2
   cloud_firestore: ^4.15.10
+  socket_io_client: ^2.0.3+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

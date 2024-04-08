@@ -37,6 +37,8 @@ class _LiveTabState extends State<LiveTab> {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
+              } else if (state is MatchGetLiveError) {
+                return Center(child: Text(state.message));
               }
               return ListView.builder(
                   itemCount:

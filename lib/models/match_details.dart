@@ -20,7 +20,7 @@ class MatchDetails {
   bool? team2Batting;
   bool? team1toss;
   bool? team2toss;
-  Player? manOfTheMatch;
+  Player? manOfTheMatch, striker, nonStriker, openingBowler;
   int? team1Score;
   int? team2Score;
   int? team1Overs;
@@ -92,6 +92,12 @@ class MatchDetails {
     team2toss = json['team2toss'];
     manOfTheMatch = json['manOfTheMatch'] != null
         ? Player.fromJson(json['manOfTheMatch'])
+        : null;
+    striker = json['striker'] != null ? Player.fromJson(json['striker']) : null;
+    nonStriker =
+        json['nonStriker'] != null ? Player.fromJson(json['nonStriker']) : null;
+    openingBowler = json['openingBowler'] != null
+        ? Player.fromJson(json['openingBowler'])
         : null;
     team1Score = json['team1Score'];
     team2Score = json['team2Score'];

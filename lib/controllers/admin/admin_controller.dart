@@ -402,4 +402,22 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> getMatch(String matchId) async {
+    final url = "${AdminUrl.getMatch}/$matchId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(
+        resBody,
+        (data) => MatchDetails.fromJson(
+          resBody['data'],
+        ),
+      );
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }
