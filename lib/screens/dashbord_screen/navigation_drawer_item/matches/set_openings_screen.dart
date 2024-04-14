@@ -35,6 +35,9 @@ class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
       MatchCubit.get(context).bowlers = widget.squad1;
     }
     setState(() {});
+    MatchCubit.get(context).batsmen.forEach((element) {
+      print(element.name);
+    });
     super.initState();
   }
 
@@ -53,15 +56,17 @@ class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
               "Striker",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            DropdownButton(
+            DropdownButton<Player>(
               value: MatchCubit.get(context).selectedStriker,
-              items: MatchCubit.get(context)
-                  .batsmen
-                  .map((e) => DropdownMenuItem(child: Text(e.name!.toString())))
-                  .toList(),
-              onChanged: (value) {
+              items: MatchCubit.get(context).batsmen.map((Player player) {
+                return DropdownMenuItem<Player>(
+                  value: player,
+                  child: Text(player.name ?? ''),
+                );
+              }).toList(),
+              onChanged: (Player? newValue) {
                 setState(() {
-                  MatchCubit.get(context).selectedStriker = value;
+                  MatchCubit.get(context).selectedStriker = newValue;
                 });
               },
             ),
@@ -70,18 +75,17 @@ class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
               "Non-Striker",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            DropdownButton(
+            DropdownButton<Player>(
               value: MatchCubit.get(context).selectedNonStriker,
-              items: MatchCubit.get(context)
-                  .batsmen
-                  .where((element) =>
-                      element.name !=
-                      MatchCubit.get(context).selectedStriker?.name)
-                  .map((e) => DropdownMenuItem(child: Text(e.name!.toString())))
-                  .toList(),
-              onChanged: (value) {
+              items: MatchCubit.get(context).batsmen.map((Player player) {
+                return DropdownMenuItem<Player>(
+                  value: player,
+                  child: Text(player.name ?? ''),
+                );
+              }).toList(),
+              onChanged: (Player? newValue) {
                 setState(() {
-                  MatchCubit.get(context).selectedNonStriker = value;
+                  MatchCubit.get(context).selectedNonStriker = newValue;
                 });
               },
             ),
@@ -90,17 +94,17 @@ class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
               "Bowler",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            DropdownButton(
-              value: MatchCubit.get(context).selectedNonStriker,
-              items: MatchCubit.get(context)
-                  .bowlers
-                  .where((element) =>
-                      element != MatchCubit.get(context).selectedStriker)
-                  .map((e) => DropdownMenuItem(child: Text(e.name!.toString())))
-                  .toList(),
-              onChanged: (value) {
+            DropdownButton<Player>(
+              value: MatchCubit.get(context).selectedBowler,
+              items: MatchCubit.get(context).bowlers.map((Player player) {
+                return DropdownMenuItem<Player>(
+                  value: player,
+                  child: Text(player.name ?? ''),
+                );
+              }).toList(),
+              onChanged: (Player? newValue) {
                 setState(() {
-                  MatchCubit.get(context).selectedBowler = value;
+                  MatchCubit.get(context).selectedBowler = newValue;
                 });
               },
             ),

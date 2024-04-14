@@ -16,13 +16,13 @@ class _NewsDetailsState extends State<NewsDetails> {
     final screenWdith = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Color(0XFFFBFBFB),
+      backgroundColor: const Color(0XFFFBFBFB),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'News Detail'.toUpperCase(),
           style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
             fontSize: 18,
             color: Colors.black,
             fontWeight: FontWeight.w700,
@@ -38,7 +38,7 @@ class _NewsDetailsState extends State<NewsDetails> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              SizedBox(
                 width: screenWdith,
                 height: screenHeight * 0.25,
                 child: ClipRRect(
@@ -52,7 +52,7 @@ class _NewsDetailsState extends State<NewsDetails> {
               Text(
                 '15-2-2024',
                 style: GoogleFonts.inter(
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                   fontSize: 14,
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
@@ -60,13 +60,13 @@ class _NewsDetailsState extends State<NewsDetails> {
                 maxLines: 10,
                 textAlign: TextAlign.start,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Text(
                   'Pakistan and India Set to Renew Rivalry',
                   style: GoogleFonts.inter(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                     fontSize: 18,
                     color: Colors.brown,
                     fontWeight: FontWeight.w700,
@@ -75,18 +75,18 @@ class _NewsDetailsState extends State<NewsDetails> {
                   textAlign: TextAlign.start,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 7,
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
                   'The world of cricket, few matchups generate as much anticipation '
                   '   and excitement as a clash between Pakistan and India. Once again,The world of cricket, few matchups generate as much anticipation and excitement as a clash between Pakistan and India. Once again,The worl d of cricket, few matchups generate as much anticipation and excitement as a clash between Pakistan and India. Once again, these two cricketing giants are set to renew their historic rivalry, and fans across the globe are eagerly awaiting the showdown. these two cricketing giants are set to renew their historic rivalry, and fans across the globe are eagerly awaiting the showdown.'
                   'The worl d of cricket, few matchups generateThe world of cricket, few matchups generate as much anticipation and excitement as a clash between Pakistan and India. Once again, these two cricketing giants are set to renew their historic rivalry, and fans across the globe are eagerly awaiting the showdown. as much anticipation and excitement as a clash between Pakistan and India. Once again, these two cricketing giants are set to renew their historic rivalry, and fans across the globe are eagerly awaiting the showdown.'
                   'The world of cricket, few matchups generate as much anticipation and excitement as a clash between Pakistan and India. Once again, these two cricketing giants are set to renew their historic rivalry, and fans across the globe are eagerly awaiting the showdown.',
                   style: GoogleFonts.inter(
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       fontSize: 14,
                       color: AppColor.hintColor,
                       fontWeight: FontWeight.w600,

@@ -1,5 +1,4 @@
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
@@ -16,33 +15,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'firebase_options.dart';
-
-void connectToServer() {
-  final socket = IO.io(AppUrl.baseUrl, <String, dynamic>{
-    'transports': ['websocket'],
-    'autoConnect': false,
-  });
-
-  socket.onConnect((_) {
-    socket.emit('connection', 'Hello from Flutter');
-  });
-
-  socket.on('message', (data) => print(data));
-  socket.onDisconnect((_) => print('Disconnected from server'));
-
-  socket.connect();
-}
 
 void main() async {
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   SocketService.instance.connect();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
