@@ -13,7 +13,7 @@ final class MatchLiveLoading extends MatchState {}
 
 final class MatchStartLoading extends MatchState {}
 
-final class MatchSetOpenings extends MatchState {}
+final class MatchSetOpeningsLoading extends MatchState {}
 
 final class MatchGetLoading extends MatchState {}
 

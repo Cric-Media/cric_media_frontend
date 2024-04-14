@@ -41,6 +41,9 @@ class MatchCubit extends Cubit<MatchState> {
   Player? selectedStriker, selectedNonStriker, selectedBowler;
   String? teamBatting;
 
+  // Scorer
+  bool? wide, noBall, byes, legByes;
+
   // functions
   startMatch(String matchId) async {
     emit(MatchStartLoading());
@@ -221,7 +224,7 @@ class MatchCubit extends Cubit<MatchState> {
   }
 
   setOpenings(String matchId) async {
-    emit(MatchStartLoading());
+    emit(MatchSetOpeningsLoading());
     final url = AdminUrl.setOpenings;
     final headers = {"Content-Type": "application/json"};
 

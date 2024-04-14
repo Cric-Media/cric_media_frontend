@@ -1,7 +1,9 @@
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SetOpeningsScreen extends StatefulWidget {
   final bool teamABatting, teamBBatting;
@@ -109,10 +111,25 @@ class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
               },
             ),
             const SizedBox(height: 20),
-            CustomButton(
-              buttonText: "Continue",
-              onTap: () {
-                MatchCubit.get(context).setOpenings(widget.matchId);
+            BlocConsumer<MatchCubit, MatchState>(
+              listener: (context, state) {
+                if (state is MatchSetOpeningsSuccess) {
+                  // navigate to scorer screen
+                  Navigator.pushNamed(context, liveScorer);
+                }
+              },
+              builder: (context, state) {
+                if (state is MatchSetOpeningsLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return CustomButton(
+                  buttonText: "Continue",
+                  onTap: () {
+                    MatchCubit.get(context).setOpenings(widget.matchId);
+                  },
+                );
               },
             ),
           ],

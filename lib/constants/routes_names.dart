@@ -17,3 +17,4 @@ const addTeam = '/add-team';
 const addMatch = '/add-match';
 const startMatch = '/start-match';
 const setOpenings = '/set-openings';
+const liveScorer = '/live-scorer';
