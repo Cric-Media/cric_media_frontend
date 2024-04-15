@@ -162,8 +162,9 @@ class Routes {
         );
 
       case liveScorer:
+        final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (context) => const LiveScorerScreen(),
+          builder: (context) => LiveScorerScreen(matchId: args['matchId']),
         );
 
       default:

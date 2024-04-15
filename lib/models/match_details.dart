@@ -1,3 +1,4 @@
+import 'package:cricket_app/models/ball.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/team.dart';
 
@@ -35,41 +36,54 @@ class MatchDetails {
   String? createdAt;
   String? updatedAt;
   int? iV;
+  int? currentInning;
+  List<dynamic>? innings;
+  List<dynamic>? playerStats;
+  CurrentOver? currentOver;
+  List<dynamic>? overs;
+  List<dynamic>? scorecard;
 
-  MatchDetails(
-      {this.admin,
-      this.team1,
-      this.team2,
-      this.matchType,
-      this.ballType,
-      this.pitchType,
-      this.numberOfOvers,
-      this.oversPerBowler,
-      this.cityOrTown,
-      this.ground,
-      this.matchDateTime,
-      this.whoWinsTheToss,
-      this.tossDetails,
-      this.matchStatus,
-      this.team1Batting,
-      this.team2Batting,
-      this.team1toss,
-      this.team2toss,
-      this.manOfTheMatch,
-      this.team1Score,
-      this.team2Score,
-      this.team1Overs,
-      this.team2Overs,
-      this.team1Balls,
-      this.team2Balls,
-      this.team1Outs,
-      this.team2Outs,
-      this.squad1,
-      this.squad2,
-      this.sId,
-      this.createdAt,
-      this.updatedAt,
-      this.iV});
+  MatchDetails({
+    this.admin,
+    this.team1,
+    this.team2,
+    this.matchType,
+    this.ballType,
+    this.pitchType,
+    this.numberOfOvers,
+    this.oversPerBowler,
+    this.cityOrTown,
+    this.ground,
+    this.matchDateTime,
+    this.whoWinsTheToss,
+    this.tossDetails,
+    this.matchStatus,
+    this.team1Batting,
+    this.team2Batting,
+    this.team1toss,
+    this.team2toss,
+    this.manOfTheMatch,
+    this.team1Score,
+    this.team2Score,
+    this.team1Overs,
+    this.team2Overs,
+    this.team1Balls,
+    this.team2Balls,
+    this.team1Outs,
+    this.team2Outs,
+    this.squad1,
+    this.squad2,
+    this.sId,
+    this.createdAt,
+    this.updatedAt,
+    this.iV,
+    this.currentInning,
+    this.innings,
+    this.playerStats,
+    this.currentOver,
+    this.overs,
+    this.scorecard,
+  });
 
   MatchDetails.fromJson(Map<String, dynamic> json) {
     admin = json['admin'];
@@ -123,6 +137,14 @@ class MatchDetails {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    currentInning = json['currentInning'];
+    innings = json['innings'];
+    playerStats = json['playerStats'];
+    currentOver = json['currentOver'] != null
+        ? CurrentOver.fromJson(json['currentOver'])
+        : null;
+    overs = json['overs'];
+    scorecard = json['scorecard'];
   }
 
   Map<String, dynamic> toJson() {
@@ -160,6 +182,38 @@ class MatchDetails {
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     data['__v'] = iV;
+    data['currentInning'] = currentInning;
+    data['innings'] = innings;
+    data['playerStats'] = playerStats;
+    data['currentOver'] = currentOver;
+    data['overs'] = overs;
+    data['scorecard'] = scorecard;
+    return data;
+  }
+}
+
+class CurrentOver {
+  int? number;
+  List<Ball>? balls;
+
+  CurrentOver({this.number, this.balls});
+
+  CurrentOver.fromJson(Map<String, dynamic> json) {
+    number = json['number'];
+    if (json['balls'] != null) {
+      balls = <Ball>[];
+      json['balls'].forEach((v) {
+        balls!.add(Ball.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['number'] = number;
+    if (balls != null) {
+      data['balls'] = balls!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }

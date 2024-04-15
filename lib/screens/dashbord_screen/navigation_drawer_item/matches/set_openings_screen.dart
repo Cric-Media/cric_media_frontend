@@ -115,7 +115,9 @@ class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
               listener: (context, state) {
                 if (state is MatchSetOpeningsSuccess) {
                   // navigate to scorer screen
-                  Navigator.pushNamed(context, liveScorer);
+                  Navigator.pushNamed(context, liveScorer, arguments: {
+                    "matchId": widget.matchId,
+                  });
                 }
               },
               builder: (context, state) {
