@@ -1,5 +1,6 @@
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/models/match_details.dart';
+import 'package:cricket_app/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,9 +14,13 @@ class LiveScorerScreen extends StatefulWidget {
 
 class _LiveScorerScreenState extends State<LiveScorerScreen> {
   MatchDetails? match;
+  PlayerStats? striker, nonStriker;
   @override
   void initState() {
     MatchCubit.get(context).getMatch(widget.matchId);
+    SocketService.instance.socket.on('match-${widget.matchId}', (data) {
+      MatchCubit.get(context).getMatch(widget.matchId);
+    });
     super.initState();
   }
 
@@ -28,6 +33,14 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
         listener: (context, state) {
           if (state is MatchGetSuccess) {
             match = state.res.data;
+            if (match!.playerStats != null) {
+              striker = match!.playerStats
+                  ?.where((p) => p.player?.id == match!.striker?.id)
+                  .toList()[0];
+              nonStriker = match!.playerStats
+                  ?.where((p) => p.player?.id == match!.nonStriker?.id)
+                  .toList()[0];
+            }
           }
         },
         builder: (context, state) {
@@ -113,6 +126,8 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                   SizedBox(width: 20),
                                   Text("6s"),
                                   SizedBox(width: 20),
+                                  Text("SR"),
+                                  SizedBox(width: 20),
                                 ],
                               ),
                             )
@@ -126,18 +141,21 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                               '${match?.striker?.name} *',
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
-                            const Expanded(
+                            Expanded(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text("0"),
-                                  SizedBox(width: 20),
-                                  Text("0"),
-                                  SizedBox(width: 20),
-                                  Text("0"),
-                                  SizedBox(width: 20),
-                                  Text("0"),
-                                  SizedBox(width: 20),
+                                  Text("${striker?.runs}"),
+                                  const SizedBox(width: 20),
+                                  Text("${striker?.ballsFaced}"),
+                                  const SizedBox(width: 20),
+                                  Text("${striker?.fours}"),
+                                  const SizedBox(width: 20),
+                                  Text("${striker?.sixes}"),
+                                  const SizedBox(width: 20),
+                                  Text(
+                                      "${striker?.strikeRate?.toStringAsFixed(2)}"),
+                                  const SizedBox(width: 20),
                                 ],
                               ),
                             )
@@ -150,18 +168,21 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                               match?.nonStriker?.name ?? 'Non Striker',
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
-                            const Expanded(
+                            Expanded(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text("0"),
-                                  SizedBox(width: 20),
-                                  Text("0"),
-                                  SizedBox(width: 20),
-                                  Text("0"),
-                                  SizedBox(width: 20),
-                                  Text("0"),
-                                  SizedBox(width: 20),
+                                  Text("${nonStriker?.runs}"),
+                                  const SizedBox(width: 20),
+                                  Text("${nonStriker?.ballsFaced}"),
+                                  const SizedBox(width: 20),
+                                  Text("${nonStriker?.fours}"),
+                                  const SizedBox(width: 20),
+                                  Text("${nonStriker?.sixes}"),
+                                  const SizedBox(width: 20),
+                                  Text(
+                                      "${nonStriker?.strikeRate?.toStringAsFixed(2)}"),
+                                  const SizedBox(width: 20),
                                 ],
                               ),
                             )
@@ -246,8 +267,17 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                             margin:
                                                 const EdgeInsets.only(left: 8),
                                             child: CircleAvatar(
-                                              child:
-                                                  Text(e.runsScored.toString()),
+                                              backgroundColor: e.runsScored == 4
+                                                  ? Colors.green
+                                                  : e.runsScored == 6
+                                                      ? Colors.red
+                                                      : Colors.blue,
+                                              child: Text(
+                                                e.runsScored.toString(),
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
                                           ))
                                       .toList(),
@@ -374,23 +404,48 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     child: const Text("0"),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      MatchCubit.get(context).scoreAction(
+                                        widget.matchId,
+                                        1,
+                                      );
+                                    },
                                     child: const Text("1"),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      MatchCubit.get(context).scoreAction(
+                                        widget.matchId,
+                                        2,
+                                      );
+                                    },
                                     child: const Text("2"),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      MatchCubit.get(context).scoreAction(
+                                        widget.matchId,
+                                        3,
+                                      );
+                                    },
                                     child: const Text("3"),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      MatchCubit.get(context).scoreAction(
+                                        widget.matchId,
+                                        4,
+                                      );
+                                    },
                                     child: const Text("4"),
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      MatchCubit.get(context).scoreAction(
+                                        widget.matchId,
+                                        6,
+                                      );
+                                    },
                                     child: const Text("6"),
                                   ),
                                   ElevatedButton(

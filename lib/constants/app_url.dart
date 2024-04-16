@@ -52,4 +52,5 @@ abstract class AdminUrl {
 
   // * Live URLs
   static final setOpenings = "${AppUrl.baseUrl}/set-openings";
+  static final action = "${AppUrl.baseUrl}/action";
 }

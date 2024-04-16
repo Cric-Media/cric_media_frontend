@@ -38,7 +38,7 @@ class MatchDetails {
   int? iV;
   int? currentInning;
   List<dynamic>? innings;
-  List<dynamic>? playerStats;
+  List<PlayerStats>? playerStats;
   CurrentOver? currentOver;
   List<dynamic>? overs;
   List<dynamic>? scorecard;
@@ -139,7 +139,11 @@ class MatchDetails {
     iV = json['__v'];
     currentInning = json['currentInning'];
     innings = json['innings'];
-    playerStats = json['playerStats'];
+    playerStats = json['playerStats'] != null
+        ? (json['playerStats'] as List)
+            .map((i) => PlayerStats.fromJson(i))
+            .toList()
+        : null;
     currentOver = json['currentOver'] != null
         ? CurrentOver.fromJson(json['currentOver'])
         : null;
@@ -214,6 +218,46 @@ class CurrentOver {
     if (balls != null) {
       data['balls'] = balls!.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+
+class PlayerStats {
+  Player? player;
+  num? runs;
+  num? ballsFaced;
+  num? fours;
+  num? sixes;
+  num? strikeRate;
+
+  PlayerStats({
+    this.player,
+    this.runs,
+    this.ballsFaced,
+    this.fours,
+    this.sixes,
+    this.strikeRate,
+  });
+
+  PlayerStats.fromJson(Map<String, dynamic> json) {
+    player = json['player'] != null ? Player.fromJson(json['player']) : null;
+    runs = json['runs'];
+    ballsFaced = json['ballsFaced'];
+    fours = json['fours'];
+    sixes = json['sixes'];
+    strikeRate = json['strikeRate'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (player != null) {
+      data['player'] = player!.toJson();
+    }
+    data['runs'] = runs;
+    data['ballsFaced'] = ballsFaced;
+    data['fours'] = fours;
+    data['sixes'] = sixes;
+    data['strikeRate'] = strikeRate;
     return data;
   }
 }

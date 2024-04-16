@@ -48,6 +48,11 @@ final class MatchGetSuccess extends MatchState {
   MatchGetSuccess(this.res);
 }
 
+final class MatchLiveActionSuccess extends MatchState {
+  final ApiResponse res;
+  MatchLiveActionSuccess(this.res);
+}
+
 //! Failure states
 final class MatchAddDetailsError extends MatchState {
   final String message;
@@ -77,4 +82,9 @@ final class MatchSetOpeningsError extends MatchState {
 final class MatchGetError extends MatchState {
   final String message;
   MatchGetError(this.message);
+}
+
+final class MatchLiveActionError extends MatchState {
+  final String message;
+  MatchLiveActionError(this.message);
 }

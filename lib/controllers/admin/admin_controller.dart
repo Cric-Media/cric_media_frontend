@@ -420,4 +420,17 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> liveMatchAction(Map data) async {
+    final url = AdminUrl.action;
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.postRequest(data, url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }

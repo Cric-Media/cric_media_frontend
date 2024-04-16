@@ -286,4 +286,28 @@ class MatchCubit extends Cubit<MatchState> {
       }
     }
   }
+
+  scoreAction(String matchId, int runsScored) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.liveMatchAction(
+          {
+            "matchId": matchId,
+            "actionType": "score",
+            "data": {"runsScored": runsScored}
+          },
+        );
+        emit(MatchLiveActionSuccess(response));
+      } else {
+        emit(MatchGetError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchGetError('Something went wrong'));
+      } else {
+        emit(MatchGetError(err.toString()));
+      }
+    }
+  }
 }
