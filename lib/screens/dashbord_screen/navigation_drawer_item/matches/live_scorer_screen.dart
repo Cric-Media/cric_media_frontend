@@ -171,13 +171,19 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Batsman',
-                                style: Theme.of(context).textTheme.bodyMedium,
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  'Batsman',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               ),
+                              const Expanded(child: Text("")),
                               const Expanded(
+                                flex: 3,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Text("R"),
                                     SizedBox(width: 20),
@@ -198,11 +204,17 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                '${match?.striker?.name} *',
-                                style: Theme.of(context).textTheme.bodyMedium,
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  '${match?.striker?.name ?? "Striker"} *',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               ),
                               Expanded(
+                                flex: 2,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -223,13 +235,18 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                             ],
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                match?.nonStriker?.name ?? 'Non Striker',
-                                style: Theme.of(context).textTheme.bodyMedium,
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  match?.nonStriker?.name ?? 'Non Striker',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
                               ),
                               Expanded(
+                                flex: 2,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [

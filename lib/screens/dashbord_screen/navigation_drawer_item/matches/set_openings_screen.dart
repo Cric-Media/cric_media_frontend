@@ -135,13 +135,19 @@ class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
               },
             ),
             const Spacer(),
-            TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, liveScorer, arguments: {
-                    "matchId": widget.matchId,
-                  });
-                },
-                child: const Text("Skip")),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                OutlinedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, liveScorer, arguments: {
+                      "matchId": widget.matchId,
+                    });
+                  },
+                  child: const Text("Skip"),
+                ),
+              ],
+            ),
           ],
         ),
       ),
