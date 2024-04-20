@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<AdminCubit>(create: (context) => AdminCubit()),
             BlocProvider<PlayerCubit>(create: (context) => PlayerCubit()),
             BlocProvider<TeamCubit>(
-              create: (context) => TeamCubit()..getInitialTeams(),
+              create: (context) => TeamCubit()..getInitialTeams()
             ),
             BlocProvider<MatchCubit>(create: (context) => MatchCubit()),
           ],

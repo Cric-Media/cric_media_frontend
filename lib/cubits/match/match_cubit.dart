@@ -300,13 +300,65 @@ class MatchCubit extends Cubit<MatchState> {
         );
         emit(MatchLiveActionSuccess(response));
       } else {
-        emit(MatchGetError('No internet connection'));
+        emit(MatchLiveActionError('No internet connection'));
       }
     } catch (err) {
       if (err is! AppException) {
-        emit(MatchGetError('Something went wrong'));
+        emit(MatchLiveActionError('Something went wrong'));
       } else {
-        emit(MatchGetError(err.toString()));
+        emit(MatchLiveActionError(err.toString()));
+      }
+    }
+  }
+
+  wideAction({
+    required String matchId,
+    required String actionType,
+    required String extraType,
+    required int extraRuns,
+  }) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.liveMatchAction(
+          {
+            "matchId": matchId,
+            "actionType": actionType,
+            "data": {"extraRuns": extraRuns}
+          },
+        );
+        emit(MatchLiveActionSuccess(response));
+      } else {
+        emit(MatchLiveActionError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchLiveActionError('Something went wrong'));
+      } else {
+        emit(MatchLiveActionError(err.toString()));
+      }
+    }
+  }
+
+  swapPlayersAction({
+    required String matchId,
+    required String actionType,
+  }) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.liveMatchAction(
+          {"matchId": matchId, "actionType": actionType, "data": {}},
+        );
+        emit(MatchLiveActionSuccess(response));
+      } else {
+        emit(MatchLiveActionError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchLiveActionError('Something went wrong'));
+      } else {
+        emit(MatchLiveActionError(err.toString()));
       }
     }
   }
