@@ -1,8 +1,36 @@
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/models/match_details.dart';
+import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+class ChangeBowlerWidget extends StatefulWidget {
+  const ChangeBowlerWidget({Key? key}) : super(key: key);
+
+  @override
+  State<ChangeBowlerWidget> createState() => _ChangeBowlerWidgetState();
+}
+
+class _ChangeBowlerWidgetState extends State<ChangeBowlerWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<Player>(
+      value: MatchCubit.get(context).selectedBowler,
+      items: MatchCubit.get(context).bowlers.map((Player player) {
+        return DropdownMenuItem<Player>(
+          value: player,
+          child: Text(player.name ?? ''),
+        );
+      }).toList(),
+      onChanged: (Player? newValue) {
+        setState(() {
+          MatchCubit.get(context).selectedBowler = newValue;
+        });
+      },
+    );
+  }
+}
 
 class LiveScorerScreen extends StatefulWidget {
   final String matchId;
@@ -21,14 +49,37 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     SocketService.instance.socket.on('match-${widget.matchId}', (data) {
       MatchCubit.get(context).getMatch(widget.matchId);
     });
+    SocketService.instance.socket.on('overCompleted', (data) {
+      // Handle over completion
+      handleOverCompletion();
+    });
     super.initState();
   }
 
-  resetBools() {
-    MatchCubit.get(context).wide = false;
-    MatchCubit.get(context).noBall = false;
-    MatchCubit.get(context).byes = false;
-    MatchCubit.get(context).legByes = false;
+  handleOverCompletion() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text("Over Completed"),
+              content: const Text("Select next bowler"),
+              actions: [
+                const Text(
+                  "Bowler",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                ChangeBowlerWidget(),
+                ElevatedButton(
+                  onPressed: () async {
+                    await MatchCubit.get(context).changeBowlerAction(
+                      widget.matchId,
+                      MatchCubit.get(context).selectedBowler!.id.toString(),
+                    );
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Continue"),
+                ),
+              ],
+            ));
   }
 
   @override
@@ -40,7 +91,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
         listener: (context, state) {
           if (state is MatchGetSuccess) {
             match = state.res.data;
-            resetBools();
+            MatchCubit.get(context).resetBools();
             if (match!.playerStats != null) {
               striker = match!.playerStats
                   ?.where((p) => p.player?.id == match!.striker?.id)
@@ -287,9 +338,9 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                                                 ? Colors.brown
                                                                 : Colors.grey,
                                                 child: (e.extraType == 'wide')
-                                                    ? Text(
+                                                    ? const Text(
                                                         "WD",
-                                                        style: const TextStyle(
+                                                        style: TextStyle(
                                                           color: Colors.white,
                                                         ),
                                                       )

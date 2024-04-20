@@ -45,6 +45,13 @@ class MatchCubit extends Cubit<MatchState> {
   bool? wide, noBall, byes, legByes;
 
   // functions
+  resetBools() {
+    wide = false;
+    noBall = false;
+    byes = false;
+    legByes = false;
+  }
+
   startMatch(String matchId) async {
     emit(MatchStartLoading());
     final url = "${AdminUrl.startMatch}/$matchId";
@@ -351,6 +358,29 @@ class MatchCubit extends Cubit<MatchState> {
           {"matchId": matchId, "actionType": actionType, "data": {}},
         );
         emit(MatchLiveActionSuccess(response));
+      } else {
+        emit(MatchLiveActionError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchLiveActionError('Something went wrong'));
+      } else {
+        emit(MatchLiveActionError(err.toString()));
+      }
+    }
+  }
+
+  changeBowlerAction(String matchId, String newBowlerId) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        adminController.liveMatchAction(
+          {
+            "matchId": matchId,
+            "actionType": "changeBowler",
+            "data": {"newBowler": newBowlerId}
+          },
+        );
       } else {
         emit(MatchLiveActionError('No internet connection'));
       }
