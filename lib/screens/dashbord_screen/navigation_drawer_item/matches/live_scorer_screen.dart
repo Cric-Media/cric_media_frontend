@@ -67,7 +67,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                   "Bowler",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                ChangeBowlerWidget(),
+                const ChangeBowlerWidget(),
                 ElevatedButton(
                   onPressed: () async {
                     await MatchCubit.get(context).changeBowlerAction(

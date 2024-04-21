@@ -23,6 +23,7 @@ class LiveDetails extends StatefulWidget {
 
 class _LiveDetails extends State<LiveDetails> {
   MatchDetails? match;
+
   int value = 0;
   getVlaue(int x) {
     value = x;
@@ -41,7 +42,7 @@ class _LiveDetails extends State<LiveDetails> {
   @override
   void dispose() {
     // Remove the listener for the 'match' event when the widget is disposed
-    SocketService.instance.socket.off('match');
+    SocketService.instance.socket.off('match-${widget.match?.sId}');
 
     super.dispose();
   }
@@ -64,16 +65,6 @@ class _LiveDetails extends State<LiveDetails> {
                   fontWeight: FontWeight.w700),
             ),
           ),
-          // actions: [
-          //   Padding(
-          //     padding: const EdgeInsets.only(right: 20.0),
-          //     child: Image.asset(
-          //       '${AppIcons.search}',
-          //       width: 24,
-          //       height: 24,
-          //     ),
-          //   )
-          // ],
           centerTitle: true,
         ),
         body: BlocConsumer<MatchCubit, MatchState>(
@@ -124,9 +115,7 @@ class _LiveDetails extends State<LiveDetails> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: 30,
-                              ),
+                              SizedBox(width: 30),
                               InkWell(
                                   onTap: () {
                                     getVlaue(1);
@@ -141,9 +130,7 @@ class _LiveDetails extends State<LiveDetails> {
                                                 : Colors.grey,
                                             fontWeight: FontWeight.w700)),
                                   )),
-                              SizedBox(
-                                width: 30,
-                              ),
+                              SizedBox(width: 30),
                               InkWell(
                                   onTap: () {
                                     getVlaue(2);
@@ -192,9 +179,7 @@ class _LiveDetails extends State<LiveDetails> {
                           ),
                     ),
                     value == 0
-                        ? LiveInfo(
-                            match: match,
-                          )
+                        ? LiveInfo(match: match)
                         : value == 1
                             ? LiveLive(match: match)
                             : value == 2
