@@ -40,7 +40,7 @@ class MatchDetails {
   List<dynamic>? innings;
   List<PlayerStats>? playerStats;
   CurrentOver? currentOver;
-  List<dynamic>? overs;
+  List<Over>? overs;
   List<dynamic>? scorecard;
 
   MatchDetails({
@@ -147,7 +147,13 @@ class MatchDetails {
     currentOver = json['currentOver'] != null
         ? CurrentOver.fromJson(json['currentOver'])
         : null;
-    overs = json['overs'];
+    // overs = json['overs'];
+    if (json['overs'] != null) {
+      overs = <Over>[];
+      json['overs'].forEach((o) {
+        overs!.add(Over.fromJson(o));
+      });
+    }
     scorecard = json['scorecard'];
   }
 
@@ -259,5 +265,24 @@ class PlayerStats {
     data['sixes'] = sixes;
     data['strikeRate'] = strikeRate;
     return data;
+  }
+}
+
+class Over {
+  final int number;
+  final List<Ball> balls;
+
+  Over({
+    required this.number,
+    required this.balls,
+  });
+
+  factory Over.fromJson(Map<String, dynamic> json) {
+    return Over(
+      number: json['number'] as int,
+      balls: (json['balls'] as List<dynamic>)
+          .map((ballJson) => Ball.fromJson(ballJson as Map<String, dynamic>))
+          .toList(),
+    );
   }
 }

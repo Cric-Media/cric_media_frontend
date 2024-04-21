@@ -11,6 +11,7 @@ class LiveLive extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    var currentOverNumber = (match!.currentOver!.number ?? 0) + 1;
 
     return SingleChildScrollView(
       child: Column(children: [
@@ -364,7 +365,7 @@ class LiveLive extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Over: ${match!.currentOver!.number ?? 0}"),
+                      Text("Over: $currentOverNumber"),
                       if (match != null)
                         Expanded(
                           child: Wrap(
@@ -405,6 +406,59 @@ class LiveLive extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 7),
+        ...match!.overs!.reversed
+            .map((e) =>
+                // Row(
+                //   children: [
+                //     Text("${e.number} . ${e.balls.length}"),
+                //   ],
+                // ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: e.balls.reversed
+                        .map((i) => SizedBox(
+                              width: double.infinity,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                            child: Text(
+                                                "${e.number} . ${e.balls.length}")),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Text(i.ballTo ?? ''),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text("${i.runsScored}"),
+                                        ),
+                                        Expanded(
+                                          flex: 3,
+                                          child: Text(i.description ?? ''),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ))
+                        .toList(),
+                  ),
+                ))
+            .toList(),
+
         // Padding(
         //   padding: const EdgeInsets.symmetric(horizontal: 10.0),
         //   child: Row(

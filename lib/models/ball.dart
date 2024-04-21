@@ -8,6 +8,8 @@ class Ball {
   bool? isExtra;
   String? extraType;
   bool? isWicket;
+  String? description;
+  String? ballTo;
   String? wicketType;
   Player? fielder;
 
@@ -19,6 +21,8 @@ class Ball {
     this.isExtra,
     this.extraType,
     this.isWicket,
+    this.description,
+    this.ballTo,
     this.wicketType,
     this.fielder,
   });
@@ -29,6 +33,8 @@ class Ball {
     batsman = json['batsman'] != null ? Player.fromJson(json['batsman']) : null;
     runsScored = json['runsScored'];
     isExtra = json['isExtra'];
+    description = json['description'];
+    ballTo = json['ballTo'];
     extraType = json['extraType'];
     isWicket = json['isWicket'];
     wicketType = json['wicketType'];
@@ -42,6 +48,8 @@ class Ball {
     data['batsman'] = batsman;
     data['runsScored'] = runsScored;
     data['isExtra'] = isExtra;
+    data['description'] = description;
+    data['ballTo'] = ballTo;
     data['extraType'] = extraType;
     data['isWicket'] = isWicket;
     data['wicketType'] = wicketType;
