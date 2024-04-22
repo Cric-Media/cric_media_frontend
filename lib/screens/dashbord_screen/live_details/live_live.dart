@@ -429,9 +429,9 @@ class LiveLive extends StatelessWidget {
                                   children: [
                                     Row(
                                       children: [
-                                        Expanded(
-                                            child: Text(
-                                                "${e.number} . ${e.balls.length}")),
+                                        Text(
+                                            "${e.number} . ${e.balls.indexOf(i) + 1}"),
+                                        const SizedBox(width: 32),
                                         Expanded(
                                           flex: 3,
                                           child: Text(i.ballTo ?? ''),
@@ -441,9 +441,29 @@ class LiveLive extends StatelessWidget {
                                     const SizedBox(height: 8),
                                     Row(
                                       children: [
-                                        Expanded(
-                                          child: Text("${i.runsScored}"),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                            color: i.runsScored == 4
+                                                ? Colors.lightBlue
+                                                : i.runsScored == 6
+                                                    ? Colors.pink
+                                                    : i.isExtra == true
+                                                        ? Colors.brown
+                                                        : Colors.grey,
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                          ),
+                                          child: Text(
+                                            "${i.runsScored}",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ),
+                                        const SizedBox(width: 32),
                                         Expanded(
                                           flex: 3,
                                           child: Text(i.description ?? ''),
