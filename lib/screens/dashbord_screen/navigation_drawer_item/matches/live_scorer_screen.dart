@@ -355,7 +355,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                                             : e.isExtra == true
                                                                 ? Colors.brown
                                                                 : Colors.grey,
-                                                child: (e.extraType == 'wide')
+                                                child: (e.extraType == 'wides')
                                                     ? const Text(
                                                         "WD",
                                                         style: TextStyle(

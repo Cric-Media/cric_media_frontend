@@ -381,7 +381,7 @@ class LiveLive extends StatelessWidget {
                                                 : e.isExtra == true
                                                     ? Colors.brown
                                                     : Colors.grey,
-                                        child: (e.extraType == 'wide')
+                                        child: (e.extraType == 'wides')
                                             ? const Text(
                                                 "WD",
                                                 style: TextStyle(
@@ -457,12 +457,19 @@ class LiveLive extends StatelessWidget {
                                             borderRadius:
                                                 BorderRadius.circular(50),
                                           ),
-                                          child: Text(
-                                            "${i.runsScored}",
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
+                                          child: (i.extraType == 'wides')
+                                              ? const Text(
+                                                  "WD",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  "${i.runsScored}",
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
                                         ),
                                         const SizedBox(width: 32),
                                         Expanded(

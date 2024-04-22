@@ -134,11 +134,12 @@ class MatchDetailsLiveCard extends StatelessWidget {
                   Text(
                     match?.team2?.name ?? '',
                     style: GoogleFonts.inter(
-                        textStyle: const TextStyle(
-                      fontSize: 14,
-                      color: AppColor.blackColor,
-                      fontWeight: FontWeight.w600,
-                    )),
+                      textStyle: const TextStyle(
+                        fontSize: 14,
+                        color: AppColor.blackColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                   const Spacer(),
                   Text(

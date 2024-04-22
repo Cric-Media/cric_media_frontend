@@ -331,7 +331,7 @@ class MatchCubit extends Cubit<MatchState> {
           {
             "matchId": matchId,
             "actionType": actionType,
-            "data": {"extraRuns": extraRuns}
+            "data": {"extraRuns": extraRuns, "extraType": extraType}
           },
         );
         emit(MatchLiveActionSuccess(response));
