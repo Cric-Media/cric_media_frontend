@@ -58,7 +58,7 @@ class MatchDetailsLiveCard extends StatelessWidget {
               ),
               const SizedBox(height: 3),
               Text(
-                match == null ? 'At Kabul' : 'At ${match?.cityOrTown}',
+                match == null ? 'City' : 'At ${match?.cityOrTown}',
                 style: GoogleFonts.inter(
                     textStyle: const TextStyle(
                         fontSize: 14,
@@ -104,8 +104,8 @@ class MatchDetailsLiveCard extends StatelessWidget {
                   ),
                   Text(
                     match == null
-                        ? ' (0/0 Overs)'
-                        : ' (${match?.team1Overs}.${match?.team1Balls} Overs)',
+                        ? ' (0.0 Overs)'
+                        : ' (${match?.team2Overs}.${match?.team2Balls} Overs)',
                     style: GoogleFonts.inter(
                         textStyle: const TextStyle(
                             fontSize: 14,
@@ -154,7 +154,7 @@ class MatchDetailsLiveCard extends StatelessWidget {
                   Text(
                     match == null
                         ? ' (0/0 Overs)'
-                        : ' (${match?.team2Overs}.${match?.team2Balls} Overs)',
+                        : ' (${match?.team1Overs}.${match?.team1Balls} Overs)',
                     style: GoogleFonts.inter(
                       textStyle: const TextStyle(
                         fontSize: 14,

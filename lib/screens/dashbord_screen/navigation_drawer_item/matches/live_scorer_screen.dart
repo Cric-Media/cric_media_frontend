@@ -227,7 +227,8 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     Text("${striker?.sixes}"),
                                     const SizedBox(width: 20),
                                     Text(
-                                        "${striker?.strikeRate?.toStringAsFixed(2)}"),
+                                      "${striker?.strikeRate?.toStringAsFixed(2)}",
+                                    ),
                                     const SizedBox(width: 20),
                                   ],
                                 ),

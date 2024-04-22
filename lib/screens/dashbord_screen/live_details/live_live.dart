@@ -430,7 +430,8 @@ class LiveLive extends StatelessWidget {
                                     Row(
                                       children: [
                                         Text(
-                                            "${e.number} . ${e.balls.indexOf(i) + 1}"),
+                                          "${e.number} . ${e.balls.indexOf(i) + 1}",
+                                        ),
                                         const SizedBox(width: 32),
                                         Expanded(
                                           flex: 3,
