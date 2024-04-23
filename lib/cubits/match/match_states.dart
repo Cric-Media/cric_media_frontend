@@ -17,6 +17,8 @@ final class MatchSetOpeningsLoading extends MatchState {}
 
 final class MatchGetLoading extends MatchState {}
 
+final class MatchScoreCardsLoading extends MatchState {}
+
 //* Success states
 final class MatchAddDetailsSuccess extends MatchState {
   final ApiResponse res;
@@ -53,6 +55,11 @@ final class MatchLiveActionSuccess extends MatchState {
   MatchLiveActionSuccess(this.res);
 }
 
+final class MatchScoreCardsSuccess extends MatchState {
+  final ApiResponse res;
+  MatchScoreCardsSuccess(this.res);
+}
+
 //! Failure states
 final class MatchAddDetailsError extends MatchState {
   final String message;
@@ -87,4 +94,9 @@ final class MatchGetError extends MatchState {
 final class MatchLiveActionError extends MatchState {
   final String message;
   MatchLiveActionError(this.message);
+}
+
+final class MatchScoreCardsError extends MatchState {
+  final String message;
+  MatchScoreCardsError(this.message);
 }

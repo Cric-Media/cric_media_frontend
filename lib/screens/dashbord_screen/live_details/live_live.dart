@@ -12,6 +12,9 @@ class LiveLive extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     var currentOverNumber = (match!.currentOver!.number ?? 0) + 1;
+    final bowlerStatsIndex = match!.bowlerStats!.indexWhere(
+      (element) => element.player!.id == match!.openingBowler!.id,
+    );
 
     return SingleChildScrollView(
       child: Column(children: [
@@ -253,7 +256,6 @@ class LiveLive extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 7),
-
         // Card(
         //   elevation: 2,
         //   color: Colors.white,
@@ -360,7 +362,16 @@ class LiveLive extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Over section
-                  Text(match!.openingBowler!.name ?? "Bowler"),
+                  Row(
+                    children: [
+                      Text(match!.openingBowler!.name ?? "Bowler"),
+                      const Spacer(),
+                      if (bowlerStatsIndex != -1)
+                        Text(
+                          "${match!.bowlerStats![bowlerStatsIndex].runsGiven}-${match!.bowlerStats![bowlerStatsIndex].wickets} (${match!.bowlerStats![bowlerStatsIndex].overs}.${match?.team1Batting == true ? match?.team2Balls : match?.team1Balls})",
+                        ),
+                    ],
+                  ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -183,7 +183,7 @@ class _LiveDetails extends State<LiveDetails> {
                         : value == 1
                             ? LiveLive(match: match)
                             : value == 2
-                                ? LiveScoreCard()
+                                ? LiveScoreCard(match: match)
                                 : value == 3
                                     ? LivePointTable()
                                     : Container(),

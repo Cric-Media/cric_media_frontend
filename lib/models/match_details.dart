@@ -39,6 +39,7 @@ class MatchDetails {
   int? currentInning;
   List<dynamic>? innings;
   List<PlayerStats>? playerStats;
+  List<BowlerStats>? bowlerStats;
   CurrentOver? currentOver;
   List<Over>? overs;
   List<dynamic>? scorecard;
@@ -80,6 +81,7 @@ class MatchDetails {
     this.currentInning,
     this.innings,
     this.playerStats,
+    this.bowlerStats,
     this.currentOver,
     this.overs,
     this.scorecard,
@@ -144,6 +146,11 @@ class MatchDetails {
             .map((i) => PlayerStats.fromJson(i))
             .toList()
         : null;
+    bowlerStats = json['bowlerStats'] != null
+        ? (json['bowlerStats'] as List)
+            .map((i) => BowlerStats.fromJson(i))
+            .toList()
+        : null;
     currentOver = json['currentOver'] != null
         ? CurrentOver.fromJson(json['currentOver'])
         : null;
@@ -195,6 +202,7 @@ class MatchDetails {
     data['currentInning'] = currentInning;
     data['innings'] = innings;
     data['playerStats'] = playerStats;
+    data['bowlerStats'] = bowlerStats;
     data['currentOver'] = currentOver;
     data['overs'] = overs;
     data['scorecard'] = scorecard;
@@ -264,6 +272,54 @@ class PlayerStats {
     data['fours'] = fours;
     data['sixes'] = sixes;
     data['strikeRate'] = strikeRate;
+    return data;
+  }
+}
+
+class BowlerStats {
+  Player? player;
+  num? overs;
+  num? maidens;
+  num? runsGiven;
+  num? wickets;
+  num? economy;
+  num? fours;
+  num? sixes;
+
+  BowlerStats({
+    this.player,
+    this.overs,
+    this.maidens,
+    this.runsGiven,
+    this.wickets,
+    this.economy,
+    this.fours,
+    this.sixes,
+  });
+
+  BowlerStats.fromJson(Map<String, dynamic> json) {
+    player = json['player'] != null ? Player.fromJson(json['player']) : null;
+    overs = json['overs'];
+    maidens = json['maidens'];
+    runsGiven = json['runsGiven'];
+    wickets = json['wickets'];
+    economy = json['economy'];
+    fours = json['fours'];
+    sixes = json['sixes'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (player != null) {
+      data['player'] = player!.toJson();
+    }
+    data['overs'] = overs;
+    data['maidens'] = maidens;
+    data['runsGiven'] = runsGiven;
+    data['wickets'] = wickets;
+    data['economy'] = economy;
+    data['fours'] = fours;
+    data['sixes'] = sixes;
     return data;
   }
 }

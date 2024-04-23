@@ -7,6 +7,7 @@ import 'package:cricket_app/controllers/admin/admin_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/player.dart';
+import 'package:cricket_app/models/score_card.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
@@ -43,6 +44,9 @@ class MatchCubit extends Cubit<MatchState> {
 
   // Scorer
   bool? wide, noBall, byes, legByes;
+
+  // Scorecards
+  List<ScoreCard> scoreCards = [];
 
   // functions
   resetBools() {
@@ -290,6 +294,24 @@ class MatchCubit extends Cubit<MatchState> {
         emit(MatchGetError('Something went wrong'));
       } else {
         emit(MatchGetError(err.toString()));
+      }
+    }
+  }
+
+  getMatchScoreCards(String matchId) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.getMatchScoreCards(matchId);
+        emit(MatchScoreCardsSuccess(response));
+      } else {
+        emit(MatchScoreCardsError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchScoreCardsError('Something went wrong'));
+      } else {
+        emit(MatchScoreCardsError(err.toString()));
       }
     }
   }

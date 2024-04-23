@@ -8,6 +8,7 @@ import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/player.dart';
+import 'package:cricket_app/models/score_card.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
@@ -429,6 +430,23 @@ class AdminController {
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> getMatchScoreCards(String matchId) async {
+    final url = "${AdminUrl.matchScoreCards}/$matchId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<ScoreCard> scoreCards = [];
+      for (var scoreCard in resBody['data']) {
+        scoreCards.add(ScoreCard.fromJson(scoreCard));
+      }
+      return ApiResponse.fromJson(resBody, (data) => scoreCards);
     } else {
       throw AppException(resBody['message']);
     }

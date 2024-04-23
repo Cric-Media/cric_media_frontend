@@ -84,6 +84,9 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int? bowlerStatsIndex = match?.bowlerStats?.indexWhere(
+        (element) => element.player?.id == match?.openingBowler?.id);
+
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(),
@@ -283,8 +286,8 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                   children: [
                                     Text("O"),
                                     SizedBox(width: 20),
-                                    Text("M"),
-                                    SizedBox(width: 20),
+                                    // Text("M"),
+                                    // SizedBox(width: 20),
                                     Text("R"),
                                     SizedBox(width: 20),
                                     Text("W"),
@@ -302,21 +305,31 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                 match?.openingBowler?.name ?? '',
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
-                              const Expanded(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Text("0"),
-                                    SizedBox(width: 20),
-                                    Text("0"),
-                                    SizedBox(width: 20),
-                                    Text("0"),
-                                    SizedBox(width: 20),
-                                    Text("0"),
-                                    SizedBox(width: 20),
-                                  ],
-                                ),
-                              )
+                              if (bowlerStatsIndex != null &&
+                                  bowlerStatsIndex != -1)
+                                Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        "${match!.bowlerStats![bowlerStatsIndex].overs}",
+                                      ),
+                                      // const SizedBox(width: 20),
+                                      // Text(
+                                      //   "${match!.bowlerStats![bowlerStatsIndex].maidens}",
+                                      // ),
+                                      const SizedBox(width: 20),
+                                      Text(
+                                        "${match!.bowlerStats![bowlerStatsIndex].runsGiven}",
+                                      ),
+                                      const SizedBox(width: 20),
+                                      Text(
+                                        "${match!.bowlerStats![bowlerStatsIndex].wickets}",
+                                      ),
+                                      const SizedBox(width: 20),
+                                    ],
+                                  ),
+                                )
                             ],
                           ),
                         ],
