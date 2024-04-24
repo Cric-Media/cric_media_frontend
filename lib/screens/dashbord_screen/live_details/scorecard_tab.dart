@@ -95,16 +95,18 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                     children: [
                                       Container(
                                         width: 40,
-                                        height: 40,
+                                        height: 50,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.rectangle,
                                           image: DecorationImage(
                                             image: CachedNetworkImageProvider(
                                               batsman.player?.imageUrl ?? "",
                                             ),
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
                                       ),
+                                      const SizedBox(width: 8),
                                       Text(
                                         batsman.player?.name ?? "",
                                         style: const TextStyle(
@@ -193,16 +195,18 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                     children: [
                                       Container(
                                         width: 40,
-                                        height: 40,
+                                        height: 50,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.rectangle,
                                           image: DecorationImage(
                                             image: CachedNetworkImageProvider(
                                               bowler.player?.imageUrl ?? "",
                                             ),
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
                                       ),
+                                      const SizedBox(width: 8),
                                       Text(
                                         bowler.player?.name ?? "",
                                         style: const TextStyle(
