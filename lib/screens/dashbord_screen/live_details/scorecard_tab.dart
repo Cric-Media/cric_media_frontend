@@ -17,7 +17,6 @@ class _ScorecardTabState extends State<ScorecardTab> {
   @override
   void initState() {
     MatchCubit.get(context).getMatchScoreCards(widget.match!.sId.toString());
-
     super.initState();
   }
 

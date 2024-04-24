@@ -34,6 +34,7 @@ class MatchCubit extends Cubit<MatchState> {
   int? numberOfOvers, oversPerBowler;
   String? cityTown, ground, matchDateTime, whoWinsToss, tossDetails;
   bool? teamAToss, teamBToss, teamABat, teamBBat, teamABowl, teamBBowl;
+  int outPlayerIndex = 0;
 
   // Set openings
   List<Player> batsmen = [];
@@ -401,6 +402,44 @@ class MatchCubit extends Cubit<MatchState> {
             "matchId": matchId,
             "actionType": "changeBowler",
             "data": {"newBowler": newBowlerId}
+          },
+        );
+      } else {
+        emit(MatchLiveActionError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchLiveActionError('Something went wrong'));
+      } else {
+        emit(MatchLiveActionError(err.toString()));
+      }
+    }
+  }
+
+  outPlayerAction(String matchId, String playerIdOut) async {
+    try {
+      print({
+        "matchId": matchId,
+        "actionType": "outPlayer",
+        "data": {
+          "playerIdOut": playerIdOut,
+          "newPlayerId": selectedStriker == null
+              ? selectedNonStriker?.id.toString()
+              : selectedStriker?.id.toString()
+        }
+      });
+      var network = await Network.check();
+      if (network) {
+        adminController.liveMatchAction(
+          {
+            "matchId": matchId,
+            "actionType": "outPlayer",
+            "data": {
+              "playerIdOut": playerIdOut,
+              "newPlayerId": selectedStriker == null
+                  ? selectedNonStriker?.id.toString()
+                  : selectedStriker?.id.toString()
+            }
           },
         );
       } else {

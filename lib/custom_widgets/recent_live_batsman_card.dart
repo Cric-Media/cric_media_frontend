@@ -18,12 +18,28 @@ class _RecentLiveBatsmanCardState extends State<RecentLiveBatsmanCard> {
   @override
   Widget build(BuildContext context) {
     if (widget.match!.playerStats != null) {
-      striker = widget.match!.playerStats
-          ?.where((p) => p.player?.id == widget.match!.striker?.id)
-          .toList()[0];
-      nonStriker = widget.match!.playerStats
-          ?.where((p) => p.player?.id == widget.match!.nonStriker?.id)
-          .toList()[0];
+      striker = widget.match!.playerStats?.firstWhere(
+        (p) => p.player?.id == widget.match!.striker?.id,
+        orElse: () => PlayerStats(
+          player: widget.match!.striker,
+          runs: 0,
+          ballsFaced: 0,
+          fours: 0,
+          sixes: 0,
+          strikeRate: 0,
+        ),
+      );
+      nonStriker = widget.match!.playerStats?.firstWhere(
+        (p) => p.player?.id == widget.match!.nonStriker?.id,
+        orElse: () => PlayerStats(
+          player: widget.match!.nonStriker,
+          runs: 0,
+          ballsFaced: 0,
+          fours: 0,
+          sixes: 0,
+          strikeRate: 0,
+        ),
+      );
     }
     return Padding(
       padding: const EdgeInsets.only(left: 10.0),

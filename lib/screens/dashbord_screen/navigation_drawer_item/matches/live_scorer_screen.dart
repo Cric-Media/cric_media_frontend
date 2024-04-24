@@ -43,6 +43,7 @@ class LiveScorerScreen extends StatefulWidget {
 class _LiveScorerScreenState extends State<LiveScorerScreen> {
   MatchDetails? match;
   PlayerStats? striker, nonStriker;
+
   @override
   void initState() {
     MatchCubit.get(context).getMatch(widget.matchId);
@@ -82,6 +83,37 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
             ));
   }
 
+  handlePlayerOut(BuildContext context, String matchId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Player Out'),
+          content: SingleChildScrollView(
+            child: OutPlayerWidget(match: match!),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Continue'),
+              onPressed: () async {
+                MatchCubit.get(context).outPlayerAction(
+                  matchId,
+                  MatchCubit.get(context).outPlayerIndex == 1
+                      ? "${match?.striker?.id}"
+                      : "${match?.nonStriker?.id}",
+                );
+                // Perform your action here
+                // For example, you might want to call a method to change the player
+                // await MatchCubit.get(context).changePlayerAction(matchId, newPlayerId);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     int? bowlerStatsIndex = match?.bowlerStats?.indexWhere(
@@ -96,12 +128,29 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
             match = state.res.data;
             MatchCubit.get(context).resetBools();
             if (match!.playerStats != null) {
-              striker = match!.playerStats
-                  ?.where((p) => p.player?.id == match!.striker?.id)
-                  .toList()[0];
-              nonStriker = match!.playerStats
-                  ?.where((p) => p.player?.id == match!.nonStriker?.id)
-                  .toList()[0];
+              striker = match?.playerStats?.firstWhere(
+                (p) => p.player?.id == match!.striker?.id,
+                orElse: () => PlayerStats(
+                  player: match?.nonStriker,
+                  runs: 0,
+                  ballsFaced: 0,
+                  fours: 0,
+                  sixes: 0,
+                  strikeRate: 0,
+                ),
+              );
+
+              nonStriker = match?.playerStats?.firstWhere(
+                (p) => p.player?.id == match!.nonStriker?.id,
+                orElse: () => PlayerStats(
+                  player: match?.nonStriker,
+                  runs: 0,
+                  ballsFaced: 0,
+                  fours: 0,
+                  sixes: 0,
+                  strikeRate: 0,
+                ),
+              );
             }
           }
         },
@@ -599,7 +648,12 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                       child: const Text("6"),
                                     ),
                                     ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        handlePlayerOut(
+                                          context,
+                                          widget.matchId,
+                                        );
+                                      },
                                       child: const Text("W"),
                                     ),
                                   ],
@@ -646,6 +700,75 @@ class _CheckboxWidgetState extends State<CheckboxWidget> {
           Text(widget.text),
         ],
       ),
+    );
+  }
+}
+
+class OutPlayerWidget extends StatefulWidget {
+  final MatchDetails match;
+  const OutPlayerWidget({Key? key, required this.match}) : super(key: key);
+
+  @override
+  State<OutPlayerWidget> createState() => _OutPlayerWidgetState();
+}
+
+class _OutPlayerWidgetState extends State<OutPlayerWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return ListBody(
+      children: <Widget>[
+        const Text('Select a player to out.'),
+        RadioListTile(
+          value: 1,
+          groupValue: MatchCubit.get(context).outPlayerIndex,
+          onChanged: (value) {
+            setState(() {
+              MatchCubit.get(context).outPlayerIndex = value as int;
+            });
+          },
+          title: Text(
+            widget.match.striker?.name ?? "",
+            style: const TextStyle(color: Colors.black),
+          ),
+        ),
+        RadioListTile(
+          value: 2,
+          groupValue: MatchCubit.get(context).outPlayerIndex,
+          onChanged: (value) {
+            setState(() {
+              MatchCubit.get(context).outPlayerIndex = value as int;
+            });
+          },
+          title: Text(
+            widget.match.nonStriker?.name ?? "",
+            style: const TextStyle(color: Colors.black),
+          ),
+        ),
+        const SizedBox(height: 32),
+        const Text("Replace by ?"),
+        DropdownButton<Player>(
+          value: MatchCubit.get(context).outPlayerIndex == 1
+              ? MatchCubit.get(context).selectedStriker
+              : MatchCubit.get(context).selectedNonStriker,
+          items: MatchCubit.get(context).batsmen.map((Player player) {
+            return DropdownMenuItem<Player>(
+              value: player,
+              child: Text(player.name ?? ''),
+            );
+          }).toList(),
+          onChanged: (Player? newValue) {
+            setState(() {
+              if (MatchCubit.get(context).outPlayerIndex == 1) {
+                MatchCubit.get(context).selectedStriker = newValue;
+                MatchCubit.get(context).selectedNonStriker = null;
+              } else {
+                MatchCubit.get(context).selectedNonStriker = newValue;
+                MatchCubit.get(context).selectedStriker = null;
+              }
+            });
+          },
+        )
+      ],
     );
   }
 }
