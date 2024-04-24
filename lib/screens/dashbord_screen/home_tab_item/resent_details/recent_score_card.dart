@@ -126,8 +126,8 @@ class RecentScoreCard extends StatelessWidget {
                       SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        height: 820,
+                      SizedBox(
+                        // height: 820,
                         child: ListView.builder(
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: 11,

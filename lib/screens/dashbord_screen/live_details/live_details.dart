@@ -7,7 +7,7 @@ import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_info.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_live.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_point_table.dart';
-import 'package:cricket_app/screens/dashbord_screen/live_details/live_score_card.dart';
+import 'package:cricket_app/screens/dashbord_screen/live_details/scorecard_tab.dart';
 import 'package:cricket_app/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -183,7 +183,9 @@ class _LiveDetails extends State<LiveDetails> {
                         : value == 1
                             ? LiveLive(match: match)
                             : value == 2
-                                ? LiveScoreCard(match: match)
+                                ? ScorecardTab(
+                                    match:
+                                        match) /* LiveScoreCard(match: match) */
                                 : value == 3
                                     ? LivePointTable()
                                     : Container(),
