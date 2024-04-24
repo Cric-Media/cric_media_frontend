@@ -391,7 +391,9 @@ class LiveLive extends StatelessWidget {
                                                 ? Colors.pink
                                                 : e.isExtra == true
                                                     ? Colors.brown
-                                                    : Colors.grey,
+                                                    : e.isWicket == true
+                                                        ? Colors.red
+                                                        : Colors.grey,
                                         child: (e.extraType == 'wides')
                                             ? const Text(
                                                 "WD",
@@ -400,7 +402,9 @@ class LiveLive extends StatelessWidget {
                                                 ),
                                               )
                                             : Text(
-                                                e.runsScored.toString(),
+                                                e.isWicket == true
+                                                    ? "W"
+                                                    : e.runsScored.toString(),
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                 ),
@@ -464,23 +468,22 @@ class LiveLive extends StatelessWidget {
                                                     ? Colors.pink
                                                     : i.isExtra == true
                                                         ? Colors.brown
-                                                        : Colors.grey,
+                                                        : i.isWicket == true
+                                                            ? Colors.red
+                                                            : Colors.grey,
                                             borderRadius:
                                                 BorderRadius.circular(50),
                                           ),
-                                          child: (i.extraType == 'wides')
-                                              ? const Text(
-                                                  "WD",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                  ),
-                                                )
-                                              : Text(
-                                                  "${i.runsScored}",
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
+                                          child: Text(
+                                            (i.extraType == 'wides')
+                                                ? "WD"
+                                                : (i.isWicket == true)
+                                                    ? "W"
+                                                    : "${i.runsScored}",
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                         ),
                                         const SizedBox(width: 32),
                                         Expanded(

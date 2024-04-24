@@ -115,6 +115,12 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
   }
 
   @override
+  void dispose() {
+    SocketService.instance.socket.off('match-${widget.matchId}');
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     int? bowlerStatsIndex = match?.bowlerStats?.indexWhere(
         (element) => element.player?.id == match?.openingBowler?.id);
@@ -409,27 +415,27 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                               margin: const EdgeInsets.only(
                                                   left: 8),
                                               child: CircleAvatar(
-                                                backgroundColor:
-                                                    e.runsScored == 4
-                                                        ? Colors.lightBlue
-                                                        : e.runsScored == 6
-                                                            ? Colors.pink
-                                                            : e.isExtra == true
-                                                                ? Colors.brown
+                                                backgroundColor: e.runsScored ==
+                                                        4
+                                                    ? Colors.lightBlue
+                                                    : e.runsScored == 6
+                                                        ? Colors.pink
+                                                        : e.isExtra == true
+                                                            ? Colors.brown
+                                                            : e.isWicket == true
+                                                                ? Colors.red
                                                                 : Colors.grey,
-                                                child: (e.extraType == 'wides')
-                                                    ? const Text(
-                                                        "WD",
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                        ),
-                                                      )
-                                                    : Text(
-                                                        e.runsScored.toString(),
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
+                                                child: Text(
+                                                  (e.extraType == 'wides')
+                                                      ? "WD"
+                                                      : (e.isWicket == true)
+                                                          ? "W"
+                                                          : e.runsScored
+                                                              .toString(),
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
                                               ),
                                             ))
                                         .toList(),
