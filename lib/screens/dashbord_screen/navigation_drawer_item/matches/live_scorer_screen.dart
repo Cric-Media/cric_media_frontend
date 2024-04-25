@@ -54,6 +54,9 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
       // Handle over completion
       handleOverCompletion();
     });
+    SocketService.instance.socket.on('inningCompleted', (data) {
+      // TODO: Handle inning completed
+    });
     super.initState();
   }
 
@@ -449,75 +452,89 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                   ),
                   const SizedBox(height: 5),
                   //* Action buttons
-                  Card(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Extra',
-                            style: Theme.of(context).textTheme.bodyLarge,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Card(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Extra',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                Wrap(
+                                  direction: Axis.horizontal,
+                                  children: [
+                                    CheckboxWidget(
+                                      text: "Wide",
+                                      value:
+                                          MatchCubit.get(context).wide ?? false,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          MatchCubit.get(context).wide = value;
+                                        });
+                                      },
+                                    ),
+                                    CheckboxWidget(
+                                      text: "No Ball",
+                                      value: MatchCubit.get(context).noBall ??
+                                          false,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          MatchCubit.get(context).noBall =
+                                              value;
+                                        });
+                                      },
+                                    ),
+                                    CheckboxWidget(
+                                      text: "Byes",
+                                      value:
+                                          MatchCubit.get(context).byes ?? false,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          MatchCubit.get(context).byes = value;
+                                        });
+                                      },
+                                    ),
+                                    CheckboxWidget(
+                                      text: "Leg Byes",
+                                      value: MatchCubit.get(context).legByes ??
+                                          false,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          MatchCubit.get(context).legByes =
+                                              value;
+                                        });
+                                      },
+                                    ),
+                                    // const SizedBox(width: 32),
+                                    // ElevatedButton(
+                                    //   onPressed: () {},
+                                    //   child: const Text("Out"),
+                                    // ),
+                                    // const SizedBox(width: 32),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        MatchCubit.get(context)
+                                            .swapPlayersAction(
+                                          matchId: widget.matchId,
+                                          actionType: "swap",
+                                        );
+                                      },
+                                      child: const Text("Swap Batsman"),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                          Wrap(
-                            direction: Axis.horizontal,
-                            children: [
-                              CheckboxWidget(
-                                text: "Wide",
-                                value: MatchCubit.get(context).wide ?? false,
-                                onChanged: (value) {
-                                  setState(() {
-                                    MatchCubit.get(context).wide = value;
-                                  });
-                                },
-                              ),
-                              CheckboxWidget(
-                                text: "No Ball",
-                                value: MatchCubit.get(context).noBall ?? false,
-                                onChanged: (value) {
-                                  setState(() {
-                                    MatchCubit.get(context).noBall = value;
-                                  });
-                                },
-                              ),
-                              CheckboxWidget(
-                                text: "Byes",
-                                value: MatchCubit.get(context).byes ?? false,
-                                onChanged: (value) {
-                                  setState(() {
-                                    MatchCubit.get(context).byes = value;
-                                  });
-                                },
-                              ),
-                              CheckboxWidget(
-                                text: "Leg Byes",
-                                value: MatchCubit.get(context).legByes ?? false,
-                                onChanged: (value) {
-                                  setState(() {
-                                    MatchCubit.get(context).legByes = value;
-                                  });
-                                },
-                              ),
-                              const SizedBox(width: 16),
-                              ElevatedButton(
-                                onPressed: () {},
-                                child: const Text("Retire"),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  MatchCubit.get(context).swapPlayersAction(
-                                    matchId: widget.matchId,
-                                    actionType: "swap",
-                                  );
-                                },
-                                child: const Text("Swap Batsman"),
-                              ),
-                            ],
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                   const SizedBox(height: 5),
                   //* Action buttons
@@ -660,7 +677,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                           widget.matchId,
                                         );
                                       },
-                                      child: const Text("W"),
+                                      child: const Text("Out"),
                                     ),
                                   ],
                                 ),
@@ -721,6 +738,9 @@ class OutPlayerWidget extends StatefulWidget {
 class _OutPlayerWidgetState extends State<OutPlayerWidget> {
   @override
   Widget build(BuildContext context) {
+    var fieldingTeam = widget.match.team1Batting == true
+        ? widget.match.squad2
+        : widget.match.squad1;
     return ListBody(
       children: <Widget>[
         const Text('Select a player to out.'),
@@ -773,7 +793,50 @@ class _OutPlayerWidgetState extends State<OutPlayerWidget> {
               }
             });
           },
-        )
+        ),
+        const SizedBox(height: 16),
+        const Text("Wicket Type"),
+        DropdownButton<String>(
+          value: MatchCubit.get(context).wicketType,
+          items: [
+            "Bowled",
+            "Caught",
+            "LBW",
+            "Run Out",
+            "Stumped",
+            "Hit Wicket",
+            "Handled Ball",
+            "Obstructing Field",
+            "Timed Out",
+            "Hit Twice",
+          ].map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              MatchCubit.get(context).wicketType = newValue;
+            });
+          },
+        ),
+        const SizedBox(height: 16),
+        const Text("Fielder"),
+        DropdownButton<Player>(
+          value: MatchCubit.get(context).selectedFielder,
+          items: fieldingTeam?.map((Player player) {
+            return DropdownMenuItem<Player>(
+              value: player,
+              child: Text(player.name ?? ''),
+            );
+          }).toList(),
+          onChanged: (Player? newValue) {
+            setState(() {
+              MatchCubit.get(context).selectedFielder = newValue;
+            });
+          },
+        ),
       ],
     );
   }

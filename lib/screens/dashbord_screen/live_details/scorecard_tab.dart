@@ -172,6 +172,8 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
+                                      Text("R"),
+                                      SizedBox(width: 16),
                                       Text("O"),
                                       SizedBox(width: 16),
                                       Text("W"),
@@ -219,6 +221,8 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,
                                           children: [
+                                            Text(bowler.runsGiven.toString()),
+                                            const SizedBox(width: 16),
                                             Text(bowler.overs.toString()),
                                             const SizedBox(width: 16),
                                             Text(bowler.wickets.toString()),

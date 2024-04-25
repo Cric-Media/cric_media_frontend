@@ -48,6 +48,8 @@ class MatchCubit extends Cubit<MatchState> {
 
   // Scorecards
   List<ScoreCard> scoreCards = [];
+  String? wicketType;
+  Player? selectedFielder;
 
   // functions
   resetBools() {
@@ -418,16 +420,6 @@ class MatchCubit extends Cubit<MatchState> {
 
   outPlayerAction(String matchId, String playerIdOut) async {
     try {
-      print({
-        "matchId": matchId,
-        "actionType": "outPlayer",
-        "data": {
-          "playerIdOut": playerIdOut,
-          "newPlayerId": selectedStriker == null
-              ? selectedNonStriker?.id.toString()
-              : selectedStriker?.id.toString()
-        }
-      });
       var network = await Network.check();
       if (network) {
         adminController.liveMatchAction(
@@ -438,7 +430,9 @@ class MatchCubit extends Cubit<MatchState> {
               "playerIdOut": playerIdOut,
               "newPlayerId": selectedStriker == null
                   ? selectedNonStriker?.id.toString()
-                  : selectedStriker?.id.toString()
+                  : selectedStriker?.id.toString(),
+              "wicketType": wicketType,
+              "fielder": selectedFielder?.id.toString(),
             }
           },
         );
