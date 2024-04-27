@@ -18,6 +18,7 @@ class _LiveLiveState extends State<LiveLive> {
   @override
   void initState() {
     MatchCubit.get(context).getInitialOvers(widget.match!.sId.toString());
+
     super.initState();
   }
 
@@ -447,6 +448,8 @@ class _LiveLiveState extends State<LiveLive> {
         listener: (context, state) {
           if (state is MatchGetInitialOversSuccess) {
             MatchCubit.get(context).overs = state.res.data;
+          } else if (state is MatchGetMoreOversSuccess) {
+            MatchCubit.get(context).overs.addAll(state.res.data);
           }
         },
         builder: (context, state) {
@@ -535,6 +538,25 @@ class _LiveLiveState extends State<LiveLive> {
                         ),
                       ))
                   .toList(),
+              const SizedBox(height: 16),
+              Center(
+                child: BlocBuilder<MatchCubit, MatchState>(
+                  builder: (context, state) {
+                    if (state is MatchGetMoreOversLoading) {
+                      return const CircularProgressIndicator();
+                    }
+                    return ElevatedButton(
+                      onPressed: () {
+                        MatchCubit.get(context).getMoreOvers(
+                          widget.match!.sId.toString(),
+                        );
+                      },
+                      child: const Text("Load more"),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
             ],
           );
         },

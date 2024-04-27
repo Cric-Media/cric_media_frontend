@@ -343,6 +343,29 @@ class MatchCubit extends Cubit<MatchState> {
     }
   }
 
+  getMoreOvers(String matchId, {int page = 1, int limit = 20}) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        emit(MatchGetMoreOversLoading());
+        final res = await adminController.getMatchOvers(
+          matchId,
+          page: page,
+          limit: limit,
+        );
+        emit(MatchGetMoreOversSuccess(res));
+      } else {
+        emit(MatchScoreCardsError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchGetMoreOversError('Something went wrong'));
+      } else {
+        emit(MatchGetMoreOversError(err.toString()));
+      }
+    }
+  }
+
   scoreAction(String matchId, int runsScored) async {
     try {
       emit(MatchLiveActionLoading());
