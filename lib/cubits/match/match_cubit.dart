@@ -425,8 +425,6 @@ class MatchCubit extends Cubit<MatchState> {
 
   outPlayerAction(String matchId, String playerIdOut) async {
     try {
-      emit(MatchLiveActionLoading());
-
       var network = await Network.check();
       if (network) {
         adminController.liveMatchAction(
