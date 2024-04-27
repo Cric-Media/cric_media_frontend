@@ -421,9 +421,10 @@ class LiveLive extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 7),
+        const SizedBox(height: 8),
+        // ! Ball to Ball info:.......:
         ...match!.overs!.reversed
-            .map((e) =>
+            .map((over) =>
                 // Row(
                 //   children: [
                 //     Text("${e.number} . ${e.balls.length}"),
@@ -434,7 +435,7 @@ class LiveLive extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: e.balls.reversed
+                    children: over.balls.reversed
                         .map((i) => SizedBox(
                               width: double.infinity,
                               child: Padding(
@@ -445,7 +446,7 @@ class LiveLive extends StatelessWidget {
                                     Row(
                                       children: [
                                         Text(
-                                          "${e.number} . ${e.balls.indexOf(i) + 1}",
+                                          "${over.number} . ${over.balls.indexOf(i) + 1}",
                                         ),
                                         const SizedBox(width: 32),
                                         Expanded(

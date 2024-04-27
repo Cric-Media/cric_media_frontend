@@ -404,8 +404,9 @@ class AdminController {
     }
   }
 
-  Future<ApiResponse> getMatch(String matchId) async {
-    final url = "${AdminUrl.getMatch}/$matchId";
+  Future<ApiResponse> getMatch(String matchId, {bool? isAdmin}) async {
+    final url =
+        "${isAdmin != null ? AdminUrl.getMatchAdmin : AdminUrl.getMatch}/$matchId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
     log(response.body);

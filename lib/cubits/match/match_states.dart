@@ -17,6 +17,8 @@ final class MatchSetOpeningsLoading extends MatchState {}
 
 final class MatchGetLoading extends MatchState {}
 
+final class MatchLiveActionLoading extends MatchState {}
+
 final class MatchScoreCardsLoading extends MatchState {}
 
 //* Success states

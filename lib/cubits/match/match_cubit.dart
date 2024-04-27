@@ -282,11 +282,14 @@ class MatchCubit extends Cubit<MatchState> {
     }
   }
 
-  getMatch(String matchId) async {
+  getMatch(String matchId, {bool? isAdmin}) async {
     try {
       var network = await Network.check();
       if (network) {
-        var response = await adminController.getMatch(matchId);
+        var response = await adminController.getMatch(
+          matchId,
+          isAdmin: isAdmin,
+        );
         emit(MatchGetSuccess(response));
       } else {
         emit(MatchGetError('No internet connection'));
@@ -321,6 +324,7 @@ class MatchCubit extends Cubit<MatchState> {
 
   scoreAction(String matchId, int runsScored) async {
     try {
+      emit(MatchLiveActionLoading());
       var network = await Network.check();
       if (network) {
         var response = await adminController.liveMatchAction(
@@ -350,6 +354,8 @@ class MatchCubit extends Cubit<MatchState> {
     required int extraRuns,
   }) async {
     try {
+      emit(MatchLiveActionLoading());
+
       var network = await Network.check();
       if (network) {
         var response = await adminController.liveMatchAction(
@@ -377,6 +383,8 @@ class MatchCubit extends Cubit<MatchState> {
     required String actionType,
   }) async {
     try {
+      emit(MatchLiveActionLoading());
+
       var network = await Network.check();
       if (network) {
         var response = await adminController.liveMatchAction(
@@ -420,6 +428,8 @@ class MatchCubit extends Cubit<MatchState> {
 
   outPlayerAction(String matchId, String playerIdOut) async {
     try {
+      emit(MatchLiveActionLoading());
+
       var network = await Network.check();
       if (network) {
         adminController.liveMatchAction(
