@@ -208,10 +208,10 @@ class LiveLive extends StatelessWidget {
                       const SizedBox(height: 10),
                       RecentLiveBatsmanCard(match: match),
                       const SizedBox(height: 16),
-                      const SizedBox(height: 16),
+
                       Row(
                         children: [
-                          if (match?.lastWicket != null)
+                          if (match?.lastWicket?.player != null)
                             Text(
                                 "Last Wkt: ${match?.lastWicket?.player?.name} ${match?.lastWicket?.runs}(${match?.lastWicket?.runs})")
                         ],
