@@ -736,11 +736,23 @@ class OutPlayerWidget extends StatefulWidget {
 }
 
 class _OutPlayerWidgetState extends State<OutPlayerWidget> {
+  resetValues() {
+    MatchCubit.get(context).selectedFielder = null;
+    MatchCubit.get(context).wicketType = null;
+  }
+
+  @override
+  void initState() {
+    resetValues();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var fieldingTeam = widget.match.team1Batting == true
         ? widget.match.squad2
         : widget.match.squad1;
+
     return ListBody(
       children: <Widget>[
         const Text('Select a player to out.'),
@@ -752,10 +764,7 @@ class _OutPlayerWidgetState extends State<OutPlayerWidget> {
               MatchCubit.get(context).outPlayerIndex = value as int;
             });
           },
-          title: Text(
-            widget.match.striker?.name ?? "",
-            style: const TextStyle(color: Colors.black),
-          ),
+          title: Text(widget.match.striker?.name ?? ""),
         ),
         RadioListTile(
           value: 2,
@@ -776,7 +785,11 @@ class _OutPlayerWidgetState extends State<OutPlayerWidget> {
           value: MatchCubit.get(context).outPlayerIndex == 1
               ? MatchCubit.get(context).selectedStriker
               : MatchCubit.get(context).selectedNonStriker,
-          items: MatchCubit.get(context).batsmen.map((Player player) {
+          items: MatchCubit.get(context)
+              .batsmen
+              .where((player) =>
+                  !widget.match.outPlayers!.contains(player.id.toString()))
+              .map((Player player) {
             return DropdownMenuItem<Player>(
               value: player,
               child: Text(player.name ?? ''),

@@ -43,6 +43,8 @@ class MatchDetails {
   CurrentOver? currentOver;
   List<Over>? overs;
   List<dynamic>? scorecard;
+  List<String>? outPlayers;
+  List<String>? oversCompletedPlayers;
 
   MatchDetails({
     this.admin,
@@ -85,6 +87,8 @@ class MatchDetails {
     this.currentOver,
     this.overs,
     this.scorecard,
+    this.outPlayers,
+    this.oversCompletedPlayers,
   });
 
   MatchDetails.fromJson(Map<String, dynamic> json) {
@@ -162,6 +166,11 @@ class MatchDetails {
       });
     }
     scorecard = json['scorecard'];
+    outPlayers =
+        json['outPlayers'] != null ? List<String>.from(json['outPlayers']) : [];
+    oversCompletedPlayers = json['oversCompletedPlayers'] != null
+        ? List<String>.from(json['oversCompletedPlayers'])
+        : [];
   }
 
   Map<String, dynamic> toJson() {
@@ -206,6 +215,8 @@ class MatchDetails {
     data['currentOver'] = currentOver;
     data['overs'] = overs;
     data['scorecard'] = scorecard;
+    data['outPlayers'] = outPlayers;
+    data['oversCompletedPlayers'] = oversCompletedPlayers;
     return data;
   }
 }

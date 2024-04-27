@@ -94,15 +94,18 @@ class Batsmen {
   num? sixes;
   num? strikeRate;
   String? sId;
+  Dismissal? dismissal;
 
-  Batsmen(
-      {this.player,
-      this.runs,
-      this.ballsFaced,
-      this.fours,
-      this.sixes,
-      this.strikeRate,
-      this.sId});
+  Batsmen({
+    this.player,
+    this.runs,
+    this.ballsFaced,
+    this.fours,
+    this.sixes,
+    this.strikeRate,
+    this.sId,
+    this.dismissal,
+  });
 
   Batsmen.fromJson(Map<String, dynamic> json) {
     player = json['player'] != null ? Player.fromJson(json['player']) : null;
@@ -112,6 +115,9 @@ class Batsmen {
     sixes = json['sixes'];
     strikeRate = json['strikeRate'];
     sId = json['_id'];
+    dismissal = json['dismissal'] != null
+        ? Dismissal.fromJson(json['dismissal'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -125,6 +131,9 @@ class Batsmen {
     data['sixes'] = sixes;
     data['strikeRate'] = strikeRate;
     data['_id'] = sId;
+    if (dismissal != null) {
+      data['dismissal'] = dismissal!.toJson();
+    }
     return data;
   }
 }
@@ -168,6 +177,32 @@ class Bowlers {
     data['wickets'] = wickets;
     data['economy'] = economy;
     data['_id'] = sId;
+    return data;
+  }
+}
+
+class Dismissal {
+  String? type;
+  Player? outBy;
+  Player? fielder;
+
+  Dismissal({this.type, this.outBy, this.fielder});
+
+  Dismissal.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    outBy = json['outBy'] != null ? Player.fromJson(json['outBy']) : null;
+    fielder = json['fielder'] != null ? Player.fromJson(json['fielder']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    if (outBy != null) {
+      data['outBy'] = outBy!.toJson();
+    }
+    if (fielder != null) {
+      data['fielder'] = fielder!.toJson();
+    }
     return data;
   }
 }

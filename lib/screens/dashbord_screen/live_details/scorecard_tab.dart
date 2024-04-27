@@ -87,53 +87,72 @@ class _ScorecardTabState extends State<ScorecardTab> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, i) {
                                 var batsman = scorecard.batsmen![i];
+                                var dismissal = scorecard.batsmen![i].dismissal;
                                 return Container(
                                   margin: const EdgeInsets.only(bottom: 16),
-                                  child: Row(
+                                  child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Container(
-                                        width: 40,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          image: DecorationImage(
-                                            image: CachedNetworkImageProvider(
-                                              batsman.player?.imageUrl ?? "",
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            width: 40,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.rectangle,
+                                              image: DecorationImage(
+                                                image:
+                                                    CachedNetworkImageProvider(
+                                                  batsman.player?.imageUrl ??
+                                                      "",
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
-                                            fit: BoxFit.cover,
                                           ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        batsman.player?.name ?? "",
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(batsman.runs.toString()),
-                                            const SizedBox(width: 16),
-                                            Text(batsman.ballsFaced.toString()),
-                                            const SizedBox(width: 16),
-                                            Text(batsman.fours.toString()),
-                                            const SizedBox(width: 16),
-                                            Text(batsman.sixes.toString()),
-                                            const SizedBox(width: 16),
-                                            Text(
-                                              batsman.strikeRate!
-                                                  .toStringAsFixed(2),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            batsman.player?.name ?? "",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          Expanded(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Text(batsman.runs.toString()),
+                                                const SizedBox(width: 16),
+                                                Text(batsman.ballsFaced
+                                                    .toString()),
+                                                const SizedBox(width: 16),
+                                                Text(batsman.fours.toString()),
+                                                const SizedBox(width: 16),
+                                                Text(batsman.sixes.toString()),
+                                                const SizedBox(width: 16),
+                                                Text(
+                                                  batsman.strikeRate!
+                                                      .toStringAsFixed(2),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
                                       ),
+                                      const SizedBox(height: 16),
+                                      if (dismissal!.fielder != null)
+                                        Text(
+                                          "${dismissal.type} ${dismissal.fielder?.name} by ${dismissal.outBy?.name}",
+                                        ),
+                                      if (dismissal.fielder == null)
+                                        Text(
+                                          "${dismissal.type} ${dismissal.outBy?.name}",
+                                        ),
                                     ],
                                   ),
                                 );
