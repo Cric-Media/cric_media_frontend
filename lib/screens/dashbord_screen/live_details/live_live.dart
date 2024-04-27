@@ -207,7 +207,15 @@ class LiveLive extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       RecentLiveBatsmanCard(match: match),
-                      // SizedBox(height: 20),
+                      const SizedBox(height: 16),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          if (match?.lastWicket != null)
+                            Text(
+                                "Last Wkt: ${match?.lastWicket?.player?.name} ${match?.lastWicket?.runs}(${match?.lastWicket?.runs})")
+                        ],
+                      ),
                       // Padding(
                       //   padding: const EdgeInsets.only(left: 18.0, right: 20),
                       //   child: Row(
@@ -255,7 +263,7 @@ class LiveLive extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 7),
+        const SizedBox(height: 8),
         // Card(
         //   elevation: 2,
         //   color: Colors.white,

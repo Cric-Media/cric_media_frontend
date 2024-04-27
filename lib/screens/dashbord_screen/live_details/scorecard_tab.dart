@@ -29,20 +29,20 @@ class _ScorecardTabState extends State<ScorecardTab> {
         }
       },
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  var scorecard = MatchCubit.get(context).scoreCards[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Card(
-                        color: Colors.white,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                var scorecard = MatchCubit.get(context).scoreCards[index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Card(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -150,9 +150,11 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                           "${dismissal.type} ${dismissal.fielder?.name} by ${dismissal.outBy?.name}",
                                         ),
                                       if (dismissal.fielder == null)
-                                        Text(
-                                          "${dismissal.type} ${dismissal.outBy?.name}",
-                                        ),
+                                        dismissal.type == "Not Out"
+                                            ? Text("${dismissal.type}")
+                                            : Text(
+                                                "${dismissal.type} ${dismissal.outBy?.name}",
+                                              ),
                                     ],
                                   ),
                                 );
@@ -163,112 +165,111 @@ class _ScorecardTabState extends State<ScorecardTab> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 32),
-                      Card(
-                        color: Colors.white,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              scorecard.bowlingTeam?.name ?? "",
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                    ),
+                    const SizedBox(height: 32),
+                    Card(
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            scorecard.bowlingTeam?.name ?? "",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 32),
+                          const Row(
+                            children: [
+                              Text(
+                                "Bowling",
+                                style: TextStyle(
+                                  color: AppColor.blueColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 32),
-                            const Row(
-                              children: [
-                                Text(
-                                  "Bowling",
-                                  style: TextStyle(
-                                    color: AppColor.blueColor,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
-                                  ),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text("R"),
+                                    SizedBox(width: 16),
+                                    Text("O"),
+                                    SizedBox(width: 16),
+                                    Text("W"),
+                                    SizedBox(width: 16),
+                                    Text("E"),
+                                  ],
                                 ),
-                                Expanded(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text("R"),
-                                      SizedBox(width: 16),
-                                      Text("O"),
-                                      SizedBox(width: 16),
-                                      Text("W"),
-                                      SizedBox(width: 16),
-                                      Text("E"),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),
-                            ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, i) {
-                                var bowler = scorecard.bowlers![i];
-                                return Container(
-                                  margin: const EdgeInsets.only(bottom: 16),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 40,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          image: DecorationImage(
-                                            image: CachedNetworkImageProvider(
-                                              bowler.player?.imageUrl ?? "",
-                                            ),
-                                            fit: BoxFit.cover,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, i) {
+                              var bowler = scorecard.bowlers![i];
+                              return Container(
+                                margin: const EdgeInsets.only(bottom: 16),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 40,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.rectangle,
+                                        image: DecorationImage(
+                                          image: CachedNetworkImageProvider(
+                                            bowler.player?.imageUrl ?? "",
                                           ),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        bowler.player?.name ?? "",
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
-                                        ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      bowler.player?.name ?? "",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
                                       ),
-                                      Expanded(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(bowler.runsGiven.toString()),
-                                            const SizedBox(width: 16),
-                                            Text(bowler.overs.toString()),
-                                            const SizedBox(width: 16),
-                                            Text(bowler.wickets.toString()),
-                                            const SizedBox(width: 16),
-                                            Text(bowler.economy.toString()),
-                                            const SizedBox(width: 16),
-                                          ],
-                                        ),
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Text(bowler.runsGiven.toString()),
+                                          const SizedBox(width: 16),
+                                          Text(bowler.overs.toString()),
+                                          const SizedBox(width: 16),
+                                          Text(bowler.wickets.toString()),
+                                          const SizedBox(width: 16),
+                                          Text(bowler.economy.toString()),
+                                          const SizedBox(width: 16),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                );
-                              },
-                              itemCount: scorecard.bowlers!.length,
-                              shrinkWrap: true,
-                            ),
-                          ],
-                        ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            itemCount: scorecard.bowlers!.length,
+                            shrinkWrap: true,
+                          ),
+                        ],
                       ),
-                    ],
-                  );
-                },
-                itemCount: MatchCubit.get(context).scoreCards.length,
-                shrinkWrap: true,
-              ),
-            ],
-          ),
+                    ),
+                  ],
+                );
+              },
+              itemCount: MatchCubit.get(context).scoreCards.length,
+              shrinkWrap: true,
+            ),
+          ],
         );
       },
     );

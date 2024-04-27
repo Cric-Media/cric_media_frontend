@@ -282,14 +282,11 @@ class MatchCubit extends Cubit<MatchState> {
     }
   }
 
-  getMatch(String matchId, {bool? isAdmin}) async {
+  getMatch(String matchId) async {
     try {
       var network = await Network.check();
       if (network) {
-        var response = await adminController.getMatch(
-          matchId,
-          isAdmin: isAdmin,
-        );
+        var response = await adminController.getMatch(matchId);
         emit(MatchGetSuccess(response));
       } else {
         emit(MatchGetError('No internet connection'));

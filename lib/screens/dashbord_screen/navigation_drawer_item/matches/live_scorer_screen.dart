@@ -47,9 +47,9 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
 
   @override
   void initState() {
-    MatchCubit.get(context).getMatch(widget.matchId, isAdmin: true);
+    MatchCubit.get(context).getMatch(widget.matchId);
     SocketService.instance.socket.on('match-${widget.matchId}', (data) {
-      MatchCubit.get(context).getMatch(widget.matchId, isAdmin: true);
+      MatchCubit.get(context).getMatch(widget.matchId);
     });
     SocketService.instance.socket.on('overCompleted', (data) {
       // Handle over completion

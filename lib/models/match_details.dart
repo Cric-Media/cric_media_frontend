@@ -45,6 +45,7 @@ class MatchDetails {
   List<dynamic>? scorecard;
   List<String>? outPlayers;
   List<String>? oversCompletedPlayers;
+  PlayerStats? lastWicket;
 
   MatchDetails({
     this.admin,
@@ -89,6 +90,7 @@ class MatchDetails {
     this.scorecard,
     this.outPlayers,
     this.oversCompletedPlayers,
+    this.lastWicket,
   });
 
   MatchDetails.fromJson(Map<String, dynamic> json) {
@@ -171,6 +173,9 @@ class MatchDetails {
     oversCompletedPlayers = json['oversCompletedPlayers'] != null
         ? List<String>.from(json['oversCompletedPlayers'])
         : [];
+    lastWicket = json['lastWicket'] != null
+        ? PlayerStats.fromJson(json['lastWicket'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -217,6 +222,7 @@ class MatchDetails {
     data['scorecard'] = scorecard;
     data['outPlayers'] = outPlayers;
     data['oversCompletedPlayers'] = oversCompletedPlayers;
+    data['lastWicket'] = lastWicket;
     return data;
   }
 }
