@@ -161,12 +161,12 @@ class MatchDetails {
         ? CurrentOver.fromJson(json['currentOver'])
         : null;
     // overs = json['overs'];
-    if (json['overs'] != null) {
-      overs = <Over>[];
-      json['overs'].forEach((o) {
-        overs!.add(Over.fromJson(o));
-      });
-    }
+    // if (json['overs'] != null) {
+    //   overs = <Over>[];
+    //   json['overs'].forEach((o) {
+    //     overs!.add(Over.fromJson(o));
+    //   });
+    // }
     scorecard = json['scorecard'];
     outPlayers =
         json['outPlayers'] != null ? List<String>.from(json['outPlayers']) : [];

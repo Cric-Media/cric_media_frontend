@@ -54,6 +54,7 @@ class MatchCubit extends Cubit<MatchState> {
 
   // Overs
   List<over.Over> overs = [];
+  int overPage = 2, overLimit = 2;
 
   // functions
   resetBools() {
@@ -323,13 +324,15 @@ class MatchCubit extends Cubit<MatchState> {
     }
   }
 
-  getInitialOvers(String matchId, {int page = 1, int limit = 20}) async {
+  getInitialOvers(String matchId) async {
     try {
+      // Reset page for pagination
+      overPage = 2;
+
       var network = await Network.check();
       if (network) {
         emit(MatchGetInitialOversLoading());
-        final res = await adminController.getMatchOvers(matchId,
-            page: page, limit: limit);
+        final res = await adminController.getMatchOvers(matchId);
         emit(MatchGetInitialOversSuccess(res));
       } else {
         emit(MatchScoreCardsError('No internet connection'));
@@ -343,7 +346,11 @@ class MatchCubit extends Cubit<MatchState> {
     }
   }
 
-  getMoreOvers(String matchId, {int page = 1, int limit = 20}) async {
+  getMoreOvers(
+    String matchId, {
+    required int page,
+    required int limit,
+  }) async {
     try {
       var network = await Network.check();
       if (network) {

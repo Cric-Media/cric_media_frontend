@@ -30,6 +30,7 @@ class _LiveItem extends State<LiveItem> {
           Expanded(
             child: BlocConsumer<MatchCubit, MatchState>(
               listener: (context, state) {
+                if (state is MatchGetLiveError) {}
                 if (state is MatchGetLiveSuccess) {
                   MatchCubit.get(context).liveMatchDetailsList = state.res.data;
                 }
@@ -39,6 +40,8 @@ class _LiveItem extends State<LiveItem> {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
+                } else if (state is MatchGetLiveError) {
+                  return Center(child: Text(state.message));
                 }
                 return ListView.builder(
                   shrinkWrap: true,

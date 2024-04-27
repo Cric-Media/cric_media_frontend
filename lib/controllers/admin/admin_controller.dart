@@ -456,7 +456,7 @@ class AdminController {
   Future<ApiResponse> getMatchOvers(
     String matchId, {
     int page = 1,
-    int limit = 20,
+    int limit = 2,
   }) async {
     final url = "${AdminUrl.getMatchOvers}/$matchId?page=$page&limit=$limit";
     final headers = {"Content-Type": "application/json"};

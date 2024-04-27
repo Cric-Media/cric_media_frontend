@@ -449,6 +449,7 @@ class _LiveLiveState extends State<LiveLive> {
           if (state is MatchGetInitialOversSuccess) {
             MatchCubit.get(context).overs = state.res.data;
           } else if (state is MatchGetMoreOversSuccess) {
+            MatchCubit.get(context).overPage++;
             MatchCubit.get(context).overs.addAll(state.res.data);
           }
         },
@@ -549,6 +550,8 @@ class _LiveLiveState extends State<LiveLive> {
                       onPressed: () {
                         MatchCubit.get(context).getMoreOvers(
                           widget.match!.sId.toString(),
+                          page: MatchCubit.get(context).overPage,
+                          limit: MatchCubit.get(context).overLimit,
                         );
                       },
                       child: const Text("Load more"),
