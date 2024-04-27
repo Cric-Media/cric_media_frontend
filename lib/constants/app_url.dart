@@ -55,4 +55,5 @@ abstract class AdminUrl {
   static final setOpenings = "${AppUrl.baseUrl}/set-openings";
   static final action = "${AppUrl.baseUrl}/action";
   static final matchScoreCards = "${AppUrl.baseUrl}/get-scorecards-for-match";
+  static final getMatchOvers = "${AppUrl.baseUrl}/get-overs-for-match";
 }

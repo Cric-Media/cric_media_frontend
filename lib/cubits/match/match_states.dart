@@ -21,6 +21,10 @@ final class MatchLiveActionLoading extends MatchState {}
 
 final class MatchScoreCardsLoading extends MatchState {}
 
+final class MatchGetInitialOversLoading extends MatchState {}
+
+final class MatchGetMoreOversLoading extends MatchState {}
+
 //* Success states
 final class MatchAddDetailsSuccess extends MatchState {
   final ApiResponse res;
@@ -62,6 +66,16 @@ final class MatchScoreCardsSuccess extends MatchState {
   MatchScoreCardsSuccess(this.res);
 }
 
+final class MatchGetInitialOversSuccess extends MatchState {
+  final ApiResponse res;
+  MatchGetInitialOversSuccess(this.res);
+}
+
+final class MatchGetMoreOversSuccess extends MatchState {
+  final ApiResponse res;
+  MatchGetMoreOversSuccess(this.res);
+}
+
 //! Failure states
 final class MatchAddDetailsError extends MatchState {
   final String message;
@@ -101,4 +115,14 @@ final class MatchLiveActionError extends MatchState {
 final class MatchScoreCardsError extends MatchState {
   final String message;
   MatchScoreCardsError(this.message);
+}
+
+final class MatchGetInitialOversError extends MatchState {
+  final String message;
+  MatchGetInitialOversError(this.message);
+}
+
+final class MatchGetMoreOversError extends MatchState {
+  final String message;
+  MatchGetMoreOversError(this.message);
 }

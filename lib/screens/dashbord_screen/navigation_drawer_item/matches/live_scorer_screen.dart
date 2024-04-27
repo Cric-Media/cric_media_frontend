@@ -3,8 +3,6 @@ import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/services/socket_service.dart';
-import 'package:cricket_app/utils/app_dialog.dart';
-import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -165,14 +163,14 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
               );
             }
           }
-          if (state is MatchLiveActionLoading) {
-            AppDialogs.loadingDialog(context);
-          } else if (state is MatchLiveActionError) {
-            AppDialogs.closeDialog(context);
-            showSnack(context, message: state.message);
-          } else if (state is MatchLiveActionSuccess) {
-            AppDialogs.closeDialog(context);
-          }
+          // if (state is MatchLiveActionLoading) {
+          //   AppDialogs.loadingDialog(context);
+          // } else if (state is MatchLiveActionError) {
+          //   AppDialogs.closeDialog(context);
+          //   showSnack(context, message: state.message);
+          // } else if (state is MatchLiveActionSuccess) {
+          //   AppDialogs.closeDialog(context);
+          // }
         },
         builder: (context, state) {
           return Padding(

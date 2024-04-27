@@ -7,6 +7,7 @@ import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/match_details.dart';
+import 'package:cricket_app/models/over.dart' as Over;
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/score_card.dart';
 import 'package:cricket_app/models/team.dart';
@@ -447,6 +448,27 @@ class AdminController {
         scoreCards.add(ScoreCard.fromJson(scoreCard));
       }
       return ApiResponse.fromJson(resBody, (data) => scoreCards);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> getMatchOvers(
+    String matchId, {
+    int page = 1,
+    int limit = 20,
+  }) async {
+    final url = "${AdminUrl.getMatchOvers}/$matchId?page=$page&limit=$limit";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<Over.Over> overs = [];
+      for (var over in resBody['data']) {
+        overs.add(Over.Over.fromJson(over));
+      }
+      return ApiResponse.fromJson(resBody, (data) => overs);
     } else {
       throw AppException(resBody['message']);
     }

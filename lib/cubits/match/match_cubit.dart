@@ -6,6 +6,7 @@ import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/controllers/admin/admin_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/match_details.dart';
+import 'package:cricket_app/models/over.dart' as over;
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/score_card.dart';
 import 'package:cricket_app/models/team.dart';
@@ -50,6 +51,9 @@ class MatchCubit extends Cubit<MatchState> {
   List<ScoreCard> scoreCards = [];
   String? wicketType;
   Player? selectedFielder;
+
+  // Overs
+  List<over.Over> overs = [];
 
   // functions
   resetBools() {
@@ -315,6 +319,26 @@ class MatchCubit extends Cubit<MatchState> {
         emit(MatchScoreCardsError('Something went wrong'));
       } else {
         emit(MatchScoreCardsError(err.toString()));
+      }
+    }
+  }
+
+  getInitialOvers(String matchId, {int page = 1, int limit = 20}) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        emit(MatchGetInitialOversLoading());
+        final res = await adminController.getMatchOvers(matchId,
+            page: page, limit: limit);
+        emit(MatchGetInitialOversSuccess(res));
+      } else {
+        emit(MatchScoreCardsError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchGetInitialOversError('Something went wrong'));
+      } else {
+        emit(MatchGetInitialOversError(err.toString()));
       }
     }
   }
