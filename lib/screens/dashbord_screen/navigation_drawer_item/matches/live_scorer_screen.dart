@@ -616,20 +616,21 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                   children: [
                                     ElevatedButton(
                                       onPressed: () {
-                                        if (MatchCubit.get(context).wide ==
-                                            true) {
-                                          MatchCubit.get(context).wideAction(
-                                            matchId: widget.matchId,
-                                            actionType: "wide",
-                                            extraType: "wides",
-                                            extraRuns: 0,
-                                          );
-                                        } else {
-                                          MatchCubit.get(context).scoreAction(
-                                            widget.matchId,
-                                            0,
-                                          );
-                                        }
+                                        // if (MatchCubit.get(context).wide ==
+                                        //     true) {
+                                        //   MatchCubit.get(context).wideAction(
+                                        //     matchId: widget.matchId,
+                                        //     actionType: "wide",
+                                        //     extraType: "wides",
+                                        //     extraRuns: 0,
+                                        //   );
+                                        // } else {
+                                        //   MatchCubit.get(context).scoreAction(
+                                        //     widget.matchId,
+                                        //     0,
+                                        //   );
+                                        // }
+                                        action(0);
                                       },
                                       child: const Text("0"),
                                     ),
@@ -641,53 +642,57 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        MatchCubit.get(context).scoreAction(
-                                          widget.matchId,
-                                          2,
-                                        );
+                                        // MatchCubit.get(context).scoreAction(
+                                        //   widget.matchId,
+                                        //   2,
+                                        // );
+                                        action(2);
                                       },
                                       child: const Text("2"),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        if (MatchCubit.get(context).wide !=
-                                            true) {
-                                          MatchCubit.get(context)
-                                              .scoreAction(widget.matchId, 3);
-                                        }
+                                        // if (MatchCubit.get(context).wide !=
+                                        //     true) {
+                                        //   MatchCubit.get(context)
+                                        //       .scoreAction(widget.matchId, 3);
+                                        // }
+                                        action(3);
                                       },
                                       child: const Text("3"),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        if (MatchCubit.get(context).wide !=
-                                            true) {
-                                          MatchCubit.get(context).scoreAction(
-                                            widget.matchId,
-                                            4,
-                                          );
-                                        } else if (MatchCubit.get(context)
-                                                .wide ==
-                                            true) {
-                                          MatchCubit.get(context).wideAction(
-                                            matchId: widget.matchId,
-                                            actionType: "wide",
-                                            extraType: "wides",
-                                            extraRuns: 4,
-                                          );
-                                        }
+                                        // if (MatchCubit.get(context).wide !=
+                                        //     true) {
+                                        //   MatchCubit.get(context).scoreAction(
+                                        //     widget.matchId,
+                                        //     4,
+                                        //   );
+                                        // } else if (MatchCubit.get(context)
+                                        //         .wide ==
+                                        //     true) {
+                                        //   MatchCubit.get(context).wideAction(
+                                        //     matchId: widget.matchId,
+                                        //     actionType: "wide",
+                                        //     extraType: "wides",
+                                        //     extraRuns: 4,
+                                        //   );
+                                        // }
+                                        action(4);
                                       },
                                       child: const Text("4"),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        if (MatchCubit.get(context).wide !=
-                                            true) {
-                                          MatchCubit.get(context).scoreAction(
-                                            widget.matchId,
-                                            6,
-                                          );
-                                        }
+                                        // if (MatchCubit.get(context).wide !=
+                                        //     true) {
+                                        //   MatchCubit.get(context).scoreAction(
+                                        //     widget.matchId,
+                                        //     6,
+                                        //   );
+                                        // }
+                                        action(6);
                                       },
                                       child: const Text("6"),
                                     ),
@@ -730,8 +735,25 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     bool noByesOrLb = MatchCubit.get(context).byes != true &&
         MatchCubit.get(context).legByes != true;
 
+    bool isWide = MatchCubit.get(context).wide == true;
+    bool isNo = MatchCubit.get(context).noBall == true;
+
+    if (isWide) {
+      MatchCubit.get(context).wideAction(
+        matchId: widget.matchId,
+        actionType: "wide",
+        extraType: "wides",
+        extraRuns: runs,
+      );
+    } else if (isNo) {
+      MatchCubit.get(context).noBallAction(
+        widget.matchId,
+        runsScored: runs,
+        extraType: "no ball",
+      );
+    }
     // Only No ball
-    if (noByesOrLb && MatchCubit.get(context).noBall == true) {
+    else if (noByesOrLb && MatchCubit.get(context).noBall == true) {
       MatchCubit.get(context).noBallAction(
         widget.matchId,
         runsScored: runs,
@@ -746,22 +768,25 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
         extraType: "byes",
       );
     }
-    // Leg byes
-    else if (MatchCubit.get(context).legByes == true && notWideOrNo) {
-      MatchCubit.get(context).byesLegByesAction(
-        widget.matchId,
-        runsScored: runs,
-        extraType: "leg byes",
-      );
-    } else if (MatchCubit.get(context).legByes == true &&
-        MatchCubit.get(context).noBall == true) {
-      MatchCubit.get(context).byesLegByesAction(widget.matchId,
-          runsScored: runs, extraType: "leg byes", noOrWide: "no ball");
-    } else if (MatchCubit.get(context).byes == true &&
+    // byes with wide ball
+    else if (MatchCubit.get(context).byes == true &&
         MatchCubit.get(context).wide == true) {
       MatchCubit.get(context).byesLegByesAction(widget.matchId,
-          runsScored: runs, extraType: "leg byes", noOrWide: "wide");
-    } else if (MatchCubit.get(context).byes == true &&
+          runsScored: runs, extraType: "byes", noOrWide: "wide");
+    }
+    // byes with no ball
+    else if (MatchCubit.get(context).byes == true &&
+        MatchCubit.get(context).noBall == true) {
+      MatchCubit.get(context).byesLegByesAction(widget.matchId,
+          runsScored: runs, extraType: "byes", noOrWide: "no ball");
+    }
+    // Leg byes
+    else if (MatchCubit.get(context).legByes == true && notWideOrNo) {
+      MatchCubit.get(context).byesLegByesAction(widget.matchId,
+          runsScored: runs, extraType: "leg byes");
+    }
+    // leg byes with no ball
+    else if (MatchCubit.get(context).legByes == true &&
         MatchCubit.get(context).noBall == true) {
       MatchCubit.get(context).byesLegByesAction(widget.matchId,
           runsScored: runs, extraType: "leg byes", noOrWide: "no ball");
