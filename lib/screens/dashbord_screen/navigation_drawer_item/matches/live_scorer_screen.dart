@@ -132,9 +132,6 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int? bowlerStatsIndex = match?.bowlerStats?.indexWhere(
-        (element) => element.player?.id == match?.openingBowler?.id);
-
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(),
@@ -179,6 +176,8 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
           // }
         },
         builder: (context, state) {
+          int? bowlerStatsIndex = match?.bowlerStats?.indexWhere(
+              (element) => element.player?.id == match?.openingBowler?.id);
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
@@ -375,7 +374,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                match?.openingBowler?.name ?? '',
+                                match?.openingBowler?.name ?? 'Bowler',
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                               if (bowlerStatsIndex != null &&
@@ -440,15 +439,21 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                                             e.extraType ==
                                                                 "leg byes")
                                                         ? Colors.orange
-                                                        : e.runsScored == 6
-                                                            ? Colors.pink
-                                                            : e.isExtra == true
-                                                                ? Colors.brown
-                                                                : e.isWicket ==
+                                                        : (e.extraType ==
+                                                                "no ball")
+                                                            ? Colors.deepOrange
+                                                            : e.runsScored == 6
+                                                                ? Colors.pink
+                                                                : e.isExtra ==
                                                                         true
-                                                                    ? Colors.red
-                                                                    : Colors
-                                                                        .grey,
+                                                                    ? Colors
+                                                                        .brown
+                                                                    : e.isWicket ==
+                                                                            true
+                                                                        ? Colors
+                                                                            .red
+                                                                        : Colors
+                                                                            .grey,
                                                 child: Text(
                                                   (e.extraType == 'wides')
                                                       ? "WD"
@@ -460,8 +465,11 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                                               : (e.extraType ==
                                                                       "leg byes")
                                                                   ? "lb${e.runsScored}"
-                                                                  : e.runsScored
-                                                                      .toString(),
+                                                                  : (e.extraType ==
+                                                                          "no ball")
+                                                                      ? "NB${e.runsScored == 1 ? '' : e.runsScored}"
+                                                                      : e.runsScored
+                                                                          .toString(),
                                                   style: const TextStyle(
                                                     color: Colors.white,
                                                   ),
@@ -627,7 +635,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        action1();
+                                        action(1);
                                       },
                                       child: const Text("1"),
                                     ),
@@ -716,14 +724,25 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     );
   }
 
-  action1() {
-    bool notWideOrNo = MatchCubit.get(context).noBall == null &&
-        MatchCubit.get(context).wide == null;
+  action(int runs) {
+    bool notWideOrNo = MatchCubit.get(context).noBall != true &&
+        MatchCubit.get(context).wide != true;
+    bool noByesOrLb = MatchCubit.get(context).byes != true &&
+        MatchCubit.get(context).legByes != true;
+
+    // Only No ball
+    if (noByesOrLb && MatchCubit.get(context).noBall == true) {
+      MatchCubit.get(context).noBallAction(
+        widget.matchId,
+        runsScored: runs,
+        extraType: "no ball",
+      );
+    }
     // Byes
-    if (MatchCubit.get(context).byes == true && notWideOrNo) {
+    else if (MatchCubit.get(context).byes == true && notWideOrNo) {
       MatchCubit.get(context).byesLegByesAction(
         widget.matchId,
-        runsScored: 1,
+        runsScored: runs,
         extraType: "byes",
       );
     }
@@ -731,26 +750,23 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     else if (MatchCubit.get(context).legByes == true && notWideOrNo) {
       MatchCubit.get(context).byesLegByesAction(
         widget.matchId,
-        runsScored: 1,
+        runsScored: runs,
         extraType: "leg byes",
       );
     } else if (MatchCubit.get(context).legByes == true &&
         MatchCubit.get(context).noBall == true) {
       MatchCubit.get(context).byesLegByesAction(widget.matchId,
-          runsScored: 1, extraType: "leg byes", noOrWide: "no ball");
+          runsScored: runs, extraType: "leg byes", noOrWide: "no ball");
     } else if (MatchCubit.get(context).byes == true &&
         MatchCubit.get(context).wide == true) {
       MatchCubit.get(context).byesLegByesAction(widget.matchId,
-          runsScored: 1, extraType: "leg byes", noOrWide: "wide");
+          runsScored: runs, extraType: "leg byes", noOrWide: "wide");
     } else if (MatchCubit.get(context).byes == true &&
         MatchCubit.get(context).noBall == true) {
       MatchCubit.get(context).byesLegByesAction(widget.matchId,
-          runsScored: 1, extraType: "leg byes", noOrWide: "no ball");
+          runsScored: runs, extraType: "leg byes", noOrWide: "no ball");
     } else {
-      MatchCubit.get(context).scoreAction(
-        widget.matchId,
-        1,
-      );
+      MatchCubit.get(context).scoreAction(widget.matchId, runs);
     }
   }
 }

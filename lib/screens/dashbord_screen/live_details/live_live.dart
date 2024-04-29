@@ -222,10 +222,16 @@ class _LiveLiveState extends State<LiveLive> {
                     const SizedBox(height: 16),
 
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        if (widget.match?.partnership != null)
+                          Text(
+                            "P’ship: ${widget.match?.partnership?.runs}(${widget.match?.partnership?.balls})",
+                          ),
                         if (widget.match?.lastWicket?.player != null)
                           Text(
-                              "Last Wkt: ${widget.match?.lastWicket?.player?.name} ${widget.match?.lastWicket?.runs}(${widget.match?.lastWicket?.runs})")
+                            "Last Wkt: ${widget.match?.lastWicket?.player?.name} ${widget.match?.lastWicket?.runs}(${widget.match?.lastWicket?.runs})",
+                          ),
                       ],
                     ),
                     // Padding(
@@ -407,13 +413,18 @@ class _LiveLiveState extends State<LiveLive> {
                                       radius: 16,
                                       backgroundColor: e.runsScored == 4
                                           ? Colors.lightBlue
-                                          : e.runsScored == 6
-                                              ? Colors.pink
-                                              : e.isExtra == true
-                                                  ? Colors.brown
-                                                  : e.isWicket == true
-                                                      ? Colors.red
-                                                      : Colors.grey,
+                                          : (e.extraType == "byes" ||
+                                                  e.extraType == 'leg byes')
+                                              ? Colors.orange
+                                              : (e.extraType == "no ball")
+                                                  ? Colors.deepOrange
+                                                  : e.runsScored == 6
+                                                      ? Colors.pink
+                                                      : e.isExtra == true
+                                                          ? Colors.brown
+                                                          : e.isWicket == true
+                                                              ? Colors.red
+                                                              : Colors.grey,
                                       child: (e.extraType == 'wides')
                                           ? const Text(
                                               "WD",
@@ -424,7 +435,16 @@ class _LiveLiveState extends State<LiveLive> {
                                           : Text(
                                               e.isWicket == true
                                                   ? "W"
-                                                  : e.runsScored.toString(),
+                                                  : (e.extraType == "byes")
+                                                      ? "b${e.runsScored}"
+                                                      : (e.extraType ==
+                                                              "leg byes")
+                                                          ? "lb${e.runsScored}"
+                                                          : (e.extraType ==
+                                                                  "no ball")
+                                                              ? "NB"
+                                                              : e.runsScored
+                                                                  .toString(),
                                               style: const TextStyle(
                                                 color: Colors.white,
                                               ),
@@ -501,14 +521,28 @@ class _LiveLiveState extends State<LiveLive> {
                                                 decoration: BoxDecoration(
                                                   color: i.runsScored == 4
                                                       ? Colors.lightBlue
-                                                      : i.runsScored == 6
-                                                          ? Colors.pink
-                                                          : i.isExtra == true
-                                                              ? Colors.brown
-                                                              : i.isWicket ==
-                                                                      true
-                                                                  ? Colors.red
-                                                                  : Colors.grey,
+                                                      : (i.extraType ==
+                                                                  "byes" ||
+                                                              i.extraType ==
+                                                                  "leg byes")
+                                                          ? Colors.orange
+                                                          : (i.extraType ==
+                                                                  "no ball")
+                                                              ? Colors
+                                                                  .deepOrange
+                                                              : i.runsScored ==
+                                                                      6
+                                                                  ? Colors.pink
+                                                                  : i.isExtra ==
+                                                                          true
+                                                                      ? Colors
+                                                                          .brown
+                                                                      : i.isWicket ==
+                                                                              true
+                                                                          ? Colors
+                                                                              .red
+                                                                          : Colors
+                                                                              .grey,
                                                   borderRadius:
                                                       BorderRadius.circular(50),
                                                 ),
@@ -517,7 +551,16 @@ class _LiveLiveState extends State<LiveLive> {
                                                       ? "WD"
                                                       : (i.isWicket == true)
                                                           ? "W"
-                                                          : "${i.runsScored}",
+                                                          : (i.extraType ==
+                                                                  "byes")
+                                                              ? "b"
+                                                              : (i.extraType ==
+                                                                      "leg byes")
+                                                                  ? "lb"
+                                                                  : (i.extraType ==
+                                                                          "no ball")
+                                                                      ? "NB"
+                                                                      : "${i.runsScored}",
                                                   style: const TextStyle(
                                                     color: Colors.white,
                                                   ),

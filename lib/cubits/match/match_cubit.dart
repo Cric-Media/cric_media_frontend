@@ -45,7 +45,7 @@ class MatchCubit extends Cubit<MatchState> {
   String? teamBatting;
 
   // Scorer
-  bool? wide, noBall, byes, legByes;
+  bool? wide = false, noBall = false, byes, legByes;
 
   // Scorecards
   List<ScoreCard> scoreCards = [];
@@ -527,6 +527,36 @@ class MatchCubit extends Cubit<MatchState> {
                     "extraType": extraType,
                     "noOrWide": noOrWide.toString(),
                   }
+          },
+        );
+      } else {
+        emit(MatchLiveActionError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchLiveActionError('Something went wrong'));
+      } else {
+        emit(MatchLiveActionError(err.toString()));
+      }
+    }
+  }
+
+  noBallAction(
+    String matchId, {
+    required int runsScored,
+    required String extraType,
+  }) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        adminController.liveMatchAction(
+          {
+            "matchId": matchId,
+            "actionType": "no ball",
+            "data": {
+              "runsScored": runsScored,
+              "extraType": extraType,
+            }
           },
         );
       } else {

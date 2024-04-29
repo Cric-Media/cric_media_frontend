@@ -46,6 +46,7 @@ class MatchDetails {
   List<String>? outPlayers;
   List<String>? oversCompletedPlayers;
   PlayerStats? lastWicket;
+  Partnership? partnership;
 
   MatchDetails({
     this.admin,
@@ -91,6 +92,7 @@ class MatchDetails {
     this.outPlayers,
     this.oversCompletedPlayers,
     this.lastWicket,
+    this.partnership,
   });
 
   MatchDetails.fromJson(Map<String, dynamic> json) {
@@ -175,6 +177,9 @@ class MatchDetails {
         : [];
     lastWicket = json['lastWicket'] != null
         ? PlayerStats.fromJson(json['lastWicket'])
+        : null;
+    partnership = json['partnership'] != null
+        ? Partnership.fromJson(json['partnership'])
         : null;
   }
 
@@ -357,5 +362,28 @@ class Over {
           .map((ballJson) => Ball.fromJson(ballJson as Map<String, dynamic>))
           .toList(),
     );
+  }
+}
+
+class Partnership {
+  final num balls, runs;
+
+  Partnership({
+    required this.balls,
+    required this.runs,
+  });
+
+  factory Partnership.fromJson(Map<String, dynamic> json) {
+    return Partnership(
+      balls: json['balls'] as num,
+      runs: json['runs'] as num,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'balls': balls,
+      'runs': runs,
+    };
   }
 }
