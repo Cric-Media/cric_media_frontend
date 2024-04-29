@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChangeBowlerWidget extends StatefulWidget {
-  const ChangeBowlerWidget({Key? key}) : super(key: key);
+  final MatchDetails? match;
+  const ChangeBowlerWidget({Key? key, required this.match}) : super(key: key);
 
   @override
   State<ChangeBowlerWidget> createState() => _ChangeBowlerWidgetState();
@@ -18,7 +19,12 @@ class _ChangeBowlerWidgetState extends State<ChangeBowlerWidget> {
   Widget build(BuildContext context) {
     return DropdownButton<Player>(
       value: MatchCubit.get(context).selectedBowler,
-      items: MatchCubit.get(context).bowlers.map((Player player) {
+      items: MatchCubit.get(context)
+          .bowlers
+          .where((element) =>
+              (widget.match?.oversCompletedPlayers?.contains(element.id) ==
+                  false))
+          .map((Player player) {
         return DropdownMenuItem<Player>(
           value: player,
           child: Text(player.name ?? ''),
@@ -72,7 +78,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                   "Bowler",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                const ChangeBowlerWidget(),
+                ChangeBowlerWidget(match: match),
                 ElevatedButton(
                   onPressed: () async {
                     await MatchCubit.get(context).changeBowlerAction(
@@ -430,20 +436,32 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                                 backgroundColor: e.runsScored ==
                                                         4
                                                     ? Colors.lightBlue
-                                                    : e.runsScored == 6
-                                                        ? Colors.pink
-                                                        : e.isExtra == true
-                                                            ? Colors.brown
-                                                            : e.isWicket == true
-                                                                ? Colors.red
-                                                                : Colors.grey,
+                                                    : (e.extraType == "byes" ||
+                                                            e.extraType ==
+                                                                "leg byes")
+                                                        ? Colors.orange
+                                                        : e.runsScored == 6
+                                                            ? Colors.pink
+                                                            : e.isExtra == true
+                                                                ? Colors.brown
+                                                                : e.isWicket ==
+                                                                        true
+                                                                    ? Colors.red
+                                                                    : Colors
+                                                                        .grey,
                                                 child: Text(
                                                   (e.extraType == 'wides')
                                                       ? "WD"
                                                       : (e.isWicket == true)
                                                           ? "W"
-                                                          : e.runsScored
-                                                              .toString(),
+                                                          : (e.extraType ==
+                                                                  "byes")
+                                                              ? "b${e.runsScored}"
+                                                              : (e.extraType ==
+                                                                      "leg byes")
+                                                                  ? "lb${e.runsScored}"
+                                                                  : e.runsScored
+                                                                      .toString(),
                                                   style: const TextStyle(
                                                     color: Colors.white,
                                                   ),
@@ -609,39 +627,16 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        if (MatchCubit.get(context).wide ==
-                                            true) {
-                                          MatchCubit.get(context).wideAction(
-                                            matchId: widget.matchId,
-                                            actionType: "wide",
-                                            extraType: "wides",
-                                            extraRuns: 1,
-                                          );
-                                        } else {
-                                          MatchCubit.get(context).scoreAction(
-                                            widget.matchId,
-                                            1,
-                                          );
-                                        }
+                                        action1();
                                       },
                                       child: const Text("1"),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        if (MatchCubit.get(context).wide ==
-                                            true) {
-                                          MatchCubit.get(context).wideAction(
-                                            matchId: widget.matchId,
-                                            actionType: "wide",
-                                            extraType: "wides",
-                                            extraRuns: 2,
-                                          );
-                                        } else {
-                                          MatchCubit.get(context).scoreAction(
-                                            widget.matchId,
-                                            2,
-                                          );
-                                        }
+                                        MatchCubit.get(context).scoreAction(
+                                          widget.matchId,
+                                          2,
+                                        );
                                       },
                                       child: const Text("2"),
                                     ),
@@ -662,6 +657,15 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                           MatchCubit.get(context).scoreAction(
                                             widget.matchId,
                                             4,
+                                          );
+                                        } else if (MatchCubit.get(context)
+                                                .wide ==
+                                            true) {
+                                          MatchCubit.get(context).wideAction(
+                                            matchId: widget.matchId,
+                                            actionType: "wide",
+                                            extraType: "wides",
+                                            extraRuns: 4,
                                           );
                                         }
                                       },
@@ -688,6 +692,12 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                       },
                                       child: const Text("Out"),
                                     ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        handleOverCompletion();
+                                      },
+                                      child: const Text("Change bowler"),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -704,6 +714,44 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
         },
       ),
     );
+  }
+
+  action1() {
+    bool notWideOrNo = MatchCubit.get(context).noBall == null &&
+        MatchCubit.get(context).wide == null;
+    // Byes
+    if (MatchCubit.get(context).byes == true && notWideOrNo) {
+      MatchCubit.get(context).byesLegByesAction(
+        widget.matchId,
+        runsScored: 1,
+        extraType: "byes",
+      );
+    }
+    // Leg byes
+    else if (MatchCubit.get(context).legByes == true && notWideOrNo) {
+      MatchCubit.get(context).byesLegByesAction(
+        widget.matchId,
+        runsScored: 1,
+        extraType: "leg byes",
+      );
+    } else if (MatchCubit.get(context).legByes == true &&
+        MatchCubit.get(context).noBall == true) {
+      MatchCubit.get(context).byesLegByesAction(widget.matchId,
+          runsScored: 1, extraType: "leg byes", noOrWide: "no ball");
+    } else if (MatchCubit.get(context).byes == true &&
+        MatchCubit.get(context).wide == true) {
+      MatchCubit.get(context).byesLegByesAction(widget.matchId,
+          runsScored: 1, extraType: "leg byes", noOrWide: "wide");
+    } else if (MatchCubit.get(context).byes == true &&
+        MatchCubit.get(context).noBall == true) {
+      MatchCubit.get(context).byesLegByesAction(widget.matchId,
+          runsScored: 1, extraType: "leg byes", noOrWide: "no ball");
+    } else {
+      MatchCubit.get(context).scoreAction(
+        widget.matchId,
+        1,
+      );
+    }
   }
 }
 

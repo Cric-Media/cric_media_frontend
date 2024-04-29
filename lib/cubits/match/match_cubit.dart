@@ -506,4 +506,38 @@ class MatchCubit extends Cubit<MatchState> {
       }
     }
   }
+
+  byesLegByesAction(
+    String matchId, {
+    required int runsScored,
+    required String extraType,
+    String? noOrWide,
+  }) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        adminController.liveMatchAction(
+          {
+            "matchId": matchId,
+            "actionType": "byes-LegByes",
+            "data": noOrWide == null
+                ? {"runsScored": runsScored, "extraType": extraType}
+                : {
+                    "runsScored": runsScored,
+                    "extraType": extraType,
+                    "noOrWide": noOrWide.toString(),
+                  }
+          },
+        );
+      } else {
+        emit(MatchLiveActionError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchLiveActionError('Something went wrong'));
+      } else {
+        emit(MatchLiveActionError(err.toString()));
+      }
+    }
+  }
 }

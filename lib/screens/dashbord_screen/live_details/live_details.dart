@@ -36,6 +36,7 @@ class _LiveDetails extends State<LiveDetails> {
     MatchCubit.get(context).getMatch(widget.match!.sId.toString());
     SocketService.instance.socket.on('match-${widget.match?.sId}', (data) {
       MatchCubit.get(context).getMatch(widget.match!.sId.toString());
+      MatchCubit.get(context).getInitialOvers(widget.match!.sId.toString());
     });
   }
 
