@@ -31,127 +31,38 @@ class _LiveLiveState extends State<LiveLive> {
     );
 
     return Column(children: [
-      // Card(
-      //   elevation: 2,
-      //   color: Colors.white,
-      //   child: Container(
-      //     width: screenWidth,
-      //     height: 75,
-      //     decoration: BoxDecoration(
-      //         borderRadius: BorderRadius.circular(12), color: Colors.white),
-      //     child: Padding(
-      //       padding:
-      //           const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-      //       child: Row(
-      //         children: [
-      //           Column(
-      //             mainAxisAlignment: MainAxisAlignment.start,
-      //             crossAxisAlignment: CrossAxisAlignment.start,
-      //             children: [
-      //               Text(
-      //                 'AFG Loose by 100 runs',
-      //                 style: GoogleFonts.inter(
-      //                     textStyle: TextStyle(
-      //                         color: AppColor.blueColor,
-      //                         fontSize: 14,
-      //                         fontWeight: FontWeight.w600)),
-      //               ),
-      //               SizedBox(
-      //                 height: 20,
-      //               ),
-      //               Row(
-      //                 mainAxisAlignment: MainAxisAlignment.start,
-      //                 crossAxisAlignment: CrossAxisAlignment.start,
-      //                 children: [
-      //                   Text(
-      //                     'CRR:4.67',
-      //                     style: GoogleFonts.inter(
-      //                         textStyle: TextStyle(
-      //                             fontSize: 13,
-      //                             color: AppColor.hintColor,
-      //                             fontWeight: FontWeight.w500)),
-      //                   ),
-      //                   SizedBox(
-      //                     width: 20,
-      //                   ),
-      //                   Text(
-      //                     'RR:5.67',
-      //                     style: GoogleFonts.inter(
-      //                         textStyle: TextStyle(
-      //                             fontSize: 13,
-      //                             color: AppColor.hintColor,
-      //                             fontWeight: FontWeight.w500)),
-      //                   ),
-      //                 ],
-      //               )
-      //             ],
-      //           ),
-      //           Spacer(),
-      //           Padding(
-      //             padding: const EdgeInsets.only(right: 10.0),
-      //             child: Column(
-      //               mainAxisAlignment: MainAxisAlignment.center,
-      //               children: [
-      //                 Row(
-      //                   mainAxisAlignment: MainAxisAlignment.start,
-      //                   crossAxisAlignment: CrossAxisAlignment.start,
-      //                   children: [
-      //                     Text(
-      //                       'Target: ',
-      //                       style: GoogleFonts.inter(
-      //                           textStyle: TextStyle(
-      //                               fontSize: 13,
-      //                               color: AppColor.hintColor,
-      //                               fontWeight: FontWeight.w500)),
-      //                     ),
-      //                     SizedBox(width: 7),
-      //                     Text(
-      //                       '200',
-      //                       style: GoogleFonts.inter(
-      //                           textStyle: TextStyle(
-      //                               fontSize: 13,
-      //                               color: AppColor.hintColor,
-      //                               fontWeight: FontWeight.w500)),
-      //                     ),
-      //                   ],
-      //                 ),
-      //                 SizedBox(
-      //                   width: 12,
-      //                 ),
-      //                 Row(
-      //                   mainAxisAlignment: MainAxisAlignment.start,
-      //                   crossAxisAlignment: CrossAxisAlignment.start,
-      //                   children: [
-      //                     Text(
-      //                       'Total:',
-      //                       style: GoogleFonts.inter(
-      //                           textStyle: TextStyle(
-      //                               fontSize: 13,
-      //                               color: AppColor.hintColor,
-      //                               fontWeight: FontWeight.w500)),
-      //                     ),
-      //                     SizedBox(
-      //                       width: 7,
-      //                     ),
-      //                     Text(
-      //                       '100',
-      //                       style: GoogleFonts.inter(
-      //                           textStyle: TextStyle(
-      //                               fontSize: 13,
-      //                               color: AppColor.hintColor,
-      //                               fontWeight: FontWeight.w500)),
-      //                     ),
-      //                   ],
-      //                 )
-      //               ],
-      //             ),
-      //           )
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
-      const SizedBox(height: 5),
+      Card(
+        elevation: 2,
+        child: Container(
+          width: screenWidth,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              // TODO WIN OR LOSE
+              // Current and required run rate
+              Row(
+                children: [
+                  Text(
+                    "CRR: ${widget.match?.team1Batting == true ? widget.match?.team1CurrentRunRate : widget.match?.team2CurrentRunRate}",
+                  ),
+                  const SizedBox(width: 16),
+                  if (widget.match!.team1RequiredRunRate! > 0 ||
+                      widget.match!.team2RequiredRunRate! > 0)
+                    Text(
+                      "RR: ${widget.match?.team1Batting == true ? widget.match?.team1RequiredRunRate : widget.match?.team1RequiredRunRate}",
+                    ),
+                  const Spacer(),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+      const SizedBox(height: 8),
       Card(
         elevation: 2,
         child: Container(

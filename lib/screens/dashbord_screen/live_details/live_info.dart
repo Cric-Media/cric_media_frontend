@@ -105,9 +105,7 @@ class LiveInfo extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              match != null
-                                  ? "${match?.tossDetails}"
-                                  : '         Pakistan elect to bat',
+                              match != null ? "${match?.tossDetails}" : '',
                               style: GoogleFonts.inter(
                                   textStyle: TextStyle(
                                 fontSize: 14,

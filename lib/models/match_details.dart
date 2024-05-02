@@ -47,6 +47,10 @@ class MatchDetails {
   List<String>? oversCompletedPlayers;
   PlayerStats? lastWicket;
   Partnership? partnership;
+  int? team1CurrentRunRate;
+  int? team1RequiredRunRate;
+  int? team2CurrentRunRate;
+  int? team2RequiredRunRate;
 
   MatchDetails({
     this.admin,
@@ -93,6 +97,10 @@ class MatchDetails {
     this.oversCompletedPlayers,
     this.lastWicket,
     this.partnership,
+    this.team1CurrentRunRate,
+    this.team1RequiredRunRate,
+    this.team2CurrentRunRate,
+    this.team2RequiredRunRate,
   });
 
   MatchDetails.fromJson(Map<String, dynamic> json) {
@@ -181,6 +189,10 @@ class MatchDetails {
     partnership = json['partnership'] != null
         ? Partnership.fromJson(json['partnership'])
         : null;
+    team1CurrentRunRate = json['team1CurrentRunRate'];
+    team1RequiredRunRate = json['team1RequiredRunRate'];
+    team2CurrentRunRate = json['team2CurrentRunRate'];
+    team2RequiredRunRate = json['team2RequiredRunRate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -228,6 +240,10 @@ class MatchDetails {
     data['outPlayers'] = outPlayers;
     data['oversCompletedPlayers'] = oversCompletedPlayers;
     data['lastWicket'] = lastWicket;
+    data['partnership'] = partnership;
+    data['team1CurrentRunRate'] = team1CurrentRunRate;
+    data['team1RequiredRunRate'] = team1RequiredRunRate;
+    data['team2CurrentRunRate'] = team2CurrentRunRate;
     return data;
   }
 }

@@ -746,27 +746,18 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
         extraRuns: runs,
       );
     } else if (isNo) {
-      MatchCubit.get(context).noBallAction(
-        widget.matchId,
-        runsScored: runs,
-        extraType: "no ball",
-      );
+      MatchCubit.get(context)
+          .noBallAction(widget.matchId, runsScored: runs, extraType: "no ball");
     }
     // Only No ball
     else if (noByesOrLb && MatchCubit.get(context).noBall == true) {
-      MatchCubit.get(context).noBallAction(
-        widget.matchId,
-        runsScored: runs,
-        extraType: "no ball",
-      );
+      MatchCubit.get(context)
+          .noBallAction(widget.matchId, runsScored: runs, extraType: "no ball");
     }
     // Byes
     else if (MatchCubit.get(context).byes == true && notWideOrNo) {
-      MatchCubit.get(context).byesLegByesAction(
-        widget.matchId,
-        runsScored: runs,
-        extraType: "byes",
-      );
+      MatchCubit.get(context).byesLegByesAction(widget.matchId,
+          runsScored: runs, extraType: "byes");
     }
     // byes with wide ball
     else if (MatchCubit.get(context).byes == true &&

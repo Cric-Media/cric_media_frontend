@@ -2,8 +2,8 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/models/match_details.dart';
+import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/profile_Screen/player_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -51,7 +51,7 @@ class GridViewContanor extends StatelessWidget {
                         .copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
                       title: Text(
-                        match != null ? "${match?.team1?.name}" : 'Afghanistan',
+                        match != null ? "${match?.team1?.name}" : 'Team 1',
                         style: GoogleFonts.inter(
                           textStyle: TextStyle(
                             fontSize: 16,
@@ -67,13 +67,15 @@ class GridViewContanor extends StatelessWidget {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 20.0,
-                            mainAxisSpacing: 20.0,
+                            crossAxisSpacing: 16.0,
+                            mainAxisSpacing: 16.0,
                           ),
                           itemCount: match != null
                               ? match?.squad1?.length
-                              : 10, // Example number of items
+                              : 0, // Example number of items
                           itemBuilder: (BuildContext context, int index) {
+                            var player = match!.squad1![index];
+
                             return InkWell(
                               onTap: () {
                                 Navigator.push(
@@ -82,115 +84,7 @@ class GridViewContanor extends StatelessWidget {
                                         builder: (context) =>
                                             PlayerProfileScreen()));
                               },
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white, // Example color
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 20.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          height: 85,
-                                          decoration: BoxDecoration(),
-                                          alignment: Alignment.center,
-                                          // child:  Image.asset(AppIcons.profile2),
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                match!.squad1![index].imageUrl!,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Rashid Khan (vc)',
-                                          style: GoogleFonts.inter(
-                                              textStyle: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w700,
-                                          )),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Top: ',
-                                              style: GoogleFonts.inter(
-                                                  textStyle: TextStyle(
-                                                fontSize: 11,
-                                                color: AppColor.hintColor,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                            ),
-                                            Text('Order batter',
-                                                style: GoogleFonts.inter(
-                                                    textStyle: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                ))),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Age: ',
-                                              style: GoogleFonts.inter(
-                                                  textStyle: TextStyle(
-                                                fontSize: 11,
-                                                color: AppColor.hintColor,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                            ),
-                                            Text(' 28y 313d',
-                                                style: GoogleFonts.inter(
-                                                    textStyle: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                ))),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Bowling: ',
-                                              style: GoogleFonts.inter(
-                                                  textStyle: TextStyle(
-                                                fontSize: 11,
-                                                color: AppColor.hintColor,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                            ),
-                                            Text(
-                                              'Right arm Offbreak ',
-                                              style: GoogleFonts.inter(
-                                                  textStyle: TextStyle(
-                                                fontSize: 11,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  )),
+                              child: SquadPlayer(player: player),
                             );
                           },
                         ),
@@ -202,7 +96,7 @@ class GridViewContanor extends StatelessWidget {
                         .copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
                       title: Text(
-                        'Pakistan',
+                        match?.team2?.name ?? 'Team 2',
                         style: GoogleFonts.inter(
                           textStyle: TextStyle(
                             fontSize: 16,
@@ -218,11 +112,13 @@ class GridViewContanor extends StatelessWidget {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 8.0,
-                            mainAxisSpacing: 8.0,
+                            crossAxisSpacing: 16.0,
+                            mainAxisSpacing: 16.0,
                           ),
-                          itemCount: 8, // Example number of items
+                          itemCount:
+                              match?.squad2?.length, // Example number of items
                           itemBuilder: (BuildContext context, int index) {
+                            var player = match?.squad2![index];
                             return InkWell(
                               onTap: () {
                                 Navigator.push(
@@ -231,111 +127,7 @@ class GridViewContanor extends StatelessWidget {
                                         builder: (context) =>
                                             PlayerProfileScreen()));
                               },
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white, // Example color
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 20.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                            height: 100,
-                                            decoration: BoxDecoration(),
-                                            child: Image.asset(
-                                              AppIcons.profile2,
-                                            )),
-                                        Text(
-                                          'Babar Azam (c)',
-                                          style: GoogleFonts.inter(
-                                              textStyle: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w700,
-                                          )),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Top: ',
-                                              style: GoogleFonts.inter(
-                                                  textStyle: TextStyle(
-                                                fontSize: 11,
-                                                color: AppColor.hintColor,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                            ),
-                                            Text('Order batter',
-                                                style: GoogleFonts.inter(
-                                                    textStyle: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                ))),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Age: ',
-                                              style: GoogleFonts.inter(
-                                                  textStyle: TextStyle(
-                                                fontSize: 11,
-                                                color: AppColor.hintColor,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                            ),
-                                            Text(' 28y 313d',
-                                                style: GoogleFonts.inter(
-                                                    textStyle: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                ))),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Bowling: ',
-                                              style: GoogleFonts.inter(
-                                                  textStyle: TextStyle(
-                                                fontSize: 11,
-                                                color: AppColor.hintColor,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                            ),
-                                            Text(
-                                              'Right arm Offbreak ',
-                                              style: GoogleFonts.inter(
-                                                  textStyle: TextStyle(
-                                                fontSize: 11,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  )),
+                              child: SquadPlayer(player: player),
                             );
                           },
                         ),
@@ -346,11 +138,64 @@ class GridViewContanor extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 5,
-          ),
+          SizedBox(height: 5),
         ],
       ),
+    );
+  }
+}
+
+class SquadPlayer extends StatelessWidget {
+  final Player? player;
+  const SquadPlayer({Key? key, this.player}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Center(
+          child: CachedNetworkImage(
+            imageUrl: player?.imageUrl ?? '',
+            imageBuilder: (context, imageProvider) => Container(
+              width: 80,
+              height: 120,
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Expanded(
+          child: Column(
+            children: [
+              Text(
+                player?.name ?? '',
+                style: GoogleFonts.inter(
+                  textStyle: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              Text(
+                player?.role ?? '',
+                style: GoogleFonts.inter(
+                  textStyle: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
