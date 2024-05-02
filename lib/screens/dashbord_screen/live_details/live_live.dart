@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/recent_live_batsman_card.dart';
@@ -301,6 +302,12 @@ class _LiveLiveState extends State<LiveLive> {
                 // Over section
                 Row(
                   children: [
+                    CircleAvatar(
+                      backgroundImage: CachedNetworkImageProvider(
+                        widget.match!.openingBowler!.imageUrl ?? "",
+                      ),
+                    ),
+                    const SizedBox(width: 8),
                     Text(widget.match!.openingBowler!.name ?? "Bowler"),
                     const Spacer(),
                     if (bowlerStatsIndex != -1)

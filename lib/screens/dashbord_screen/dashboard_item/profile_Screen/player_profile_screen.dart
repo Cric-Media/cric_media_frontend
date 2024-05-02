@@ -29,16 +29,6 @@ class PlayerProfileScreen extends StatelessWidget {
           )),
         ),
         centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: Image.asset(
-              '${AppIcons.search}',
-              width: 24,
-              height: 24,
-            ),
-          )
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(children: [
@@ -50,9 +40,7 @@ class PlayerProfileScreen extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Container(
