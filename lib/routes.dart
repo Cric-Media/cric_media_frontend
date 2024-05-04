@@ -12,6 +12,7 @@ import 'package:cricket_app/screens/dashbord_screen/dashboard_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/add_new_player_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/add_match_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/live_scorer_screen.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/match_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/set_openings_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/start_match_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/player_item.dart';
@@ -165,6 +166,11 @@ class Routes {
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) => LiveScorerScreen(matchId: args['matchId']),
+        );
+
+      case adminMatches:
+        return MaterialPageRoute(
+          builder: (context) => const MatchItem(),
         );
 
       default:

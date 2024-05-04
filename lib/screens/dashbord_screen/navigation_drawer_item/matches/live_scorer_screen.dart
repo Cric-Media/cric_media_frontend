@@ -2,7 +2,6 @@ import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/player.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/match_item.dart';
 import 'package:cricket_app/services/socket_service.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -73,11 +72,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
       MatchCubit.get(context).getMatchForInnings(widget.matchId);
     });
     SocketService.instance.socket.on('matchCompleted', (data) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MatchItem(),
-          ));
+      handleMatchCompletion();
     });
     super.initState();
   }
@@ -92,6 +87,27 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
       "squad1": match?.squad1 ?? [],
       "squad2": match?.squad2 ?? [],
     });
+  }
+
+  handleMatchCompletion() {
+    // Show dialog
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text("Match Completed"),
+              content: const Text("Match has been completed"),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, adminMatches, (route) => false);
+                  },
+                  child: const Text("Close"),
+                ),
+              ],
+            ));
   }
 
   handleOverCompletion() {
