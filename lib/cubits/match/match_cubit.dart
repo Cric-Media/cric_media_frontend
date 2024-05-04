@@ -306,6 +306,25 @@ class MatchCubit extends Cubit<MatchState> {
     }
   }
 
+  getMatchForInnings(String matchId) async {
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.getMatch(matchId);
+        emit(MatchGetForInningSuccess(response));
+      } else {
+        emit(MatchGetForInningError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(MatchGetForInningError('Something went wrong'));
+      } else {
+        emit(MatchGetForInningError(err.toString()));
+      }
+    }
+  }
+
   getMatchScoreCards(String matchId) async {
     try {
       var network = await Network.check();
@@ -514,6 +533,7 @@ class MatchCubit extends Cubit<MatchState> {
     String? noOrWide,
   }) async {
     try {
+      emit(MatchLiveActionLoading());
       var network = await Network.check();
       if (network) {
         adminController.liveMatchAction(
@@ -547,6 +567,8 @@ class MatchCubit extends Cubit<MatchState> {
     required String extraType,
   }) async {
     try {
+      emit(MatchLiveActionLoading());
+
       var network = await Network.check();
       if (network) {
         adminController.liveMatchAction(

@@ -27,6 +27,9 @@ class SetOpeningsScreen extends StatefulWidget {
 class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
   @override
   void initState() {
+    MatchCubit.get(context).selectedStriker = null;
+    MatchCubit.get(context).selectedNonStriker = null;
+    MatchCubit.get(context).selectedBowler = null;
     if (widget.teamABatting) {
       MatchCubit.get(context).teamBatting = widget.teamAId.toString();
       MatchCubit.get(context).batsmen = widget.squad1;
@@ -37,9 +40,7 @@ class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
       MatchCubit.get(context).bowlers = widget.squad1;
     }
     setState(() {});
-    MatchCubit.get(context).batsmen.forEach((element) {
-      print(element.name);
-    });
+
     super.initState();
   }
 

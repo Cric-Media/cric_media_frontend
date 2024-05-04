@@ -56,6 +56,11 @@ final class MatchGetSuccess extends MatchState {
   MatchGetSuccess(this.res);
 }
 
+final class MatchGetForInningSuccess extends MatchState {
+  final ApiResponse res;
+  MatchGetForInningSuccess(this.res);
+}
+
 final class MatchLiveActionSuccess extends MatchState {
   final ApiResponse res;
   MatchLiveActionSuccess(this.res);
@@ -105,6 +110,11 @@ final class MatchSetOpeningsError extends MatchState {
 final class MatchGetError extends MatchState {
   final String message;
   MatchGetError(this.message);
+}
+
+final class MatchGetForInningError extends MatchState {
+  final String message;
+  MatchGetForInningError(this.message);
 }
 
 final class MatchLiveActionError extends MatchState {

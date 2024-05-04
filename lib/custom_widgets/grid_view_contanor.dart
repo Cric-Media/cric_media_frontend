@@ -79,10 +79,11 @@ class GridViewContanor extends StatelessWidget {
                             return InkWell(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PlayerProfileScreen()));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PlayerProfileScreen(),
+                                  ),
+                                );
                               },
                               child: SquadPlayer(player: player),
                             );

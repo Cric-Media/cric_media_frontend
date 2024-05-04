@@ -9,34 +9,34 @@ class MatchDetails {
   String? matchType;
   String? ballType;
   String? pitchType;
-  int? numberOfOvers;
-  int? oversPerBowler;
+  num? numberOfOvers;
+  num? oversPerBowler;
   String? cityOrTown;
   String? ground;
   String? matchDateTime;
   String? whoWinsTheToss;
   String? tossDetails;
-  int? matchStatus;
+  num? matchStatus;
   bool? team1Batting;
   bool? team2Batting;
   bool? team1toss;
   bool? team2toss;
   Player? manOfTheMatch, striker, nonStriker, openingBowler;
-  int? team1Score;
-  int? team2Score;
-  int? team1Overs;
-  int? team2Overs;
-  int? team1Balls;
-  int? team2Balls;
-  int? team1Outs;
-  int? team2Outs;
+  num? team1Score;
+  num? team2Score;
+  num? team1Overs;
+  num? team2Overs;
+  num? team1Balls;
+  num? team2Balls;
+  num? team1Outs;
+  num? team2Outs;
   List<Player>? squad1;
   List<Player>? squad2;
   String? sId;
   String? createdAt;
   String? updatedAt;
-  int? iV;
-  int? currentInning;
+  num? iV;
+  num? currentInning;
   List<dynamic>? innings;
   List<PlayerStats>? playerStats;
   List<BowlerStats>? bowlerStats;
@@ -47,10 +47,10 @@ class MatchDetails {
   List<String>? oversCompletedPlayers;
   PlayerStats? lastWicket;
   Partnership? partnership;
-  int? team1CurrentRunRate;
-  int? team1RequiredRunRate;
-  int? team2CurrentRunRate;
-  int? team2RequiredRunRate;
+  num? team1CurrentRunRate;
+  num? team1RequiredRunRate;
+  num? team2CurrentRunRate;
+  num? team2RequiredRunRate;
 
   MatchDetails({
     this.admin,
@@ -249,7 +249,7 @@ class MatchDetails {
 }
 
 class CurrentOver {
-  int? number;
+  num? number;
   List<Ball>? balls;
 
   CurrentOver({this.number, this.balls});
@@ -363,7 +363,7 @@ class BowlerStats {
 }
 
 class Over {
-  final int number;
+  final num number;
   final List<Ball> balls;
 
   Over({
@@ -373,7 +373,7 @@ class Over {
 
   factory Over.fromJson(Map<String, dynamic> json) {
     return Over(
-      number: json['number'] as int,
+      number: json['number'] as num,
       balls: (json['balls'] as List<dynamic>)
           .map((ballJson) => Ball.fromJson(ballJson as Map<String, dynamic>))
           .toList(),
