@@ -9,6 +9,8 @@ final class MatchAddDetailsLoading extends MatchState {}
 
 final class MatchUpcommingLoading extends MatchState {}
 
+final class MatchGetCompletedLoading extends MatchState {}
+
 final class MatchLiveLoading extends MatchState {}
 
 final class MatchStartLoading extends MatchState {}
@@ -36,6 +38,11 @@ final class MatchAddDetailsSuccess extends MatchState {
 final class MatchUpcommingSuccess extends MatchState {
   final ApiResponse res;
   MatchUpcommingSuccess(this.res);
+}
+
+final class MatchGetCompletedSuccess extends MatchState {
+  final ApiResponse res;
+  MatchGetCompletedSuccess(this.res);
 }
 
 final class MatchGetLiveSuccess extends MatchState {
@@ -97,6 +104,11 @@ final class MatchAddDetailsError extends MatchState {
 final class MatchGetUpcommingError extends MatchState {
   final String message;
   MatchGetUpcommingError(this.message);
+}
+
+final class MatchGetCompletedError extends MatchState {
+  final String message;
+  MatchGetCompletedError(this.message);
 }
 
 final class MatchGetLiveError extends MatchState {

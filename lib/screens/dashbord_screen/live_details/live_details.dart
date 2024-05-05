@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
@@ -53,14 +51,14 @@ class _LiveDetails extends State<LiveDetails> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return DefaultTabController(
-      length: 4, // Number of tabs
+      length: 3, // change the number to 4, when adding points table
       child: Scaffold(
-        backgroundColor: Color(0XFFFBFBFB),
+        backgroundColor: const Color(0XFFFBFBFB),
         appBar: AppBar(
           title: Text(
             'Live Details '.toUpperCase(),
             style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                   fontSize: 20,
                   color: AppColor.blackColor,
                   fontWeight: FontWeight.w700),
@@ -78,7 +76,7 @@ class _LiveDetails extends State<LiveDetails> {
           },
           builder: (context, state) {
             if (match == null || state is MatchGetLoading) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (state is MatchGetError) {
@@ -91,9 +89,9 @@ class _LiveDetails extends State<LiveDetails> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     MatchDetailsLiveCard(match: match),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Card(
                       color: Colors.white,
                       elevation: 2,
@@ -105,7 +103,7 @@ class _LiveDetails extends State<LiveDetails> {
                               color: Colors.white),
                           child: Row(
                             children: [
-                              SizedBox(width: 25),
+                              const SizedBox(width: 25),
                               InkWell(
                                 onTap: () {
                                   getVlaue(0);
@@ -122,7 +120,7 @@ class _LiveDetails extends State<LiveDetails> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 30),
+                              const SizedBox(width: 30),
                               InkWell(
                                   onTap: () {
                                     getVlaue(1);
@@ -137,7 +135,7 @@ class _LiveDetails extends State<LiveDetails> {
                                                 : Colors.grey,
                                             fontWeight: FontWeight.w700)),
                                   )),
-                              SizedBox(width: 30),
+                              const SizedBox(width: 30),
                               InkWell(
                                   onTap: () {
                                     getVlaue(2);
@@ -152,23 +150,23 @@ class _LiveDetails extends State<LiveDetails> {
                                                 : Colors.grey,
                                             fontWeight: FontWeight.w700)),
                                   )),
-                              SizedBox(
+                              const SizedBox(
                                 width: 30,
                               ),
-                              InkWell(
-                                  onTap: () {
-                                    getVlaue(3);
-                                  },
-                                  child: Text(
-                                    'Points Table',
-                                    style: GoogleFonts.inter(
-                                        textStyle: TextStyle(
-                                            fontSize: 16,
-                                            color: value == 3
-                                                ? Colors.black
-                                                : Colors.grey,
-                                            fontWeight: FontWeight.w700)),
-                                  )),
+                              // InkWell(
+                              //     onTap: () {
+                              //       getVlaue(3);
+                              //     },
+                              //     child: Text(
+                              //       'Points Table',
+                              //       style: GoogleFonts.inter(
+                              //           textStyle: TextStyle(
+                              //               fontSize: 16,
+                              //               color: value == 3
+                              //                   ? Colors.black
+                              //                   : Colors.grey,
+                              //               fontWeight: FontWeight.w700)),
+                              //     )),
                             ],
                           )
                           // child: TabBar(
@@ -194,7 +192,7 @@ class _LiveDetails extends State<LiveDetails> {
                                     match:
                                         match) /* LiveScoreCard(match: match) */
                                 : value == 3
-                                    ? LivePointTable()
+                                    ? const LivePointTable()
                                     : Container(),
                   ],
                 ),

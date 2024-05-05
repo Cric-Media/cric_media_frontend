@@ -93,6 +93,8 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     MatchCubit.get(context).manOfTheMatch = null;
     var team =
         match?.winningTeam == match?.team1?.id ? match?.squad1 : match?.squad2;
+    print(match?.winningTeam);
+    print(match?.team1?.id);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -113,7 +115,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                 playerId: MatchCubit.get(context).manOfTheMatch?.id.toString(),
               );
             },
-            child: const Text("Close"),
+            child: const Text("Continue"),
           ),
         ],
       ),
@@ -811,6 +813,16 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                             },
                                             child: const Text("Change bowler"),
                                           ),
+                                        if (match != null)
+                                          Visibility(
+                                            visible: match!.matchStatus! > 1,
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                handleMatchCompletion();
+                                              },
+                                              child: const Text("Finish Match"),
+                                            ),
+                                          ),
                                       ],
                                     ),
                                   ],
@@ -1062,6 +1074,7 @@ class _ManOfTheMatchWidgetState extends State<ManOfTheMatchWidget> {
   Widget build(BuildContext context) {
     return DropdownButton<Player>(
       value: MatchCubit.get(context).manOfTheMatch,
+      hint: const Text("Man of the match"),
       items: widget.team?.map((Player player) {
         return DropdownMenuItem<Player>(
           value: player,

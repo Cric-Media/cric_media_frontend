@@ -32,7 +32,6 @@ class AdminController {
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.postRequest(body, url, headers: headers);
     var resBody = jsonDecode(response.body);
-    print(resBody);
     if (resBody['success']) {
       List<Admin> admins = [];
       for (var admin in resBody['data']) {
@@ -189,7 +188,6 @@ class AdminController {
     // print response
     var json = await response.stream.bytesToString();
     var body = jsonDecode(json);
-    print(body);
     if (body['success'] == true) {
       return ApiResponse.fromJson(
         body,
@@ -243,7 +241,6 @@ class AdminController {
     var response = await request.send();
     // print response
     var json = await response.stream.bytesToString();
-    print(json);
 
     var body = jsonDecode(json);
     if (body['success'] == true) {
@@ -298,7 +295,6 @@ class AdminController {
     var response = await request.send();
     // print response
     var json = await response.stream.bytesToString();
-    print(json);
 
     var body = jsonDecode(json);
     if (body['success'] == true) {
@@ -354,7 +350,6 @@ class AdminController {
     };
     final response = await ApiManager.putRequest(body, url, headers: headers);
     var resBody = jsonDecode(response.body);
-    print(resBody);
     if (resBody['success']) {
       return ApiResponse.fromJson(resBody, (data) => null);
     } else {
@@ -368,6 +363,27 @@ class AdminController {
     final url = user
         ? AdminUrl.getUpcomingMatches
         : "${AdminUrl.getUncomingMatchesByAdmin}/$adminId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+
+    if (resBody['success']) {
+      List<MatchDetails> matches = [];
+      for (var match in resBody['data']) {
+        matches.add(MatchDetails.fromJson(match));
+      }
+      return ApiResponse.fromJson(resBody, (data) => matches);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> getCompletedMatches({bool user = false}) async {
+    final adminId = await Global().getAdminId();
+    final url = user
+        ? AdminUrl.getCompletedMatches
+        : "${AdminUrl.getCompletedMatchesByAdmin}/$adminId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
     log(response.body);

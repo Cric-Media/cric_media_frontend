@@ -50,6 +50,9 @@ abstract class AdminUrl {
   static final startMatch = "${AppUrl.baseUrl}/start-match";
   static final getMatch = "${AppUrl.baseUrl}/get-matchesdetails";
   static final getMatchAdmin = "${AppUrl.baseUrl}/get-matchdetails-for-admin";
+  static final getCompletedMatches = "${AppUrl.baseUrl}/get-completed-matches";
+  static final getCompletedMatchesByAdmin =
+      "${AppUrl.baseUrl}/get-completed-matches-for-admin";
 
   // * Live URLs
   static final setOpenings = "${AppUrl.baseUrl}/set-openings";

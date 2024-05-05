@@ -201,6 +201,26 @@ class MatchCubit extends Cubit<MatchState> {
     }
   }
 
+  getCompletedMatches({bool user = false}) async {
+    emit(MatchGetCompletedLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.getCompletedMatches(user: user);
+        emit(MatchGetCompletedSuccess(response));
+      } else {
+        emit(MatchGetCompletedError('No internet connection'));
+      }
+    } catch (err) {
+      // if exception type is not AppException then emit "Something went wrong"
+      if (err is! AppException) {
+        emit(MatchGetCompletedError('Something went wrong'));
+      } else {
+        emit(MatchGetCompletedError(err.toString()));
+      }
+    }
+  }
+
   getUpcomingMatches({bool user = false}) async {
     emit(MatchUpcommingLoading());
     try {

@@ -11,6 +11,12 @@ class MatchDetailsLiveCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final winningTeam = match?.team1?.id == match?.winningTeam
+        ? match?.team1?.name
+        : match?.team2?.name;
+    final winningWickets = match?.team1?.id == match?.winningTeam
+        ? (match!.squad1!.length.toInt() - match!.team1Outs!.toInt())
+        : (match!.squad2!.length.toInt() - match!.team2Outs!.toInt());
 
     return Card(
       elevation: 2,
@@ -169,14 +175,21 @@ class MatchDetailsLiveCard extends StatelessWidget {
               const SizedBox(
                 height: 12,
               ),
-              // Text(
-              //   'AFG Need by 110 runs',
-              //   style: GoogleFonts.inter(
-              //       textStyle: const TextStyle(
-              //           fontSize: 15,
-              //           fontWeight: FontWeight.w600,
-              //           color: AppColor.blueColor)),
-              // )
+              if (match != null)
+                Visibility(
+                  visible: match!.matchStatus! > 1,
+                  child: Center(
+                    child: Text(
+                      '$winningTeam won by $winningWickets wickets',
+                      style: GoogleFonts.inter(
+                        textStyle: const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: AppColor.blueColor),
+                      ),
+                    ),
+                  ),
+                )
             ],
           ),
         ),

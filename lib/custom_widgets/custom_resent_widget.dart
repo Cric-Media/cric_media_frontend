@@ -1,18 +1,18 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, sized_box_for_whitespace
-
-import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/constants/app_images.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CustomResentWidget extends StatelessWidget {
-  CustomResentWidget({super.key});
+  final MatchDetails? match;
+  const CustomResentWidget({super.key, this.match});
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
+    var winningWickets = match?.winningTeam == match?.team1?.id
+        ? (11 - match!.team1Outs!.toInt())
+        : (11 - match!.team2Outs!.toInt());
     return ClipRRect(
       borderRadius: BorderRadius.circular(25),
       child: Card(
@@ -21,179 +21,122 @@ class CustomResentWidget extends StatelessWidget {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
-          width: screenWidth,
-          height: 170,
           decoration: BoxDecoration(
-            color: Colors.white,
             borderRadius: BorderRadius.circular(20),
-            // Apply gradient here
+            color: Colors.white,
           ),
+          width: screenWidth,
+          // height: screenHeight * 0.15,
           child: Row(
             children: [
               Expanded(
-                  flex: 4,
-                  child: Container(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 17.0, top: 7),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                flex: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Column(
+                    children: [
+                      // Team 1
+                      Row(
                         children: [
+                          CircleAvatar(
+                            backgroundImage: CachedNetworkImageProvider(
+                              match?.team1?.image ?? '',
+                            ),
+                          ),
+                          const SizedBox(width: 8),
                           Text(
-                            '2nd ODI, At  Lahore',
-                            style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: AppColor.hintColor,
-                                    fontWeight: FontWeight.w500)),
+                            match?.team1?.name.toString() ?? '',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          SizedBox(
-                            height: screenHeight * 0.015,
+                          const SizedBox(width: 8),
+                          Text(
+                            "${match?.team1Score}/${match?.team1Outs}",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          Row(
-                            children: [
-                              Container(
-                                width: 35,
-                                height: 35,
-                                child: Image.asset('${AppIcons.pak}'),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Text(
-                                'PAK',
-                                style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.blackColor,
-                                  fontWeight: FontWeight.w700,
-                                )),
-                              ),
-                              SizedBox(
-                                width: 25,
-                              ),
-                              Text(
-                                '320/3',
-                                style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.blackColor,
-                                  fontWeight: FontWeight.w600,
-                                )),
-                              ),
-                              Text(
-                                ' (50 Overs)',
-                                style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.hintColor,
-                                  fontWeight: FontWeight.w600,
-                                )),
-                              )
-                            ],
+                          const SizedBox(width: 8),
+                          Text(
+                            "(${match?.team2Overs}/${match?.team2Balls})",
                           ),
-                          SizedBox(
-                            height: 15,
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: CachedNetworkImageProvider(
+                              match?.team2?.image ?? '',
+                            ),
                           ),
-                          Row(
-                            children: [
-                              Container(
-                                width: 35,
-                                height: 35,
-                                child: Image.asset('${AppIcons.afg}'),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Text(
-                                'AFG',
-                                style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.blackColor,
-                                  fontWeight: FontWeight.w700,
-                                )),
-                              ),
-                              SizedBox(
-                                width: 25,
-                              ),
-                              Text(
-                                '320/3',
-                                style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.blackColor,
-                                  fontWeight: FontWeight.w600,
-                                )),
-                              ),
-                              Text(
-                                ' (50 Overs)',
-                                style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.hintColor,
-                                  fontWeight: FontWeight.w600,
-                                )),
-                              )
-                            ],
+                          const SizedBox(width: 8),
+                          Text(
+                            match?.team2?.name.toString() ?? '',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          SizedBox(
-                            height: 10,
+                          const SizedBox(width: 8),
+                          Text(
+                            "${match?.team2Score}/${match?.team2Outs}",
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            "(${match?.team1Overs}/${match?.team1Balls})",
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 32),
+                      if (match?.winningTeam == match?.team1?.id)
+                        Text(
+                          "${match?.team1?.name} won by $winningWickets wickets",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                  flex: 2,
+                  child: Container(
+                    color: Colors.grey.shade300,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl: match?.manOfTheMatch?.imageUrl ?? "",
+                            height: 100,
                           ),
                           Text(
-                            'Pak Won by 5 Wickets',
-                            style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                              fontSize: 16,
-                              color: AppColor.blueColor,
-                              fontWeight: FontWeight.w700,
-                            )),
-                          )
+                            match?.manOfTheMatch?.name ?? "",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            "Player of the match",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   )),
-              Expanded(
-                  flex: 2,
-                  child: Container(
-                    color: Color(0xffECECEC),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 4,
-                        ),
-                        Image.asset(
-                          AppIcons.profile2,
-                          width: screenWidth,
-                          height: 70,
-                          fit: BoxFit.contain,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          'Babar Azam',
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: AppColor.blackColor,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          'Player of the \n'
-                          'Match',
-                          style: TextStyle(
-                              fontSize: 13,
-                              color: AppColor.hintColor,
-                              fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ))
             ],
           ),
         ),
