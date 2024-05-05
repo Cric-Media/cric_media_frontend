@@ -57,16 +57,11 @@ class _RecentTabState extends State<RecentTab> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => LiveDetails(
-                                match: match,
-                              ),
+                              builder: (context) => LiveDetails(match: match),
                             ),
                           );
                         },
-                        child: CustomResentWidget(
-                          match: MatchCubit.get(context)
-                              .completedMatchDetailsList[index],
-                        ),
+                        child: CustomResentWidget(match: match),
                       ),
                     );
                   }),
