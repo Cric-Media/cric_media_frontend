@@ -72,12 +72,18 @@ class _LiveDetails extends State<LiveDetails> {
           listener: (context, state) {
             if (state is MatchGetSuccess) {
               match = state.res.data;
+            } else if (state is MatchGetError) {
+              match = MatchDetails();
             }
           },
           builder: (context, state) {
-            if (match == null) {
+            if (match == null || state is MatchGetLoading) {
               return Center(
                 child: CircularProgressIndicator(),
+              );
+            } else if (state is MatchGetError) {
+              return Center(
+                child: Text(state.message),
               );
             }
             return Padding(

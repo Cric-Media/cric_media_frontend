@@ -90,24 +90,34 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
   }
 
   handleMatchCompletion() {
-    // Show dialog
+    MatchCubit.get(context).manOfTheMatch = null;
+    var team =
+        match?.winningTeam == match?.team1?.id ? match?.squad1 : match?.squad2;
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text("Match Completed"),
-              content: const Text("Match has been completed"),
-              actions: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, adminMatches, (route) => false);
-                  },
-                  child: const Text("Close"),
-                ),
-              ],
-            ));
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Match Completed"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text("Match has been completed"),
+            ManOfTheMatchWidget(team: team),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              MatchCubit.get(context).setManOfTheMatch(
+                matchId: widget.matchId,
+                playerId: MatchCubit.get(context).manOfTheMatch?.id.toString(),
+              );
+            },
+            child: const Text("Close"),
+          ),
+        ],
+      ),
+    );
   }
 
   handleOverCompletion() {
@@ -211,14 +221,16 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
           } else if (state is MatchGetForInningSuccess) {
             match = state.res.data;
             handleInningsCompleted();
-          }
-          if (state is MatchLiveActionLoading) {
+          } else if (state is MatchLiveActionLoading) {
             // AppDialogs.loadingDialog(context);
           } else if (state is MatchLiveActionError) {
             // AppDialogs.closeDialog(context);
             showSnack(context, message: state.message);
           } else if (state is MatchLiveActionSuccess) {
             // AppDialogs.closeDialog(context);
+          } else if (state is MatchSetManOfTheMatchSuccess) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, dashboard, (route) => false);
           }
         },
         builder: (context, state) {
@@ -812,7 +824,8 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                   ),
                 ),
               ),
-              if (state is MatchLiveActionLoading)
+              if (state is MatchLiveActionLoading ||
+                  state is MatchSetManOfTheMatchLoading)
                 const Center(child: CircularProgressIndicator()),
             ],
           );
@@ -1032,6 +1045,34 @@ class _OutPlayerWidgetState extends State<OutPlayerWidget> {
           },
         ),
       ],
+    );
+  }
+}
+
+class ManOfTheMatchWidget extends StatefulWidget {
+  final List<Player>? team;
+  const ManOfTheMatchWidget({Key? key, required this.team}) : super(key: key);
+
+  @override
+  State<ManOfTheMatchWidget> createState() => _ManOfTheMatchWidgetState();
+}
+
+class _ManOfTheMatchWidgetState extends State<ManOfTheMatchWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<Player>(
+      value: MatchCubit.get(context).manOfTheMatch,
+      items: widget.team?.map((Player player) {
+        return DropdownMenuItem<Player>(
+          value: player,
+          child: Text(player.name ?? ''),
+        );
+      }).toList(),
+      onChanged: (Player? newValue) {
+        setState(() {
+          MatchCubit.get(context).manOfTheMatch = newValue;
+        });
+      },
     );
   }
 }

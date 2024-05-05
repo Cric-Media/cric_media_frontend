@@ -41,7 +41,7 @@ class MatchCubit extends Cubit<MatchState> {
   List<Player> batsmen = [];
   List<Player> bowlers = [];
 
-  Player? selectedStriker, selectedNonStriker, selectedBowler;
+  Player? selectedStriker, selectedNonStriker, selectedBowler, manOfTheMatch;
   String? teamBatting;
 
   // Scorer
@@ -591,5 +591,18 @@ class MatchCubit extends Cubit<MatchState> {
         emit(MatchLiveActionError(err.toString()));
       }
     }
+  }
+
+  setManOfTheMatch({required String matchId, String? playerId}) {
+    emit(MatchSetManOfTheMatchLoading());
+    adminController.setManOfTheMatch(matchId, playerId).then((res) {
+      emit(MatchSetManOfTheMatchSuccess(res));
+    }).catchError((err) {
+      if (err is! AppException) {
+        emit(MatchSetManOfTheMatchError('Something went wrong'));
+      } else {
+        emit(MatchSetManOfTheMatchError(err.toString()));
+      }
+    });
   }
 }

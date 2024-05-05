@@ -30,7 +30,9 @@ class _LiveLiveState extends State<LiveLive> {
     final bowlerStatsIndex = widget.match!.bowlerStats!.indexWhere(
       (element) => element.player!.id == widget.match!.openingBowler!.id,
     );
-
+    final looseScore = widget.match?.winningTeam == widget.match?.team1?.id
+        ? (widget.match!.team1Score! - widget.match!.team2Score!)
+        : (widget.match!.team2Score! - widget.match!.team1Score!);
     return Column(children: [
       Card(
         elevation: 2,
@@ -43,19 +45,33 @@ class _LiveLiveState extends State<LiveLive> {
           padding: const EdgeInsets.all(8),
           child: Column(
             children: [
-              // TODO WIN OR LOSE
-              // Current and required run rate
+              Row(
+                children: [
+                  if (widget.match!.matchStatus! > 1)
+                    Text(
+                      "${widget.match?.winningTeam == widget.match?.team1?.id ? widget.match?.team2?.name : widget.match?.team1?.name} loose by $looseScore runs",
+                      style: const TextStyle(color: AppColor.blueColor),
+                    ),
+                  const Spacer(),
+                  if (widget.match!.currentInning! == 2)
+                    Text(
+                      "Target: ${widget.match?.team1Batting == true ? widget.match?.team2Score : widget.match?.team1Score}",
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   Text(
                     "CRR: ${widget.match?.team1Batting == true ? widget.match?.team1CurrentRunRate : widget.match?.team2CurrentRunRate}",
                   ),
                   const SizedBox(width: 16),
-                  if (widget.match!.team1RequiredRunRate! > 0 ||
-                      widget.match!.team2RequiredRunRate! > 0)
-                    Text(
-                      "RR: ${widget.match?.team1Batting == true ? widget.match?.team1RequiredRunRate : widget.match?.team1RequiredRunRate}",
+                  Visibility(
+                    visible: widget.match?.team2Batting == true,
+                    child: Text(
+                      "RR: ${widget.match?.team1Batting == true ? widget.match?.team1RequiredRunRate : widget.match?.team2RequiredRunRate}",
                     ),
+                  ),
                   const Spacer(),
                 ],
               )

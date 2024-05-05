@@ -6,6 +6,7 @@ class MatchDetails {
   String? admin;
   Team? team1;
   Team? team2;
+  String? winningTeam;
   String? matchType;
   String? ballType;
   String? pitchType;
@@ -56,6 +57,7 @@ class MatchDetails {
     this.admin,
     this.team1,
     this.team2,
+    this.winningTeam,
     this.matchType,
     this.ballType,
     this.pitchType,
@@ -107,6 +109,7 @@ class MatchDetails {
     admin = json['admin'];
     team1 = json['team1'] == null ? null : Team.fromJson(json['team1']);
     team2 = json['team2'] == null ? null : Team.fromJson(json['team2']);
+    winningTeam = json['winningTeam'];
     matchType = json['matchType'];
     ballType = json['ballType'];
     pitchType = json['pitchType'];
@@ -200,6 +203,7 @@ class MatchDetails {
     data['admin'] = admin;
     data['team1'] = team1;
     data['team2'] = team2;
+    data['winningTeam'] = winningTeam;
     data['matchType'] = matchType;
     data['ballType'] = ballType;
     data['pitchType'] = pitchType;

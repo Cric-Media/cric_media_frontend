@@ -473,4 +473,18 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> setManOfTheMatch(matchId, playerId) async {
+    final url = AdminUrl.setManOfTheMatch;
+    final headers = {"Content-Type": "application/json"};
+    final body = {"matchId": matchId, "playerId": playerId};
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }
