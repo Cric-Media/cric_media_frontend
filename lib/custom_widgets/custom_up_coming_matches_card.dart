@@ -75,7 +75,7 @@ class UpCommingMachesCard extends StatelessWidget {
                                     : 'PAK',
                                 style: GoogleFonts.inter(
                                     textStyle: const TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   color: AppColor.blackColor,
                                   fontWeight: FontWeight.w700,
                                 )),
@@ -108,7 +108,7 @@ class UpCommingMachesCard extends StatelessWidget {
                                     : 'AFG',
                                 style: GoogleFonts.inter(
                                   textStyle: const TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     color: AppColor.blackColor,
                                     fontWeight: FontWeight.w700,
                                   ),
