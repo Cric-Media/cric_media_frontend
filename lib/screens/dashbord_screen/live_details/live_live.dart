@@ -99,8 +99,6 @@ class _LiveLiveState extends State<LiveLive> {
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       // crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        const SizedBox(width: 4),
-                        const SizedBox(height: 20, width: 20),
                         Expanded(
                           child: Text(
                             'Batsmen',
@@ -112,12 +110,14 @@ class _LiveLiveState extends State<LiveLive> {
                             )),
                           ),
                         ),
+                        const SizedBox(width: 4),
+                        const SizedBox(height: 20, width: 20),
                         const Expanded(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '4s',
+                                "4's",
                                 style: TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
@@ -125,7 +125,7 @@ class _LiveLiveState extends State<LiveLive> {
                               ),
                               SizedBox(width: 30),
                               Text(
-                                '6s',
+                                "6's",
                                 style: TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
@@ -149,7 +149,6 @@ class _LiveLiveState extends State<LiveLive> {
                     const SizedBox(height: 10),
                     RecentLiveBatsmanCard(match: widget.match),
                     const SizedBox(height: 16),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -163,46 +162,6 @@ class _LiveLiveState extends State<LiveLive> {
                           ),
                       ],
                     ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 18.0, right: 20),
-                    //   child: Row(
-                    //     children: [
-                    //       Text(
-                    //         'P’ship:',
-                    //         style: TextStyle(
-                    //           fontSize: 12,
-                    //           color: Colors.grey,
-                    //           fontWeight: FontWeight.w500,
-                    //         ),
-                    //       ),
-                    //       Text(
-                    //         ' 90(100)',
-                    //         style: TextStyle(
-                    //           fontSize: 12,
-                    //           color: Colors.black,
-                    //           fontWeight: FontWeight.w500,
-                    //         ),
-                    //       ),
-                    //       Spacer(),
-                    //       Text(
-                    //         'Last Wkt: ',
-                    //         style: TextStyle(
-                    //           fontSize: 12,
-                    //           color: Colors.grey,
-                    //           fontWeight: FontWeight.w500,
-                    //         ),
-                    //       ),
-                    //       Text(
-                    //         'H Zazai 10 (7)',
-                    //         style: TextStyle(
-                    //           fontSize: 12,
-                    //           color: Colors.black,
-                    //           fontWeight: FontWeight.w500,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // )
                   ],
                 )
               ],
@@ -211,98 +170,6 @@ class _LiveLiveState extends State<LiveLive> {
         ),
       ),
       const SizedBox(height: 8),
-      // Card(
-      //   elevation: 2,
-      //   color: Colors.white,
-      //   child: Container(
-      //     width: screenWidth,
-      //     // height: 100,
-      //     decoration: BoxDecoration(
-      //       color: Colors.white,
-      //       borderRadius: BorderRadius.circular(12),
-      //     ),
-      //     child: Padding(
-      //       padding:
-      //           const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-      //       child: Column(
-      //         children: [
-      //           Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             crossAxisAlignment: CrossAxisAlignment.end,
-      //             children: [
-      //               Padding(
-      //                 padding: const EdgeInsets.only(left: 5.0),
-      //                 child: Text(
-      //                   'Bowling',
-      //                   style: GoogleFonts.inter(
-      //                       textStyle: TextStyle(
-      //                     fontSize: 15,
-      //                     color: AppColor.blueColor,
-      //                     fontWeight: FontWeight.w600,
-      //                   )),
-      //                 ),
-      //               ),
-      //               Padding(
-      //                 padding: const EdgeInsets.only(right: 50.0),
-      //                 child: Row(
-      //                   children: [
-      //                     Text(
-      //                       'O',
-      //                       style: TextStyle(
-      //                           fontSize: 15,
-      //                           color: Colors.black,
-      //                           fontWeight: FontWeight.w600),
-      //                     ),
-      //                     SizedBox(
-      //                       width: 30,
-      //                     ),
-      //                     Text(
-      //                       'M',
-      //                       style: TextStyle(
-      //                           fontSize: 15,
-      //                           color: Colors.black,
-      //                           fontWeight: FontWeight.w600),
-      //                     ),
-      //                     SizedBox(
-      //                       width: 30,
-      //                     ),
-      //                     Text(
-      //                       'E',
-      //                       style: TextStyle(
-      //                           fontSize: 15,
-      //                           color: Colors.black,
-      //                           fontWeight: FontWeight.w600),
-      //                     ),
-      //                     SizedBox(
-      //                       width: 30,
-      //                     ),
-      //                     Text(
-      //                       'W',
-      //                       style: TextStyle(
-      //                           fontSize: 15,
-      //                           color: Colors.black,
-      //                           fontWeight: FontWeight.w600),
-      //                     ),
-      //                     SizedBox(
-      //                       height: 25,
-      //                     ),
-      //                   ],
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //           SizedBox(
-      //             height: 15,
-      //           ),
-      //           RecentLiveBollingCard(match: match),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
-      // SizedBox(
-      //   height: 7,
-      // ),
       Card(
         elevation: 2,
         child: Container(

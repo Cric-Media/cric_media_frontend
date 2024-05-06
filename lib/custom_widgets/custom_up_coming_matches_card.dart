@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, unnecessary_string_interpolations
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
@@ -47,7 +45,7 @@ class UpCommingMachesCard extends StatelessWidget {
                                 ? "${match?.cityOrTown} City, ${match?.ground} Ground."
                                 : 'Asia Cup 2023',
                             style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 fontSize: 10,
                                 color: AppColor.hintColor,
                                 fontWeight: FontWeight.bold,
@@ -59,7 +57,7 @@ class UpCommingMachesCard extends StatelessWidget {
                           SizedBox(height: screenHeight * 0.015),
                           Row(
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 35,
                                 height: 35,
                                 child: match != null
@@ -69,14 +67,14 @@ class UpCommingMachesCard extends StatelessWidget {
                                           match!.team1!.image!,
                                         ),
                                       )
-                                    : Image.asset('${AppIcons.pak}'),
+                                    : Image.asset(AppIcons.pak),
                               ),
-                              SizedBox(width: 15),
+                              const SizedBox(width: 15),
                               Expanded(
                                 child: Text(
                                   match != null ? match!.team1!.name! : 'PAK',
                                   style: GoogleFonts.inter(
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: AppColor.blackColor,
                                     fontWeight: FontWeight.w700,
@@ -87,10 +85,10 @@ class UpCommingMachesCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           Row(
                             children: [
-                              Container(
+                              SizedBox(
                                 width: 35,
                                 height: 35,
                                 child: match != null
@@ -100,14 +98,14 @@ class UpCommingMachesCard extends StatelessWidget {
                                           match!.team2!.image!,
                                         ),
                                       )
-                                    : Image.asset('${AppIcons.afg}'),
+                                    : Image.asset(AppIcons.afg),
                               ),
-                              SizedBox(width: 15),
+                              const SizedBox(width: 15),
                               Expanded(
                                 child: Text(
                                   match != null ? match!.team2!.name! : 'AFG',
                                   style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
+                                    textStyle: const TextStyle(
                                       fontSize: 14,
                                       color: AppColor.blackColor,
                                       fontWeight: FontWeight.w700,
@@ -120,7 +118,7 @@ class UpCommingMachesCard extends StatelessWidget {
                             ],
                           ),
                           admin == null
-                              ? SizedBox.shrink()
+                              ? const SizedBox.shrink()
                               : Expanded(
                                   child: TextButton(
                                     onPressed: () {
@@ -130,7 +128,7 @@ class UpCommingMachesCard extends StatelessWidget {
                                         arguments: {'match': match},
                                       );
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       "Start Match",
                                       style: TextStyle(
                                         fontSize: 13,
@@ -147,11 +145,11 @@ class UpCommingMachesCard extends StatelessWidget {
               Expanded(
                   flex: 3,
                   child: Container(
-                    color: Color(0xffECECEC),
+                    color: const Color(0xffECECEC),
+                    padding: const EdgeInsets.all(8),
                     child: Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: 50, top: 7),
                           alignment: Alignment.center,
                           width: 80,
                           height: 30,
@@ -161,39 +159,39 @@ class UpCommingMachesCard extends StatelessWidget {
                           child: Text(
                             'Upcoming',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                    fontSize: 13, color: Colors.white)),
+                              textStyle: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
+                        const SizedBox(height: 15),
+                        const Text(
                           'Watch Live At',
                           style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 12,
                               color: AppColor.hintColor,
                               fontWeight: FontWeight.w500),
                         ),
-                        SizedBox(
-                          height: 8,
-                        ),
+                        const SizedBox(height: 8),
                         Text(
                           match != null
                               ? match!.matchDateTime!.split("-").first
                               : '6:00 pm',
-                          style: TextStyle(
-                              fontSize: 13,
-                              color: AppColor.blackColor,
-                              fontWeight: FontWeight.w700),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppColor.blackColor,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                        SizedBox(height: 7),
+                        const SizedBox(height: 7),
                         Text(
                           match != null
                               ? match!.matchDateTime!.split("-").last
                               : '09-04-2023',
-                          style: TextStyle(
-                              fontSize: 14,
+                          style: const TextStyle(
+                              fontSize: 12,
                               color: AppColor.blackColor,
                               fontWeight: FontWeight.w700),
                         )

@@ -1,17 +1,14 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/custom_widgets/custom_contanor_trading_news.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
+import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
 import 'package:cricket_app/custom_widgets/onging_series.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/matchesDetails.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/new_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../../../custom_widgets/match_details_live_card.dart';
 
 class HomeTab extends StatelessWidget {
   const HomeTab({super.key});
@@ -22,7 +19,7 @@ class HomeTab extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -44,18 +41,18 @@ class HomeTab extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LiveDetails()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LiveDetails()));
                 },
-                child: MatchDetailsLiveCard()),
-            SizedBox(
-              height: screenWidth * 0.026,
-            ),
+                child: const MatchDetailsLiveCard()),
+            SizedBox(height: screenWidth * 0.026),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
@@ -68,19 +65,19 @@ class HomeTab extends StatelessWidget {
                             color: AppColor.blackColor,
                             fontWeight: FontWeight.w800)),
                   ),
-                  Spacer(),
+                  const Spacer(),
                 ],
               ),
             ),
-            SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MatcheDetails()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MatcheDetails()));
                 },
-                child: UpCommingMachesCard()),
+                child: const UpCommingMachesCard()),
             SizedBox(
               height: screenWidth * 0.030,
             ),
@@ -96,15 +93,15 @@ class HomeTab extends StatelessWidget {
                             color: AppColor.blackColor,
                             fontWeight: FontWeight.w800)),
                   ),
-                  Spacer(),
+                  const Spacer(),
                 ],
               ),
             ),
             SizedBox(
               height: screenWidth * 0.020,
             ),
-            OngingSeries(),
-            SizedBox(
+            const OngingSeries(),
+            const SizedBox(
               height: 10,
             ),
             Align(
@@ -112,22 +109,24 @@ class HomeTab extends StatelessWidget {
               child: Text(
                 'Trending News',
                 style: GoogleFonts.inter(
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                   fontSize: 17,
                   color: Colors.black,
                   fontWeight: FontWeight.w700,
                 )),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 6,
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NewsDetails()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NewsDetails()));
                 },
                 child: Card(
                   color: Colors.white,
@@ -140,8 +139,8 @@ class HomeTab extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,19 +159,19 @@ class HomeTab extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Text(
                             'Pakistan and India Set to Renew Rivalry',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                               fontSize: 15,
                               color: Colors.black,
                               fontWeight: FontWeight.w600,
                             )),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Text(
@@ -183,7 +182,7 @@ class HomeTab extends StatelessWidget {
                             ' rivalry, and fans across the '
                             '  globe are eagerly awaiting the showdown.',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                               fontSize: 12,
                               color: AppColor.grayColor,
                               fontWeight: FontWeight.w300,
@@ -199,19 +198,19 @@ class HomeTab extends StatelessWidget {
             SizedBox(
               height: 800,
               child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: 5,
                 itemBuilder: (context, index) {
                   return Padding(
-                      padding: EdgeInsets.only(top: 5),
+                      padding: const EdgeInsets.only(top: 5),
                       child: InkWell(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => NewsDetails()));
+                                    builder: (context) => const NewsDetails()));
                           },
-                          child: Custom_Contanor_trading_news()));
+                          child: const Custom_Contanor_trading_news()));
                 },
               ),
             ),

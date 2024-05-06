@@ -41,190 +41,187 @@ class _RecentLiveBatsmanCardState extends State<RecentLiveBatsmanCard> {
         ),
       );
     }
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              SizedBox(
-                // width: 25,
-                child: CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(
-                    widget.match!.striker!.imageUrl.toString(),
-                  ),
+    return Column(
+      children: [
+        Row(
+          children: [
+            SizedBox(
+              // width: 25,
+              child: CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(
+                  widget.match!.striker!.imageUrl.toString(),
                 ),
               ),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          widget.match?.striker != null
-                              ? widget.match?.striker?.name ?? "Striker"
-                              : 'Striker',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+            ),
+            const SizedBox(width: 4),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        widget.match?.striker != null
+                            ? widget.match?.striker?.name ?? "Striker"
+                            : 'Striker',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Image.asset(AppIcons.bat),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${striker?.runs ?? 0}",
+                        style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      Text(
+                        '(${striker?.ballsFaced ?? 0})',
+                        style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${striker?.fours ?? 0}',
+                    style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    '${striker?.sixes ?? 0}',
+                    style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    '${striker?.strikeRate?.toStringAsFixed(1) ?? 0}',
+                    style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Row(
+          children: [
+            SizedBox(
+              // width: 25,
+              child: CircleAvatar(
+                backgroundImage: CachedNetworkImageProvider(
+                  widget.match!.nonStriker!.imageUrl.toString(),
+                ),
+              ),
+            ),
+            const SizedBox(width: 4),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        widget.match?.nonStriker != null
+                            ? widget.match?.nonStriker?.name ?? "Non Striker"
+                            : 'Non Striker',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
                             fontSize: 13,
                             color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Image.asset(AppIcons.bat),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${striker?.runs ?? 0}",
-                          style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                        Text(
-                          '(${striker?.ballsFaced ?? 0})',
-                          style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${striker?.fours ?? 0}',
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(width: 16),
-                    Text(
-                      '${striker?.sixes ?? 0}',
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(width: 16),
-                    Text(
-                      '${striker?.strikeRate?.toStringAsFixed(1) ?? 0}',
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              SizedBox(
-                // width: 25,
-                child: CircleAvatar(
-                  backgroundImage: CachedNetworkImageProvider(
-                    widget.match!.nonStriker!.imageUrl.toString(),
+                            fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(width: 10),
+                      const SizedBox(),
+                    ],
                   ),
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${nonStriker?.runs ?? 0}",
+                        style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      Text(
+                        '(${nonStriker?.ballsFaced ?? 0})',
+                        style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ],
+                  )
+                ],
               ),
-              const SizedBox(width: 4),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          widget.match?.nonStriker != null
-                              ? widget.match?.nonStriker?.name ?? "Non Striker"
-                              : 'Non Striker',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(width: 10),
-                        const SizedBox(),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${nonStriker?.runs ?? 0}",
-                          style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                        Text(
-                          '(${nonStriker?.ballsFaced ?? 0})',
-                          style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${nonStriker?.fours ?? 0}',
+                    style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    '${nonStriker?.sixes ?? 0}',
+                    style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    '${nonStriker?.strikeRate?.toStringAsFixed(1) ?? 0}',
+                    style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${nonStriker?.fours ?? 0}',
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(width: 16),
-                    Text(
-                      '${nonStriker?.sixes ?? 0}',
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(width: 16),
-                    Text(
-                      '${nonStriker?.strikeRate?.toStringAsFixed(1) ?? 0}',
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
