@@ -56,53 +56,55 @@ class _RecentLiveBatsmanCardState extends State<RecentLiveBatsmanCard> {
                 ),
               ),
               const SizedBox(width: 4),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        widget.match?.striker != null
-                            ? widget.match?.striker?.name ?? "Striker"
-                            : 'Striker',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          widget.match?.striker != null
+                              ? widget.match?.striker?.name ?? "Striker"
+                              : 'Striker',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
                             fontSize: 13,
                             color: Colors.black,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(width: 10),
-                      Image.asset(AppIcons.bat),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${striker?.runs ?? 0}",
-                        style: GoogleFonts.inter(
-                            textStyle: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      Text(
-                        '(${striker?.ballsFaced ?? 0})',
-                        style: GoogleFonts.inter(
-                            textStyle: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                    ],
-                  )
-                ],
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Image.asset(AppIcons.bat),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${striker?.runs ?? 0}",
+                          style: GoogleFonts.inter(
+                              textStyle: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                        Text(
+                          '(${striker?.ballsFaced ?? 0})',
+                          style: GoogleFonts.inter(
+                              textStyle: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
               Expanded(
-                flex: 3,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       '${striker?.fours ?? 0}',
@@ -144,53 +146,54 @@ class _RecentLiveBatsmanCardState extends State<RecentLiveBatsmanCard> {
                 ),
               ),
               const SizedBox(width: 4),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        widget.match?.nonStriker != null
-                            ? widget.match?.nonStriker?.name ?? "Non Striker"
-                            : 'Non Striker',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(width: 10),
-                      const SizedBox(),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${nonStriker?.runs ?? 0}",
-                        style: GoogleFonts.inter(
-                            textStyle: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                      Text(
-                        '(${nonStriker?.ballsFaced ?? 0})',
-                        style: GoogleFonts.inter(
-                            textStyle: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w500)),
-                      ),
-                    ],
-                  )
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          widget.match?.nonStriker != null
+                              ? widget.match?.nonStriker?.name ?? "Non Striker"
+                              : 'Non Striker',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(width: 10),
+                        const SizedBox(),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${nonStriker?.runs ?? 0}",
+                          style: GoogleFonts.inter(
+                              textStyle: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                        Text(
+                          '(${nonStriker?.ballsFaced ?? 0})',
+                          style: GoogleFonts.inter(
+                              textStyle: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                  fontWeight: FontWeight.w500)),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
               Expanded(
-                flex: 3,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       '${nonStriker?.fours ?? 0}',

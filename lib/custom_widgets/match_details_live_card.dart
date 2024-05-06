@@ -11,12 +11,16 @@ class MatchDetailsLiveCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final winningTeam = match?.team1?.id == match?.winningTeam
-        ? match?.team1?.name
-        : match?.team2?.name;
-    final winningWickets = match?.team1?.id == match?.winningTeam
-        ? (match!.squad1!.length.toInt() - match!.team1Outs!.toInt())
-        : (match!.squad2!.length.toInt() - match!.team2Outs!.toInt());
+    var winningTeam;
+    var winningWickets;
+    if (match != null) {
+      winningTeam = match?.team1?.id == match?.winningTeam
+          ? match?.team1?.name
+          : match?.team2?.name;
+      winningWickets = match?.team1?.id == match?.winningTeam
+          ? (match!.squad1!.length.toInt() - match!.team1Outs!.toInt())
+          : (match!.squad2!.length.toInt() - match!.team2Outs!.toInt());
+    }
 
     return Card(
       elevation: 2,
@@ -24,7 +28,6 @@ class MatchDetailsLiveCard extends StatelessWidget {
       color: Colors.white,
       child: Container(
         width: screenWidth,
-        height: 195,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -37,14 +40,14 @@ class MatchDetailsLiveCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  // Text(
-                  //   'Afghanistan tour of Pakistan',
-                  //   style: GoogleFonts.inter(
-                  //       textStyle: TextStyle(
-                  //           fontSize: screenWidth * 0.040,
-                  //           color: AppColor.blackColor,
-                  //           fontWeight: FontWeight.w700)),
-                  // ),
+                  Text(
+                    match == null ? 'City' : 'At ${match?.cityOrTown}',
+                    style: GoogleFonts.inter(
+                        textStyle: const TextStyle(
+                            fontSize: 14,
+                            color: AppColor.grayColor,
+                            fontWeight: FontWeight.w400)),
+                  ),
                   const Spacer(),
                   Container(
                     alignment: Alignment.center,
@@ -56,23 +59,14 @@ class MatchDetailsLiveCard extends StatelessWidget {
                     child: Text(
                       'Live',
                       style: GoogleFonts.inter(
-                          textStyle: const TextStyle(
-                              fontSize: 15, color: Colors.white)),
+                        textStyle: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   )
                 ],
-              ),
-              const SizedBox(height: 3),
-              Text(
-                match == null ? 'City' : 'At ${match?.cityOrTown}',
-                style: GoogleFonts.inter(
-                    textStyle: const TextStyle(
-                        fontSize: 14,
-                        color: AppColor.grayColor,
-                        fontWeight: FontWeight.w400)),
-              ),
-              const SizedBox(
-                height: 14,
               ),
               Row(
                 children: [
@@ -172,22 +166,26 @@ class MatchDetailsLiveCard extends StatelessWidget {
                   )
                 ],
               ),
-              const SizedBox(
-                height: 12,
-              ),
               if (match != null)
                 Visibility(
                   visible: match!.matchStatus! > 1,
-                  child: Center(
-                    child: Text(
-                      '$winningTeam won by $winningWickets wickets',
-                      style: GoogleFonts.inter(
-                        textStyle: const TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: AppColor.blueColor),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 12,
                       ),
-                    ),
+                      Center(
+                        child: Text(
+                          '$winningTeam won by $winningWickets wickets',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: AppColor.blueColor),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 )
             ],

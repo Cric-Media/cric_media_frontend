@@ -53,29 +53,32 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 32),
+                            const SizedBox(height: 16),
                             const Row(
                               children: [
-                                Text(
-                                  "Batsmen",
-                                  style: TextStyle(
-                                    color: AppColor.blueColor,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
+                                Expanded(
+                                  child: Text(
+                                    "Batsmen",
+                                    style: TextStyle(
+                                      color: AppColor.blueColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
                                 Expanded(
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Text("R"),
-                                      SizedBox(width: 16),
+                                      // SizedBox(width: 16),
                                       Text("B"),
-                                      SizedBox(width: 16),
+                                      // SizedBox(width: 16),
                                       Text("4,s"),
-                                      SizedBox(width: 16),
+                                      // SizedBox(width: 16),
                                       Text("6,s"),
-                                      SizedBox(width: 16),
+                                      // SizedBox(width: 16),
                                       Text("SR"),
                                     ],
                                   ),
@@ -98,43 +101,50 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            width: 40,
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.rectangle,
-                                              image: DecorationImage(
-                                                image:
-                                                    CachedNetworkImageProvider(
-                                                  batsman.player?.imageUrl ??
-                                                      "",
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  width: 40,
+                                                  height: 50,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.rectangle,
+                                                    image: DecorationImage(
+                                                      image:
+                                                          CachedNetworkImageProvider(
+                                                        batsman.player
+                                                                ?.imageUrl ??
+                                                            "",
+                                                      ),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
                                                 ),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            batsman.player?.name ?? "",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 14,
+                                                const SizedBox(width: 8),
+                                                Text(
+                                                  batsman.player?.name ?? "",
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                           Expanded(
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.end,
+                                                  MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 Text(batsman.runs.toString()),
-                                                const SizedBox(width: 16),
+                                                // const SizedBox(width: 16),
                                                 Text(batsman.ballsFaced
                                                     .toString()),
-                                                const SizedBox(width: 16),
+                                                // const SizedBox(width: 16),
                                                 Text(batsman.fours.toString()),
-                                                const SizedBox(width: 16),
+                                                // const SizedBox(width: 16),
                                                 Text(batsman.sixes.toString()),
-                                                const SizedBox(width: 16),
+                                                // const SizedBox(width: 16),
                                                 Text(
                                                   batsman.strikeRate!
                                                       .toStringAsFixed(2),
@@ -159,14 +169,14 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                   ),
                                 );
                               },
-                              itemCount: scorecard.batsmen!.length,
+                              itemCount: scorecard.batsmen?.length,
                               shrinkWrap: true,
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 16),
                     Card(
                       color: Colors.white,
                       child: Column(
@@ -179,27 +189,30 @@ class _ScorecardTabState extends State<ScorecardTab> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 32),
+                          const SizedBox(height: 16),
                           const Row(
                             children: [
-                              Text(
-                                "Bowling",
-                                style: TextStyle(
-                                  color: AppColor.blueColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14,
+                              Expanded(
+                                child: Text(
+                                  "Bowling",
+                                  style: TextStyle(
+                                    color: AppColor.blueColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
                               Expanded(
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Text("R"),
-                                    SizedBox(width: 16),
+                                    // SizedBox(width: 16),
                                     Text("O"),
-                                    SizedBox(width: 16),
+                                    // SizedBox(width: 16),
                                     Text("W"),
-                                    SizedBox(width: 16),
+                                    // SizedBox(width: 16),
                                     Text("E"),
                                   ],
                                 ),
@@ -216,40 +229,47 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      width: 40,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        image: DecorationImage(
-                                          image: CachedNetworkImageProvider(
-                                            bowler.player?.imageUrl ?? "",
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 40,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.rectangle,
+                                              image: DecorationImage(
+                                                image:
+                                                    CachedNetworkImageProvider(
+                                                  bowler.player?.imageUrl ?? "",
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
                                           ),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      bowler.player?.name ?? "",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            bowler.player?.name ?? "",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     Expanded(
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
                                           Text(bowler.runsGiven.toString()),
-                                          const SizedBox(width: 16),
+                                          // const SizedBox(width: 16),
                                           Text(bowler.overs.toString()),
-                                          const SizedBox(width: 16),
+                                          // const SizedBox(width: 16),
                                           Text(bowler.wickets.toString()),
-                                          const SizedBox(width: 16),
+                                          // const SizedBox(width: 16),
                                           Text(bowler.economy.toString()),
-                                          const SizedBox(width: 16),
+                                          // const SizedBox(width: 16),
                                         ],
                                       ),
                                     ),
@@ -257,7 +277,7 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                 ),
                               );
                             },
-                            itemCount: scorecard.bowlers!.length,
+                            itemCount: scorecard.bowlers?.length,
                             shrinkWrap: true,
                           ),
                         ],

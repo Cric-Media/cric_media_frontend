@@ -99,6 +99,8 @@ class _LiveLiveState extends State<LiveLive> {
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       // crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
+                        const SizedBox(width: 4),
+                        const SizedBox(height: 20, width: 20),
                         Expanded(
                           child: Text(
                             'Batsmen',
@@ -111,9 +113,8 @@ class _LiveLiveState extends State<LiveLive> {
                           ),
                         ),
                         const Expanded(
-                          flex: 3,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 '4s',
