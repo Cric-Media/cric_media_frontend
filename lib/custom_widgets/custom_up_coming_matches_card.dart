@@ -23,7 +23,6 @@ class UpCommingMachesCard extends StatelessWidget {
         elevation: 2,
         child: Container(
           width: screenWidth,
-          height: 150,
           decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(25),
             // Apply gradient here
@@ -34,112 +33,114 @@ class UpCommingMachesCard extends StatelessWidget {
                   flex: 4,
                   child: Container(
                     color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 17.0, top: 7),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            match != null
-                                ? "${match?.cityOrTown} City, ${match?.ground} Ground."
-                                : 'Asia Cup 2023',
-                            style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                                fontSize: 10,
-                                color: AppColor.hintColor,
-                                fontWeight: FontWeight.bold,
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          match != null
+                              ? "${match?.cityOrTown} City, ${match?.ground} Ground."
+                              : 'Asia Cup 2023',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              color: AppColor.hintColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: screenHeight * 0.015),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 35,
+                              height: 35,
+                              child: match != null
+                                  ? CircleAvatar(
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(
+                                        match?.team1?.image ?? '',
+                                      ),
+                                    )
+                                  : Image.asset(AppIcons.pak),
+                            ),
+                            const SizedBox(width: 15),
+                            Expanded(
+                              child: Text(
+                                match != null
+                                    ? match?.team1?.name ?? ''
+                                    : 'PAK',
+                                style: GoogleFonts.inter(
+                                    textStyle: const TextStyle(
+                                  fontSize: 14,
+                                  color: AppColor.blackColor,
+                                  fontWeight: FontWeight.w700,
+                                )),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: screenHeight * 0.015),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 35,
-                                height: 35,
-                                child: match != null
-                                    ? CircleAvatar(
-                                        backgroundImage:
-                                            CachedNetworkImageProvider(
-                                          match!.team1!.image!,
-                                        ),
-                                      )
-                                    : Image.asset(AppIcons.pak),
-                              ),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: Text(
-                                  match != null ? match!.team1!.name! : 'PAK',
-                                  style: GoogleFonts.inter(
-                                      textStyle: const TextStyle(
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: 35,
+                              height: 35,
+                              child: match != null
+                                  ? CircleAvatar(
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(
+                                        match?.team2?.image ?? '',
+                                      ),
+                                    )
+                                  : Image.asset(AppIcons.afg),
+                            ),
+                            const SizedBox(width: 15),
+                            Expanded(
+                              child: Text(
+                                match != null
+                                    ? match?.team2?.name ?? ''
+                                    : 'AFG',
+                                style: GoogleFonts.inter(
+                                  textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: AppColor.blackColor,
                                     fontWeight: FontWeight.w700,
-                                  )),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 35,
-                                height: 35,
-                                child: match != null
-                                    ? CircleAvatar(
-                                        backgroundImage:
-                                            CachedNetworkImageProvider(
-                                          match!.team2!.image!,
-                                        ),
-                                      )
-                                    : Image.asset(AppIcons.afg),
-                              ),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: Text(
-                                  match != null ? match!.team2!.name! : 'AFG',
-                                  style: GoogleFonts.inter(
-                                    textStyle: const TextStyle(
-                                      fontSize: 14,
-                                      color: AppColor.blackColor,
+                            ),
+                          ],
+                        ),
+                        admin == null
+                            ? const SizedBox.shrink()
+                            : Expanded(
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      startMatch,
+                                      arguments: {'match': match},
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Start Match",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: AppColor.blueColor,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                            ],
-                          ),
-                          admin == null
-                              ? const SizedBox.shrink()
-                              : Expanded(
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        startMatch,
-                                        arguments: {'match': match},
-                                      );
-                                    },
-                                    child: const Text(
-                                      "Start Match",
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: AppColor.blueColor,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                        ],
-                      ),
+                              )
+                      ],
                     ),
                   )),
               Expanded(
