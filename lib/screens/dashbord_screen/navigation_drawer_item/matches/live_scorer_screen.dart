@@ -936,7 +936,8 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                 ),
               ),
               if (state is MatchLiveActionLoading ||
-                  state is MatchSetManOfTheMatchLoading)
+                  state is MatchSetManOfTheMatchLoading ||
+                  state is MatchStartStopLoading)
                 const Center(child: CircularProgressIndicator()),
             ],
           );
