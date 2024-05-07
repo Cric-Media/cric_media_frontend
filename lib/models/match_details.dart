@@ -37,7 +37,7 @@ class MatchDetails {
   String? createdAt;
   String? updatedAt;
   num? iV;
-  num? currentInning;
+  CurrentInning? currentInning;
   List<dynamic>? innings;
   List<PlayerStats>? playerStats;
   List<BowlerStats>? bowlerStats;
@@ -158,7 +158,9 @@ class MatchDetails {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
-    currentInning = json['currentInning'];
+    currentInning = json['currentInning'] == null
+        ? null
+        : CurrentInning.fromJson(json['currentInning']);
     innings = json['innings'];
     playerStats = json['playerStats'] != null
         ? (json['playerStats'] as List)
@@ -404,6 +406,27 @@ class Partnership {
     return {
       'balls': balls,
       'runs': runs,
+    };
+  }
+}
+
+class CurrentInning {
+  num number;
+  bool started;
+
+  CurrentInning({required this.number, required this.started});
+
+  factory CurrentInning.fromJson(Map<String, dynamic> json) {
+    return CurrentInning(
+      number: json['number'],
+      started: json['started'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'number': number,
+      'started': started,
     };
   }
 }

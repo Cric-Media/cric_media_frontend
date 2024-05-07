@@ -20,8 +20,6 @@ class _LiveTabState extends State<LiveTab> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Column(children: [

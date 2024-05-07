@@ -41,9 +41,7 @@ class HomeTab extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             InkWell(
                 onTap: () {
                   Navigator.push(
@@ -60,10 +58,11 @@ class HomeTab extends StatelessWidget {
                   Text(
                     'Up Coming',
                     style: GoogleFonts.inter(
-                        textStyle: TextStyle(
-                            fontSize: screenWidth * 0.038,
-                            color: AppColor.blackColor,
-                            fontWeight: FontWeight.w800)),
+                      textStyle: TextStyle(
+                          fontSize: screenWidth * 0.038,
+                          color: AppColor.blackColor,
+                          fontWeight: FontWeight.w800),
+                    ),
                   ),
                   const Spacer(),
                 ],
@@ -73,14 +72,14 @@ class HomeTab extends StatelessWidget {
             InkWell(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const MatcheDetails()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MatcheDetails(),
+                    ),
+                  );
                 },
                 child: const UpCommingMachesCard()),
-            SizedBox(
-              height: screenWidth * 0.030,
-            ),
+            SizedBox(height: screenWidth * 0.030),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Row(
@@ -101,9 +100,7 @@ class HomeTab extends StatelessWidget {
               height: screenWidth * 0.020,
             ),
             const OngingSeries(),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             Align(
               alignment: Alignment.topLeft,
               child: Text(

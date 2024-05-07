@@ -51,13 +51,17 @@ class MatchDetailsLiveCard extends StatelessWidget {
                   const Spacer(),
                   Container(
                     alignment: Alignment.center,
-                    width: 55,
+                    width: match?.currentInning?.started == false ? 100 : 55,
                     height: 30,
                     decoration: BoxDecoration(
-                        color: Colors.red,
+                        color: match?.currentInning?.started == false
+                            ? Colors.lightBlue
+                            : Colors.red,
                         borderRadius: BorderRadius.circular(7)),
                     child: Text(
-                      'Live',
+                      match?.currentInning?.started == false
+                          ? 'Inning Break'
+                          : 'Live',
                       style: GoogleFonts.inter(
                         textStyle: const TextStyle(
                           fontSize: 13,
