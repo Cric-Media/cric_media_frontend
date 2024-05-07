@@ -49,27 +49,46 @@ class MatchDetailsLiveCard extends StatelessWidget {
                             fontWeight: FontWeight.w400)),
                   ),
                   const Spacer(),
-                  Container(
-                    alignment: Alignment.center,
-                    width: match?.currentInning?.started == false ? 100 : 55,
-                    height: 30,
-                    decoration: BoxDecoration(
-                        color: match?.currentInning?.started == false
-                            ? Colors.lightBlue
-                            : Colors.red,
-                        borderRadius: BorderRadius.circular(7)),
-                    child: Text(
-                      match?.currentInning?.started == false
-                          ? 'Inning Break'
-                          : 'Live',
-                      style: GoogleFonts.inter(
-                        textStyle: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.white,
+                  if (match?.matchStopped?.stop == false)
+                    Container(
+                      alignment: Alignment.center,
+                      width: match?.currentInning?.started == false ? 100 : 55,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: match?.currentInning?.started == false
+                              ? Colors.lightBlue
+                              : Colors.red,
+                          borderRadius: BorderRadius.circular(7)),
+                      child: Text(
+                        match?.currentInning?.started == false
+                            ? 'Inning Break'
+                            : 'Live',
+                        style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(8),
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: Colors.orange,
+                          borderRadius: BorderRadius.circular(7)),
+                      child: Text(
+                        match?.matchStopped?.stopReason ?? '',
+                        style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  )
                 ],
               ),
               Row(

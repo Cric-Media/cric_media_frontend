@@ -292,6 +292,8 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
           } else if (state is MatchSetManOfTheMatchSuccess) {
             Navigator.pushNamedAndRemoveUntil(
                 context, dashboard, (route) => false);
+          } else if (state is MatchStartStopSuccess) {
+            match = state.res.data;
           }
         },
         builder: (context, state) {
