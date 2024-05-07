@@ -64,6 +64,27 @@ class MatchCubit extends Cubit<MatchState> {
     legByes = false;
   }
 
+  startStopAction(matchId, {String? reason}) async {
+    emit(MatchStartStopLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.startStopMatch(matchId, reason);
+        emit(MatchStartStopSuccess(response));
+      } else {
+        emit(MatchStartStopError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(
+          MatchStartStopError("Something went wrong, please try again later"),
+        );
+      } else {
+        emit(MatchStartStopError(err.toString()));
+      }
+    }
+  }
+
   startMatch(String matchId) async {
     emit(MatchStartLoading());
     final url = "${AdminUrl.startMatch}/$matchId";
@@ -130,8 +151,6 @@ class MatchCubit extends Cubit<MatchState> {
         "team1toss": teamAToss ?? false,
         "team2toss": teamBToss ?? false
       };
-
-      log(jsonEncode(body));
 
       final response = await ApiManager.putRequest(body, url, headers: headers);
       log(response.body);

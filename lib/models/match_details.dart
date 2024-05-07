@@ -52,6 +52,7 @@ class MatchDetails {
   num? team1RequiredRunRate;
   num? team2CurrentRunRate;
   num? team2RequiredRunRate;
+  MatchStopped? matchStopped;
 
   MatchDetails({
     this.admin,
@@ -103,6 +104,7 @@ class MatchDetails {
     this.team1RequiredRunRate,
     this.team2CurrentRunRate,
     this.team2RequiredRunRate,
+    this.matchStopped,
   });
 
   MatchDetails.fromJson(Map<String, dynamic> json) {
@@ -198,6 +200,9 @@ class MatchDetails {
     team1RequiredRunRate = json['team1RequiredRunRate'];
     team2CurrentRunRate = json['team2CurrentRunRate'];
     team2RequiredRunRate = json['team2RequiredRunRate'];
+    matchStopped = json['matchStopped'] != null
+        ? MatchStopped.fromJson(json['matchStopped'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -427,6 +432,28 @@ class CurrentInning {
     return {
       'number': number,
       'started': started,
+    };
+  }
+}
+
+class MatchStopped {
+  bool stop;
+  String? stopReason;
+
+  MatchStopped({required this.stop, this.stopReason});
+
+  factory MatchStopped.fromJson(Map<String, dynamic> json) {
+    return MatchStopped(
+      stop: json['stop'],
+      stopReason:
+          json['stopReason'] == null ? null : json['stopReason'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'stop': stop,
+      'stopReason': stopReason,
     };
   }
 }

@@ -503,4 +503,21 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> startStopMatch(String matchId, String? reason) async {
+    final url = AdminUrl.startStopMatch;
+    final headers = {"Content-Type": "application/json"};
+    final body = {"matchId": matchId, "reason": reason};
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(
+        resBody,
+        (data) => MatchDetails.fromJson(resBody['data']),
+      );
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }

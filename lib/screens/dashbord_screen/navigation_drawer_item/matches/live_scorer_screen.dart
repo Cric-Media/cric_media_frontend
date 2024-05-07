@@ -94,8 +94,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     MatchCubit.get(context).manOfTheMatch = null;
     var team =
         match?.winningTeam == match?.team1?.id ? match?.squad1 : match?.squad2;
-    print(match?.winningTeam);
-    print(match?.team1?.id);
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -179,6 +178,51 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
           ],
         );
       },
+    );
+  }
+
+  handleStopMatch(context) {
+    String? reason;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Stop Match"),
+        content: Column(
+          children: [
+            const Text("Are you sure you want to stop the match?"),
+            TextField(
+              onChanged: (value) {
+                reason = value;
+              },
+              decoration: const InputDecoration(
+                hintText: "Reason?",
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (match?.matchStopped?.stop == true) {
+                MatchCubit.get(context).startStopAction(widget.matchId);
+              } else {
+                MatchCubit.get(context).startStopAction(
+                  widget.matchId,
+                  reason: reason,
+                );
+              }
+              Navigator.pop(context);
+            },
+            child: const Text("Stop"),
+          ),
+        ],
+      ),
     );
   }
 
@@ -869,9 +913,12 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                           ),
                                         ElevatedButton(
                                           onPressed: () {
-                                            // handle match stop
+                                            handleStopMatch(context);
                                           },
-                                          child: const Text("Match Stop"),
+                                          child: Text(
+                                              match?.matchStopped?.stop == true
+                                                  ? 'Resume Match'
+                                                  : "Match Stop"),
                                         ),
                                       ],
                                     ),
