@@ -72,9 +72,9 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     SocketService.instance.socket.on('inningCompleted', (data) {
       MatchCubit.get(context).getMatchForInnings(widget.matchId);
     });
-    SocketService.instance.socket.on('matchCompleted', (data) {
-      handleMatchCompletion();
-    });
+    // SocketService.instance.socket.on('matchCompleted', (data) {
+    //   handleMatchCompletion();
+    // });
     super.initState();
   }
 
@@ -109,7 +109,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
         actions: [
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
+              // Navigator.pop(context);
               MatchCubit.get(context).setManOfTheMatch(
                 matchId: widget.matchId,
                 playerId: MatchCubit.get(context).manOfTheMatch?.id.toString(),
@@ -284,13 +284,8 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
           } else if (state is MatchGetForInningSuccess) {
             match = state.res.data;
             handleInningsCompleted();
-          } else if (state is MatchLiveActionLoading) {
-            // AppDialogs.loadingDialog(context);
           } else if (state is MatchLiveActionError) {
-            // AppDialogs.closeDialog(context);
             showSnack(context, message: state.message);
-          } else if (state is MatchLiveActionSuccess) {
-            // AppDialogs.closeDialog(context);
           } else if (state is MatchSetManOfTheMatchSuccess) {
             Navigator.pushNamedAndRemoveUntil(
                 context, dashboard, (route) => false);
@@ -465,35 +460,35 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                         Expanded(
                                           child: Container(
                                             alignment: Alignment.centerLeft,
-                                            child: Text("R"),
+                                            child: const Text("R"),
                                           ),
                                         ),
                                         // SizedBox(width: 20),
                                         Expanded(
                                           child: Container(
                                             alignment: Alignment.centerLeft,
-                                            child: Text("B"),
+                                            child: const Text("B"),
                                           ),
                                         ),
                                         // SizedBox(width: 20),
                                         Expanded(
                                           child: Container(
                                             alignment: Alignment.centerLeft,
-                                            child: Text("4"),
+                                            child: const Text("4"),
                                           ),
                                         ),
                                         // SizedBox(width: 20),
                                         Expanded(
                                           child: Container(
                                             alignment: Alignment.centerLeft,
-                                            child: Text("6"),
+                                            child: const Text("6"),
                                           ),
                                         ),
                                         // SizedBox(width: 20),
                                         Expanded(
                                           child: Container(
                                             alignment: Alignment.centerLeft,
-                                            child: Text("S"),
+                                            child: const Text("S"),
                                           ),
                                         ),
                                         // SizedBox(width: 20),
@@ -681,19 +676,19 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              "${match!.bowlerStats![bowlerStatsIndex].overs}",
+                                              "${match?.bowlerStats?[bowlerStatsIndex].overs}",
                                               textAlign: TextAlign.left,
                                             ),
                                           ),
                                           Expanded(
                                             child: Text(
-                                              "${match!.bowlerStats![bowlerStatsIndex].runsGiven}",
+                                              "${match?.bowlerStats?[bowlerStatsIndex].runsGiven}",
                                               textAlign: TextAlign.left,
                                             ),
                                           ),
                                           Expanded(
                                             child: Text(
-                                              "${match!.bowlerStats![bowlerStatsIndex].wickets}",
+                                              "${match?.bowlerStats?[bowlerStatsIndex].wickets}",
                                               textAlign: TextAlign.left,
                                             ),
                                           ),
