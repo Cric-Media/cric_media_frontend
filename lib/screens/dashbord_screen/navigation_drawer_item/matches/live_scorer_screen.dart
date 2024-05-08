@@ -186,18 +186,26 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Stop Match"),
+        title: Text(
+          match?.matchStopped?.stop == true ? "Resume Match" : "Stop Match",
+        ),
         content: Column(
           children: [
-            const Text("Are you sure you want to stop the match?"),
-            TextField(
-              onChanged: (value) {
-                reason = value;
-              },
-              decoration: const InputDecoration(
-                hintText: "Reason?",
-              ),
+            Text(
+              match?.matchStopped?.stop == true
+                  ? "Are you sure you want to resume the match?"
+                  : "Are you sure you want to stop the match?",
             ),
+            match?.matchStopped?.stop == true
+                ? const SizedBox()
+                : TextField(
+                    onChanged: (value) {
+                      reason = value;
+                    },
+                    decoration: const InputDecoration(
+                      hintText: "Reason?",
+                    ),
+                  ),
           ],
         ),
         actions: [
@@ -219,17 +227,11 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
               }
               Navigator.pop(context);
             },
-            child: const Text("Stop"),
+            child: Text(match?.matchStopped?.stop == true ? "Resume" : "Stop"),
           ),
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    SocketService.instance.socket.off('match-${widget.matchId}');
-    super.dispose();
   }
 
   @override
@@ -300,21 +302,74 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
           int? bowlerStatsIndex = match?.bowlerStats?.indexWhere(
               (element) => element.player?.id == match?.openingBowler?.id);
 
-          if (match?.currentInning?.number == 2 &&
-              match?.currentInning?.started == false) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    handleInningsCompleted();
-                  },
-                  child: const Text("Change Innings"),
-                ),
-              ],
+          if (match != null && match!.matchStatus! > 1) {
+            var team = match?.winningTeam == match?.team1?.id
+                ? match?.squad1
+                : match?.squad2;
+
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  if (match!.matchStatus! > 1)
+                    Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            "Match has been completed",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+
+                          // choose man of the match
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const Text("Man of the match ?"),
+                              ManOfTheMatchWidget(team: team),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          OutlinedButton(
+                            onPressed: () {
+                              MatchCubit.get(context).setManOfTheMatch(
+                                matchId: widget.matchId,
+                                playerId: MatchCubit.get(context)
+                                    .manOfTheMatch
+                                    ?.id
+                                    .toString(),
+                              );
+                            },
+                            child: const Text("Continue"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  // if (match?.currentInning?.number == 2 &&
+                  //     match?.currentInning?.started == false)
+                  //   Center(
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.center,
+                  //       children: [
+                  //         const SizedBox(height: 20),
+                  //         ElevatedButton(
+                  //           onPressed: () {
+                  //             handleInningsCompleted();
+                  //           },
+                  //           child: const Text("Change Innings"),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                ],
+              ),
             );
           }
+
           return Stack(
             children: [
               Padding(
@@ -393,7 +448,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
-                                    flex: 1,
+                                    flex: 2,
                                     child: Text(
                                       'Batsmen',
                                       style: Theme.of(context)
@@ -401,21 +456,46 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                           .bodyMedium,
                                     ),
                                   ),
-                                  const Expanded(
-                                    flex: 2,
+                                  Expanded(
+                                    flex: 3,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("R"),
+                                        Expanded(
+                                          child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text("R"),
+                                          ),
+                                        ),
                                         // SizedBox(width: 20),
-                                        Text("B"),
+                                        Expanded(
+                                          child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text("B"),
+                                          ),
+                                        ),
                                         // SizedBox(width: 20),
-                                        Text("4"),
+                                        Expanded(
+                                          child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text("4"),
+                                          ),
+                                        ),
                                         // SizedBox(width: 20),
-                                        Text("6"),
+                                        Expanded(
+                                          child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text("6"),
+                                          ),
+                                        ),
                                         // SizedBox(width: 20),
-                                        Text("S"),
+                                        Expanded(
+                                          child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text("S"),
+                                          ),
+                                        ),
                                         // SizedBox(width: 20),
                                       ],
                                     ),
@@ -428,6 +508,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
+                                    flex: 2,
                                     child: Text(
                                       '${match?.striker?.name ?? "Striker"} *',
                                       maxLines: 1,
@@ -438,23 +519,41 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     ),
                                   ),
                                   Expanded(
-                                    flex: 2,
+                                    flex: 3,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("${striker?.runs ?? 0}"),
-                                        // const SizedBox(width: 20),
-                                        Text("${striker?.ballsFaced ?? 0}"),
-                                        // const SizedBox(width: 20),
-                                        Text("${striker?.fours ?? 0}"),
-                                        // const SizedBox(width: 20),
-                                        Text("${striker?.sixes ?? 0}"),
-                                        // const SizedBox(width: 20),
-                                        Text(
-                                          "${striker?.strikeRate?.toStringAsFixed(0) ?? 0}",
+                                        Expanded(
+                                          child: Text(
+                                            "${striker?.runs ?? 0}",
+                                            textAlign: TextAlign.left,
+                                          ),
                                         ),
-                                        // const SizedBox(width: 20),
+                                        Expanded(
+                                          child: Text(
+                                            "${striker?.ballsFaced ?? 0}",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "${striker?.fours ?? 0}",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "${striker?.sixes ?? 0}",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "${striker?.strikeRate ?? 0}",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   )
@@ -463,7 +562,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                               Row(
                                 children: [
                                   Expanded(
-                                    flex: 1,
+                                    flex: 2,
                                     child: Text(
                                       match?.nonStriker?.name ?? 'Non Striker',
                                       maxLines: 1,
@@ -474,23 +573,41 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     ),
                                   ),
                                   Expanded(
-                                    flex: 2,
+                                    flex: 3,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("${nonStriker?.runs ?? 0}"),
-                                        // const SizedBox(width: 20),
-                                        Text("${nonStriker?.ballsFaced ?? 0}"),
-                                        // const SizedBox(width: 20),
-                                        Text("${nonStriker?.fours ?? 0}"),
-                                        // const SizedBox(width: 20),
-                                        Text("${nonStriker?.sixes ?? 0}"),
-                                        // const SizedBox(width: 20),
-                                        Text(
-                                          "${nonStriker?.strikeRate?.toStringAsFixed(0) ?? 0}",
+                                        Expanded(
+                                          child: Text(
+                                            "${nonStriker?.runs ?? 0}",
+                                            textAlign: TextAlign.left,
+                                          ),
                                         ),
-                                        // const SizedBox(width: 20),
+                                        Expanded(
+                                          child: Text(
+                                            "${nonStriker?.ballsFaced ?? 0}",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "${nonStriker?.fours ?? 0}",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "${nonStriker?.sixes ?? 0}",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "${nonStriker?.strikeRate ?? 0}",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   )
@@ -517,14 +634,24 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("O"),
-                                        // SizedBox(width: 20),
-                                        // Text("M"),
-                                        // SizedBox(width: 20),
-                                        Text("R"),
-                                        // SizedBox(width: 20),
-                                        Text("W"),
-                                        // SizedBox(width: 20),
+                                        Expanded(
+                                          child: Text(
+                                            "O",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "R",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            "W",
+                                            textAlign: TextAlign.left,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   )
@@ -552,22 +679,24 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            "${match!.bowlerStats![bowlerStatsIndex].overs}",
+                                          Expanded(
+                                            child: Text(
+                                              "${match!.bowlerStats![bowlerStatsIndex].overs}",
+                                              textAlign: TextAlign.left,
+                                            ),
                                           ),
-                                          // const SizedBox(width: 20),
-                                          // Text(
-                                          //   "${match!.bowlerStats![bowlerStatsIndex].maidens}",
-                                          // ),
-                                          // const SizedBox(width: 20),
-                                          Text(
-                                            "${match!.bowlerStats![bowlerStatsIndex].runsGiven}",
+                                          Expanded(
+                                            child: Text(
+                                              "${match!.bowlerStats![bowlerStatsIndex].runsGiven}",
+                                              textAlign: TextAlign.left,
+                                            ),
                                           ),
-                                          // const SizedBox(width: 20),
-                                          Text(
-                                            "${match!.bowlerStats![bowlerStatsIndex].wickets}",
+                                          Expanded(
+                                            child: Text(
+                                              "${match!.bowlerStats![bowlerStatsIndex].wickets}",
+                                              textAlign: TextAlign.left,
+                                            ),
                                           ),
-                                          // const SizedBox(width: 20),
                                         ],
                                       ),
                                     )

@@ -49,46 +49,7 @@ class MatchDetailsLiveCard extends StatelessWidget {
                             fontWeight: FontWeight.w400)),
                   ),
                   const Spacer(),
-                  if (match?.matchStopped?.stop == false)
-                    Container(
-                      alignment: Alignment.center,
-                      width: match?.currentInning?.started == false ? 100 : 55,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: match?.currentInning?.started == false
-                              ? Colors.lightBlue
-                              : Colors.red,
-                          borderRadius: BorderRadius.circular(7)),
-                      child: Text(
-                        match?.currentInning?.started == false
-                            ? 'Inning Break'
-                            : 'Live',
-                        style: GoogleFonts.inter(
-                          textStyle: const TextStyle(
-                            fontSize: 13,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    )
-                  else
-                    Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(8),
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.orange,
-                          borderRadius: BorderRadius.circular(7)),
-                      child: Text(
-                        match?.matchStopped?.stopReason ?? '',
-                        style: GoogleFonts.inter(
-                          textStyle: const TextStyle(
-                            fontSize: 13,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
+                  if (match != null) MatchStatusWidget(match: match),
                 ],
               ),
               Row(
@@ -216,5 +177,71 @@ class MatchDetailsLiveCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MatchStatusWidget extends StatelessWidget {
+  final MatchDetails? match;
+
+  const MatchStatusWidget({Key? key, this.match}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (match!.matchStatus! == 1 && match?.matchStopped?.stop == false) {
+      return Container(
+        alignment: Alignment.center,
+        width: match?.currentInning?.started == false ? 100 : 55,
+        height: 30,
+        decoration: BoxDecoration(
+            color: match?.currentInning?.started == false
+                ? Colors.lightBlue
+                : Colors.red,
+            borderRadius: BorderRadius.circular(7)),
+        child: Text(
+          match?.currentInning?.started == false ? 'Inning Break' : 'Live',
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(fontSize: 13, color: Colors.white),
+          ),
+        ),
+      );
+    } else if (match!.matchStatus! == 1 && match?.matchStopped?.stop == true)
+      // ignore: curly_braces_in_flow_control_structures
+      return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.orange,
+          borderRadius: BorderRadius.circular(7),
+        ),
+        child: Text(
+          "Match delayed due to ${match?.matchStopped?.stopReason ?? ''}",
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
+    else if (match!.matchStatus! > 1 && match?.matchStopped?.stop == false)
+      // ignore: curly_braces_in_flow_control_structures
+      return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: Colors.green, borderRadius: BorderRadius.circular(7)),
+        child: Text(
+          "Match Ended",
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
+    else
+      // ignore: curly_braces_in_flow_control_structures
+      return Container();
   }
 }

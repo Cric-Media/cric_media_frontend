@@ -69,17 +69,38 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                 Expanded(
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text("R"),
-                                      // SizedBox(width: 16),
-                                      Text("B"),
-                                      // SizedBox(width: 16),
-                                      Text("4,s"),
-                                      // SizedBox(width: 16),
-                                      Text("6,s"),
-                                      // SizedBox(width: 16),
-                                      Text("SR"),
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("R"),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("B"),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("4,s"),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("6,s"),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("SR"),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -103,6 +124,8 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                         children: [
                                           Expanded(
                                             child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Container(
                                                   width: 40,
@@ -134,20 +157,51 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                           Expanded(
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Text(batsman.runs.toString()),
-                                                // const SizedBox(width: 16),
-                                                Text(batsman.ballsFaced
-                                                    .toString()),
-                                                // const SizedBox(width: 16),
-                                                Text(batsman.fours.toString()),
-                                                // const SizedBox(width: 16),
-                                                Text(batsman.sixes.toString()),
-                                                // const SizedBox(width: 16),
-                                                Text(
-                                                  batsman.strikeRate!
-                                                      .toStringAsFixed(2),
+                                                Expanded(
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(batsman.runs
+                                                        .toString()),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(batsman
+                                                        .ballsFaced
+                                                        .toString()),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(batsman.fours
+                                                        .toString()),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(batsman.sixes
+                                                        .toString()),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(
+                                                      batsman.strikeRate!
+                                                          .toStringAsFixed(0),
+                                                    ),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -205,15 +259,32 @@ class _ScorecardTabState extends State<ScorecardTab> {
                               Expanded(
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("R"),
-                                    // SizedBox(width: 16),
-                                    Text("O"),
-                                    // SizedBox(width: 16),
-                                    Text("W"),
-                                    // SizedBox(width: 16),
-                                    Text("E"),
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text("R"),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text("O"),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text("W"),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text("E"),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -231,6 +302,8 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                   children: [
                                     Expanded(
                                       child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             width: 40,
@@ -262,14 +335,34 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Text(bowler.runsGiven.toString()),
-                                          // const SizedBox(width: 16),
-                                          Text(bowler.overs.toString()),
-                                          // const SizedBox(width: 16),
-                                          Text(bowler.wickets.toString()),
-                                          // const SizedBox(width: 16),
-                                          Text(bowler.economy.toString()),
-                                          // const SizedBox(width: 16),
+                                          Expanded(
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  bowler.runsGiven.toString()),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child:
+                                                  Text(bowler.overs.toString()),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  bowler.wickets.toString()),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  bowler.economy.toString()),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
