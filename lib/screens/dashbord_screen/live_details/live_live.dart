@@ -26,9 +26,9 @@ class _LiveLiveState extends State<LiveLive> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    var currentOverNumber = (widget.match!.currentOver!.number ?? 0) + 1;
+    var currentOverNumber = (widget.match?.currentOver?.number ?? 0) + 1;
     final bowlerStatsIndex = widget.match!.bowlerStats!.indexWhere(
-      (element) => element.player!.id == widget.match!.openingBowler!.id,
+      (element) => element.player?.id == widget.match!.openingBowler!.id,
     );
     final looseScore = widget.match?.winningTeam == widget.match?.team1?.id
         ? (widget.match!.team1Score! - widget.match!.team2Score!)
@@ -53,7 +53,7 @@ class _LiveLiveState extends State<LiveLive> {
                       style: const TextStyle(color: AppColor.blueColor),
                     ),
                   const Spacer(),
-                  if (widget.match!.currentInning! == 2)
+                  if (widget.match!.currentInning?.number == 2)
                     Text(
                       "Target: ${widget.match?.team1Batting == true ? widget.match?.team2Score : widget.match?.team1Score}",
                     ),
