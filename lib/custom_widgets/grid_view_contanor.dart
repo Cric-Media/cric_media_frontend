@@ -74,14 +74,16 @@ class GridViewContanor extends StatelessWidget {
                               ? match?.squad1?.length
                               : 0, // Example number of items
                           itemBuilder: (BuildContext context, int index) {
-                            var player = match!.squad1![index];
+                            var player = match?.squad1![index];
 
                             return InkWell(
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => PlayerProfileScreen(),
+                                    builder: (context) => PlayerProfileScreen(
+                                      id: player?.id,
+                                    ),
                                   ),
                                 );
                               },
@@ -120,13 +122,17 @@ class GridViewContanor extends StatelessWidget {
                               match?.squad2?.length, // Example number of items
                           itemBuilder: (BuildContext context, int index) {
                             var player = match?.squad2![index];
+
                             return InkWell(
                               onTap: () {
                                 Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PlayerProfileScreen()));
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PlayerProfileScreen(
+                                      id: player?.id,
+                                    ),
+                                  ),
+                                );
                               },
                               child: SquadPlayer(player: player),
                             );

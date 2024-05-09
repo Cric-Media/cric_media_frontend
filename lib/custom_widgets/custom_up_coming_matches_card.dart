@@ -119,27 +119,31 @@ class UpCommingMachesCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        admin == null
-                            ? const SizedBox.shrink()
-                            : Expanded(
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(
-                                      context,
-                                      startMatch,
-                                      arguments: {'match': match},
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Start Match",
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: AppColor.blueColor,
-                                      fontWeight: FontWeight.w700,
+                        Row(
+                          children: [
+                            admin == null
+                                ? const SizedBox.shrink()
+                                : Expanded(
+                                    child: OutlinedButton(
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          startMatch,
+                                          arguments: {'match': match},
+                                        );
+                                      },
+                                      child: const Text(
+                                        "Start Match",
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: AppColor.blueColor,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
+                          ],
+                        )
                       ],
                     ),
                   )),

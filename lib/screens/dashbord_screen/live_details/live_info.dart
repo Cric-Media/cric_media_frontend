@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/custom_widgets/grid_view_contanor.dart';
 import 'package:cricket_app/models/match_details.dart';
@@ -18,7 +16,7 @@ class LiveInfo extends StatelessWidget {
       // Used to make the entire screen scrollable
       child: Column(
         children: [
-          SizedBox(height: 7),
+          const SizedBox(height: 7),
           Card(
             color: Colors.white,
             elevation: 2,
@@ -42,14 +40,14 @@ class LiveInfo extends StatelessWidget {
                     //           color: AppColor.blueColor,
                     //           fontWeight: FontWeight.w700)),
                     // ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Expanded(
                       child: Row(
                         children: [
                           Text(
                             'Date & Time :',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600)),
@@ -60,7 +58,7 @@ class LiveInfo extends StatelessWidget {
                                   ? "\t\t${match?.matchDateTime}"
                                   : '   Wed, 8 Jan 2024- 2:30 pm',
                               style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                 fontSize: 14,
                                 color: AppColor.hintColor,
                                 fontWeight: FontWeight.w600,
@@ -70,7 +68,7 @@ class LiveInfo extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     // Row(
                     //   children: [
                     //     Text(
@@ -98,7 +96,7 @@ class LiveInfo extends StatelessWidget {
                           Text(
                             'Toss :\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600)),
@@ -107,7 +105,7 @@ class LiveInfo extends StatelessWidget {
                             child: Text(
                               match != null ? "${match?.tossDetails}" : '',
                               style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                 fontSize: 14,
                                 color: AppColor.hintColor,
                                 fontWeight: FontWeight.w600,
@@ -141,12 +139,12 @@ class LiveInfo extends StatelessWidget {
                     Text(
                       'Venue',
                       style: GoogleFonts.inter(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 16,
                               color: AppColor.blueColor,
                               fontWeight: FontWeight.w700)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Expanded(
@@ -155,7 +153,7 @@ class LiveInfo extends StatelessWidget {
                           Text(
                             'City / Town:\t\t\t',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600)),
@@ -165,7 +163,7 @@ class LiveInfo extends StatelessWidget {
                                 ? "${match?.cityOrTown}"
                                 : ' Karachi cricket stadium',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                               fontSize: 14,
                               color: AppColor.hintColor,
                               fontWeight: FontWeight.w600,
@@ -181,7 +179,7 @@ class LiveInfo extends StatelessWidget {
                           Text(
                             'Ground:\t\t\t',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600)),
@@ -190,7 +188,7 @@ class LiveInfo extends StatelessWidget {
                             child: Text(
                               match != null ? "${match?.ground}" : 'Pakistan',
                               style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                 fontSize: 14,
                                 color: AppColor.hintColor,
                                 fontWeight: FontWeight.w600,

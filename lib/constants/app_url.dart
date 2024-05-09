@@ -24,8 +24,8 @@ abstract class AdminUrl {
   static final getAllPlayers = '${AppUrl.baseUrl}/get-player-detail-by-adminid';
   static final getAllPlayersByTeamId =
       '${AppUrl.baseUrl}/get-players-by-teamId';
-  static final getPlayerDetail =
-      '${AppUrl.baseUrl}/get-player-detail-by-playerid';
+  // static final getPlayerDetail =
+  //     '${AppUrl.baseUrl}/get-player-detail-by-playerid';
   static final updatePlayer = '${AppUrl.baseUrl}/update-player';
   static final deletePlayer = '${AppUrl.baseUrl}/delete-player-byid';
   static final getOtherAdmins = '${AppUrl.baseUrl}/get-other-admin-by-adminid';
@@ -61,4 +61,8 @@ abstract class AdminUrl {
   static final matchScoreCards = "${AppUrl.baseUrl}/get-scorecards-for-match";
   static final getMatchOvers = "${AppUrl.baseUrl}/get-overs-for-match";
   static final setManOfTheMatch = "${AppUrl.baseUrl}/set-man-of-the-match";
+}
+
+abstract class UserUrl {
+  static final getPlayerDetails = "${AppUrl.baseUrl}/player-details";
 }

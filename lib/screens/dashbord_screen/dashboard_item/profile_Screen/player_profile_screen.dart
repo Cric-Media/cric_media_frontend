@@ -1,28 +1,42 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, sized_box_for_whitespace
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_images.dart';
-import 'package:cricket_app/custom_widgets/profile_Card2.dart';
+import 'package:cricket_app/cubits/player/player_cubit.dart';
+import 'package:cricket_app/custom_widgets/odi_career_card.dart';
 import 'package:cricket_app/custom_widgets/profile_card.dart';
-import 'package:cricket_app/custom_widgets/profile_card4.dart';
+import 'package:cricket_app/custom_widgets/t20_career_card.dart';
+import 'package:cricket_app/custom_widgets/test_career_card.dart';
+import 'package:cricket_app/models/player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../custom_widgets/player_profile3.dart';
+class PlayerProfileScreen extends StatefulWidget {
+  final String? id;
+  const PlayerProfileScreen({super.key, this.id});
 
-class PlayerProfileScreen extends StatelessWidget {
-  const PlayerProfileScreen({super.key});
+  @override
+  State<PlayerProfileScreen> createState() => _PlayerProfileScreenState();
+}
+
+class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
+  Player? player;
+  @override
+  void initState() {
+    super.initState();
+    PlayerCubit.get(context).getPlayer(widget.id ?? '');
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Color(0XFFFBFBFB),
+      backgroundColor: const Color(0XFFFBFBFB),
       appBar: AppBar(
         title: Text(
           'PLAYER PROFILE',
           style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
             fontSize: 17,
             color: Colors.black,
             fontWeight: FontWeight.w700,
@@ -30,166 +44,158 @@ class PlayerProfileScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(children: [
-          Container(
-            width: screenWidth,
-            height: 250,
-            child: Image.asset(
-              AppIcons.profileimage,
-              fit: BoxFit.contain,
-            ),
-          ),
-          SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Container(
-              width: screenWidth,
-              height: 150,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 1.0,
-                        offset: Offset.zero)
-                  ]),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Personal Information',
-                      style: TextStyle(
-                          fontSize: 17,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Name: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 14,
-                              color: Colors.black),
+      body: BlocConsumer<PlayerCubit, PlayerState>(
+        listener: (context, state) {
+          if (state is PlayerGetPlayer) {
+            player = state.response.data;
+          }
+        },
+        builder: (context, state) {
+          if (state is PlayerGetPlayerLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return SingleChildScrollView(
+            child: Column(children: [
+              SizedBox(
+                width: screenWidth,
+                height: 360,
+                child: player != null
+                    ? Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: CachedNetworkImageProvider(
+                              player?.imageUrl ?? '',
+                            ),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        Text(
-                          'Babar Azam',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color: Colors.black),
+                      )
+                    : Image.asset(
+                        AppIcons.profileimage,
+                        fit: BoxFit.contain,
+                      ),
+              ),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Container(
+                  width: screenWidth,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 1.0,
+                          offset: Offset.zero,
                         )
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Personal Information',
+                          style: TextStyle(
+                              fontSize: 17,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            const Text(
+                              'Name: ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 14,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              player?.name ?? '',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
+                                  color: Colors.black),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            const Text(
+                              'Born: ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 14,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              player?.age ?? '',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
+                                  color: Colors.black),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            const Text(
+                              'Role: ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 14,
+                                  color: Colors.black),
+                            ),
+                            Text(
+                              player?.role ?? '',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
+                                  color: Colors.black),
+                            )
+                          ],
+                        ),
                       ],
                     ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Born: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 14,
-                              color: Colors.black),
-                        ),
-                        Text(
-                          'October 15, Lahore, Punjab',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color: Colors.black),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Batting Style: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 14,
-                              color: Colors.black),
-                        ),
-                        Text(
-                          'Right Hand Bat',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color: Colors.black),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          'Bowling Style: ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: 14,
-                              color: Colors.black),
-                        ),
-                        Text(
-                          'Right arm Offbreak',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color: Colors.black),
-                        )
-                      ],
-                    )
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: ProfileCard(),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: ProfileCard2(),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: ProfileCard3(),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: ProfileCard4(),
-          ),
-          SizedBox(
-            height: 50,
-          ),
-        ]),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: LatestPerformanceCard(player: player),
+              ),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: OdiCareerCard(player: player),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: T20CareerCard(player: player),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: TestCareerCard(),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+            ]),
+          );
+        },
       ),
     );
   }

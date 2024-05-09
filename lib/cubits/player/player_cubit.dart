@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cricket_app/controllers/admin/admin_controller.dart';
+import 'package:cricket_app/controllers/user/user_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/utils/app_exception.dart';
@@ -14,6 +15,7 @@ class PlayerCubit extends Cubit<PlayerState> {
   static PlayerCubit get(context) => BlocProvider.of<PlayerCubit>(context);
 
   var adminController = AdminController();
+  var userController = UserController();
   List<Player> players = [];
 
   addPlayer({required Player player, required File playerImage}) async {
@@ -91,13 +93,13 @@ class PlayerCubit extends Cubit<PlayerState> {
     try {
       var network = await Network.check();
       if (network) {
-        var response = await adminController.getPlayer(playerId);
+        var response = await userController.getPlayerDetails(playerId);
         emit(PlayerGetPlayer(response));
       } else {
         emit(PlayerGetError('No internet connection'));
       }
     } catch (err) {
-      // if exception type is not AppException then emit "Something went wrong"
+      print(err);
       if (err is! AppException) {
         emit(PlayerGetError('Something went wrong'));
       } else {

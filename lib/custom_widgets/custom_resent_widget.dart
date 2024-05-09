@@ -9,10 +9,12 @@ class CustomResentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
-    var winningWickets = match?.winningTeam == match?.team1?.id
-        ? (match!.squad1!.length - match!.team1Outs!.toInt())
-        : (match!.squad2!.length - match!.team2Outs!.toInt());
+    int? winningWickets = 0;
+    if (match != null) {
+      winningWickets = match?.winningTeam == match?.team1?.id
+          ? (match!.squad1!.length - match!.team1Outs!.toInt())
+          : (match!.squad2!.length - match!.team2Outs!.toInt());
+    }
     return ClipRRect(
       borderRadius: BorderRadius.circular(25),
       child: Card(

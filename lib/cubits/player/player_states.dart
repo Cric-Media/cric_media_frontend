@@ -17,7 +17,7 @@ class PlayerUpdateLoading extends PlayerState {}
 
 class PlayerDeleteLoading extends PlayerState {}
 
-// Success states
+// * Success states
 class PlayerAddSuccess extends PlayerState {
   final ApiResponse response;
   PlayerAddSuccess(this.response);
@@ -43,7 +43,7 @@ class PlayerGetInitial extends PlayerState {
   PlayerGetInitial(this.response);
 }
 
-// Error states
+// ! Error states
 class PlayerAddError extends PlayerState {
   final String message;
   PlayerAddError(this.message);

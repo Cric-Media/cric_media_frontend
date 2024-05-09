@@ -7,7 +7,10 @@ class Player {
   String? additionalInfo;
   String? imageUrl;
   List<String>? admins;
-  Stats? stats;
+  // Stats? stats;
+  Stats? t20Stats;
+  Stats? odiStats;
+  Stats? lastPerformance;
 
   Player({
     this.name,
@@ -18,7 +21,10 @@ class Player {
     this.additionalInfo,
     this.imageUrl,
     this.admins,
-    this.stats,
+    // this.stats,
+    this.t20Stats,
+    this.odiStats,
+    this.lastPerformance,
   });
 
   Player.fromJson(Map<String, dynamic> json) {
@@ -30,7 +36,14 @@ class Player {
     additionalInfo = json['additionalInfo'];
     imageUrl = json['Image'];
     admins = json['admins']?.cast<String>();
-    stats = json['stats'] != null ? Stats.fromJson(json['stats']) : null;
+    // stats = json['stats'] != null ? Stats.fromJson(json['stats']) : null;
+    t20Stats =
+        json['t20Stats'] != null ? Stats.fromJson(json['t20Stats']) : null;
+    odiStats =
+        json['odiStats'] != null ? Stats.fromJson(json['odiStats']) : null;
+    lastPerformance = json['lastPerformance'] != null
+        ? Stats.fromJson(json['lastPerformance'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -43,8 +56,17 @@ class Player {
     data['additionalInfo'] = additionalInfo;
     data['Image'] = imageUrl;
     data['admins'] = admins;
-    if (stats != null) {
-      data['stats'] = stats!.toJson();
+    // if (stats != null) {
+    //   data['stats'] = stats!.toJson();
+    // }
+    if (t20Stats != null) {
+      data['t20Stats'] = t20Stats!.toJson();
+    }
+    if (odiStats != null) {
+      data['odiStats'] = odiStats!.toJson();
+    }
+    if (lastPerformance != null) {
+      data['lastPerformance'] = lastPerformance!.toJson();
     }
     return data;
   }
@@ -62,7 +84,10 @@ class Player {
         other.additionalInfo == additionalInfo &&
         other.imageUrl == imageUrl &&
         other.admins == admins &&
-        other.stats == stats;
+        // other.stats == stats;
+        other.t20Stats == t20Stats &&
+        other.odiStats == odiStats &&
+        other.lastPerformance == lastPerformance;
   }
 
   @override
@@ -75,7 +100,10 @@ class Player {
         additionalInfo.hashCode ^
         imageUrl.hashCode ^
         admins.hashCode ^
-        stats.hashCode;
+        // stats.hashCode;
+        t20Stats.hashCode ^
+        odiStats.hashCode ^
+        lastPerformance.hashCode;
   }
 }
 
@@ -83,13 +111,34 @@ class Stats {
   int? sixes;
   int? fours;
   int? wickets;
+  num? runs, catches, balls, fifties, hundreds, innings, highestScore, matches;
 
-  Stats({this.sixes, this.fours, this.wickets});
+  Stats({
+    this.sixes,
+    this.fours,
+    this.wickets,
+    this.runs,
+    this.catches,
+    this.balls,
+    this.fifties,
+    this.hundreds,
+    this.innings,
+    this.highestScore,
+    this.matches,
+  });
 
   Stats.fromJson(Map<String, dynamic> json) {
     sixes = json['sixes'];
     fours = json['fours'];
     wickets = json['wickets'];
+    runs = json['runs'];
+    catches = json['catches'];
+    balls = json['balls'];
+    fifties = json['fifties'];
+    hundreds = json['hundreds'];
+    innings = json['innings'];
+    highestScore = json['highestScore'];
+    matches = json['matches'];
   }
 
   Map<String, dynamic> toJson() {
@@ -97,6 +146,14 @@ class Stats {
     data['sixes'] = sixes;
     data['fours'] = fours;
     data['wickets'] = wickets;
+    data['runs'] = runs;
+    data['catches'] = catches;
+    data['balls'] = balls;
+    data['fifties'] = fifties;
+    data['hundreds'] = hundreds;
+    data['innings'] = innings;
+    data['highestScore'] = highestScore;
+    data['matches'] = matches;
     return data;
   }
 
@@ -107,11 +164,29 @@ class Stats {
     return other is Stats &&
         other.sixes == sixes &&
         other.fours == fours &&
-        other.wickets == wickets;
+        other.wickets == wickets &&
+        other.runs == runs &&
+        other.catches == catches &&
+        other.balls == balls &&
+        other.fifties == fifties &&
+        other.hundreds == hundreds &&
+        other.innings == innings &&
+        other.highestScore == highestScore &&
+        other.matches == matches;
   }
 
   @override
   int get hashCode {
-    return sixes.hashCode ^ fours.hashCode ^ wickets.hashCode;
+    return sixes.hashCode ^
+        fours.hashCode ^
+        wickets.hashCode ^
+        runs.hashCode ^
+        catches.hashCode ^
+        balls.hashCode ^
+        fifties.hashCode ^
+        hundreds.hashCode ^
+        innings.hashCode ^
+        highestScore.hashCode ^
+        matches.hashCode;
   }
 }
