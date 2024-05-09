@@ -13,7 +13,7 @@ class ExpandedAlignedText extends StatelessWidget {
         child: Text(
           text,
           style: const TextStyle(
-            fontSize: 16,
+            fontSize: 13,
             color: Colors.black,
             fontWeight: FontWeight.w400,
           ),

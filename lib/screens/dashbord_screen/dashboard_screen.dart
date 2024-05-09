@@ -2,6 +2,7 @@
 
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
+import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/menu.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/news.dart';
@@ -32,6 +33,8 @@ class _MainPageState extends State<DashBoardScreen> {
   @override
   void initState() {
     BlocProvider.of<AuthCubit>(context).getUser();
+    MatchCubit.get(context).getLiveMatches(user: true);
+
     super.initState();
   }
 

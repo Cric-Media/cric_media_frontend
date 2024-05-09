@@ -41,7 +41,7 @@ class _LiveDetails extends State<LiveDetails> {
   @override
   void dispose() {
     // Remove the listener for the 'match' event when the widget is disposed
-    SocketService.instance.socket.off('match-${widget.match?.sId}');
+    // SocketService.instance.socket.off('match-${widget.match?.sId}');
 
     super.dispose();
   }

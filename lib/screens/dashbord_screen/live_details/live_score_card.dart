@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
-
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/custom_widgets/recent_live_bolling_Card.dart';
 import 'package:cricket_app/models/match_details.dart';
@@ -26,7 +24,7 @@ class LiveScoreCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.grey,
                     offset: Offset.zero,
@@ -45,13 +43,13 @@ class LiveScoreCard extends StatelessWidget {
                       Text(
                         match != null ? match!.team1!.name! : 'Afghanistan',
                         style: GoogleFonts.inter(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 16,
                               color: Colors.black,
                               fontWeight: FontWeight.w600),
                         ),
                       ),
-                      SizedBox(height: 13),
+                      const SizedBox(height: 13),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -61,15 +59,15 @@ class LiveScoreCard extends StatelessWidget {
                             child: Text(
                               'Batsmen',
                               style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                 fontSize: 15,
                                 color: AppColor.blueColor,
                                 fontWeight: FontWeight.w600,
                               )),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 10.0),
                             child: Row(
                               children: [
                                 Text(
@@ -124,14 +122,14 @@ class LiveScoreCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       SizedBox(
                         height: 820,
                         child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: 11,
                             itemBuilder: (context, index) {
-                              return RecentTeamCard();
+                              return const RecentTeamCard();
                             }),
                       ),
                       Row(
@@ -139,23 +137,23 @@ class LiveScoreCard extends StatelessWidget {
                           Text(
                             'Extras: ',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.black)),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           Text(
                             '10 (5 b, 1 lb, 1 wd,1 nb)',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.black)),
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Row(
@@ -163,23 +161,23 @@ class LiveScoreCard extends StatelessWidget {
                           Text(
                             'Total: ',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.black)),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           Text(
                             ' 230/8 45 Ov(RR4.21)',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.grey)),
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Row(
@@ -187,45 +185,45 @@ class LiveScoreCard extends StatelessWidget {
                           Text(
                             'Target:  ',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.black)),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           Text(
                             ' 300',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.grey)),
                           )
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Text(
                         'Yet to bat',
                         style: GoogleFonts.inter(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black)),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       Text(
                         'Rehmatullah, Mujeeb',
                         style: GoogleFonts.inter(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.grey)),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                     ],
@@ -233,15 +231,15 @@ class LiveScoreCard extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 7,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
               child: Text(
                   'Fall of wickets: 1-4 (Rohit Sharma, 0.2 ov), 2-193 \n(Shubman Gill, 29.6 ov), 3-196 (Virat Kohli, 31.3 ov),\n 4-256 (KL Rahul, 39.2 ov), 5-276\n (Suryakumar Yadav, 41.3 ov), 6-333 (Shreyas Iyer, 47.3 ov),\n 7-355 (Mohammed Shami, 49.3 ov), 8-357 (Ravindra Jadeja, 49.6 ov)'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Card(
@@ -267,15 +265,15 @@ class LiveScoreCard extends StatelessWidget {
                             child: Text(
                               'Bowling',
                               style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                 fontSize: 15,
                                 color: AppColor.blueColor,
                                 fontWeight: FontWeight.w600,
                               )),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 10.0),
                             child: Row(
                               children: [
                                 Text(
@@ -343,28 +341,28 @@ class LiveScoreCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
-                      RecentLiveBollingCard(),
-                      SizedBox(
+                      const RecentLiveBollingCard(),
+                      const SizedBox(
                         height: 15,
                       ),
-                      RecentLiveBollingCard(),
-                      SizedBox(
+                      const RecentLiveBollingCard(),
+                      const SizedBox(
                         height: 15,
                       ),
-                      RecentLiveBollingCard(),
-                      SizedBox(
+                      const RecentLiveBollingCard(),
+                      const SizedBox(
                         height: 15,
                       ),
-                      RecentLiveBollingCard(),
+                      const RecentLiveBollingCard(),
                     ],
                   ),
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Container(
@@ -373,7 +371,7 @@ class LiveScoreCard extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
-                  BoxShadow(
+                  const BoxShadow(
                     color: Colors.grey,
                     offset: Offset.zero,
                     blurRadius: 2,
@@ -390,12 +388,12 @@ class LiveScoreCard extends StatelessWidget {
                     Text(
                       'pakistan',
                       style: GoogleFonts.inter(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 16,
                               color: Colors.black,
                               fontWeight: FontWeight.w600)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 13,
                     ),
                     Row(
@@ -407,15 +405,15 @@ class LiveScoreCard extends StatelessWidget {
                           child: Text(
                             'Batsmen',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                               fontSize: 15,
                               color: AppColor.blueColor,
                               fontWeight: FontWeight.w600,
                             )),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
+                        const Padding(
+                          padding: EdgeInsets.only(right: 10.0),
                           child: Row(
                             children: [
                               Text(
@@ -470,16 +468,16 @@ class LiveScoreCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
                       height: 820,
                       child: ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: 11,
                           itemBuilder: (context, index) {
-                            return RecentTeamCard();
+                            return const RecentTeamCard();
                           }),
                     ),
                     Row(
@@ -487,23 +485,23 @@ class LiveScoreCard extends StatelessWidget {
                         Text(
                           'Extras: ',
                           style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black)),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           '10 (5 b, 1 lb, 1 wd,1 nb)',
                           style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black)),
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
                     Row(
@@ -511,23 +509,23 @@ class LiveScoreCard extends StatelessWidget {
                         Text(
                           'Total: ',
                           style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black)),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           ' 230/8 45 Ov(RR4.21)',
                           style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.grey)),
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
                     Row(
@@ -535,60 +533,60 @@ class LiveScoreCard extends StatelessWidget {
                         Text(
                           'Target:  ',
                           style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.black)),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           ' 300',
                           style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
                                   color: Colors.grey)),
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Text(
                       'Yet to bat',
                       style: GoogleFonts.inter(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Colors.black)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     ),
                     Text(
                       'Rehmatullah, Mujeeb',
                       style: GoogleFonts.inter(
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Colors.grey)),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                   ],
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 7,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
               child: Text(
                   'Fall of wickets: 1-4 (Rohit Sharma, 0.2 ov), 2-193 \n(Shubman Gill, 29.6 ov), 3-196 (Virat Kohli, 31.3 ov),\n 4-256 (KL Rahul, 39.2 ov), 5-276\n (Suryakumar Yadav, 41.3 ov), 6-333 (Shreyas Iyer, 47.3 ov),\n 7-355 (Mohammed Shami, 49.3 ov), 8-357 (Ravindra Jadeja, 49.6 ov)'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Card(
@@ -614,15 +612,15 @@ class LiveScoreCard extends StatelessWidget {
                             child: Text(
                               'Bowling',
                               style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                 fontSize: 15,
                                 color: AppColor.blueColor,
                                 fontWeight: FontWeight.w600,
                               )),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 10.0),
                             child: Row(
                               children: [
                                 Text(
@@ -690,22 +688,22 @@ class LiveScoreCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
-                      RecentLiveBollingCard(),
-                      SizedBox(
+                      const RecentLiveBollingCard(),
+                      const SizedBox(
                         height: 15,
                       ),
-                      RecentLiveBollingCard(),
-                      SizedBox(
+                      const RecentLiveBollingCard(),
+                      const SizedBox(
                         height: 15,
                       ),
-                      RecentLiveBollingCard(),
-                      SizedBox(
+                      const RecentLiveBollingCard(),
+                      const SizedBox(
                         height: 15,
                       ),
-                      RecentLiveBollingCard(),
+                      const RecentLiveBollingCard(),
                     ],
                   ),
                 ),

@@ -26,7 +26,7 @@ class TestCareerCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'T20 Career',
+              'Test Career',
               style: TextStyle(
                   fontSize: 17,
                   color: Colors.black,

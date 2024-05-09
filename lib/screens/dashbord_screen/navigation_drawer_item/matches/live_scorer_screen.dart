@@ -78,6 +78,14 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    SocketService.instance.socket.off('match-${widget.matchId}');
+    SocketService.instance.socket.off('overCompleted');
+    SocketService.instance.socket.off('inningCompleted');
+    super.dispose();
+  }
+
   handleInningsCompleted() {
     Navigator.pushNamed(context, setOpenings, arguments: {
       "matchId": match?.sId.toString(),
