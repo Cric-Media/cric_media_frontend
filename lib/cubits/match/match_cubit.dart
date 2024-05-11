@@ -193,7 +193,7 @@ class MatchCubit extends Cubit<MatchState> {
         "oversPerBowler": oversPerBowler ?? 0,
         "cityOrTown": cityTown.toString(),
         "ground": ground.toString(),
-        "matchDateTime": matchDateTime.toString(),
+        "matchDateTime": "$matchDateTime $country",
       };
 
       final response = await ApiManager.postRequest(

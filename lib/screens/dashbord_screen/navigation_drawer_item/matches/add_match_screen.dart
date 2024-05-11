@@ -1,3 +1,5 @@
+import 'package:country_state_city/models/country.dart';
+import 'package:country_state_city/utils/country_utils.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
@@ -19,9 +21,21 @@ class AddMatchScreen extends StatefulWidget {
 }
 
 class _AddMatchScreenState extends State<AddMatchScreen> {
+  List<Country> countries = [];
   late DateTime selectedDateTime =
       DateTime.now(); // Initialize with current time
   bool checkBoxValue = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getAllCountries().then((value) {
+      setState(() {
+        countries = value;
+      });
+    });
+  }
+
   Future<void> _selectDateAndTime(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -417,9 +431,7 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 5),
                   GestureDetector(
                     onTap: () {
                       _selectDateAndTime(context);
@@ -442,6 +454,28 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
+                  const Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Country',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  DropdownWidget(
+                    items: countries.map((e) => e.name).toList(),
+                    value: MatchCubit.get(context).country,
+                    hint: "Select a country please.",
+                    onChanged: (v) {
+                      setState(() {
+                        MatchCubit.get(context).country = v;
+                      });
+                    },
+                  ),
                   SizedBox(
                     width: double.infinity,
                     height: 50,
