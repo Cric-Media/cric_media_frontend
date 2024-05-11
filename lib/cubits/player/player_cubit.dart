@@ -56,7 +56,6 @@ class PlayerCubit extends Cubit<PlayerState> {
         emit(PlayerGetError('No internet connection'));
       }
     } catch (err) {
-      // if exception type is not AppException then emit "Something went wrong"
       if (err is! AppException) {
         emit(PlayerGetError('Something went wrong'));
       } else {
@@ -99,7 +98,6 @@ class PlayerCubit extends Cubit<PlayerState> {
         emit(PlayerGetError('No internet connection'));
       }
     } catch (err) {
-      print(err);
       if (err is! AppException) {
         emit(PlayerGetError('Something went wrong'));
       } else {

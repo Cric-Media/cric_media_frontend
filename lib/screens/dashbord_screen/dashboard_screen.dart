@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, non_constant_identifier_names
-
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
@@ -20,11 +18,11 @@ class DashBoardScreen extends StatefulWidget {
 
 class _MainPageState extends State<DashBoardScreen> {
   List<Widget> Screen = [
-    Home(),
-    News(),
-    Video(),
-    Series(),
-    Menu(),
+    const Home(),
+    const News(),
+    const Video(),
+    const Series(),
+    const Menu(),
     Container(),
   ];
 
@@ -48,22 +46,22 @@ class _MainPageState extends State<DashBoardScreen> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Color(0XFFFBFBFB),
+      backgroundColor: const Color(0XFFFBFBFB),
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
           value == 0
-              ? Home()
+              ? const Home()
               : value == 1
-                  ? News()
+                  ? const News()
                   : value == 2
-                      ? Series()
+                      ? const Series()
                       : value == 3
-                          ? Video()
+                          ? const Video()
                           : value == 4
-                              ? Menu()
+                              ? const Menu()
                               : Container(),
-          SizedBox(
+          const SizedBox(
             height: 4,
           ),
           SingleChildScrollView(
@@ -72,9 +70,9 @@ class _MainPageState extends State<DashBoardScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
                   height: size.height * 0.080,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                         topRight: Radius.circular(12),
@@ -86,14 +84,14 @@ class _MainPageState extends State<DashBoardScreen> {
                           getVlaue(0);
                         },
                         child: Container(
-                          margin: EdgeInsets.only(left: 10),
+                          margin: const EdgeInsets.only(left: 10),
                           width: size.width * 0.15,
                           height: size.height,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Image.asset(
@@ -121,14 +119,14 @@ class _MainPageState extends State<DashBoardScreen> {
                         getVlaue(1);
                       },
                       child: Container(
-                        margin: EdgeInsets.only(left: 15),
+                        margin: const EdgeInsets.only(left: 15),
                         width: size.width * 0.15,
                         height: size.height,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Image.asset(
@@ -140,7 +138,7 @@ class _MainPageState extends State<DashBoardScreen> {
                                   ? AppColor.blueColor
                                   : Colors.grey.withOpacity(0.8),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 2,
                             ),
                             Text(
@@ -160,14 +158,14 @@ class _MainPageState extends State<DashBoardScreen> {
                           getVlaue(2);
                         },
                         child: Container(
-                          margin: EdgeInsets.only(left: 15),
+                          margin: const EdgeInsets.only(left: 15),
                           width: size.width * 0.15,
                           height: size.height,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 6,
                               ),
                               Image.asset(
@@ -179,7 +177,7 @@ class _MainPageState extends State<DashBoardScreen> {
                                     ? size.width * 0.058
                                     : size.width * 0.056,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 2,
                               ),
                               Text(
@@ -198,14 +196,14 @@ class _MainPageState extends State<DashBoardScreen> {
                           getVlaue(3);
                         },
                         child: Container(
-                          margin: EdgeInsets.only(left: 15),
+                          margin: const EdgeInsets.only(left: 15),
                           width: size.width * 0.15,
                           height: size.height,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 12,
                               ),
                               Image.asset(
@@ -217,7 +215,7 @@ class _MainPageState extends State<DashBoardScreen> {
                                     ? size.width * 0.058
                                     : size.width * 0.056,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 2,
                               ),
                               Text(
@@ -236,14 +234,14 @@ class _MainPageState extends State<DashBoardScreen> {
                         getVlaue(4);
                       },
                       child: Container(
-                        margin: EdgeInsets.only(left: 15),
+                        margin: const EdgeInsets.only(left: 15),
                         width: size.width * 0.15,
                         height: size.height,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             Image.asset(
@@ -255,7 +253,7 @@ class _MainPageState extends State<DashBoardScreen> {
                                   ? size.width * 0.058
                                   : size.width * 0.056,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 2,
                             ),
                             Text(

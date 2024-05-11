@@ -36,31 +36,20 @@ class LatestPerformanceCard extends StatelessWidget {
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ExpandedAlignedText('R'),
-                ExpandedAlignedText('B'),
-                ExpandedAlignedText('6'),
-                ExpandedAlignedText('4'),
-                ExpandedAlignedText('HS'),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ExpandedAlignedText(
-                    player?.lastPerformance?.runs.toString() ?? ''),
-                ExpandedAlignedText(
-                    player?.lastPerformance?.balls.toString() ?? ''),
-                ExpandedAlignedText(
-                    player?.lastPerformance?.sixes.toString() ?? ''),
-                ExpandedAlignedText(
-                    player?.lastPerformance?.fours.toString() ?? ''),
-                ExpandedAlignedText(
-                    player?.lastPerformance?.highestScore.toString() ?? ''),
-              ],
-            ),
+            if (player != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: player!.latestPerformance!
+                    .map((e) => ExpandedAlignedText(e.team?.name ?? ''))
+                    .toList(),
+              ),
+            if (player != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: player!.latestPerformance!
+                    .map((e) => ExpandedAlignedText("Runs:${e.runs ?? 0}"))
+                    .toList(),
+              ),
           ],
         ),
       ),

@@ -237,23 +237,63 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                       });
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Number of over ',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColor.hintColor,
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Number of overs',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: AppColor.hintColor,
+                              ),
                             ),
-                          ),
-                          Container(
+                            Container(
+                                width: 180,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.grey.withOpacity(0.3)),
+                                child: TextField(
+                                  onChanged: (value) {
+                                    MatchCubit.get(context).numberOfOvers =
+                                        int.tryParse(value);
+                                  },
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                      hintText: '10',
+                                      hintStyle: TextStyle(
+                                        fontSize: 20,
+                                        color:
+                                            AppColor.hintColor.withOpacity(0.5),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                      border: InputBorder.none),
+                                ))
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Over  per  bowler ',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: AppColor.hintColor,
+                              ),
+                            ),
+                            Container(
                               width: 180,
                               height: 50,
                               decoration: BoxDecoration(
@@ -261,7 +301,7 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                                   color: Colors.grey.withOpacity(0.3)),
                               child: TextField(
                                 onChanged: (value) {
-                                  MatchCubit.get(context).numberOfOvers =
+                                  MatchCubit.get(context).oversPerBowler =
                                       int.tryParse(value);
                                 },
                                 keyboardType: TextInputType.number,
@@ -276,132 +316,96 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                                     contentPadding: const EdgeInsets.symmetric(
                                         horizontal: 10),
                                     border: InputBorder.none),
-                              ))
-                        ],
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Over  per  bowler ',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColor.hintColor,
-                            ),
-                          ),
-                          Container(
-                            width: 180,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.grey.withOpacity(0.3)),
-                            child: TextField(
-                              onChanged: (value) {
-                                MatchCubit.get(context).oversPerBowler =
-                                    int.tryParse(value);
-                              },
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                  hintText: '10',
-                                  hintStyle: TextStyle(
-                                    fontSize: 20,
-                                    color: AppColor.hintColor.withOpacity(0.5),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  border: InputBorder.none),
-                            ),
-                          )
-                        ],
+                              ),
+                            )
+                          ],
+                        ),
                       )
                     ],
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'City / Town ',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColor.hintColor,
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'City / Town ',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: AppColor.hintColor,
+                              ),
                             ),
-                          ),
-                          Container(
-                              width: 180,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Colors.grey.withOpacity(0.3)),
-                              child: TextField(
-                                onChanged: (value) {
-                                  MatchCubit.get(context).cityTown = value;
-                                },
-                                decoration: InputDecoration(
-                                    hintText: 'Kabul',
-                                    hintStyle: TextStyle(
-                                      fontSize: 20,
-                                      color:
-                                          AppColor.hintColor.withOpacity(0.5),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    border: InputBorder.none),
-                              ))
-                        ],
+                            Container(
+                                width: 180,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.grey.withOpacity(0.3)),
+                                child: TextField(
+                                  onChanged: (value) {
+                                    MatchCubit.get(context).cityTown = value;
+                                  },
+                                  decoration: InputDecoration(
+                                      hintText: 'Kabul',
+                                      hintStyle: TextStyle(
+                                        fontSize: 20,
+                                        color:
+                                            AppColor.hintColor.withOpacity(0.5),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                      border: InputBorder.none),
+                                ))
+                          ],
+                        ),
                       ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Ground ',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: AppColor.hintColor,
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Ground ',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: AppColor.hintColor,
+                              ),
                             ),
-                          ),
-                          Container(
-                              width: 180,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Colors.grey.withOpacity(0.3)),
-                              child: TextField(
-                                onChanged: (value) {
-                                  MatchCubit.get(context).ground = value;
-                                },
-                                decoration: InputDecoration(
-                                    hintText: 'Ground',
-                                    hintStyle: TextStyle(
-                                      fontSize: 20,
-                                      color:
-                                          AppColor.hintColor.withOpacity(0.5),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    border: InputBorder.none),
-                              ))
-                        ],
+                            Container(
+                                width: 180,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.grey.withOpacity(0.3)),
+                                child: TextField(
+                                  onChanged: (value) {
+                                    MatchCubit.get(context).ground = value;
+                                  },
+                                  decoration: InputDecoration(
+                                      hintText: 'Ground',
+                                      hintStyle: TextStyle(
+                                        fontSize: 20,
+                                        color:
+                                            AppColor.hintColor.withOpacity(0.5),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                      border: InputBorder.none),
+                                ))
+                          ],
+                        ),
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   const Align(
                     alignment: Alignment.topLeft,
                     child: Text(

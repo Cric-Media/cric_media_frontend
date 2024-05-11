@@ -33,7 +33,7 @@ class MatchCubit extends Cubit<MatchState> {
   Set<Player> squad1 = {}, squad2 = {};
   String? matchType, ballType, pitchType;
   int? numberOfOvers, oversPerBowler;
-  String? cityTown, ground, matchDateTime, whoWinsToss, tossDetails;
+  String? cityTown, ground, matchDateTime, whoWinsToss, tossDetails, country;
   bool? teamAToss, teamBToss, teamABat, teamBBat, teamABowl, teamBBowl;
   int outPlayerIndex = 0;
 
@@ -273,7 +273,6 @@ class MatchCubit extends Cubit<MatchState> {
         emit(MatchGetLiveError('No internet connection'));
       }
     } catch (err) {
-      // if exception type is not AppException then emit "Something went wrong"
       if (err is! AppException) {
         emit(MatchGetLiveError('Something went wrong'));
       } else {

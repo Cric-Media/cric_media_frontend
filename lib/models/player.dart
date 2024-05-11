@@ -1,3 +1,5 @@
+import 'package:cricket_app/models/team.dart';
+
 class Player {
   String? id;
   String? name;
@@ -7,10 +9,10 @@ class Player {
   String? additionalInfo;
   String? imageUrl;
   List<String>? admins;
-  // Stats? stats;
+  Stats? stats;
   Stats? t20Stats;
   Stats? odiStats;
-  Stats? lastPerformance;
+  List<LatestPerformance>? latestPerformance;
 
   Player({
     this.name,
@@ -21,10 +23,10 @@ class Player {
     this.additionalInfo,
     this.imageUrl,
     this.admins,
-    // this.stats,
+    this.stats,
     this.t20Stats,
     this.odiStats,
-    this.lastPerformance,
+    this.latestPerformance,
   });
 
   Player.fromJson(Map<String, dynamic> json) {
@@ -36,14 +38,17 @@ class Player {
     additionalInfo = json['additionalInfo'];
     imageUrl = json['Image'];
     admins = json['admins']?.cast<String>();
-    // stats = json['stats'] != null ? Stats.fromJson(json['stats']) : null;
+    stats = json['stats'] != null ? Stats.fromJson(json['stats']) : null;
     t20Stats =
         json['t20Stats'] != null ? Stats.fromJson(json['t20Stats']) : null;
     odiStats =
         json['odiStats'] != null ? Stats.fromJson(json['odiStats']) : null;
-    lastPerformance = json['lastPerformance'] != null
-        ? Stats.fromJson(json['lastPerformance'])
-        : null;
+    latestPerformance = json['latestPerformance'] == null
+        ? null
+        : (json['latestPerformance'] as List<dynamic>)
+            .map((perJson) =>
+                LatestPerformance.fromJson(perJson as Map<String, dynamic>))
+            .toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -56,17 +61,20 @@ class Player {
     data['additionalInfo'] = additionalInfo;
     data['Image'] = imageUrl;
     data['admins'] = admins;
-    // if (stats != null) {
-    //   data['stats'] = stats!.toJson();
-    // }
+    if (stats != null) {
+      data['stats'] = stats!.toJson();
+    }
     if (t20Stats != null) {
       data['t20Stats'] = t20Stats!.toJson();
     }
     if (odiStats != null) {
       data['odiStats'] = odiStats!.toJson();
     }
-    if (lastPerformance != null) {
-      data['lastPerformance'] = lastPerformance!.toJson();
+    if (latestPerformance != null) {
+      data['latestPerformance'] = latestPerformance!
+          .where((element) => element is! String)
+          .map((v) => v.toJson())
+          .toList();
     }
     return data;
   }
@@ -84,10 +92,10 @@ class Player {
         other.additionalInfo == additionalInfo &&
         other.imageUrl == imageUrl &&
         other.admins == admins &&
-        // other.stats == stats;
+        other.stats == stats &&
         other.t20Stats == t20Stats &&
         other.odiStats == odiStats &&
-        other.lastPerformance == lastPerformance;
+        other.latestPerformance == latestPerformance;
   }
 
   @override
@@ -100,10 +108,10 @@ class Player {
         additionalInfo.hashCode ^
         imageUrl.hashCode ^
         admins.hashCode ^
-        // stats.hashCode;
+        stats.hashCode ^
         t20Stats.hashCode ^
         odiStats.hashCode ^
-        lastPerformance.hashCode;
+        latestPerformance.hashCode;
   }
 }
 
@@ -188,5 +196,26 @@ class Stats {
         innings.hashCode ^
         highestScore.hashCode ^
         matches.hashCode;
+  }
+}
+
+class LatestPerformance {
+  Team? team;
+  int? runs;
+
+  LatestPerformance({this.team, this.runs});
+
+  factory LatestPerformance.fromJson(Map<String, dynamic> json) {
+    return LatestPerformance(
+      team: json['team'] == null ? null : Team.fromJson(json['team']),
+      runs: json['runs'] as int?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'team': team,
+      'runs': runs,
+    };
   }
 }

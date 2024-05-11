@@ -29,7 +29,6 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: const Color(0XFFFBFBFB),
       appBar: AppBar(
@@ -53,27 +52,32 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
         builder: (context, state) {
           if (state is PlayerGetPlayerLoading) {
             return const Center(child: CircularProgressIndicator());
+          } else if (state is PlayerGetError) {
+            return Center(child: Text(state.message));
           }
           return SingleChildScrollView(
             child: Column(children: [
               SizedBox(
-                width: screenWidth,
-                height: 360,
-                child: player != null
-                    ? Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                              player?.imageUrl ?? '',
+                // width: screenWidth,
+                width: 200,
+                height: 200,
+                child: ClipOval(
+                  child: player != null
+                      ? Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: CachedNetworkImageProvider(
+                                player?.imageUrl ?? '',
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
                           ),
+                        )
+                      : Image.asset(
+                          AppIcons.profileimage,
+                          fit: BoxFit.contain,
                         ),
-                      )
-                    : Image.asset(
-                        AppIcons.profileimage,
-                        fit: BoxFit.contain,
-                      ),
+                ),
               ),
               const SizedBox(height: 20),
               Padding(

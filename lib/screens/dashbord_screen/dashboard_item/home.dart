@@ -56,6 +56,7 @@ class _HomeState extends State<Home> {
               appBar: AppBar(
                 bottom: const TabBar(
                     dividerHeight: 3,
+                    isScrollable: false,
                     dividerColor: Colors.grey,
                     labelColor: Colors.black,
                     labelStyle: TextStyle(
