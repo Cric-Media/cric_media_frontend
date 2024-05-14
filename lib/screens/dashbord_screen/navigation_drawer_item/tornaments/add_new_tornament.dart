@@ -1,12 +1,10 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:io';
-
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -39,6 +37,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
       // Update the selected date
       setState(() {
         selectedDate = picked;
+        TournamentCubit.get(context).startDate = picked.toIso8601String();
       });
     }
   }
@@ -55,17 +54,13 @@ class _AddNewTornamentState extends State<AddNewTornament> {
       // Update the selected date
       setState(() {
         selectedDateend = picked;
+        TournamentCubit.get(context).endDate = picked.toIso8601String();
       });
     }
   }
 
   void _pickImage() async {
-    final pickedImage =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      _pickedImage = pickedImage;
-    });
+    TournamentCubit.get(context).pickImage();
   }
 
   @override
@@ -73,9 +68,9 @@ class _AddNewTornamentState extends State<AddNewTornament> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Color(0XFFFBFBFB),
+      backgroundColor: const Color(0XFFFBFBFB),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
+        preferredSize: const Size.fromHeight(60),
         child: Container(
           // extra container for custom bottom shadows
           decoration: BoxDecoration(
@@ -84,7 +79,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                 color: Colors.black.withOpacity(0.5),
                 spreadRadius: 5,
                 blurRadius: 5,
-                offset: Offset(0, -2),
+                offset: const Offset(0, -2),
               ),
             ],
           ),
@@ -102,9 +97,9 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                   )),
             ],
             title: Text(
-              'Add Tornament',
+              'Add Tournament',
               style: GoogleFonts.inter(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                       fontSize: 19,
                       color: Colors.white,
                       fontWeight: FontWeight.w600)),
@@ -118,29 +113,31 @@ class _AddNewTornamentState extends State<AddNewTornament> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Center(
                 child: Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColor.blueColor, width: 2),
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: _pickedImage != null
-                              ? FileImage(File(_pickedImage!.path))
-                                  as ImageProvider<
-                                      Object> // Cast to ImageProvider<Object>
-                              : AssetImage(AppIcons
-                                  .azam), // Fallback to a default asset image
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                    BlocBuilder<TournamentCubit, TournamentState>(
+                      builder: (context, state) {
+                        return Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: AppColor.blueColor, width: 2),
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: TournamentCubit.get(context).image != null
+                                  ? FileImage(
+                                          TournamentCubit.get(context).image!)
+                                      as ImageProvider<Object>
+                                  : AssetImage(AppIcons.profile),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 5.0, bottom: 5),
@@ -149,11 +146,11 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                         child: Container(
                           width: 25,
                           height: 25,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: AppColor.blueColor,
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.add,
                             color: Colors.white,
                           ),
@@ -163,9 +160,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                   ],
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -177,12 +172,11 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                           color: AppColor.blackColor)),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               CustomTextField(
                 isPassword: false,
                 hintText: 'Enter Series name',
+                controller: TournamentCubit.get(context).seriesName,
                 // iconImagePath: AppIcons.password,
                 //     controller: emailController,
                 validator: (value) {
@@ -193,7 +187,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                   return null;
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Align(
@@ -207,12 +201,11 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                           color: AppColor.blackColor)),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               CustomTextField(
                 isPassword: false,
                 hintText: 'Enter Series location',
+                controller: TournamentCubit.get(context).seriesLocation,
                 // iconImagePath: AppIcons.password,
                 //     controller: emailController,
                 validator: (value) {
@@ -223,9 +216,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                   return null;
                 },
               ),
-              SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -237,7 +228,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                           color: AppColor.blackColor)),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Container(
                 decoration: BoxDecoration(
                   // color: AppColor.textfieldColor.withOpacity(0.5),
@@ -246,14 +237,15 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                 width: screenWidth * 0.95,
                 height: 65,
                 child: DropdownButtonFormField<String>(
-                  value: selectedBookingFor,
+                  value: TournamentCubit.get(context).tournamentType,
                   onChanged: (value) {
                     setState(() {
                       selectedBookingFor = value!;
+                      TournamentCubit.get(context).tournamentType = value!;
                       bookingFor = selectedBookingFor;
                     });
                   },
-                  items: ['Hard Bol', 'Tennis Bol ', 'other']
+                  items: ['Hard Bowl', 'Tennis Bowl ', 'other']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -264,7 +256,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                         child: Text(
                           value,
                           style: GoogleFonts.inter(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontSize: 18,
                               color: Colors.grey,
                               fontWeight: FontWeight.w500,
@@ -275,18 +267,18 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                     );
                   }).toList(),
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(bottom: 2),
+                    contentPadding: const EdgeInsets.only(bottom: 2),
                     filled: true,
                     fillColor: AppColor.textfieldColor.withOpacity(0.4),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(7.0),
-                      borderSide:
-                          BorderSide(color: AppColor.grayColor, width: 0.2),
+                      borderSide: const BorderSide(
+                          color: AppColor.grayColor, width: 0.2),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(7.0),
-                      borderSide:
-                          BorderSide(color: AppColor.grayColor, width: 0.2),
+                      borderSide: const BorderSide(
+                          color: AppColor.grayColor, width: 0.2),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(7.0),
@@ -306,12 +298,11 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                           color: AppColor.blackColor)),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               CustomTextField(
                 isPassword: false,
                 hintText: 'Enter number of over ',
+                controller: TournamentCubit.get(context).numberOfOvers,
                 // iconImagePath: AppIcons.password,
                 //     controller: emailController,
                 validator: (value) {
@@ -322,9 +313,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                   return null;
                 },
               ),
-              SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -336,12 +325,11 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                           color: AppColor.blackColor)),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               CustomTextField(
                 isPassword: false,
                 hintText: 'Enter number of team',
+                controller: TournamentCubit.get(context).numberOfTeams,
                 // iconImagePath: AppIcons.password,
                 //     controller: emailController,
                 validator: (value) {
@@ -352,9 +340,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                   return null;
                 },
               ),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -366,25 +352,23 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                           color: AppColor.blackColor)),
                 ),
               ),
-              SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               GestureDetector(
                 onTap: () => _selectDate(context),
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     // border: Border.all(color: Colors.black),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.calendar_today,
                         color: Colors.black,
                         size: 20,
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(
                         selectedDate != null
                             ? DateFormat('EEEE, MMMM dd, yyyy')
@@ -402,9 +386,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -418,25 +400,23 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                           )),
                 ),
               ),
-              SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               GestureDetector(
                 onTap: () => _selectDateend(context),
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     // border: Border.all(color: Colors.black),
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.calendar_today,
                         color: Colors.black,
                         size: 20,
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(
                         selectedDateend != null
                             ? DateFormat('EEEE, MMMM dd, yyyy')
@@ -454,14 +434,35 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                   ),
                 ),
               ),
-              CustomButton(
-                buttonText: 'Submit',
-                backgroundColor: AppColor.blueColor,
-                onTap: () {},
+              BlocConsumer<TournamentCubit, TournamentState>(
+                listener: (context, state) {
+                  if (state is TournamentAddSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Tournament added successfully'),
+                      ),
+                    );
+                    TournamentCubit.get(context).clearFields();
+                    TournamentCubit.get(context).getInitialTournaments(
+                      isAdmin: true,
+                    );
+                    Navigator.pop(context);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is TournamentAddLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  return CustomButton(
+                    buttonText: 'Submit',
+                    backgroundColor: AppColor.blueColor,
+                    onTap: () {
+                      TournamentCubit.get(context).addTournament();
+                    },
+                  );
+                },
               ),
-              SizedBox(
-                height: 20,
-              )
+              const SizedBox(height: 20)
             ],
           ),
         ),

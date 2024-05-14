@@ -32,9 +32,6 @@ class GridViewContanor extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 5,
-                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 17.0),
                     child: Text(
@@ -67,8 +64,8 @@ class GridViewContanor extends StatelessWidget {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 16.0,
-                            mainAxisSpacing: 16.0,
+                            crossAxisSpacing: 20.0,
+                            mainAxisSpacing: 20.0,
                           ),
                           itemCount: match != null
                               ? match?.squad1?.length
@@ -160,17 +157,19 @@ class SquadPlayer extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Center(
-          child: CachedNetworkImage(
-            imageUrl: player?.imageUrl ?? '',
-            imageBuilder: (context, imageProvider) => Container(
-              width: 80,
-              height: 120,
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
+        Expanded(
+          child: Center(
+            child: CachedNetworkImage(
+              imageUrl: player?.imageUrl ?? '',
+              imageBuilder: (context, imageProvider) => Container(
+                width: 80,
+                height: 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

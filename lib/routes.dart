@@ -89,7 +89,9 @@ class Routes {
               BlocProvider(
                 create: (context) => AuthCubit(),
               ),
-              BlocProvider<MatchCubit>(create: (context) => MatchCubit()),
+              BlocProvider<MatchCubit>(
+                create: (context) => MatchCubit()..getLiveMatches(user: true),
+              ),
             ],
             child: const DashBoardScreen(),
           ),

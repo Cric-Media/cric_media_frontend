@@ -11,6 +11,7 @@ import 'package:cricket_app/models/over.dart' as Over;
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/score_card.dart';
 import 'package:cricket_app/models/team.dart';
+import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 import 'package:http/http.dart';
@@ -502,6 +503,70 @@ class AdminController {
         resBody,
         (data) => MatchDetails.fromJson(resBody['data']),
       );
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  // * TOURNAMENT SECTION
+  Future<ApiResponse> addTournament(Map<String, dynamic> data) async {
+    final url = AdminUrl.addTournament;
+    // final headers = {"Content-Type": "application/json"};
+    final adminId = await Global().getAdminId();
+    var request = MultipartRequest('POST', Uri.parse(url));
+
+    // request.headers.addAll({
+    //   "Content-Type": "multipart/form-data",
+    //   "Authorization": "Bearer ${model.token}",
+    // });
+
+    request.files.add(
+      MultipartFile(
+        'image',
+        data['image'].readAsBytes().asStream(),
+        data['image'].lengthSync(),
+        filename: data['image'].path.split('/').last,
+      ),
+    );
+
+    // send other fields
+    request.fields["seriesName"] = data['series_name'].toString();
+    request.fields["seriesLocation"] = data['series_location'].toString();
+    request.fields["tournamentType"] = data['tournament_type'].toString();
+    request.fields["numberOfOvers"] = data['number_of_overs'].toString();
+    request.fields["numberOfTeams"] = data['number_of_teams'].toString();
+    request.fields["startDate"] = data['start_date'].toString();
+    request.fields["endDate"] = data['end_date'].toString();
+    request.fields["admins[0]"] = adminId.toString();
+
+    // send request
+    var response = await request.send();
+    // print response
+    var json = await response.stream.bytesToString();
+    var body = jsonDecode(json);
+    if (body['success'] == true) {
+      return ApiResponse.fromJson(
+        body,
+        (data) => Tournament.fromJson(body['data']),
+      );
+    } else {
+      throw AppException(body['message']);
+    }
+  }
+
+  Future<ApiResponse> getInitialTournaments({bool isAdmin = false}) async {
+    final adminId = await Global().getAdminId();
+    final url =
+        "${AdminUrl.getTournaments}${isAdmin == true ? '?adminId=$adminId' : ''}";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<Tournament> tournaments = [];
+      for (var tournament in resBody['data']) {
+        tournaments.add(Tournament.fromJson(tournament));
+      }
+      return ApiResponse.fromJson(resBody, (data) => tournaments);
     } else {
       throw AppException(resBody['message']);
     }

@@ -1,6 +1,5 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
-import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/menu.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/news.dart';
@@ -17,7 +16,7 @@ class DashBoardScreen extends StatefulWidget {
 }
 
 class _MainPageState extends State<DashBoardScreen> {
-  List<Widget> Screen = [
+  List<Widget> screens = [
     const Home(),
     const News(),
     const Video(),
@@ -31,8 +30,9 @@ class _MainPageState extends State<DashBoardScreen> {
   @override
   void initState() {
     BlocProvider.of<AuthCubit>(context).getUser();
-    MatchCubit.get(context).getLiveMatches(user: true);
-
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {});
+    });
     super.initState();
   }
 

@@ -1,3 +1,4 @@
+import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/models/match_details.dart';
@@ -87,15 +88,19 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
   }
 
   handleInningsCompleted() {
-    Navigator.pushNamed(context, setOpenings, arguments: {
-      "matchId": match?.sId.toString(),
-      "teamABatting": match?.team1Batting,
-      "teamBBatting": match?.team2Batting,
-      "teamAId": match?.team1?.id.toString(),
-      "teamBId": match?.team2?.id.toString(),
-      "squad1": match?.squad1 ?? [],
-      "squad2": match?.squad2 ?? [],
-    });
+    Navigator.pushNamedAndRemoveUntil(
+        context,
+        setOpenings,
+        arguments: {
+          "matchId": match?.sId.toString(),
+          "teamABatting": match?.team1Batting,
+          "teamBBatting": match?.team2Batting,
+          "teamAId": match?.team1?.id.toString(),
+          "teamBId": match?.team2?.id.toString(),
+          "squad1": match?.squad1 ?? [],
+          "squad2": match?.squad2 ?? [],
+        },
+        (route) => false);
   }
 
   handleMatchCompletion() {
@@ -247,6 +252,17 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
+        title: Visibility(
+          visible: match != null,
+          child: Text(
+            "${match?.team1?.name ?? ''} VS ${match?.team2?.name ?? ''}",
+            style: const TextStyle(
+              color: AppColor.blueColor,
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
         actions: [
           TextButton(
               onPressed: () {
@@ -393,17 +409,13 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    'Innings',
+                                    match?.currentInning?.number == 1
+                                        ? "1st Inning"
+                                        : "2nd Inning",
                                     style:
                                         Theme.of(context).textTheme.titleLarge,
                                   ),
-                                  if (match != null)
-                                    Text(
-                                      '${match?.currentInning?.number}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleMedium,
-                                    ),
+                                  if (match != null) const Text("CRR"),
                                 ],
                               ),
                               // score section
@@ -413,24 +425,68 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      'Score',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge,
-                                    ),
-                                    Row(
-                                      children: [
-                                        if (match?.team1Batting == true)
+                                    if (match?.team1Batting == true)
+                                      Row(
+                                        children: [
                                           Text(
-                                            "${match?.team1Score} - ${match?.team1Outs} (${match?.team2Overs}.${match?.team2Balls})",
+                                            "${match?.team1Score} - ${match?.team1Outs}",
+                                            style: const TextStyle(
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                        if (match?.team2Batting == true)
+                                          const SizedBox(width: 8),
                                           Text(
-                                            "${match?.team2Score} - ${match?.team2Outs} (${match?.team1Overs}.${match?.team1Balls})",
+                                            "${match?.team2Overs}.${match?.team2Balls}",
+                                            style:
+                                                const TextStyle(fontSize: 18),
                                           ),
-                                      ],
-                                    )
+                                          // if (match?.team2Batting == true)
+                                          //   Text(
+                                          //     "${match?.team2Score} - ${match?.team2Outs} (${match?.team1Overs}.${match?.team1Balls})",
+                                          //   ),
+                                        ],
+                                      ),
+                                    if (match?.team2Batting == true)
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "${match?.team2Score} - ${match?.team2Outs}",
+                                            style: const TextStyle(
+                                              fontSize: 23,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            "${match?.team1Overs}.${match?.team1Balls}",
+                                            style:
+                                                const TextStyle(fontSize: 18),
+                                          ),
+                                        ],
+                                      ),
+                                    // Row(
+                                    //   children: [
+                                    //     if (match?.team1Batting == true)
+                                    //       Text(
+                                    //         "${match?.team1Score} - ${match?.team1Outs} (${match?.team2Overs}.${match?.team2Balls})",
+                                    //       ),
+                                    //     if (match?.team2Batting == true)
+                                    //       Text(
+                                    //         "${match?.team2Score} - ${match?.team2Outs} (${match?.team1Overs}.${match?.team1Balls})",
+                                    //       ),
+                                    //   ],
+                                    // ),
+                                    if (match?.team1Batting == true)
+                                      Text(
+                                        "${match?.team1CurrentRunRate ?? 0}",
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                    if (match?.team2Batting == true)
+                                      Text(
+                                        "${match?.team2CurrentRunRate ?? 0}",
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
                                   ],
                                 ),
                             ],
@@ -553,7 +609,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            "${striker?.strikeRate ?? 0}",
+                                            "${striker?.strikeRate?.toStringAsFixed(0) ?? 0}",
                                             textAlign: TextAlign.left,
                                           ),
                                         ),
@@ -607,7 +663,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            "${nonStriker?.strikeRate ?? 0}",
+                                            "${nonStriker?.strikeRate?.toStringAsFixed(0) ?? 0}",
                                             textAlign: TextAlign.left,
                                           ),
                                         ),
@@ -727,14 +783,18 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                     style:
                                         Theme.of(context).textTheme.bodyLarge,
                                   ),
+                                  const SizedBox(width: 8),
                                   if (match != null)
                                     Expanded(
                                       child: Wrap(
+                                        spacing: 4,
                                         children: match!.currentOver!.balls!
                                             .map((e) => Container(
                                                   margin: const EdgeInsets.only(
-                                                      left: 8),
+                                                    bottom: 8,
+                                                  ),
                                                   child: CircleAvatar(
+                                                    radius: 16,
                                                     backgroundColor: e
                                                                 .runsScored ==
                                                             4
@@ -809,6 +869,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
                                     Wrap(
+                                      spacing: 10,
                                       direction: Axis.horizontal,
                                       children: [
                                         CheckboxWidget(
@@ -857,7 +918,8 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                             });
                                           },
                                         ),
-                                        // const SizedBox(width: 32),
+
+                                        const SizedBox(width: 32),
                                         // ElevatedButton(
                                         //   onPressed: () {},
                                         //   child: const Text("Out"),
@@ -871,18 +933,50 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                               actionType: "swap",
                                             );
                                           },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColor.blueColor,
+                                            foregroundColor: Colors.white,
+                                          ),
                                           child: const Text("Swap Batsman"),
                                         ),
-                                        if (match != null &&
-                                            match?.currentInning?.number == 2 &&
-                                            match?.currentInning?.started ==
-                                                false)
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              handleInningsCompleted();
-                                            },
-                                            child: const Text("Change Innings"),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            handlePlayerOut(
+                                              context,
+                                              widget.matchId,
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColor.blueColor,
+                                            foregroundColor: Colors.white,
                                           ),
+                                          child: const Text("Out"),
+                                        ),
+
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            if (match != null &&
+                                                match?.currentInning?.number ==
+                                                    2 &&
+                                                match?.currentInning?.started ==
+                                                    false) {
+                                              handleInningsCompleted();
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: match != null &&
+                                                    match?.currentInning
+                                                            ?.number ==
+                                                        2 &&
+                                                    match?.currentInning
+                                                            ?.started ==
+                                                        false
+                                                ? AppColor.blueColor
+                                                : Colors.grey,
+                                            foregroundColor: Colors.white,
+                                          ),
+                                          child: const Text("Change Innings"),
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -894,174 +988,199 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                       ),
                       const SizedBox(height: 5),
                       //* Action buttons
-                      Row(
-                        children: [
-                          // Expanded(
-                          //   child: Card(
-                          //     color: Colors.white,
-                          //     child: Wrap(
-                          //       direction: Axis.horizontal,
-                          //       children: [
-                          //         ElevatedButton(
-                          //           onPressed: () {},
-                          //           child: const Text("Undo"),
-                          //         ),
-                          //         ElevatedButton(
-                          //           onPressed: () {},
-                          //           child: const Text("Partnership"),
-                          //         ),
-                          //         ElevatedButton(
-                          //           onPressed: () {},
-                          //           child: const Text("Extras"),
-                          //         ),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                          Expanded(
-                            // flex: 2,
-                            child: Card(
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Action',
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                    Wrap(
-                                      spacing: 10,
-                                      direction: Axis.horizontal,
-                                      children: [
+                      SizedBox(
+                        height: 200,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Card(
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          handleStopMatch(context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColor.blueColor,
+                                          foregroundColor: Colors.white,
+                                        ),
+                                        child: Text(
+                                          match?.matchStopped?.stop == true
+                                              ? 'Resume'
+                                              : "Stop",
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          if (match?.currentOver?.balls !=
+                                                  null &&
+                                              match!.currentOver!.balls!
+                                                  .isEmpty) {
+                                            handleOverCompletion();
+                                          }
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              match?.currentOver?.balls !=
+                                                          null &&
+                                                      match!.currentOver!.balls!
+                                                          .isEmpty
+                                                  ? AppColor.blueColor
+                                                  : Colors.grey,
+                                          foregroundColor: Colors.white,
+                                        ),
+                                        child: const Text("Bowler"),
+                                      ),
+                                      if (match != null)
                                         ElevatedButton(
                                           onPressed: () {
-                                            // if (MatchCubit.get(context).wide ==
-                                            //     true) {
-                                            //   MatchCubit.get(context).wideAction(
-                                            //     matchId: widget.matchId,
-                                            //     actionType: "wide",
-                                            //     extraType: "wides",
-                                            //     extraRuns: 0,
-                                            //   );
-                                            // } else {
-                                            //   MatchCubit.get(context).scoreAction(
-                                            //     widget.matchId,
-                                            //     0,
-                                            //   );
-                                            // }
-                                            action(0);
+                                            if (match!.matchStatus! > 1) {
+                                              handleMatchCompletion();
+                                            }
                                           },
-                                          child: const Text("0"),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            action(1);
-                                          },
-                                          child: const Text("1"),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            // MatchCubit.get(context).scoreAction(
-                                            //   widget.matchId,
-                                            //   2,
-                                            // );
-                                            action(2);
-                                          },
-                                          child: const Text("2"),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            // if (MatchCubit.get(context).wide !=
-                                            //     true) {
-                                            //   MatchCubit.get(context)
-                                            //       .scoreAction(widget.matchId, 3);
-                                            // }
-                                            action(3);
-                                          },
-                                          child: const Text("3"),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            // if (MatchCubit.get(context).wide !=
-                                            //     true) {
-                                            //   MatchCubit.get(context).scoreAction(
-                                            //     widget.matchId,
-                                            //     4,
-                                            //   );
-                                            // } else if (MatchCubit.get(context)
-                                            //         .wide ==
-                                            //     true) {
-                                            //   MatchCubit.get(context).wideAction(
-                                            //     matchId: widget.matchId,
-                                            //     actionType: "wide",
-                                            //     extraType: "wides",
-                                            //     extraRuns: 4,
-                                            //   );
-                                            // }
-                                            action(4);
-                                          },
-                                          child: const Text("4"),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            // if (MatchCubit.get(context).wide !=
-                                            //     true) {
-                                            //   MatchCubit.get(context).scoreAction(
-                                            //     widget.matchId,
-                                            //     6,
-                                            //   );
-                                            // }
-                                            action(6);
-                                          },
-                                          child: const Text("6"),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            handlePlayerOut(
-                                              context,
-                                              widget.matchId,
-                                            );
-                                          },
-                                          child: const Text("Out"),
-                                        ),
-                                        if (match?.currentOver?.balls != null &&
-                                            match!.currentOver!.balls!.isEmpty)
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              handleOverCompletion();
-                                            },
-                                            child: const Text("Change bowler"),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                match!.matchStatus! > 1
+                                                    ? AppColor.blueColor
+                                                    : Colors.grey,
+                                            foregroundColor: Colors.white,
                                           ),
-                                        if (match != null)
-                                          Visibility(
-                                            visible: match!.matchStatus! > 1,
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                handleMatchCompletion();
-                                              },
-                                              child: const Text("Finish Match"),
-                                            ),
-                                          ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            handleStopMatch(context);
-                                          },
-                                          child: Text(
-                                              match?.matchStopped?.stop == true
-                                                  ? 'Resume Match'
-                                                  : "Match Stop"),
+                                          child: const Text("Finish"),
                                         ),
-                                      ],
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                            Expanded(
+                              flex: 3,
+                              child: Card(
+                                elevation: 6,
+                                color: Colors.white,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Action',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge,
+                                        ),
+                                        Wrap(
+                                          spacing: 4,
+                                          direction: Axis.horizontal,
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                // if (MatchCubit.get(context).wide ==
+                                                //     true) {
+                                                //   MatchCubit.get(context).wideAction(
+                                                //     matchId: widget.matchId,
+                                                //     actionType: "wide",
+                                                //     extraType: "wides",
+                                                //     extraRuns: 0,
+                                                //   );
+                                                // } else {
+                                                //   MatchCubit.get(context).scoreAction(
+                                                //     widget.matchId,
+                                                //     0,
+                                                //   );
+                                                // }
+                                                action(0);
+                                              },
+                                              child: const Text("0"),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                action(1);
+                                              },
+                                              child: const Text("1"),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                // MatchCubit.get(context).scoreAction(
+                                                //   widget.matchId,
+                                                //   2,
+                                                // );
+                                                action(2);
+                                              },
+                                              child: const Text("2"),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                // if (MatchCubit.get(context).wide !=
+                                                //     true) {
+                                                //   MatchCubit.get(context)
+                                                //       .scoreAction(widget.matchId, 3);
+                                                // }
+                                                action(3);
+                                              },
+                                              child: const Text("3"),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                // if (MatchCubit.get(context).wide !=
+                                                //     true) {
+                                                //   MatchCubit.get(context).scoreAction(
+                                                //     widget.matchId,
+                                                //     4,
+                                                //   );
+                                                // } else if (MatchCubit.get(context)
+                                                //         .wide ==
+                                                //     true) {
+                                                //   MatchCubit.get(context).wideAction(
+                                                //     matchId: widget.matchId,
+                                                //     actionType: "wide",
+                                                //     extraType: "wides",
+                                                //     extraRuns: 4,
+                                                //   );
+                                                // }
+                                                action(4);
+                                              },
+                                              child: const Text("4"),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                // if (MatchCubit.get(context).wide !=
+                                                //     true) {
+                                                //   MatchCubit.get(context).scoreAction(
+                                                //     widget.matchId,
+                                                //     6,
+                                                //   );
+                                                // }
+                                                action(6);
+                                              },
+                                              child: const Text("6"),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

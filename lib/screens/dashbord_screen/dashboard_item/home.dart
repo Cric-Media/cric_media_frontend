@@ -7,7 +7,7 @@ import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/home_tab.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/live_tab.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/recent_tab.dart';
-import 'package:cricket_app/screens/dashbord_screen/home_tab_item/upcomingTab.dart';
+import 'package:cricket_app/screens/dashbord_screen/home_tab_item/upcoming_tab.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/match_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/profile_item.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tornament_item.dart';
@@ -55,21 +55,23 @@ class _HomeState extends State<Home> {
               backgroundColor: const Color(0XFFFBFBFB),
               appBar: AppBar(
                 bottom: const TabBar(
-                    dividerHeight: 3,
-                    isScrollable: false,
-                    dividerColor: Colors.grey,
-                    labelColor: Colors.black,
-                    labelStyle: TextStyle(
-                      fontWeight: FontWeight.w800,
-                    ),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    tabs: [
-                      Tab(text: 'Home'),
-                      Tab(text: 'Live'),
-                      Tab(text: 'Upcoming'),
-                      Tab(text: 'Recent'),
-                    ],
-                    indicatorColor: AppColor.blueColor),
+                  dividerHeight: 3,
+                  isScrollable: false,
+                  dividerColor: Colors.grey,
+                  labelColor: Colors.black,
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 12,
+                  ),
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  tabs: [
+                    Tab(text: 'Home'),
+                    Tab(text: 'Live'),
+                    Tab(text: 'Upcoming'),
+                    Tab(text: 'Recent'),
+                  ],
+                  indicatorColor: AppColor.blueColor,
+                ),
                 centerTitle: true,
                 actions: [
                   Padding(

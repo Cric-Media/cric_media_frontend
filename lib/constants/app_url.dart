@@ -61,6 +61,10 @@ abstract class AdminUrl {
   static final matchScoreCards = "${AppUrl.baseUrl}/get-scorecards-for-match";
   static final getMatchOvers = "${AppUrl.baseUrl}/get-overs-for-match";
   static final setManOfTheMatch = "${AppUrl.baseUrl}/set-man-of-the-match";
+
+  // * Tournament URLs
+  static final addTournament = "${AppUrl.baseUrl}/tournament";
+  static final getTournaments = "${AppUrl.baseUrl}/tournament";
 }
 
 abstract class UserUrl {

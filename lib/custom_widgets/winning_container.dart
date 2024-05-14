@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class DaysContanor extends StatelessWidget {
+class WinningContainer extends StatelessWidget {
   final String text;
-  const DaysContanor({super.key, required this.text});
+  const WinningContainer({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class DaysContanor extends StatelessWidget {
       height: 25,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
-        color: Colors.red,
+        color: Colors.green,
       ),
       child: Text(
         text,

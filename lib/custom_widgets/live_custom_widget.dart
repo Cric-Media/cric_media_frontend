@@ -1,21 +1,27 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, sized_box_for_whitespace
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/custom_widgets/days_contanar.dart';
-import 'package:cricket_app/custom_widgets/days_contanor2.dart';
-import 'package:cricket_app/custom_widgets/grid_view_contanor.dart';
+import 'package:cricket_app/custom_widgets/losing_container.dart';
+import 'package:cricket_app/custom_widgets/winning_container.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/app_images.dart';
 
 class LiveCustomWidgt extends StatelessWidget {
-  const LiveCustomWidgt({super.key});
+  final MatchDetails? match;
+  const LiveCustomWidgt({super.key, this.match});
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    var team1Index = match?.team1?.recentPerformance
+        ?.indexWhere((element) => element.team == match?.team2?.id);
+
+    var team2Index = match?.team2?.recentPerformance
+        ?.indexWhere((element) => element.team == match?.team1?.id);
 
     return Column(
       children: [
@@ -26,7 +32,6 @@ class LiveCustomWidgt extends StatelessWidget {
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
             ),
-            height: screenHeight * 0.15,
             width: screenWidth,
             child: Padding(
               padding: const EdgeInsets.only(left: 20.0, top: 7),
@@ -37,19 +42,20 @@ class LiveCustomWidgt extends StatelessWidget {
                       Text(
                         'Recent Performance',
                         style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                          fontSize: 14,
-                          color: AppColor.blackColor,
-                          fontWeight: FontWeight.w700,
-                        )),
+                          textStyle: const TextStyle(
+                            fontSize: 14,
+                            color: AppColor.blackColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
+                        padding: const EdgeInsets.only(right: 4.0),
                         child: Text(
-                          'Last 5 matches',
+                          'Last ${match?.team1?.recentPerformance?[team1Index!].history?.length} ${match?.team1?.recentPerformance?[team1Index!].history?.length == 1 ? "Match" : "Matches"}',
                           style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                             fontSize: 14,
                             color: AppColor.hintColor,
                             fontWeight: FontWeight.w600,
@@ -58,132 +64,94 @@ class LiveCustomWidgt extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: 35,
                         height: 35,
-                        child: Image.asset('${AppIcons.pak}'),
+                        child: match != null
+                            ? CircleAvatar(
+                                backgroundImage: CachedNetworkImageProvider(
+                                  match?.team1?.image ?? '',
+                                ),
+                              )
+                            : Image.asset(AppIcons.pak),
                       ),
-                      SizedBox(
-                        width: 15,
-                      ),
+                      const SizedBox(width: 15),
                       Text(
-                        'PAK',
+                        match?.team1?.name ?? '',
                         style: GoogleFonts.inter(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                           fontSize: 14,
                           color: AppColor.blackColor,
                           fontWeight: FontWeight.w600,
                         )),
                       ),
-                      Spacer(),
-                      Container(
-                        width: 180,
-                        height: 30,
-                        //  decoration: BoxDecoration(color: Colors.amber),
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: Row(
-                            children: [
-                              DaysContanor(
-                                text: 'L',
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              DaysContanor2(
-                                text: 'W',
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              DaysContanor(
-                                text: 'L',
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              DaysContanor2(
-                                text: 'W',
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              DaysContanor(
-                                text: 'L',
-                              )
-                            ],
+                      const Spacer(),
+                      if (team1Index != null && team1Index != -1)
+                        SizedBox(
+                          width: 180,
+                          height: 30,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 4.0),
+                            child: Row(
+                              children: match!.team1!
+                                  .recentPerformance![team1Index].history!
+                                  .map(
+                                    (h) => h.wins == true
+                                        ? const WinningContainer(text: "W")
+                                        : const LosingContainer(text: 'L'),
+                                  )
+                                  .toList(),
+                            ),
                           ),
-                        ),
-                      )
+                        )
                     ],
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
+                  const SizedBox(height: 12),
                   Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: 35,
                         height: 35,
-                        child: Image.asset('${AppIcons.afg}'),
+                        child: match != null
+                            ? CircleAvatar(
+                                backgroundImage: CachedNetworkImageProvider(
+                                  match?.team2?.image ?? '',
+                                ),
+                              )
+                            : Image.asset(AppIcons.afg),
                       ),
-                      SizedBox(
-                        width: 15,
-                      ),
+                      const SizedBox(width: 15),
                       Text(
-                        'AFG',
+                        match?.team2?.name ?? '',
                         style: GoogleFonts.inter(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                           fontSize: 14,
                           color: AppColor.blackColor,
                           fontWeight: FontWeight.w600,
                         )),
                       ),
-                      Spacer(),
-                      Container(
-                        width: 180,
-                        height: 30,
-                        //  decoration: BoxDecoration(color: Colors.amber),
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: Row(
-                            children: [
-                              DaysContanor(
-                                text: 'L',
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              DaysContanor2(
-                                text: 'W',
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              DaysContanor(
-                                text: 'L',
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              DaysContanor2(
-                                text: 'W',
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              DaysContanor(
-                                text: 'L',
-                              )
-                            ],
+                      const Spacer(),
+                      if (team2Index != null && team2Index != -1)
+                        SizedBox(
+                          width: 180,
+                          height: 30,
+                          //  decoration: BoxDecoration(color: Colors.amber),
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: Row(
+                                children: match!.team2!
+                                    .recentPerformance![team2Index].history!
+                                    .map(
+                                      (h) => h.wins == true
+                                          ? const WinningContainer(text: "W")
+                                          : const LosingContainer(text: 'L'),
+                                    )
+                                    .toList()),
                           ),
-                        ),
-                      )
+                        )
                     ],
                   ),
                 ],
@@ -191,24 +159,21 @@ class LiveCustomWidgt extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(
-          height: 5,
-        ),
-        GridViewContanor(),
-        SizedBox(
-          height: 4,
-        ),
+        const SizedBox(height: 8),
+        // const GridViewContanor(),
+        // const SizedBox(
+        //   height: 4,
+        // ),
         Card(
           elevation: 3,
           child: Container(
             width: screenWidth,
-            height: 200,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 7),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
                   Row(
@@ -216,19 +181,19 @@ class LiveCustomWidgt extends StatelessWidget {
                       Text(
                         'Head To Head',
                         style: GoogleFonts.inter(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                           fontSize: 14,
                           color: AppColor.blueColor,
                           fontWeight: FontWeight.w700,
                         )),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Padding(
                         padding: const EdgeInsets.only(right: 10.0),
                         child: Text(
-                          'Last 5 matches',
+                          'Last ${match?.team1?.recentPerformance?[team1Index ?? 0].history?.length} ${match?.team1?.recentPerformance?[team1Index!].history?.length} ${match?.team1?.recentPerformance?[team1Index!].history?.length == 1 ? "Match" : "Matches"}',
                           style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                             fontSize: 14,
                             color: AppColor.blackColor,
                             fontWeight: FontWeight.w600,
@@ -237,107 +202,79 @@ class LiveCustomWidgt extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 12,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        child: Image.asset('${AppIcons.pak}'),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        'Pak won by 20 runs  ',
-                        style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                          fontSize: 15,
-                          color: AppColor.blackColor,
-                          fontWeight: FontWeight.w600,
-                        )),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        child: Image.asset('${AppIcons.afg}'),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        'Afghanistan won by 3 wickets ',
-                        style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                          fontSize: 15,
-                          color: AppColor.blackColor,
-                          fontWeight: FontWeight.w600,
-                        )),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        child: Image.asset('${AppIcons.pak}'),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        'Pak won by 20 runs   ',
-                        style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                          fontSize: 15,
-                          color: AppColor.blackColor,
-                          fontWeight: FontWeight.w600,
-                        )),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        child: Image.asset('${AppIcons.afg}'),
-                      ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        'Afghanistan won by 3 wickets ',
-                        style: GoogleFonts.inter(
-                            textStyle: TextStyle(
-                          fontSize: 15,
-                          color: AppColor.blackColor,
-                          fontWeight: FontWeight.w600,
-                        )),
-                      ),
-                    ],
-                  ),
+                  const SizedBox(height: 12),
+                  ...match!.team1!.recentPerformance![team1Index!].history!
+                      .where((element) => element.wins == true)
+                      .map(
+                        (e) => Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: match != null
+                                    ? CircleAvatar(
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                                match?.team1?.image ?? ''),
+                                      )
+                                    : Image.asset(AppIcons.pak),
+                              ),
+                              const SizedBox(width: 15),
+                              Text(
+                                '${match?.team1?.name ?? ''} won by ${e.wonByRuns ?? 0} runs  ',
+                                style: GoogleFonts.inter(
+                                    textStyle: const TextStyle(
+                                  fontSize: 15,
+                                  color: AppColor.blackColor,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  const SizedBox(height: 8),
+                  ...match!.team2!.recentPerformance![team2Index!].history!
+                      .where((element) => element.wins == true)
+                      .map(
+                        (e) => Container(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 30,
+                                height: 30,
+                                child: match != null
+                                    ? CircleAvatar(
+                                        backgroundImage:
+                                            CachedNetworkImageProvider(
+                                                match?.team2?.image ?? ''),
+                                      )
+                                    : Image.asset(AppIcons.pak),
+                              ),
+                              const SizedBox(width: 15),
+                              Text(
+                                '${match?.team2?.name ?? ''} won by ${e.wonByRuns ?? 0} runs  ',
+                                style: GoogleFonts.inter(
+                                    textStyle: const TextStyle(
+                                  fontSize: 15,
+                                  color: AppColor.blackColor,
+                                  fontWeight: FontWeight.w600,
+                                )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                      .toList(),
                 ],
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
