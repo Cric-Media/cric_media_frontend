@@ -14,7 +14,9 @@ class UpComingTab extends StatefulWidget {
 class _UpComingTabState extends State<UpComingTab> {
   @override
   void initState() {
-    MatchCubit.get(context).getUpcomingMatches(user: true);
+    if (MatchCubit.get(context).upcomingMatchDetailsList.isEmpty) {
+      MatchCubit.get(context).getUpcomingMatches(user: true);
+    }
     super.initState();
   }
 

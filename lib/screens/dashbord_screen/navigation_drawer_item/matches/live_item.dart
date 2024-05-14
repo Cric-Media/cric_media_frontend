@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
@@ -37,7 +35,7 @@ class _LiveItem extends State<LiveItem> {
               },
               builder: (context, state) {
                 if (state is MatchLiveLoading) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else if (state is MatchGetLiveError) {

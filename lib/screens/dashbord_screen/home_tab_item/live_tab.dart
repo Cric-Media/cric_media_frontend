@@ -4,8 +4,21 @@ import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LiveTab extends StatelessWidget {
+class LiveTab extends StatefulWidget {
   const LiveTab({super.key});
+
+  @override
+  State<LiveTab> createState() => _LiveTabState();
+}
+
+class _LiveTabState extends State<LiveTab> {
+  @override
+  void initState() {
+    if (MatchCubit.get(context).liveMatchDetailsList.isEmpty) {
+      MatchCubit.get(context).getLiveMatches(user: true);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +40,7 @@ class LiveTab extends StatelessWidget {
               } else if (state is MatchGetLiveError) {
                 return Center(child: Text(state.message));
               }
+
               return RefreshIndicator(
                 onRefresh: () => MatchCubit.get(context).getLiveMatches(
                   user: true,
@@ -37,6 +51,7 @@ class LiveTab extends StatelessWidget {
                     itemBuilder: (context, index) {
                       var match =
                           MatchCubit.get(context).liveMatchDetailsList[index];
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: InkWell(

@@ -16,7 +16,9 @@ class _RecentTabState extends State<RecentTab> {
   @override
   void initState() {
     super.initState();
-    MatchCubit.get(context).getCompletedMatches(user: true);
+    if (MatchCubit.get(context).completedMatchDetailsList.isEmpty) {
+      MatchCubit.get(context).getCompletedMatches(user: true);
+    }
   }
 
   @override
