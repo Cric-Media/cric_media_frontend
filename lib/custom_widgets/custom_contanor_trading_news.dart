@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,9 @@ class Custom_Contanor_trading_news extends StatelessWidget {
         width: screenWith,
         height: 130,
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,9 +32,9 @@ class Custom_Contanor_trading_news extends StatelessWidget {
                 Container(
                   height: 130,
                   width: 140,
-                  decoration: BoxDecoration(),
+                  decoration: const BoxDecoration(),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(12),
                         bottomLeft: Radius.circular(12)),
                     child: Image.asset(
@@ -61,14 +61,14 @@ class Custom_Contanor_trading_news extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         'It is a long established  fact that \n  goddsf ddf '
                         'a reader will be \n distracted  the readable It is a\n long established  fact that \n  goddsf ddf',
                         style: GoogleFonts.inter(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                           fontSize: 13,
                           color: AppColor.hintColor,
                           fontWeight: FontWeight.w300,

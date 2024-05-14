@@ -23,16 +23,16 @@ class CustomResentWidget extends StatelessWidget {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
+          padding: const EdgeInsets.only(left: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colors.white,
           ),
           width: screenWidth,
-          // height: screenHeight * 0.15,
           child: Row(
             children: [
               Expanded(
-                flex: 5,
+                flex: 6,
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Column(
@@ -59,7 +59,7 @@ class CustomResentWidget extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 4),
                           Text(
                             "(${match?.team2Overs}/${match?.team2Balls})",
                           ),
@@ -87,13 +87,14 @@ class CustomResentWidget extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 4),
                           Text(
                             "(${match?.team1Overs}/${match?.team1Balls})",
                           ),
                         ],
                       ),
-                      const SizedBox(height: 32),
+                      if (match?.winningTeam == match?.team1?.id)
+                        const SizedBox(height: 32),
                       if (match?.winningTeam == match?.team1?.id)
                         Text(
                           "${match?.team1?.name} won by $winningWickets wickets",

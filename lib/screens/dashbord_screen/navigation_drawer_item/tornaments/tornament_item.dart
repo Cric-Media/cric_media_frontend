@@ -1,5 +1,4 @@
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/add_new_tornament.dart';
 import 'package:flutter/material.dart';
@@ -43,15 +42,15 @@ class _TornamentItemState extends State<TornamentItem> {
             foregroundColor: Colors.white,
             backgroundColor: AppColor.blueColor,
             automaticallyImplyLeading: true,
-            actions: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: Image.asset(
-                    AppIcons.search,
-                    width: 25,
-                    color: Colors.white,
-                  )),
-            ],
+            // actions: [
+            //   Padding(
+            //       padding: const EdgeInsets.only(right: 20.0),
+            //       child: Image.asset(
+            //         AppIcons.search,
+            //         width: 25,
+            //         color: Colors.white,
+            //       )),
+            // ],
             title: Text(
               'Tornaments',
               style: GoogleFonts.inter(
@@ -93,29 +92,55 @@ class _TornamentItemState extends State<TornamentItem> {
           }
           return Column(
             children: [
-              ListView.separated(
-                separatorBuilder: (context, index) => const Divider(),
+              ListView.builder(
+                // separatorBuilder: (context, index) => const Divider(),
                 padding: const EdgeInsets.all(8),
                 itemBuilder: (context, index) {
                   var tournament =
                       TournamentCubit.get(context).tournaments[index];
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                        tournament.image ?? '',
-                      ),
-                    ),
-                    title: Text(tournament.seriesName ?? ''),
-                    subtitle: Text(
-                      DateFormat('dd-MM-yyyy').format(
-                        DateTime.parse(tournament.startDate!),
+                  return Card(
+                    elevation: 6,
+                    child: Container(
+                      color: Colors.white,
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          radius: 36,
+                          // backgroundColor: AppColor.blueColor.withOpacity(0.5),
+                          backgroundImage: NetworkImage(
+                            tournament.image ?? '',
+                          ),
+                        ),
+                        title: Text(
+                          tournament.seriesName ?? '',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Starting Date: ${DateFormat('dd-MM-yyyy').format(
+                                DateTime.parse(tournament.startDate!),
+                              )}",
+                            ),
+                            Text(
+                              "Ending Date: ${DateFormat('dd-MM-yyyy').format(
+                                DateTime.parse(tournament.endDate!),
+                              )}",
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
                 },
                 itemCount: TournamentCubit.get(context).tournaments.length,
                 shrinkWrap: true,
-              )
+              ),
             ],
           );
         },

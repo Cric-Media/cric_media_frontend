@@ -1,9 +1,8 @@
 import 'package:cricket_app/cubits/match/match_cubit.dart';
+import 'package:cricket_app/custom_widgets/custom_resent_widget.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../custom_widgets/custom_resent_widget.dart';
 
 class RecentTab extends StatefulWidget {
   const RecentTab({super.key});

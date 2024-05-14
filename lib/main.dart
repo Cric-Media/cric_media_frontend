@@ -16,6 +16,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 
+import 'cubits/match/match_cubit.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -53,9 +54,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<TeamCubit>(
               create: (context) => TeamCubit()..getInitialTeams(),
             ),
-            // BlocProvider<MatchCubit>(
-            //   create: (context) => MatchCubit()..getLiveMatches(user: true),
-            // ),
+            BlocProvider<MatchCubit>(create: (context) => MatchCubit()),
             BlocProvider<TournamentCubit>(
               create: (context) => TournamentCubit(),
             ),
