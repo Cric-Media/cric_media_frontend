@@ -65,6 +65,11 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(seedColor: AppColor.blueColor),
               useMaterial3: true,
+              // ).copyWith(
+              //   appBarTheme: const AppBarTheme(
+              //     backgroundColor: AppColor.blueColor,
+              //     foregroundColor: Colors.white,
+              //   ),
             ),
             onGenerateRoute: Routes.onGenerateRoute,
             initialRoute: '/',

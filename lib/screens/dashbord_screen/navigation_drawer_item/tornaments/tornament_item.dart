@@ -1,10 +1,10 @@
 import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/add_new_tornament.dart';
+import 'package:cricket_app/custom_widgets/tournament_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 class TornamentItem extends StatefulWidget {
   const TornamentItem({super.key});
@@ -24,52 +24,24 @@ class _TornamentItemState extends State<TornamentItem> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0XFFFBFBFB),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: Container(
-          // extra container for custom bottom shadows
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 5,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: AppBar(
-            foregroundColor: Colors.white,
-            backgroundColor: AppColor.blueColor,
-            automaticallyImplyLeading: true,
-            // actions: [
-            //   Padding(
-            //       padding: const EdgeInsets.only(right: 20.0),
-            //       child: Image.asset(
-            //         AppIcons.search,
-            //         width: 25,
-            //         color: Colors.white,
-            //       )),
-            // ],
-            title: Text(
-              'Tornaments',
-              style: GoogleFonts.inter(
-                  textStyle: const TextStyle(
-                      fontSize: 19,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600)),
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        backgroundColor: AppColor.blueColor,
+        foregroundColor: Colors.white,
+        title: Text(
+          'Tornaments',
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(
+              fontSize: 19,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddNewTornament(),
-            ),
-          );
+          Navigator.pushNamed(context, addTournament);
         },
         backgroundColor: AppColor.blueColor,
         child: const Icon(
@@ -92,54 +64,28 @@ class _TornamentItemState extends State<TornamentItem> {
           }
           return Column(
             children: [
-              ListView.builder(
-                // separatorBuilder: (context, index) => const Divider(),
-                padding: const EdgeInsets.all(8),
-                itemBuilder: (context, index) {
-                  var tournament =
-                      TournamentCubit.get(context).tournaments[index];
-                  return Card(
-                    elevation: 6,
-                    child: Container(
-                      color: Colors.white,
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          radius: 36,
-                          // backgroundColor: AppColor.blueColor.withOpacity(0.5),
-                          backgroundImage: NetworkImage(
-                            tournament.image ?? '',
-                          ),
-                        ),
-                        title: Text(
-                          tournament.seriesName ?? '',
-                          style: GoogleFonts.inter(
-                            textStyle: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Starting Date: ${DateFormat('dd-MM-yyyy').format(
-                                DateTime.parse(tournament.startDate!),
-                              )}",
-                            ),
-                            Text(
-                              "Ending Date: ${DateFormat('dd-MM-yyyy').format(
-                                DateTime.parse(tournament.endDate!),
-                              )}",
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                itemCount: TournamentCubit.get(context).tournaments.length,
-                shrinkWrap: true,
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 2,
+                  ),
+                  // separatorBuilder: (context, index) => const Divider(),
+                  padding: const EdgeInsets.all(8),
+                  itemBuilder: (context, index) {
+                    var tournament =
+                        TournamentCubit.get(context).tournaments[index];
+                    return GestureDetector(
+                      onTap: () =>
+                          Navigator.pushNamed(context, tournamentDetails),
+                      child: TournamentWidget(tournament: tournament),
+                    );
+                  },
+                  itemCount: TournamentCubit.get(context).tournaments.length,
+                  shrinkWrap: true,
+                ),
               ),
             ],
           );

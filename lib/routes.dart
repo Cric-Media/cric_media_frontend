@@ -19,6 +19,8 @@ import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/playe
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/add_new_team.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/team_players_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teams_screen.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/add_new_tornament.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tournament_details_screen.dart';
 import 'package:cricket_app/screens/splash_screen.dart/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -176,6 +178,15 @@ class Routes {
       case adminMatches:
         return MaterialPageRoute(
           builder: (context) => const MatchItem(),
+        );
+
+      // Tournaments
+      case addTournament:
+        return MaterialPageRoute(builder: (context) => const AddNewTornament());
+
+      case tournamentDetails:
+        return MaterialPageRoute(
+          builder: (context) => const TournamentDetailsScreen(),
         );
 
       default:

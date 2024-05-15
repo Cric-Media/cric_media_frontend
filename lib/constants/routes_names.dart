@@ -21,3 +21,5 @@ const liveScorer = '/live-scorer';
 
 // Admin
 const adminMatches = "/admin-matches";
+const addTournament = '/admin-tournaments';
+const tournamentDetails = '/admin-tournament-details';

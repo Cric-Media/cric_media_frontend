@@ -1,11 +1,26 @@
-import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
+import 'package:cricket_app/custom_widgets/tournament_widget.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/up_coming_series_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Series extends StatelessWidget {
+class Series extends StatefulWidget {
   const Series({super.key});
+
+  @override
+  State<Series> createState() => _SeriesState();
+}
+
+class _SeriesState extends State<Series> {
+  @override
+  void initState() {
+    if (TournamentCubit.get(context).tournaments.isEmpty) {
+      TournamentCubit.get(context).getInitialTournaments(isAdmin: false);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,124 +41,53 @@ class Series extends StatelessWidget {
                   color: Colors.black,
                   fontWeight: FontWeight.w700)),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: Image.asset(
-              AppIcons.search,
-              width: 24,
-              height: 24,
-            ),
-          )
-        ],
       ),
-      body: Column(children: [
-        const SizedBox(
-          height: 5,
-        ),
-        Expanded(
-          child: ListView.builder(
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const UpCommingSeriesScreen()));
-                    },
-                    child: Card(
-                      elevation: 2,
-                      color: Colors.white,
-                      child: Container(
-                          height: 82,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Image.asset(
-                                    AppIcons.cup2,
-                                    height: 70,
-                                    color: Colors.black,
-                                  ),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        height: 2,
-                                      ),
-                                      Text(
-                                        'South Africa vs England',
-                                        style: GoogleFonts.inter(
-                                            textStyle: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w600)),
-                                      ),
-                                      const SizedBox(
-                                        height: 2,
-                                      ),
-                                      const Text('Start Date  2024/2/30',
-                                          style: TextStyle(
-                                              fontSize: 11,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w400)),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      const Row(
-                                        children: [
-                                          Text('End Date  2024/3/17',
-                                              style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w400)),
-                                          SizedBox(
-                                            width: 140,
-                                          ),
-                                          Column(
-                                            children: [
-                                              Text('3rd 20T',
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                              Text('3rd ODI',
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w400))
-                                            ],
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
-                          )),
-                    ),
+      body: BlocConsumer<TournamentCubit, TournamentState>(
+        listener: (context, state) {
+          if (state is TournamentGetInitialSuccess) {
+            TournamentCubit.get(context).tournaments = state.response.data;
+          }
+        },
+        builder: (context, state) {
+          if (state is TournamentGetInitialLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Column(
+            children: [
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 2,
                   ),
-                );
-              }),
-        )
-      ]),
+                  // separatorBuilder: (context, index) => const Divider(),
+                  padding: const EdgeInsets.all(8),
+                  itemBuilder: (context, index) {
+                    var tournament =
+                        TournamentCubit.get(context).tournaments[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const UpCommingSeriesScreen()));
+                      },
+                      child: TournamentWidget(tournament: tournament),
+                    );
+                  },
+                  itemCount: TournamentCubit.get(context).tournaments.length,
+                  shrinkWrap: true,
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
