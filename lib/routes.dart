@@ -184,7 +184,10 @@ class Routes {
 
       // Tournaments
       case addTournament:
-        return MaterialPageRoute(builder: (context) => const AddNewTornament());
+        final Tournament? tournament = settings.arguments as Tournament?;
+        return MaterialPageRoute(
+          builder: (context) => AddNewTornament(tournament: tournament),
+        );
 
       case tournamentDetails:
         final tournament = settings.arguments as Tournament;

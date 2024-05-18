@@ -16,7 +16,9 @@ class TornamentItem extends StatefulWidget {
 class _TornamentItemState extends State<TornamentItem> {
   @override
   void initState() {
-    TournamentCubit.get(context).getInitialTournaments(isAdmin: true);
+    if (TournamentCubit.get(context).tournaments.isEmpty) {
+      TournamentCubit.get(context).getInitialTournaments(isAdmin: true);
+    }
     super.initState();
   }
 
@@ -44,11 +46,7 @@ class _TornamentItemState extends State<TornamentItem> {
           Navigator.pushNamed(context, addTournament);
         },
         backgroundColor: AppColor.blueColor,
-        child: const Icon(
-          Icons.add,
-          size: 20,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.add, size: 20, color: Colors.white),
       ),
       body: BlocConsumer<TournamentCubit, TournamentState>(
         listener: (context, state) {
@@ -62,38 +60,44 @@ class _TornamentItemState extends State<TornamentItem> {
               child: CircularProgressIndicator(),
             );
           }
-          return Column(
-            children: [
-              Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 2,
+          return RefreshIndicator(
+            onRefresh: () async {
+              TournamentCubit.get(context).getInitialTournaments(isAdmin: true);
+            },
+            child: Column(
+              children: [
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 2,
+                    ),
+                    // separatorBuilder: (context, index) => const Divider(),
+                    padding: const EdgeInsets.all(8),
+                    itemBuilder: (context, index) {
+                      var tournament =
+                          TournamentCubit.get(context).tournaments[index];
+                      return GestureDetector(
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          tournamentDetails,
+                          arguments: tournament,
+                        ),
+                        child: Hero(
+                          tag: tournament.sId.toString(),
+                          child: TournamentWidget(tournament: tournament),
+                        ),
+                      );
+                    },
+                    itemCount: TournamentCubit.get(context).tournaments.length,
+                    shrinkWrap: true,
                   ),
-                  // separatorBuilder: (context, index) => const Divider(),
-                  padding: const EdgeInsets.all(8),
-                  itemBuilder: (context, index) {
-                    var tournament =
-                        TournamentCubit.get(context).tournaments[index];
-                    return GestureDetector(
-                      onTap: () => Navigator.pushNamed(
-                        context,
-                        tournamentDetails,
-                        arguments: tournament,
-                      ),
-                      child: Hero(
-                        tag: tournament.sId.toString(),
-                        child: TournamentWidget(tournament: tournament),
-                      ),
-                    );
-                  },
-                  itemCount: TournamentCubit.get(context).tournaments.length,
-                  shrinkWrap: true,
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),

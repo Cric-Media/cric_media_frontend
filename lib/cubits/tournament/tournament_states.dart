@@ -20,6 +20,8 @@ final class TournamentAddTeamLoading extends TournamentState {}
 
 final class TournamentRemoveTeamLoading extends TournamentState {}
 
+final class TournamentUpdateLoading extends TournamentState {}
+
 // Success
 final class TournamentAddSuccess extends TournamentState {
   final ApiResponse response;
@@ -51,6 +53,11 @@ final class TournamentRemoveTeamSuccess extends TournamentState {
   TournamentRemoveTeamSuccess({required this.response});
 }
 
+final class TournamentUpdateSuccess extends TournamentState {
+  final ApiResponse response;
+  TournamentUpdateSuccess({required this.response});
+}
+
 // Error
 final class TournamentAddError extends TournamentState {
   final String message;
@@ -80,4 +87,9 @@ final class TournamentAddTeamError extends TournamentState {
 final class TournamentRemoveTeamError extends TournamentState {
   final String message;
   TournamentRemoveTeamError({required this.message});
+}
+
+final class TournamentUpdateError extends TournamentState {
+  final String message;
+  TournamentUpdateError({required this.message});
 }

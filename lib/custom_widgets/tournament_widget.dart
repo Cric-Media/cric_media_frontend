@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/models/tournament.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,6 +16,31 @@ class TournamentWidget extends StatelessWidget {
       child: Stack(
         children: [
           GridTile(
+            header: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      addTournament,
+                      arguments: tournament,
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 8, top: 8),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 20,
+                      child: Icon(
+                        Icons.edit,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             footer: AspectRatio(
               aspectRatio: 3,
               child: Container(

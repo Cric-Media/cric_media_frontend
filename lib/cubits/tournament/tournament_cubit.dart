@@ -18,7 +18,7 @@ class TournamentCubit extends Cubit<TournamentState> {
 
   // Variables
   File? image;
-  String? tournamentType, startDate, endDate;
+  String? tournamentType, startDate, endDate, imageUrl;
   TextEditingController seriesName = TextEditingController();
   TextEditingController seriesLocation = TextEditingController();
   TextEditingController numberOfOvers = TextEditingController();
@@ -44,6 +44,7 @@ class TournamentCubit extends Cubit<TournamentState> {
 
   void clearFields() {
     image = null;
+    imageUrl = null;
     tournamentType = null;
     startDate = null;
     endDate = null;
@@ -74,6 +75,33 @@ class TournamentCubit extends Cubit<TournamentState> {
         emit(TournamentAddError(message: e.message));
       } else {
         emit(TournamentAddError(message: "Something went wrong"));
+      }
+    }
+  }
+
+  void updateTournament(String tournamentId) async {
+    emit(TournamentUpdateLoading());
+    try {
+      var data = {
+        'id': tournamentId,
+        'image': image,
+        'series_name': seriesName.text.trim(),
+        'series_location': seriesLocation.text.trim(),
+        'tournament_type': tournamentType,
+        'number_of_overs': numberOfOvers.text.trim(),
+        'number_of_teams': numberOfTeams.text.trim(),
+        'start_date': startDate,
+        'end_date': endDate,
+      };
+      final response = await adminController.updateTournament(
+        data: data,
+      );
+      emit(TournamentUpdateSuccess(response: response));
+    } catch (e) {
+      if (e is AppException) {
+        emit(TournamentUpdateError(message: e.message));
+      } else {
+        emit(TournamentUpdateError(message: "Something went wrong"));
       }
     }
   }

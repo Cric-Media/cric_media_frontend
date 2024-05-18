@@ -555,6 +555,58 @@ class AdminController {
     }
   }
 
+  Future<ApiResponse> updateTournament({
+    required Map<String, dynamic> data,
+  }) async {
+    final url = "${AdminUrl.addTournament}/${data['id']}";
+    var request = MultipartRequest('PUT', Uri.parse(url));
+
+    if (data['image'] != null) {
+      request.files.add(
+        MultipartFile(
+          'image',
+          data['image'].readAsBytes().asStream(),
+          data['image'].lengthSync(),
+          filename: data['image'].path.split('/').last,
+        ),
+      );
+    }
+    // send other fields
+
+    if (data['series_name'] != null) {
+      request.fields["seriesName"] = data['series_name'].toString();
+    }
+    if (data['series_location'] != null) {
+      request.fields["seriesLocation"] = data['series_location'].toString();
+    }
+    if (data['tournament_type'] != null) {
+      request.fields["tournamentType"] = data['tournament_type'].toString();
+    }
+    if (data['number_of_overs'] != null) {
+      request.fields["numberOfOvers"] = data['number_of_overs'].toString();
+    }
+    if (data['number_of_teams'] != null) {
+      request.fields["numberOfTeams"] = data['number_of_teams'].toString();
+    }
+    if (data['start_date'] != null) {
+      request.fields["startDate"] = data['start_date'].toString();
+    }
+    if (data['end_date'] != null) {
+      request.fields["endDate"] = data['end_date'].toString();
+    }
+
+    // send request
+    var response = await request.send();
+    // print response
+    var json = await response.stream.bytesToString();
+    var body = jsonDecode(json);
+    if (body['success'] == true) {
+      return ApiResponse.fromJson(body, (data) => null);
+    } else {
+      throw AppException(body['message']);
+    }
+  }
+
   Future<ApiResponse> getTournament(String tournamentId) async {
     final url = "${AdminUrl.getTournament}/$tournamentId";
     final response = await ApiManager.getRequest(url);

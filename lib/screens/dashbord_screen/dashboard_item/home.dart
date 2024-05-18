@@ -76,15 +76,15 @@ class _HomeState extends State<Home> {
                       isLabelVisible: AdminCubit.get(context).notifiers.isEmpty
                           ? false
                           : true,
-                      child: IconButton(
-                        icon: const Icon(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, notification);
+                        },
+                        child: const Icon(
                           Icons.notifications_outlined,
                           color: Colors.black,
                           size: 30,
                         ),
-                        onPressed: () {
-                          Navigator.pushNamed(context, notification);
-                        },
                       ),
                     );
                   },

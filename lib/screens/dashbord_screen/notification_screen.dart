@@ -39,7 +39,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
               children: [
                 Column(
                   children: [
-                    // const Text('Notification Screen'),
                     Expanded(
                       child: BlocConsumer<AdminCubit, AdminState>(
                         listener: (context, state) {
@@ -120,15 +119,21 @@ class Notifications extends StatelessWidget {
         return Container(
           margin: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            color: Colors.transparent,
+            // color: Colors.transparent,
             borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey[400]!,
-                blurRadius: 10,
-                offset: const Offset(0, 2),
-              ),
-            ],
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.grey[400]!,
+            //     blurRadius: 10,
+            //     offset: const Offset(0, 2),
+            //   ),
+            // ],
+            gradient: LinearGradient(colors: [
+              AppColor.blueColor.withOpacity(0.1),
+              AppColor.blueColor.withOpacity(0.2),
+              AppColor.blueColor.withOpacity(0.3),
+              // AppColor.blueColor.withOpacity(0.4),
+            ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -176,10 +181,7 @@ class Notifications extends StatelessWidget {
                               type: notifier.type ?? '',
                             );
                           },
-                          icon: const Icon(
-                            Icons.check,
-                            color: Colors.white,
-                          ),
+                          icon: const Icon(Icons.check, color: Colors.white),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -194,14 +196,12 @@ class Notifications extends StatelessWidget {
                               type: notifier.type ?? '',
                             );
                           },
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ),
+                          icon: const Icon(Icons.close, color: Colors.white),
                         ),
                       ),
                     ],
                   ),
+                  isThreeLine: true,
                 ),
               ],
             ),

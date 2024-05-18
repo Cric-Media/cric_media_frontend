@@ -1,30 +1,59 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
+import 'package:cricket_app/models/tournament.dart';
+import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class AddNewTornament extends StatefulWidget {
-  const AddNewTornament({super.key});
+  final Tournament? tournament;
+  const AddNewTornament({super.key, this.tournament});
 
   @override
   State<AddNewTornament> createState() => _AddNewTornamentState();
 }
 
 class _AddNewTornamentState extends State<AddNewTornament> {
-  final TextEditingController _textEditingController = TextEditingController();
   String selectedBookingFor = 'Hard Bol';
 
   String bookingFor = '';
-  ImagePicker _imagePicker = ImagePicker();
-  XFile? _pickedImage;
+
   DateTime? selectedDate;
   DateTime? selectedDateend;
+
+  @override
+  void initState() {
+    TournamentCubit.get(context).clearFields();
+    setValues();
+    super.initState();
+  }
+
+  setValues() {
+    if (widget.tournament != null) {
+      TournamentCubit.get(context).imageUrl = widget.tournament!.image;
+      TournamentCubit.get(context).seriesName.text =
+          widget.tournament!.seriesName ?? '';
+      TournamentCubit.get(context).seriesLocation.text =
+          widget.tournament!.seriesLocation ?? '';
+      TournamentCubit.get(context).tournamentType =
+          widget.tournament!.tournamentType ?? '';
+      TournamentCubit.get(context).numberOfOvers.text =
+          widget.tournament!.numberOfOvers.toString();
+      TournamentCubit.get(context).numberOfTeams.text =
+          widget.tournament!.numberOfTeams.toString();
+      TournamentCubit.get(context).startDate = widget.tournament!.startDate;
+      TournamentCubit.get(context).endDate = widget.tournament!.endDate;
+      selectedDateend = DateTime.parse(widget.tournament!.endDate!);
+      selectedDate = DateTime.parse(widget.tournament!.startDate!);
+    }
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     DateTime? picked = await showDatePicker(
       context: context,
@@ -86,16 +115,6 @@ class _AddNewTornamentState extends State<AddNewTornament> {
           child: AppBar(
             foregroundColor: Colors.white,
             backgroundColor: AppColor.blueColor,
-            automaticallyImplyLeading: true,
-            actions: [
-              Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
-                  child: Image.asset(
-                    AppIcons.search,
-                    width: 25,
-                    color: Colors.white,
-                  )),
-            ],
             title: Text(
               'Add Tournament',
               style: GoogleFonts.inter(
@@ -132,7 +151,13 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                                   ? FileImage(
                                           TournamentCubit.get(context).image!)
                                       as ImageProvider<Object>
-                                  : AssetImage(AppIcons.profile),
+                                  : TournamentCubit.get(context).imageUrl !=
+                                          null
+                                      ? CachedNetworkImageProvider(
+                                          TournamentCubit.get(context)
+                                                  .imageUrl ??
+                                              '') as ImageProvider
+                                      : AssetImage(AppIcons.profile),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -241,11 +266,11 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                   onChanged: (value) {
                     setState(() {
                       selectedBookingFor = value!;
-                      TournamentCubit.get(context).tournamentType = value!;
+                      TournamentCubit.get(context).tournamentType = value;
                       bookingFor = selectedBookingFor;
                     });
                   },
-                  items: ['Hard Bowl', 'Tennis Bowl ', 'other']
+                  items: ['Hard Bowl', 'Tennis Bowl ']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -436,27 +461,32 @@ class _AddNewTornamentState extends State<AddNewTornament> {
               ),
               BlocConsumer<TournamentCubit, TournamentState>(
                 listener: (context, state) {
-                  if (state is TournamentAddSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Tournament added successfully'),
-                      ),
-                    );
+                  if (state is TournamentAddSuccess ||
+                      state is TournamentUpdateSuccess) {
                     TournamentCubit.get(context).clearFields();
                     TournamentCubit.get(context).getInitialTournaments(
                       isAdmin: true,
                     );
                     Navigator.pop(context);
+                  } else if (state is TournamentUpdateError) {
+                    showSnack(context, message: state.message);
                   }
                 },
                 builder: (context, state) {
-                  if (state is TournamentAddLoading) {
+                  if (state is TournamentAddLoading ||
+                      state is TournamentUpdateLoading) {
                     return const Center(child: CircularProgressIndicator());
                   }
                   return CustomButton(
                     buttonText: 'Submit',
                     backgroundColor: AppColor.blueColor,
                     onTap: () {
+                      if (widget.tournament != null) {
+                        TournamentCubit.get(context).updateTournament(
+                          widget.tournament!.sId!,
+                        );
+                        return;
+                      }
                       TournamentCubit.get(context).addTournament();
                     },
                   );
