@@ -7,8 +7,12 @@ import 'package:intl/intl.dart';
 
 class TournamentWidget extends StatelessWidget {
   final Tournament tournament;
-  const TournamentWidget({Key? key, required this.tournament})
-      : super(key: key);
+  final bool? isAdmin;
+  const TournamentWidget({
+    Key? key,
+    required this.tournament,
+    this.isAdmin = true,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -16,31 +20,33 @@ class TournamentWidget extends StatelessWidget {
       child: Stack(
         children: [
           GridTile(
-            header: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      addTournament,
-                      arguments: tournament,
-                    );
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 8, top: 8),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 20,
-                      child: Icon(
-                        Icons.edit,
-                        color: Colors.black,
+            header: isAdmin == false
+                ? const SizedBox.shrink()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            addTournament,
+                            arguments: tournament,
+                          );
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(right: 8, top: 8),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 20,
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ),
-              ],
-            ),
             footer: AspectRatio(
               aspectRatio: 3,
               child: Container(

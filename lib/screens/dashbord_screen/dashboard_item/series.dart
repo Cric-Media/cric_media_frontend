@@ -36,10 +36,12 @@ class _SeriesState extends State<Series> {
         title: Text(
           'Series'.toUpperCase(),
           style: GoogleFonts.inter(
-              textStyle: const TextStyle(
-                  fontSize: 17,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700)),
+            textStyle: const TextStyle(
+              fontSize: 17,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ),
       ),
       body: BlocConsumer<TournamentCubit, TournamentState>(
@@ -72,12 +74,16 @@ class _SeriesState extends State<Series> {
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const UpCommingSeriesScreen()));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UpCommingSeriesScreen(),
+                          ),
+                        );
                       },
-                      child: TournamentWidget(tournament: tournament),
+                      child: TournamentWidget(
+                        tournament: tournament,
+                        isAdmin: false,
+                      ),
                     );
                   },
                   itemCount: TournamentCubit.get(context).tournaments.length,

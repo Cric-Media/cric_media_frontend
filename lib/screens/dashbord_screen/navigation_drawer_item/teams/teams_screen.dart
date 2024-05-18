@@ -97,28 +97,27 @@ class _TeamsScreenState extends State<TeamsScreen> {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SearchableList(
-              // autoCompleteHints: teams.map((e) => e.name.toString()).toList(),
-              searchFieldEnabled: true,
-              closeKeyboardWhenScrolling: true,
-              inputDecoration: InputDecoration(
-                hintText: 'Search',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+            // autoCompleteHints: teams.map((e) => e.name.toString()).toList(),
+            searchFieldEnabled: true,
+            closeKeyboardWhenScrolling: true,
+            inputDecoration: InputDecoration(
+              hintText: 'Search',
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-              initialList: teams,
-              filter: (query) {
-                return teams
-                    .where((team) =>
-                        team.name!.toLowerCase().contains(query.toLowerCase()))
-                    .toList();
-              },
-              builder: (context, index, item) {
-                return Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-                    child: TeamTile(team: item));
-              }),
+            ),
+            initialList: teams,
+            filter: (query) {
+              return teams
+                  .where((team) =>
+                      team.name!.toLowerCase().contains(query.toLowerCase()))
+                  .toList();
+            },
+            itemBuilder: (item) => Container(
+                margin: const EdgeInsets.only(bottom: 16),
+                child: TeamTile(team: item)),
+          ),
         );
       }),
       floatingActionButton: FloatingActionButton(
@@ -296,44 +295,43 @@ class _TeamTileState extends State<TeamTile> {
                   children: [
                     Expanded(
                       child: SearchableList(
-                          searchFieldEnabled: true,
-                          closeKeyboardWhenScrolling: true,
-                          inputDecoration: InputDecoration(
-                            hintText: 'Search',
-                            prefixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
+                        searchFieldEnabled: true,
+                        closeKeyboardWhenScrolling: true,
+                        inputDecoration: InputDecoration(
+                          hintText: 'Search',
+                          prefixIcon: Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        initialList: playerList,
+                        filter: (query) {
+                          return playerList
+                              .where((team) => team.name!
+                                  .toLowerCase()
+                                  .contains(query.toLowerCase()))
+                              .toList();
+                        },
+                        itemBuilder: (item) => ListTile(
+                          leading: CircleAvatar(
+                            radius: 30,
+                            backgroundImage: CachedNetworkImageProvider(
+                              item.imageUrl ?? '',
                             ),
                           ),
-                          initialList: playerList,
-                          filter: (query) {
-                            return playerList
-                                .where((team) => team.name!
-                                    .toLowerCase()
-                                    .contains(query.toLowerCase()))
-                                .toList();
-                          },
-                          builder: (context, index, item) {
-                            return ListTile(
-                              leading: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: CachedNetworkImageProvider(
-                                  playerList[index].imageUrl ?? '',
-                                ),
-                              ),
-                              title: Text(playerList[index].name ?? ''),
-                              subtitle: Text(playerList[index].role ?? ''),
-                              trailing: ElevatedButton(
-                                onPressed: () {
-                                  teamCubit.addPlayerToTeam(
-                                    widget.team.id.toString(),
-                                    playerList[index].id.toString(),
-                                  );
-                                },
-                                child: Text("Add"),
-                              ),
-                            );
-                          }),
+                          title: Text(item.name ?? ''),
+                          subtitle: Text(item.role ?? ''),
+                          trailing: ElevatedButton(
+                            onPressed: () {
+                              teamCubit.addPlayerToTeam(
+                                widget.team.id.toString(),
+                                item.id.toString(),
+                              );
+                            },
+                            child: Text("Add"),
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 );
@@ -498,10 +496,7 @@ class _TeamTileState extends State<TeamTile> {
                                     onTap: () {
                                       playersSheet();
                                     },
-                                    child: Image.asset(
-                                      AppIcons.add,
-                                      width: 20,
-                                    ),
+                                    child: Image.asset(AppIcons.add, width: 20),
                                   ),
                                 ],
                               ),
