@@ -11,6 +11,12 @@ class AdminSharePlayerLoading extends AdminState {}
 
 class AdminShareTeamLoading extends AdminState {}
 
+class AdminInvitationsLoading extends AdminState {}
+
+class AdminInvitationResponseLoading extends AdminState {}
+
+class AdminShareLoading extends AdminState {}
+
 // Success states
 class AdminGetOtherAdminsSuccess extends AdminState {
   final ApiResponse response;
@@ -32,6 +38,21 @@ class AdminShareTeamSuccess extends AdminState {
   AdminShareTeamSuccess(this.response);
 }
 
+class AdminInvitationsSuccess extends AdminState {
+  final ApiResponse response;
+  AdminInvitationsSuccess(this.response);
+}
+
+class AdminInvitationResponseSuccess extends AdminState {
+  final ApiResponse response;
+  AdminInvitationResponseSuccess(this.response);
+}
+
+class AdminShareSuccess extends AdminState {
+  final ApiResponse response;
+  AdminShareSuccess(this.response);
+}
+
 // Failute states
 class AdminGetOtherAdminsError extends AdminState {
   final String message;
@@ -46,4 +67,19 @@ class AdminSharePlayerError extends AdminState {
 class AdminShareTeamError extends AdminState {
   final String message;
   AdminShareTeamError(this.message);
+}
+
+class AdminInvitationsError extends AdminState {
+  final String message;
+  AdminInvitationsError(this.message);
+}
+
+class AdminInvitationResponseError extends AdminState {
+  final String message;
+  AdminInvitationResponseError(this.message);
+}
+
+class AdminShareError extends AdminState {
+  final String message;
+  AdminShareError(this.message);
 }

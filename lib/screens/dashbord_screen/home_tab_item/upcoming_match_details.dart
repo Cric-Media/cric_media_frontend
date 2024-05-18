@@ -61,7 +61,10 @@ class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
           child: Column(
             children: [
               const SizedBox(height: 5),
-              UpCommingMachesCard(match: widget.match),
+              Hero(
+                tag: widget.match?.sId.toString() ?? '',
+                child: UpCommingMachesCard(match: widget.match),
+              ),
               const SizedBox(height: 5),
               Card(
                 color: Colors.white,

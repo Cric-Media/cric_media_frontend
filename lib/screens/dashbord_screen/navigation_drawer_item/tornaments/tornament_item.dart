@@ -78,9 +78,15 @@ class _TornamentItemState extends State<TornamentItem> {
                     var tournament =
                         TournamentCubit.get(context).tournaments[index];
                     return GestureDetector(
-                      onTap: () =>
-                          Navigator.pushNamed(context, tournamentDetails),
-                      child: TournamentWidget(tournament: tournament),
+                      onTap: () => Navigator.pushNamed(
+                        context,
+                        tournamentDetails,
+                        arguments: tournament,
+                      ),
+                      child: Hero(
+                        tag: tournament.sId.toString(),
+                        child: TournamentWidget(tournament: tournament),
+                      ),
                     );
                   },
                   itemCount: TournamentCubit.get(context).tournaments.length,

@@ -90,7 +90,10 @@ class _LiveDetails extends State<LiveDetails> {
                 child: Column(
                   children: [
                     const SizedBox(height: 5),
-                    MatchDetailsLiveCard(match: match),
+                    Hero(
+                      tag: match?.sId.toString() ?? '',
+                      child: MatchDetailsLiveCard(match: match),
+                    ),
                     const SizedBox(height: 5),
                     Card(
                       color: Colors.white,

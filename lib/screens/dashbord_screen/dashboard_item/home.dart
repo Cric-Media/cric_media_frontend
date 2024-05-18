@@ -17,8 +17,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  void initState() {
+    AdminCubit.get(context).adminInvitations();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,10 +63,31 @@ class Home extends StatelessWidget {
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 20.0),
-                child: Image.asset(
-                  AppIcons.search,
-                  width: 24,
-                  height: 24,
+                child: BlocConsumer<AdminCubit, AdminState>(
+                  listener: (context, state) {
+                    if (state is AdminInvitationsSuccess) {
+                      AdminCubit.get(context).notifiers = state.response.data;
+                    }
+                  },
+                  builder: (context, state) {
+                    return Badge(
+                      label:
+                          Text("${AdminCubit.get(context).notifiers.length}"),
+                      isLabelVisible: AdminCubit.get(context).notifiers.isEmpty
+                          ? false
+                          : true,
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.notifications_outlined,
+                          color: Colors.black,
+                          size: 30,
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, notification);
+                        },
+                      ),
+                    );
+                  },
                 ),
               ),
             ],

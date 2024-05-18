@@ -24,6 +24,8 @@ class TournamentCubit extends Cubit<TournamentState> {
   TextEditingController numberOfOvers = TextEditingController();
   TextEditingController numberOfTeams = TextEditingController();
 
+  Tournament? tournament;
+
   // Lists
   List<Tournament> tournaments = [];
 
@@ -76,6 +78,20 @@ class TournamentCubit extends Cubit<TournamentState> {
     }
   }
 
+  void getTournament(String tournamentId) async {
+    emit(TournamentGetLoading());
+    try {
+      final response = await adminController.getTournament(tournamentId);
+      emit(TournamentGetSuccess(response: response));
+    } catch (e) {
+      if (e is AppException) {
+        emit(TournamentAddError(message: e.message));
+      } else {
+        emit(TournamentAddError(message: "Something went wrong"));
+      }
+    }
+  }
+
   void getInitialTournaments({required bool isAdmin}) async {
     emit(TournamentGetInitialLoading());
     try {
@@ -88,6 +104,46 @@ class TournamentCubit extends Cubit<TournamentState> {
         emit(TournamentGetInitialError(message: e.message));
       } else {
         emit(TournamentGetInitialError(message: "Something went wrong"));
+      }
+    }
+  }
+
+  void addTeam({
+    required String tournamentId,
+    required String teamId,
+  }) async {
+    emit(TournamentAddTeamLoading());
+    try {
+      final response = await adminController.addTeamToTournament(
+        tournamentId: tournamentId,
+        teamId: teamId,
+      );
+      emit(TournamentAddTeamSuccess(response: response));
+    } catch (e) {
+      if (e is AppException) {
+        emit(TournamentAddTeamError(message: e.message));
+      } else {
+        emit(TournamentAddTeamError(message: "Something went wrong"));
+      }
+    }
+  }
+
+  void removeTeam({
+    required String tournamentId,
+    required String teamId,
+  }) async {
+    emit(TournamentRemoveTeamLoading());
+    try {
+      final response = await adminController.removeTeamFromTournament(
+        tournamentId: tournamentId,
+        teamId: teamId,
+      );
+      emit(TournamentRemoveTeamSuccess(response: response));
+    } catch (e) {
+      if (e is AppException) {
+        emit(TournamentRemoveTeamError(message: e.message));
+      } else {
+        emit(TournamentRemoveTeamError(message: "Something went wrong"));
       }
     }
   }

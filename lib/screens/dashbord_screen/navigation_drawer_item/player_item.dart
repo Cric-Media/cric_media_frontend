@@ -7,6 +7,7 @@ import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/team.dart';
+import 'package:cricket_app/screens/dashbord_screen/dashboard_item/profile_Screen/player_profile_screen.dart';
 import 'package:cricket_app/utils/app_dialog.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -144,10 +145,24 @@ class _PlayerTileState extends State<PlayerTile> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Center(
-            child: CircleAvatar(
-              radius: 50,
-              backgroundImage: CachedNetworkImageProvider(
-                widget.player.imageUrl.toString(),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PlayerProfileScreen(id: widget.player.id),
+                  ),
+                );
+              },
+              child: Hero(
+                tag: widget.player.id.toString(),
+                child: CircleAvatar(
+                  radius: 50,
+                  backgroundImage: CachedNetworkImageProvider(
+                    widget.player.imageUrl.toString(),
+                  ),
+                ),
               ),
             ),
           ),
@@ -258,7 +273,7 @@ class _PlayerTileState extends State<PlayerTile> {
                     admins = state.response.data;
                   } else if (state is AdminGetOtherMoreAdminsSuccess) {
                     admins.addAll(state.response.data);
-                  } else if (state is AdminSharePlayerSuccess) {
+                  } else if (state is AdminShareSuccess) {
                     Navigator.pop(context);
                     showSnack(context, message: state.response.message);
                   }
@@ -285,9 +300,14 @@ class _PlayerTileState extends State<PlayerTile> {
                         title: Text(admins[index].name.toString()),
                         trailing: TextButton(
                           onPressed: () {
-                            BlocProvider.of<AdminCubit>(context).sharePlayer(
-                              playerId: widget.player.id.toString(),
+                            // BlocProvider.of<AdminCubit>(context).sharePlayer(
+                            //   playerId: widget.player.id.toString(),
+                            //   adminId: admins[index].id.toString(),
+                            // );
+                            AdminCubit.get(context).shareAccess(
+                              id: widget.player.id.toString(),
                               adminId: admins[index].id.toString(),
+                              type: 'player',
                             );
                           },
                           child: const Text("Share access"),

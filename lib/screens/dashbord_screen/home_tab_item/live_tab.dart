@@ -55,16 +55,19 @@ class _LiveTabState extends State<LiveTab> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      LiveDetails(match: match),
-                                ),
-                              );
-                            },
-                            child: MatchDetailsLiveCard(match: match)),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LiveDetails(match: match),
+                              ),
+                            );
+                          },
+                          child: Hero(
+                            tag: match.sId.toString(),
+                            child: MatchDetailsLiveCard(match: match),
+                          ),
+                        ),
                       );
                     }),
               );

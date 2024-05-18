@@ -2,6 +2,7 @@ import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
+import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/screens/auth_screen/forget_password/change_password_screen.dart';
 import 'package:cricket_app/screens/auth_screen/forget_password/forget_password.dart';
 import 'package:cricket_app/screens/auth_screen/forget_password/verify_email_for_password_screen.dart';
@@ -21,6 +22,7 @@ import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teams_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/add_new_tornament.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tournament_details_screen.dart';
+import 'package:cricket_app/screens/dashbord_screen/notification_screen.dart';
 import 'package:cricket_app/screens/splash_screen.dart/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -185,8 +187,16 @@ class Routes {
         return MaterialPageRoute(builder: (context) => const AddNewTornament());
 
       case tournamentDetails:
+        final tournament = settings.arguments as Tournament;
         return MaterialPageRoute(
-          builder: (context) => const TournamentDetailsScreen(),
+          builder: (context) => TournamentDetailsScreen(
+            tournament: tournament,
+          ),
+        );
+
+      case notification:
+        return MaterialPageRoute(
+          builder: (context) => const NotificationScreen(),
         );
 
       default:

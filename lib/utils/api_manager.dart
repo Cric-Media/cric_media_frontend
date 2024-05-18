@@ -43,11 +43,12 @@ class ApiManager {
         headers: headers ?? {'Content-Type': 'application/json'});
   }
 
-  static Future<Response> deleteRequest(var url, {dynamic headers}) async {
+  static Future<Response> deleteRequest(var url, var body, {dynamic headers}) async {
     // Perform a GET request and return the response.
     return await delete(
       Uri.parse(url),
-      headers: headers,
+      body: jsonEncode(body),
+      headers: headers ?? {'Content-Type': 'application/json'},
     );
   }
 

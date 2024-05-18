@@ -178,7 +178,7 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
                                           ? CachedNetworkImageProvider(
                                               player!.imageUrl.toString(),
                                             )
-                                          : AssetImage(AppIcons.azam)
+                                          : AssetImage(AppIcons.profile)
                                               as ImageProvider<Object>,
                                   fit: BoxFit.cover,
                                 ),

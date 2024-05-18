@@ -63,16 +63,19 @@ class _PlayerProfileScreenState extends State<PlayerProfileScreen> {
                 height: 200,
                 child: ClipOval(
                   child: player != null
-                      ? Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                player?.imageUrl ?? '',
+                      ? Hero(
+                    tag: player?.id ?? '',
+                        child: Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: CachedNetworkImageProvider(
+                                  player?.imageUrl ?? '',
+                                ),
+                                fit: BoxFit.cover,
                               ),
-                              fit: BoxFit.cover,
                             ),
                           ),
-                        )
+                      )
                       : Image.asset(
                           AppIcons.profileimage,
                           fit: BoxFit.contain,

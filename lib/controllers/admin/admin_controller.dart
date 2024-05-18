@@ -7,6 +7,7 @@ import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/match_details.dart';
+import 'package:cricket_app/models/notifier.dart';
 import 'package:cricket_app/models/over.dart' as Over;
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/score_card.dart';
@@ -554,6 +555,21 @@ class AdminController {
     }
   }
 
+  Future<ApiResponse> getTournament(String tournamentId) async {
+    final url = "${AdminUrl.getTournament}/$tournamentId";
+    final response = await ApiManager.getRequest(url);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(
+        resBody,
+        (data) => Tournament.fromJson(resBody['data']),
+      );
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
   Future<ApiResponse> getInitialTournaments({bool isAdmin = false}) async {
     final adminId = await Global().getAdminId();
     final url =
@@ -567,6 +583,103 @@ class AdminController {
         tournaments.add(Tournament.fromJson(tournament));
       }
       return ApiResponse.fromJson(resBody, (data) => tournaments);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> shareTournament({
+    required String id,
+    required String adminId,
+    required String type,
+  }) async {
+    final url = AdminUrl.shareAccess;
+    final headers = {"Content-Type": "application/json"};
+    final body = {
+      "adminId": adminId,
+      "id": id,
+      "type": type,
+    };
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> addTeamToTournament({
+    required String tournamentId,
+    required String teamId,
+  }) async {
+    final url = AdminUrl.teamToTournament;
+    final headers = {"Content-Type": "application/json"};
+    final body = {"tournamentId": tournamentId, "teamId": teamId};
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> removeTeamFromTournament({
+    required String tournamentId,
+    required String teamId,
+  }) async {
+    final url = AdminUrl.teamToTournament;
+    final headers = {"Content-Type": "application/json"};
+    final body = {"tournamentId": tournamentId, "teamId": teamId};
+    final response = await ApiManager.deleteRequest(url, body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> getAdminInvitations() async {
+    final adminId = await Global().getAdminId();
+    final url = "${AdminUrl.adminInvitations}/$adminId";
+    final headers = {"Content-Type": "application/json"};
+
+    final response = await ApiManager.getRequest(url);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<Notifier> notifiers = [];
+      for (var notifier in resBody['data']) {
+        notifiers.add(Notifier.fromJson(notifier));
+      }
+      return ApiResponse.fromJson(resBody, (data) => notifiers);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> invitationResponse({
+    required String id,
+    required String type,
+    required bool accept,
+  }) async {
+    final adminId = await Global().getAdminId();
+    final url = AdminUrl.invitationResponse;
+    final headers = {"Content-Type": "application/json"};
+    var body = {
+      "adminId": adminId,
+      "id": id,
+      "accept": accept,
+      "type": type,
+    };
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
     } else {
       throw AppException(resBody['message']);
     }

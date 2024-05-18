@@ -214,7 +214,7 @@ class _TeamTileState extends State<TeamTile> {
                     admins = state.response.data;
                   } else if (state is AdminGetOtherMoreAdminsSuccess) {
                     admins.addAll(state.response.data);
-                  } else if (state is AdminShareTeamSuccess) {
+                  } else if (state is AdminShareSuccess) {
                     Navigator.pop(context);
                     showSnack(context, message: state.response.message);
                   }
@@ -242,9 +242,14 @@ class _TeamTileState extends State<TeamTile> {
 
                         trailing: TextButton(
                           onPressed: () {
-                            BlocProvider.of<AdminCubit>(context).shareTeam(
-                              widget.team.id.toString(),
-                              admins[index].id.toString(),
+                            // BlocProvider.of<AdminCubit>(context).shareTeam(
+                            //   widget.team.id.toString(),
+                            //   admins[index].id.toString(),
+                            // );
+                            AdminCubit.get(context).shareAccess(
+                              id: widget.team.id.toString(),
+                              adminId: admins[index].id.toString(),
+                              type: 'team',
                             );
                           },
                           child: const Text("Share access"),

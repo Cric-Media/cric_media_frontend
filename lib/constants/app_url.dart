@@ -31,6 +31,8 @@ abstract class AdminUrl {
   static final getOtherAdmins = '${AppUrl.baseUrl}/get-other-admin-by-adminid';
   static final sharePlayer = '${AppUrl.baseUrl}/share-player';
   static final shareTeam = '${AppUrl.baseUrl}/share-team';
+  static final adminInvitations = "${AppUrl.baseUrl}/admin/invitations";
+  static final invitationResponse = "${AppUrl.baseUrl}/access/response";
 
   // Team URLs
   static final createTeam = '${AppUrl.baseUrl}/add-team';
@@ -64,7 +66,10 @@ abstract class AdminUrl {
 
   // * Tournament URLs
   static final addTournament = "${AppUrl.baseUrl}/tournament";
-  static final getTournaments = "${AppUrl.baseUrl}/tournament";
+  static final getTournaments = "${AppUrl.baseUrl}/tournaments";
+  static final shareAccess = "${AppUrl.baseUrl}/access";
+  static final getTournament = "${AppUrl.baseUrl}/tournament";
+  static final teamToTournament = "${AppUrl.baseUrl}/team-to-tournament";
 }
 
 abstract class UserUrl {

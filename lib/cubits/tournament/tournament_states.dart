@@ -12,6 +12,14 @@ final class TournamentAddLoading extends TournamentState {}
 
 final class TournamentGetInitialLoading extends TournamentState {}
 
+final class TournamentGetMoreLoading extends TournamentState {}
+
+final class TournamentGetLoading extends TournamentState {}
+
+final class TournamentAddTeamLoading extends TournamentState {}
+
+final class TournamentRemoveTeamLoading extends TournamentState {}
+
 // Success
 final class TournamentAddSuccess extends TournamentState {
   final ApiResponse response;
@@ -23,6 +31,26 @@ final class TournamentGetInitialSuccess extends TournamentState {
   TournamentGetInitialSuccess({required this.response});
 }
 
+final class TournamentGetMoreSuccess extends TournamentState {
+  final ApiResponse response;
+  TournamentGetMoreSuccess({required this.response});
+}
+
+final class TournamentGetSuccess extends TournamentState {
+  final ApiResponse response;
+  TournamentGetSuccess({required this.response});
+}
+
+final class TournamentAddTeamSuccess extends TournamentState {
+  final ApiResponse response;
+  TournamentAddTeamSuccess({required this.response});
+}
+
+final class TournamentRemoveTeamSuccess extends TournamentState {
+  final ApiResponse response;
+  TournamentRemoveTeamSuccess({required this.response});
+}
+
 // Error
 final class TournamentAddError extends TournamentState {
   final String message;
@@ -32,4 +60,24 @@ final class TournamentAddError extends TournamentState {
 final class TournamentGetInitialError extends TournamentState {
   final String message;
   TournamentGetInitialError({required this.message});
+}
+
+final class TournamentGetMoreError extends TournamentState {
+  final String message;
+  TournamentGetMoreError({required this.message});
+}
+
+final class TournamentGetError extends TournamentState {
+  final String message;
+  TournamentGetError({required this.message});
+}
+
+final class TournamentAddTeamError extends TournamentState {
+  final String message;
+  TournamentAddTeamError({required this.message});
+}
+
+final class TournamentRemoveTeamError extends TournamentState {
+  final String message;
+  TournamentRemoveTeamError({required this.message});
 }

@@ -60,14 +60,17 @@ class _UpComingTabState extends State<UpComingTab> {
                                 ),
                               ));
                         },
-                        child: UpCommingMachesCard(match: match),
+                        child: Hero(
+                          tag: match.sId.toString(),
+                          child: UpCommingMachesCard(match: match),
+                        ),
                       ),
                     );
                   });
             },
           ),
         ),
-        SizedBox(height: 70)
+        const SizedBox(height: 70)
       ]),
     );
   }
