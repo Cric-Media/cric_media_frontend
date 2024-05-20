@@ -9,7 +9,6 @@ import 'package:cricket_app/providers/team_provider.dart';
 import 'package:cricket_app/providers/user_login_provider.dart';
 import 'package:cricket_app/routes.dart';
 import 'package:cricket_app/services/socket_service.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,13 +16,11 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 
 import 'cubits/match/match_cubit.dart';
-import 'firebase_options.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   SocketService.instance.connect();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 

@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/controllers/admin/admin_controller.dart';
-import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/over.dart' as over;
@@ -28,6 +27,9 @@ class MatchCubit extends Cubit<MatchState> {
   List<MatchDetails> liveMatchDetailsList = [];
   List<MatchDetails> upcomingMatchDetailsList = [];
   List<MatchDetails> completedMatchDetailsList = [];
+
+  List<MatchDetails> liveBannerMatches = [];
+  List<MatchDetails> upcomingBannerMatches = [];
 
   // variables
   Team? team1, team2;
@@ -668,5 +670,32 @@ class MatchCubit extends Cubit<MatchState> {
         emit(MatchSetManOfTheMatchError(err.toString()));
       }
     });
+  }
+
+  getBannerMatches(int matchStatus) async {
+    if (matchStatus == 0) {
+      emit(MatchBannerUpcomingLoading());
+    } else {
+      emit(MatchBannerLiveLoading());
+    }
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.bannerMatches(matchStatus);
+        if (matchStatus == 0) {
+          emit(MatchBannerUpcomingSuccess(response));
+        } else {
+          emit(MatchBannerLiveSuccess(response));
+        }
+      } else {
+        emit(MatchBannerError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchBannerError('Something went wrong'));
+      } else {
+        emit(MatchBannerError(err.toString()));
+      }
+    }
   }
 }
