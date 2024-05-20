@@ -1,6 +1,7 @@
 import 'package:cricket_app/models/ball.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/team.dart';
+import 'package:cricket_app/models/tournament.dart';
 
 class MatchDetails {
   String? admin;
@@ -53,6 +54,7 @@ class MatchDetails {
   num? team2CurrentRunRate;
   num? team2RequiredRunRate;
   MatchStopped? matchStopped;
+  TournamentInfo? tournamentInfo;
 
   MatchDetails({
     this.admin,
@@ -105,6 +107,7 @@ class MatchDetails {
     this.team2CurrentRunRate,
     this.team2RequiredRunRate,
     this.matchStopped,
+    this.tournamentInfo,
   });
 
   MatchDetails.fromJson(Map<String, dynamic> json) {
@@ -203,6 +206,9 @@ class MatchDetails {
     matchStopped = json['matchStopped'] != null
         ? MatchStopped.fromJson(json['matchStopped'])
         : null;
+    tournamentInfo = json['tournamentInfo'] != null
+        ? TournamentInfo.fromJson(json['tournamentInfo'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -255,6 +261,9 @@ class MatchDetails {
     data['team1CurrentRunRate'] = team1CurrentRunRate;
     data['team1RequiredRunRate'] = team1RequiredRunRate;
     data['team2CurrentRunRate'] = team2CurrentRunRate;
+    data['team2RequiredRunRate'] = team2RequiredRunRate;
+    data['matchStopped'] = matchStopped;
+    data['tournamentInfo'] = tournamentInfo;
     return data;
   }
 }
@@ -457,3 +466,27 @@ class MatchStopped {
     };
   }
 }
+
+class TournamentInfo {
+  Tournament? tournament;
+  String? matchType;
+
+  TournamentInfo({this.tournament, this.matchType});
+
+  TournamentInfo.fromJson(Map<String, dynamic> json) {
+    tournament = json['tournament'] != null
+        ? Tournament.fromJson(json['tournament'])
+        : null;
+    matchType = json['matchType'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (tournament != null) {
+      data['tournament'] = tournament!.toJson();
+    }
+    data['matchType'] = matchType;
+    return data;
+  }
+}
+

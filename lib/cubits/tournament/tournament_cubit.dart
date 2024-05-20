@@ -31,6 +31,7 @@ class TournamentCubit extends Cubit<TournamentState> {
   List<Tournament> tournaments = [];
   List<String> matchTypes = ["series", "qualifier", "semiFinal", "final"];
   List<MatchDetails> upcomingMatchDetailsList = [];
+  List<MatchDetails> liveMatchDetailsList = [];
 
   // Selected variables
   String? selectedMatchType;
@@ -195,6 +196,22 @@ class TournamentCubit extends Cubit<TournamentState> {
         emit(TournamentUpcomingMatchesError(message: e.message));
       } else {
         emit(TournamentUpcomingMatchesError(message: "Something went wrong"));
+      }
+    }
+  }
+
+  void getLiveMatches()async {
+    emit(TournamentLiveMatchesLoading());
+    try {
+      final response = await adminController.liveMatches(
+        tournament?.sId ?? "",
+      );
+      emit(TournamentLiveMatchesSuccess(response: response));
+    } catch (e) {
+      if (e is AppException) {
+        emit(TournamentLiveMatchesError(message: e.message));
+      } else {
+        emit(TournamentLiveMatchesError(message: "Something went wrong"));
       }
     }
   }

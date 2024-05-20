@@ -7,9 +7,11 @@ import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
 import 'package:cricket_app/custom_widgets/dropdown_widget.dart';
+import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/models/tournament.dart';
+import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,7 +107,7 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                                 // Upcoming
                                 const Upcoming(),
                                 // Live
-                                const Column(children: []),
+                                const Live(),
                                 // Completed
                                 const Column(children: []),
                               ],
@@ -751,6 +753,77 @@ class _UpcomingState extends State<Upcoming> {
     );
   }
 }
+
+class Live extends StatefulWidget {
+  const Live({super.key});
+
+  @override
+  State<Live> createState() => _LiveState();
+}
+
+class _LiveState extends State<Live> {
+  @override
+  void initState() {
+    if (TournamentCubit.get(context).liveMatchDetailsList.isEmpty) {
+      TournamentCubit.get(context).getLiveMatches();
+    }
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Column(children: [
+        Expanded(
+          child: BlocConsumer<TournamentCubit, TournamentState>(
+            listener: (context, state) {
+              if (state is TournamentLiveMatchesSuccess) {
+                TournamentCubit.get(context).liveMatchDetailsList = state.response.data;
+              }
+            },
+            builder: (context, state) {
+              if (state is TournamentLiveMatchesLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is TournamentLiveMatchesError) {
+                return Center(child: Text(state.message));
+              }
+
+              return ListView.builder(
+                  itemCount:
+                  TournamentCubit.get(context).liveMatchDetailsList.length,
+                  itemBuilder: (context, index) {
+                    var match =
+                    TournamentCubit.get(context).liveMatchDetailsList[index];
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LiveDetails(match: match),
+                            ),
+                          );
+                        },
+                        child: Hero(
+                          tag: match.sId.toString(),
+                          child: MatchDetailsLiveCard(match: match),
+                        ),
+                      ),
+                    );
+                  });
+            },
+          ),
+        ),
+        const SizedBox(height: 70)
+      ]),
+    );
+  }
+}
+
 
 class ButtonWidget extends StatelessWidget {
   const ButtonWidget({super.key, this.onTap, this.color, required this.text});

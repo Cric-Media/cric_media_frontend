@@ -40,8 +40,24 @@ class UpCommingMachesCard extends StatelessWidget {
                       children: [
                         Text(
                           match != null
+                              ? match?.tournamentInfo != null ? "${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}" : ""
+                              : '',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 14,
+                              color: AppColor.blueColor,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          match != null
                               ? "${match?.cityOrTown} City, ${match?.ground} Ground."
-                              : 'Asia Cup 2023',
+                              : '',
                           style: GoogleFonts.inter(
                             textStyle: const TextStyle(
                               fontSize: 12,
