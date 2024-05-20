@@ -24,3 +24,7 @@ const adminMatches = "/admin-matches";
 const addTournament = '/admin-tournaments';
 const tournamentDetails = '/admin-tournament-details';
 const notification = '/admin-notification';
+
+
+// Tournament
+const addTournamentMatch = '/add-tournament-match';

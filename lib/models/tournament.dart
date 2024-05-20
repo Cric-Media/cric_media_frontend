@@ -10,7 +10,7 @@ class Tournament {
   int? numberOfTeams;
   String? startDate;
   String? endDate;
-  List<Team>? teams;
+  List<TeamModel>? teams;
   String? sId;
   int? iV;
 
@@ -39,9 +39,9 @@ class Tournament {
     startDate = json['startDate'];
     endDate = json['endDate'];
     if (json['teams'] != null) {
-      teams = <Team>[];
+      teams = <TeamModel>[];
       json['teams'].forEach((v) {
-        teams!.add(Team.fromJson(v));
+        teams!.add(TeamModel.fromJson(v));
       });
     }
     sId = json['_id'];
@@ -63,6 +63,28 @@ class Tournament {
     }
     data['_id'] = sId;
     data['__v'] = iV;
+    return data;
+  }
+}
+
+class TeamModel {
+  Team? team;
+  bool? qualified;
+  bool? eliminated;
+
+  TeamModel({this.team, this.qualified = false, this.eliminated = false});
+
+  TeamModel.fromJson(Map<String, dynamic> json) {
+    team = json['team'] != null ? Team.fromJson(json['team']) : null;
+    qualified = json['qualified'];
+    eliminated = json['eliminated'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['team'] = team;
+    data['qualified'] = qualified;
+    data['eliminated'] = eliminated;
     return data;
   }
 }

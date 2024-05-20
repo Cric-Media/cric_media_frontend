@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
+import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
+import 'package:cricket_app/custom_widgets/dropdown_widget.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/models/tournament.dart';
@@ -23,26 +26,9 @@ class TournamentDetailsScreen extends StatefulWidget {
 }
 
 class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
-  List<Admin> admins = [];
-  String search = '';
-  final ScrollController _scrollController = ScrollController();
-  int page = 1;
-  int limit = 20;
-
   @override
   void initState() {
     TournamentCubit.get(context).getTournament(widget.tournament.sId ?? '');
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        page++;
-        BlocProvider.of<AdminCubit>(context).getMoreOtherAdmins(
-          search: search,
-          page: page,
-          limit: limit,
-        );
-      }
-    });
     super.initState();
   }
 
@@ -70,65 +56,7 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${widget.tournament.seriesName}",
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text("${widget.tournament.seriesLocation}"),
-                        Text(
-                            "${DateFormat.yMMMMd().format(DateTime.parse(widget.tournament.startDate!))} - ${DateFormat.yMMMMd().format(DateTime.parse(widget.tournament.endDate!))}"),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        // const Text(
-                        //   "Share access",
-                        //   style: TextStyle(
-                        //     fontSize: 20,
-                        //     fontWeight: FontWeight.bold,
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 8),
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.grey[300],
-                          child: IconButton(
-                            icon: const Icon(Icons.share),
-                            onPressed: () {
-                              showAdminsSheet(context);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        // Text("${tournament.tournamentType}"),
-                        CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.grey[300],
-                          backgroundImage: AssetImage(
-                              widget.tournament.tournamentType?.toLowerCase() ==
-                                      "hard ball"
-                                  ? "assets/icons/hard_ball.png"
-                                  : "assets/icons/tennis_ball.png"),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(),
+
               // Tabs controller
               Expanded(
                 child: BlocConsumer<TournamentCubit, TournamentState>(
@@ -171,11 +99,14 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                           Expanded(
                             child: TabBarView(
                               children: [
-                                const Home(),
+                                Home(tournament: widget.tournament),
                                 Teams(teamsSheet: teamsSheet),
                                 const Column(children: []),
+                                // Upcoming
+                                const Upcoming(),
+                                // Live
                                 const Column(children: []),
-                                const Column(children: []),
+                                // Completed
                                 const Column(children: []),
                               ],
                             ),
@@ -272,6 +203,38 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
           );
         });
   }
+}
+
+class Home extends StatefulWidget {
+  final Tournament tournament;
+  const Home({Key? key, required this.tournament}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  List<Admin> admins = [];
+  String search = '';
+  final ScrollController _scrollController = ScrollController();
+  int page = 1;
+  int limit = 20;
+
+  @override
+  void initState() {
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        page++;
+        BlocProvider.of<AdminCubit>(context).getMoreOtherAdmins(
+          search: search,
+          page: page,
+          limit: limit,
+        );
+      }
+    });
+    super.initState();
+  }
 
   void showAdminsSheet(BuildContext context) {
     BlocProvider.of<AdminCubit>(context).getInitialOtherAdmins();
@@ -361,37 +324,109 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
       },
     );
   }
-}
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  void scheduleMatchSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          children: <Widget>[
+            Container(
+              height: 50,
+              width: double.infinity,
+              color: AppColor.blueColor,
+              child: const Center(
+                child: Text(
+                  'Schedule Match',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            const ScheduleMatchWidget(),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    var tournament = TournamentCubit.get(context).tournament;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${tournament?.seriesName}",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text("${tournament?.seriesLocation}"),
+                    Text(
+                        "${DateFormat.yMMMMd().format(DateTime.parse(tournament!.startDate!))} - ${DateFormat.yMMMMd().format(DateTime.parse(tournament.endDate!))}"),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.grey[300],
+                      child: IconButton(
+                        icon: const Icon(Icons.share),
+                        onPressed: () {
+                          showAdminsSheet(context);
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // Text("${tournament.tournamentType}"),
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.grey[300],
+                      backgroundImage: AssetImage(
+                          tournament.tournamentType?.toLowerCase() ==
+                                  "hard ball"
+                              ? "assets/icons/hard_ball.png"
+                              : "assets/icons/tennis_ball.png"),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          // const Divider(),
+          const Spacer(),
           Row(
             children: [
               Expanded(
-                child: Container(
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.green[300],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Center(child: Text("SCHEDULE MATCH")),
+                child: ButtonWidget(
+                  text: "SCHEDULE MATCH",
+                  color: Colors.green[400],
+                  onTap: scheduleMatchSheet,
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: Container(
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.blue[300],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Center(child: Text("CREATE GROUP")),
+                child: ButtonWidget(
+                  text: "CREATE GROUP",
+                  color: Colors.blue[400],
                 ),
               ),
             ],
@@ -403,8 +438,8 @@ class Home extends StatelessWidget {
 }
 
 class Teams extends StatefulWidget {
-  final teamsSheet;
-  const Teams({Key? key, this.teamsSheet}) : super(key: key);
+  final VoidCallback teamsSheet;
+  const Teams({Key? key, required this.teamsSheet}) : super(key: key);
 
   @override
   State<Teams> createState() => _TeamsState();
@@ -452,13 +487,13 @@ class _TeamsState extends State<Teams> {
                       child: CircleAvatar(
                         radius: 40,
                         backgroundImage: CachedNetworkImageProvider(
-                          team?.image ?? '',
+                          team?.team?.image ?? '',
                         ),
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      team?.name ?? "",
+                      team?.team?.name ?? "",
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -472,20 +507,36 @@ class _TeamsState extends State<Teams> {
           Row(
             children: [
               Expanded(
-                  child: CustomButton(
-                buttonText: "Add Team",
-                onTap: () {
-                  widget.teamsSheet();
-                },
-              )),
-              const SizedBox(width: 16),
+                child: GestureDetector(
+                  onTap: widget.teamsSheet,
+                  child: Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Colors.indigo[300],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Center(child: Text("ADD TEAM")),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
               Expanded(
-                  child: CustomButton(
-                buttonText: "Remove Team",
-                onTap: () {
-                  deleteTeamSheet(TournamentCubit.get(context).tournament!);
-                },
-              )),
+                child: GestureDetector(
+                  onTap: () {
+                    deleteTeamSheet(
+                      TournamentCubit.get(context).tournament!,
+                    );
+                  },
+                  child: Container(
+                    height: 45,
+                    decoration: BoxDecoration(
+                      color: Colors.red[300],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Center(child: Text("REMOVE TEAM")),
+                  ),
+                ),
+              ),
             ],
           ),
         ],
@@ -520,12 +571,12 @@ class _TeamsState extends State<Teams> {
                 },
                 itemCount: tournament.teams!.length,
                 itemBuilder: (context, index) {
-                  Team team = tournament.teams![index];
+                  Team? team = tournament!.teams![index].team;
                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage(team.image ?? ''),
+                      backgroundImage: NetworkImage(team!.image ?? ''),
                     ),
-                    title: Text(team.name.toString()),
+                    title: Text(team!.name.toString()),
                     trailing: TextButton(
                       onPressed: () {
                         TournamentCubit.get(context).removeTeam(
@@ -546,6 +597,181 @@ class _TeamsState extends State<Teams> {
           ],
         );
       },
+    );
+  }
+}
+
+class ScheduleMatchWidget extends StatefulWidget {
+  const ScheduleMatchWidget({super.key});
+
+  @override
+  State<ScheduleMatchWidget> createState() => _ScheduleMatchWidgetState();
+}
+
+class _ScheduleMatchWidgetState extends State<ScheduleMatchWidget> {
+  @override
+  void initState() {
+    TournamentCubit.get(context).selectedMatchType = null;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //TODO Group Name
+            const Text(
+              "Select Match Type",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  textBaseline: TextBaseline.alphabetic,
+                  decoration: TextDecoration.underline),
+            ),
+            const SizedBox(height: 8),
+            GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 4,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      TournamentCubit.get(context).selectedMatchType =
+                          TournamentCubit.get(context).matchTypes[index];
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: TournamentCubit.get(context).selectedMatchType ==
+                              TournamentCubit.get(context).matchTypes[index]
+                          ? Colors.green[300]
+                          : Colors.grey[300],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Center(
+                      child: Text(
+                        TournamentCubit.get(context).matchTypes[index],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              itemCount: TournamentCubit.get(context).matchTypes.length,
+              shrinkWrap: true,
+            ),
+            const SizedBox(height: 8),
+            if (TournamentCubit.get(context).selectedMatchType != null)
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    addTournamentMatch,
+                    arguments: TournamentCubit.get(context).tournament,
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColor.blueColor,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text("Continue"),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Upcoming extends StatefulWidget {
+  const Upcoming({super.key});
+
+  @override
+  State<Upcoming> createState() => _UpcomingState();
+}
+
+class _UpcomingState extends State<Upcoming> {
+  @override
+  void initState() {
+    if (TournamentCubit.get(context).upcomingMatchDetailsList.isEmpty) {
+      TournamentCubit.get(context).upComingMatches();
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<TournamentCubit, TournamentState>(
+      listener: (context, state) {
+        if (state is TournamentUpcomingMatchesSuccess) {
+          TournamentCubit.get(context).upcomingMatchDetailsList =
+              state.response.data;
+        }
+      },
+      builder: (context, state) {
+        if (state is TournamentUpcomingMatchesLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is TournamentUpcomingMatchesError) {
+          return Center(
+            child: Text(state.message),
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: TournamentCubit.get(context)
+                    .upcomingMatchDetailsList
+                    .length,
+                itemBuilder: (ctx, index) {
+                  var match =
+                      TournamentCubit.get(ctx).upcomingMatchDetailsList[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5),
+                    child: UpCommingMachesCard(match: match, admin: true),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ButtonWidget extends StatelessWidget {
+  const ButtonWidget({super.key, this.onTap, this.color, required this.text});
+
+  final void Function()? onTap;
+  final Color? color;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 45,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+            child: Text(text, style: const TextStyle(color: Colors.white))),
+      ),
     );
   }
 }

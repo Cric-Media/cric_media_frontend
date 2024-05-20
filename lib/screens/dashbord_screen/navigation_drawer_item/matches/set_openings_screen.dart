@@ -1,3 +1,4 @@
+import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
@@ -49,6 +50,9 @@ class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Set Openings'),
+        centerTitle: true,
+        backgroundColor: AppColor.blueColor,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -59,96 +63,161 @@ class _SetOpeningsScreenState extends State<SetOpeningsScreen> {
               "Striker",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            DropdownButton<Player>(
-              value: MatchCubit.get(context).selectedStriker,
-              items: MatchCubit.get(context).batsmen.map((Player player) {
-                return DropdownMenuItem<Player>(
-                  value: player,
-                  child: Text(player.name ?? ''),
-                );
-              }).toList(),
-              onChanged: (Player? newValue) {
-                setState(() {
-                  MatchCubit.get(context).selectedStriker = newValue;
-                });
-              },
+            Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: AppColor.blueColor.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              alignment: Alignment.center,
+              child: DropdownButton<Player>(
+                borderRadius: BorderRadius.circular(10),
+                dropdownColor: AppColor.blueColor,
+                style: const TextStyle(color: Colors.white),
+                isExpanded: true,
+                isDense: true,
+                hint: const Text(
+                  "Please select your opening striker",
+                  style: TextStyle(color: Colors.white),
+                ),
+                underline: const SizedBox(),
+                value: MatchCubit.get(context).selectedStriker,
+                items: MatchCubit.get(context).batsmen.map((Player player) {
+                  return DropdownMenuItem<Player>(
+                    value: player,
+                    child: Text(player.name ?? ''),
+                  );
+                }).toList(),
+                onChanged: (Player? newValue) {
+                  setState(() {
+                    MatchCubit.get(context).selectedStriker = newValue;
+                  });
+                },
+              ),
             ),
             const SizedBox(height: 20),
             const Text(
               "Non-Striker",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            DropdownButton<Player>(
-              value: MatchCubit.get(context).selectedNonStriker,
-              items: MatchCubit.get(context).batsmen.map((Player player) {
-                return DropdownMenuItem<Player>(
-                  value: player,
-                  child: Text(player.name ?? ''),
-                );
-              }).toList(),
-              onChanged: (Player? newValue) {
-                setState(() {
-                  MatchCubit.get(context).selectedNonStriker = newValue;
-                });
-              },
+            Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: AppColor.blueColor.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              alignment: Alignment.center,
+              child: DropdownButton<Player>(
+                borderRadius: BorderRadius.circular(10),
+                dropdownColor: AppColor.blueColor,
+                style: const TextStyle(color: Colors.white),
+                isExpanded: true,
+                isDense: true,
+                hint: const Text(
+                  "Please select your opening non striker",
+                  style: TextStyle(color: Colors.white),
+                ),
+                underline: const SizedBox(),
+                value: MatchCubit.get(context).selectedNonStriker,
+                items: MatchCubit.get(context).batsmen.map((Player player) {
+                  return DropdownMenuItem<Player>(
+                    value: player,
+                    child: Text(player.name ?? ''),
+                  );
+                }).toList(),
+                onChanged: (Player? newValue) {
+                  setState(() {
+                    MatchCubit.get(context).selectedNonStriker = newValue;
+                  });
+                },
+              ),
             ),
             const SizedBox(height: 20),
             const Text(
               "Bowler",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            DropdownButton<Player>(
-              value: MatchCubit.get(context).selectedBowler,
-              items: MatchCubit.get(context).bowlers.map((Player player) {
-                return DropdownMenuItem<Player>(
-                  value: player,
-                  child: Text(player.name ?? ''),
-                );
-              }).toList(),
-              onChanged: (Player? newValue) {
-                setState(() {
-                  MatchCubit.get(context).selectedBowler = newValue;
-                });
-              },
-            ),
-            const SizedBox(height: 20),
-            BlocConsumer<MatchCubit, MatchState>(
-              listener: (context, state) {
-                if (state is MatchSetOpeningsSuccess) {
-                  // navigate to scorer screen
-                  Navigator.pushNamed(context, liveScorer, arguments: {
-                    "matchId": widget.matchId,
-                  });
-                }
-              },
-              builder: (context, state) {
-                if (state is MatchSetOpeningsLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+            Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: AppColor.blueColor.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              alignment: Alignment.center,
+              child: DropdownButton<Player>(
+                borderRadius: BorderRadius.circular(10),
+                dropdownColor: AppColor.blueColor,
+                style: const TextStyle(color: Colors.white),
+                isExpanded: true,
+                isDense: true,
+                hint: const Text(
+                  "Please select your opening bowler",
+                  style: TextStyle(color: Colors.white),
+                ),
+                underline: const SizedBox(),
+                value: MatchCubit.get(context).selectedBowler,
+                items: MatchCubit.get(context).bowlers.map((Player player) {
+                  return DropdownMenuItem<Player>(
+                    value: player,
+                    child: Text(player.name ?? ''),
                   );
-                }
-                return CustomButton(
-                  buttonText: "Continue",
-                  onTap: () {
-                    MatchCubit.get(context).setOpenings(widget.matchId);
-                  },
-                );
-              },
+                }).toList(),
+                onChanged: (Player? newValue) {
+                  setState(() {
+                    MatchCubit.get(context).selectedBowler = newValue;
+                  });
+                },
+              ),
             ),
             const Spacer(),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, liveScorer, arguments: {
-                      "matchId": widget.matchId,
-                    });
-                  },
-                  child: const Text("Skip"),
+                Expanded(
+                  child: BlocConsumer<MatchCubit, MatchState>(
+                    listener: (context, state) {
+                      if (state is MatchSetOpeningsSuccess) {
+                        // navigate to scorer screen
+                        Navigator.pushNamed(context, liveScorer, arguments: {
+                          "matchId": widget.matchId,
+                        });
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is MatchSetOpeningsLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return CustomButton(
+                        buttonText: "Continue",
+                        onTap: () {
+                          MatchCubit.get(context).setOpenings(widget.matchId);
+                        },
+                      );
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, liveScorer, arguments: {
+                            "matchId": widget.matchId,
+                          });
+                        },
+                        child: const Text("Skip"),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
+            const SizedBox(height: 16),
           ],
         ),
       ),

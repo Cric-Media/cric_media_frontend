@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cricket_app/controllers/admin/admin_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,11 @@ class TournamentCubit extends Cubit<TournamentState> {
 
   // Lists
   List<Tournament> tournaments = [];
+  List<String> matchTypes = ["series", "qualifier", "semiFinal", "final"];
+  List<MatchDetails> upcomingMatchDetailsList = [];
+
+  // Selected variables
+  String? selectedMatchType;
 
   // Helper function
   pickImage() async {
@@ -172,6 +178,23 @@ class TournamentCubit extends Cubit<TournamentState> {
         emit(TournamentRemoveTeamError(message: e.message));
       } else {
         emit(TournamentRemoveTeamError(message: "Something went wrong"));
+      }
+    }
+  }
+
+// Matches ********************************
+  void upComingMatches() async {
+    emit(TournamentUpcomingMatchesLoading());
+    try {
+      final response = await adminController.upComingMatches(
+        tournament?.sId ?? "",
+      );
+      emit(TournamentUpcomingMatchesSuccess(response: response));
+    } catch (e) {
+      if (e is AppException) {
+        emit(TournamentUpcomingMatchesError(message: e.message));
+      } else {
+        emit(TournamentUpcomingMatchesError(message: "Something went wrong"));
       }
     }
   }

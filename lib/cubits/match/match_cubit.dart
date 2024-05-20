@@ -4,12 +4,14 @@ import 'dart:developer';
 import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/controllers/admin/admin_controller.dart';
+import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/over.dart' as over;
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/score_card.dart';
 import 'package:cricket_app/models/team.dart';
+import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 import 'package:cricket_app/utils/network.dart';
@@ -36,6 +38,7 @@ class MatchCubit extends Cubit<MatchState> {
   String? cityTown, ground, matchDateTime, whoWinsToss, tossDetails, country;
   bool? teamAToss, teamBToss, teamABat, teamBBat, teamABowl, teamBBowl;
   int outPlayerIndex = 0;
+  Tournament? tournament;
 
   // Set openings
   List<Player> batsmen = [];
@@ -175,26 +178,50 @@ class MatchCubit extends Cubit<MatchState> {
     }
   }
 
-  addMatchDetails() async {
+  addMatchDetails({
+    String? tournamentId,
+    String? tournamentMatchType,
+  }) async {
     emit(MatchAddDetailsLoading());
-    final url = AdminUrl.addMatchDetails;
+    final url = (tournamentId != null && tournamentMatchType != null)
+        ? AdminUrl.addTournamentMatch
+        : AdminUrl.addMatchDetails;
     final adminId = await Global().getAdminId();
     final headers = {"Content-Type": "application/json"};
 
     try {
-      final body = {
-        "admin": adminId.toString(),
-        "team1": team1?.id.toString(),
-        "team2": team2?.id.toString(),
-        "matchType": matchType.toString(),
-        "ballType": ballType.toString(),
-        "pitchType": pitchType.toString(),
-        "numberOfOvers": numberOfOvers ?? 0,
-        "oversPerBowler": oversPerBowler ?? 0,
-        "cityOrTown": cityTown.toString(),
-        "ground": ground.toString(),
-        "matchDateTime": "$matchDateTime $country",
-      };
+      var body;
+      if (tournamentId != null && tournamentMatchType != null) {
+        body = {
+          "admin": adminId.toString(),
+          "team1": team1?.id.toString(),
+          "team2": team2?.id.toString(),
+          "matchType": matchType.toString(),
+          "ballType": ballType.toString(),
+          "pitchType": pitchType.toString(),
+          "numberOfOvers": numberOfOvers ?? 0,
+          "oversPerBowler": oversPerBowler ?? 0,
+          "cityOrTown": cityTown.toString(),
+          "ground": ground.toString(),
+          "matchDateTime": "$matchDateTime $country",
+          "tournamentId": tournamentId,
+          "tournamentMatchType": tournamentMatchType,
+        };
+      } else {
+        body = {
+          "admin": adminId.toString(),
+          "team1": team1?.id.toString(),
+          "team2": team2?.id.toString(),
+          "matchType": matchType.toString(),
+          "ballType": ballType.toString(),
+          "pitchType": pitchType.toString(),
+          "numberOfOvers": numberOfOvers ?? 0,
+          "oversPerBowler": oversPerBowler ?? 0,
+          "cityOrTown": cityTown.toString(),
+          "ground": ground.toString(),
+          "matchDateTime": "$matchDateTime $country",
+        };
+      }
 
       final response = await ApiManager.postRequest(
         body,

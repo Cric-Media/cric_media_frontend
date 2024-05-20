@@ -21,6 +21,7 @@ import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/team_players_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/teams/teams_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/add_new_tornament.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/add_tournament_match_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tournament_details_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/notification_screen.dart';
 import 'package:cricket_app/screens/splash_screen.dart/splash_screen.dart';
@@ -200,6 +201,15 @@ class Routes {
       case notification:
         return MaterialPageRoute(
           builder: (context) => const NotificationScreen(),
+        );
+
+      case addTournamentMatch:
+        final tournament = settings.arguments as Tournament?;
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider<MatchCubit>(
+            create: (context) => MatchCubit(),
+            child: AddTournamentMatchScreen(tournament: tournament!),
+          ),
         );
 
       default:
