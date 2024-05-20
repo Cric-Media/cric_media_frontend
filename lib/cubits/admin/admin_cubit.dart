@@ -108,7 +108,11 @@ class AdminCubit extends Cubit<AdminState> {
       );
       emit(AdminInvitationResponseSuccess(response));
     } catch (e) {
-      emit(AdminInvitationResponseError(e.toString()));
+      if (e is AppException) {
+        emit(AdminInvitationResponseError(e.message));
+      } else {
+        emit(AdminInvitationResponseError("Something went wrong"));
+      }
     }
   }
 

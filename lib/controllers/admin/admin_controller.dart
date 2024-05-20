@@ -223,7 +223,7 @@ class AdminController {
 
     request.fields["name"] = team.name.toString();
     request.fields["location"] = team.location.toString();
-    request.fields["admin[0]"] = adminId.toString();
+    request.fields["admins[0]"] = adminId.toString();
 
     // send request
     var response = await request.send();
@@ -683,7 +683,6 @@ class AdminController {
     required String teamId,
   }) async {
     final url = AdminUrl.teamToTournament;
-    final headers = {"Content-Type": "application/json"};
     final body = {"tournamentId": tournamentId, "teamId": teamId};
     final response = await ApiManager.deleteRequest(url, body);
     var resBody = jsonDecode(response.body);
@@ -697,7 +696,6 @@ class AdminController {
   Future<ApiResponse> getAdminInvitations() async {
     final adminId = await Global().getAdminId();
     final url = "${AdminUrl.adminInvitations}/$adminId";
-    final headers = {"Content-Type": "application/json"};
 
     final response = await ApiManager.getRequest(url);
     log(response.body);
