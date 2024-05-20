@@ -25,9 +25,9 @@ class Team {
     name = json['name'];
     location = json['location'];
     image = json['image'];
-    if (json['admin'] != null) {
+    if (json['admins'] != null) {
       admins = <Admin>[];
-      json['admin'].forEach((v) {
+      json['admins'].forEach((v) {
         admins!.add(Admin.fromJson(v));
       });
     }

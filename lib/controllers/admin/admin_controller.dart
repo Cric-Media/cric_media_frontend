@@ -247,6 +247,7 @@ class AdminController {
     final headers = {"Content-Type": "application/json"};
     final body = {"adminId": adminId};
     final response = await ApiManager.postRequest(body, url, headers: headers);
+    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       List<Team> teams = [];

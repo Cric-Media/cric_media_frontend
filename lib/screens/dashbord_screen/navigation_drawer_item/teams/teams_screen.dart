@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
@@ -36,9 +34,9 @@ class _TeamsScreenState extends State<TeamsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0XFFFBFBFB),
+      backgroundColor: const Color(0XFFFBFBFB),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
+        preferredSize: const Size.fromHeight(60),
         child: Container(
           // extra container for custom bottom shadows
           decoration: BoxDecoration(
@@ -47,7 +45,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                 color: Colors.black.withOpacity(0.5),
                 spreadRadius: 5,
                 blurRadius: 5,
-                offset: Offset(0, -2),
+                offset: const Offset(0, -2),
               ),
             ],
           ),
@@ -58,7 +56,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
             title: Text(
               'Teams',
               style: GoogleFonts.inter(
-                  textStyle: TextStyle(
+                  textStyle: const TextStyle(
                       fontSize: 19,
                       color: Colors.white,
                       fontWeight: FontWeight.w600)),
@@ -90,7 +88,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
         }
       }, builder: (context, state) {
         if (state is TeamGetInitialLoading) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -102,7 +100,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
             closeKeyboardWhenScrolling: true,
             inputDecoration: InputDecoration(
               hintText: 'Search',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -129,7 +127,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
           );
         },
         backgroundColor: AppColor.blueColor,
-        child: Icon(
+        child: const Icon(
           Icons.add,
           size: 20,
           color: Colors.white,
@@ -299,7 +297,7 @@ class _TeamTileState extends State<TeamTile> {
                         closeKeyboardWhenScrolling: true,
                         inputDecoration: InputDecoration(
                           hintText: 'Search',
-                          prefixIcon: Icon(Icons.search),
+                          prefixIcon: const Icon(Icons.search),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -328,7 +326,7 @@ class _TeamTileState extends State<TeamTile> {
                                 item.id.toString(),
                               );
                             },
-                            child: Text("Add"),
+                            child: const Text("Add"),
                           ),
                         ),
                       ),
@@ -365,7 +363,7 @@ class _TeamTileState extends State<TeamTile> {
                   color: Colors.grey.withOpacity(0.7),
                   spreadRadius: 2,
                   blurRadius: 2,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
@@ -380,7 +378,7 @@ class _TeamTileState extends State<TeamTile> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.only(top: 10, left: 10),
+                        margin: const EdgeInsets.only(top: 10, left: 10),
                         height: 75,
                         width: 75,
                         child: CircleAvatar(
@@ -388,7 +386,7 @@ class _TeamTileState extends State<TeamTile> {
                               widget.team.image ?? ''),
                         ),
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Expanded(
                         flex: 3,
                         child: Row(
@@ -399,7 +397,7 @@ class _TeamTileState extends State<TeamTile> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 12,
                                 ),
                                 Padding(
@@ -407,13 +405,13 @@ class _TeamTileState extends State<TeamTile> {
                                   child: Text(
                                     widget.team.name ?? '',
                                     style: GoogleFonts.inter(
-                                        textStyle: TextStyle(
+                                        textStyle: const TextStyle(
                                             fontSize: 16,
                                             color: AppColor.blackColor,
                                             fontWeight: FontWeight.w700)),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 8,
                                 ),
                                 Padding(
@@ -421,7 +419,7 @@ class _TeamTileState extends State<TeamTile> {
                                   child: Text(
                                     'ID:${widget.team.id?.substring(0, 7)}',
                                     style: GoogleFonts.inter(
-                                        textStyle: TextStyle(
+                                        textStyle: const TextStyle(
                                             fontSize: 15,
                                             color: AppColor.blackColor,
                                             fontWeight: FontWeight.w600)),
@@ -432,19 +430,19 @@ class _TeamTileState extends State<TeamTile> {
                                   child: Text(
                                     'Total players:${widget.team.players?.length}',
                                     style: GoogleFonts.inter(
-                                        textStyle: TextStyle(
+                                        textStyle: const TextStyle(
                                       fontSize: 12,
                                       color: AppColor.blackColor,
                                     )),
                                   ),
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 5),
                                   child: Row(
                                     children: [
-                                      Text("Share access"),
-                                      SizedBox(width: 10),
+                                      const Text("Share access"),
+                                      const SizedBox(width: 10),
                                       GestureDetector(
                                         onTap: () {
                                           adminsSheet(context);
@@ -459,12 +457,12 @@ class _TeamTileState extends State<TeamTile> {
                                 ),
                               ],
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Padding(
                               padding: const EdgeInsets.only(right: 8.0),
                               child: Column(
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   GestureDetector(
@@ -478,7 +476,7 @@ class _TeamTileState extends State<TeamTile> {
                                     child:
                                         Image.asset(AppIcons.edit, width: 20),
                                   ),
-                                  SizedBox(height: 15),
+                                  const SizedBox(height: 15),
                                   GestureDetector(
                                     onTap: () {
                                       BlocProvider.of<TeamCubit>(context)
@@ -489,7 +487,7 @@ class _TeamTileState extends State<TeamTile> {
                                     child:
                                         Image.asset(AppIcons.delete, width: 20),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 15,
                                   ),
                                   GestureDetector(
