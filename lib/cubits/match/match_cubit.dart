@@ -363,7 +363,7 @@ class MatchCubit extends Cubit<MatchState> {
         emit(MatchGetError('No internet connection'));
       }
     } catch (err) {
-      // if exception type is not AppException then emit "Something went wrong"
+      print(err);
       if (err is! AppException) {
         emit(MatchGetError('Something went wrong'));
       } else {

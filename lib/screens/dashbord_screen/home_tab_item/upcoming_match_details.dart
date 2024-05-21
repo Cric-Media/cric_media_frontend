@@ -1,7 +1,7 @@
+import 'package:cricket_app/custom_widgets/points_table_widget.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/info.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/live.dart';
-import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/point_Table.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/scoreCard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -157,7 +157,36 @@ class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
                       : value == 2
                           ? const Expanded(child: ScoreCard())
                           : value == 3
-                              ? const Expanded(child: PointTable())
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Expanded(
+                                    child: Column(
+                                      children: [
+                                        if (widget.match?.tournamentInfo !=
+                                            null)
+                                          PointsTableWidget(
+                                            tournamentId: widget
+                                                    .match
+                                                    ?.tournamentInfo
+                                                    ?.tournament
+                                                    ?.sId ??
+                                                '',
+                                          )
+                                        else
+                                          const Center(
+                                            child: Text(
+                                              "Points Table is only available for tournament matches",
+                                              style: TextStyle(
+                                                color: AppColor.blackColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                )
                               : Container(),
             ],
           ),

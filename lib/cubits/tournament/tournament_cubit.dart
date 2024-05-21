@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cricket_app/controllers/admin/admin_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/match_details.dart';
+import 'package:cricket_app/models/points_table.dart';
 import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +30,11 @@ class TournamentCubit extends Cubit<TournamentState> {
 
   // Lists
   List<Tournament> tournaments = [];
+  List<Tournament> fiveTournaments = [];
   List<String> matchTypes = ["series", "qualifier", "semiFinal", "final"];
   List<MatchDetails> upcomingMatchDetailsList = [];
   List<MatchDetails> liveMatchDetailsList = [];
+  List<PointsTable> pointsTable = [];
 
   // Selected variables
   String? selectedMatchType;
@@ -200,7 +203,7 @@ class TournamentCubit extends Cubit<TournamentState> {
     }
   }
 
-  void getLiveMatches()async {
+  void getLiveMatches() async {
     emit(TournamentLiveMatchesLoading());
     try {
       final response = await adminController.liveMatches(
@@ -212,6 +215,35 @@ class TournamentCubit extends Cubit<TournamentState> {
         emit(TournamentLiveMatchesError(message: e.message));
       } else {
         emit(TournamentLiveMatchesError(message: "Something went wrong"));
+      }
+    }
+  }
+
+  void getFiveTournaments() async {
+    emit(TournamentGetFiveLoading());
+    try {
+      final response = await adminController.getFiveTournaments();
+      emit(TournamentGetFiveSuccess(response: response));
+    } catch (e) {
+      if (e is AppException) {
+        emit(TournamentGetFiveError(message: e.message));
+      } else {
+        emit(TournamentGetFiveError(message: "Something went wrong"));
+      }
+    }
+  }
+
+  void getTournamentPoints(String tournamentId) async {
+    print("*********" + tournamentId);
+    emit(TournamentPointsLoading());
+    try {
+      final response = await adminController.getTournamentPoints(tournamentId);
+      emit(TournamentPointsSuccess(response: response));
+    } catch (e) {
+      if (e is AppException) {
+        emit(TournamentPointsError(message: e.message));
+      } else {
+        emit(TournamentPointsError(message: "Something went wrong"));
       }
     }
   }

@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
+import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_contanor_trading_news.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
@@ -28,6 +30,9 @@ class _HomeTabState extends State<HomeTab> {
     }
     if (MatchCubit.get(context).upcomingBannerMatches.isEmpty) {
       MatchCubit.get(context).getBannerMatches(0);
+    }
+    if (TournamentCubit.get(context).fiveTournaments.isEmpty) {
+      TournamentCubit.get(context).getFiveTournaments();
     }
     super.initState();
   }
@@ -75,6 +80,7 @@ class _HomeTabState extends State<HomeTab> {
                 ),
                 const SizedBox(height: 5),
                 SliderWidget(
+                  autoPlayDuration: 400,
                   items: liveMatches.map((match) {
                     return Builder(
                       builder: (BuildContext context) {
@@ -162,7 +168,62 @@ class _HomeTabState extends State<HomeTab> {
                 SizedBox(
                   height: screenWidth * 0.020,
                 ),
-                const OngingSeries(),
+                BlocConsumer<TournamentCubit, TournamentState>(
+                  builder: (context, state) {
+                    return Column(children: [
+                      ...TournamentCubit.get(context)
+                          .fiveTournaments
+                          .map(
+                            (tournament) => Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Card(
+                                elevation: 1,
+                                color: Colors.white,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundImage:
+                                          CachedNetworkImageProvider(
+                                        tournament.image ?? '',
+                                      ),
+                                    ),
+                                    title: Text(
+                                      '${tournament.seriesName}',
+                                      style: GoogleFonts.inter(
+                                        textStyle: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      '${tournament.seriesLocation}',
+                                      style: GoogleFonts.inter(
+                                          textStyle: const TextStyle(
+                                        fontSize: 12,
+                                        color: AppColor.grayColor,
+                                        fontWeight: FontWeight.w400,
+                                      )),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList()
+                    ]);
+                  },
+                  listener: (context, state) {
+                    if (state is TournamentGetFiveSuccess) {
+                      TournamentCubit.get(context).fiveTournaments =
+                          state.response.data;
+                    }
+                  },
+                ),
                 const SizedBox(height: 10),
                 Align(
                   alignment: Alignment.topLeft,
@@ -286,7 +347,8 @@ class _HomeTabState extends State<HomeTab> {
 
 class SliderWidget extends StatelessWidget {
   final List<Widget>? items;
-  const SliderWidget({super.key, this.items});
+  final int? autoPlayDuration;
+  const SliderWidget({super.key, this.items, this.autoPlayDuration});
 
   @override
   Widget build(BuildContext context) {
@@ -300,7 +362,9 @@ class SliderWidget extends StatelessWidget {
         reverse: false,
         autoPlay: true,
         autoPlayInterval: const Duration(seconds: 3),
-        autoPlayAnimationDuration: const Duration(milliseconds: 800),
+        autoPlayAnimationDuration: Duration(
+          milliseconds: autoPlayDuration ?? 800,
+        ),
         autoPlayCurve: Curves.fastOutSlowIn,
         enlargeCenterPage: true,
         enlargeFactor: 0.3,

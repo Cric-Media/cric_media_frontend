@@ -26,6 +26,10 @@ final class TournamentUpcomingMatchesLoading extends TournamentState {}
 
 final class TournamentLiveMatchesLoading extends TournamentState {}
 
+final class TournamentGetFiveLoading extends TournamentState {}
+
+final class TournamentPointsLoading extends TournamentState {}
+
 // Success
 final class TournamentAddSuccess extends TournamentState {
   final ApiResponse response;
@@ -72,6 +76,16 @@ final class TournamentLiveMatchesSuccess extends TournamentState {
   TournamentLiveMatchesSuccess({required this.response});
 }
 
+final class TournamentGetFiveSuccess extends TournamentState {
+  final ApiResponse response;
+  TournamentGetFiveSuccess({required this.response});
+}
+
+final class TournamentPointsSuccess extends TournamentState {
+  final ApiResponse response;
+  TournamentPointsSuccess({required this.response});
+}
+
 // Error
 final class TournamentAddError extends TournamentState {
   final String message;
@@ -116,4 +130,14 @@ final class TournamentUpcomingMatchesError extends TournamentState {
 final class TournamentLiveMatchesError extends TournamentState {
   final String message;
   TournamentLiveMatchesError({required this.message});
+}
+
+final class TournamentGetFiveError extends TournamentState {
+  final String message;
+  TournamentGetFiveError({required this.message});
+}
+
+final class TournamentPointsError extends TournamentState {
+  final String message;
+  TournamentPointsError({required this.message});
 }

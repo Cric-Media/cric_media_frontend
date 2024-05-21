@@ -100,8 +100,18 @@ class LiveCustomWidgt extends StatelessWidget {
                                   .recentPerformance![team1Index].history!
                                   .map(
                                     (h) => h.wins == true
-                                        ? const WinningContainer(text: "W")
-                                        : const LosingContainer(text: 'L'),
+                                        ? Container(
+                                            margin:
+                                                const EdgeInsets.only(right: 4),
+                                            child: const WinningContainer(
+                                                text: "W"),
+                                          )
+                                        : Container(
+                                            margin:
+                                                const EdgeInsets.only(right: 4),
+                                            child: const LosingContainer(
+                                                text: 'L'),
+                                          ),
                                   )
                                   .toList(),
                             ),

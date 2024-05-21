@@ -1,10 +1,10 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
+import 'package:cricket_app/custom_widgets/points_table_widget.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_info.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_live.dart';
-import 'package:cricket_app/screens/dashbord_screen/live_details/live_point_table.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/scorecard_tab.dart';
 import 'package:cricket_app/services/socket_service.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +41,7 @@ class _LiveDetails extends State<LiveDetails> {
   @override
   void dispose() {
     // Remove the listener for the 'match' event when the widget is disposed
-    // SocketService.instance.socket.off('match-${widget.match?.sId}');
+    SocketService.instance.socket.off('match-${widget.match?.sId}');
 
     super.dispose();
   }
@@ -49,9 +49,11 @@ class _LiveDetails extends State<LiveDetails> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return DefaultTabController(
-      length: 3, // change the number to 4, when adding points table
+      length: 4, // change the number to 4, when adding points table
+      initialIndex: 0,
       child: Scaffold(
         backgroundColor: const Color(0XFFFBFBFB),
         appBar: AppBar(
@@ -156,20 +158,20 @@ class _LiveDetails extends State<LiveDetails> {
                               const SizedBox(
                                 width: 30,
                               ),
-                              // InkWell(
-                              //     onTap: () {
-                              //       getVlaue(3);
-                              //     },
-                              //     child: Text(
-                              //       'Points Table',
-                              //       style: GoogleFonts.inter(
-                              //           textStyle: TextStyle(
-                              //               fontSize: 16,
-                              //               color: value == 3
-                              //                   ? Colors.black
-                              //                   : Colors.grey,
-                              //               fontWeight: FontWeight.w700)),
-                              //     )),
+                              InkWell(
+                                  onTap: () {
+                                    getVlaue(3);
+                                  },
+                                  child: Text(
+                                    'Points Table',
+                                    style: GoogleFonts.inter(
+                                        textStyle: TextStyle(
+                                            fontSize: 16,
+                                            color: value == 3
+                                                ? Colors.black
+                                                : Colors.grey,
+                                            fontWeight: FontWeight.w700)),
+                                  )),
                             ],
                           )
                           // child: TabBar(
@@ -191,11 +193,31 @@ class _LiveDetails extends State<LiveDetails> {
                         : value == 1
                             ? LiveLive(match: match)
                             : value == 2
-                                ? ScorecardTab(
-                                    match:
-                                        match) /* LiveScoreCard(match: match) */
+                                ? ScorecardTab(match: match)
                                 : value == 3
-                                    ? const LivePointTable()
+                                    ? Column(
+                                        children: [
+                                          if (match?.tournamentInfo == null)
+                                            const Center(
+                                              child: Text(
+                                                "Points Table is only available for tournament matches",
+                                                style: TextStyle(
+                                                  color: AppColor.blackColor,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          if (match?.tournamentInfo != null)
+                                            PointsTableWidget(
+                                              tournamentId: match
+                                                      ?.tournamentInfo
+                                                      ?.tournament
+                                                      ?.sId ??
+                                                  '',
+                                            ),
+                                        ],
+                                      )
                                     : Container(),
                   ],
                 ),

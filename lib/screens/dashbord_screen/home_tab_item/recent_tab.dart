@@ -36,39 +36,44 @@ class _RecentTabState extends State<RecentTab> {
         } else if (state is MatchGetCompletedError) {
           return Center(child: Text(state.message));
         }
-        return Column(
-          children: [
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                  itemCount:
-                      MatchCubit.get(context).completedMatchDetailsList.length,
-                  itemBuilder: (context, index) {
-                    var match = MatchCubit.get(context)
-                        .completedMatchDetailsList[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 5),
-                      child: InkWell(
-                        onTap: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => recentDetails()));
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LiveDetails(match: match),
-                            ),
-                          );
-                        },
-                        child: CustomResentWidget(match: match),
-                      ),
-                    );
-                  }),
-            ),
-            const SizedBox(height: 70),
-          ],
+        return RefreshIndicator(
+          onRefresh:  () async{
+        MatchCubit.get(context).getCompletedMatches(user: true);
+        },
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              Expanded(
+                child: ListView.builder(
+                    itemCount:
+                        MatchCubit.get(context).completedMatchDetailsList.length,
+                    itemBuilder: (context, index) {
+                      var match = MatchCubit.get(context)
+                          .completedMatchDetailsList[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 5),
+                        child: InkWell(
+                          onTap: () {
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => recentDetails()));
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LiveDetails(match: match),
+                              ),
+                            );
+                          },
+                          child: CustomResentWidget(match: match),
+                        ),
+                      );
+                    }),
+              ),
+              const SizedBox(height: 70),
+            ],
+          ),
         );
       },
     );

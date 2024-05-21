@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/complete_item.dart';
@@ -23,7 +21,7 @@ class _MatchItemState extends State<MatchItem> {
     return DefaultTabController(
       length: 3, // Adjusted to match the tabs length
       child: Scaffold(
-        backgroundColor: Color(0XFFFBFBFB),
+        backgroundColor: const Color(0XFFFBFBFB),
         appBar: AppBar(
           foregroundColor: Colors.white,
           backgroundColor: AppColor.blueColor,
@@ -33,8 +31,9 @@ class _MatchItemState extends State<MatchItem> {
                 _selectedIndex = index; // Update selected index
               });
             },
+
             labelColor: Colors.white,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontWeight: FontWeight.w800,
               fontSize: 12,
             ),
@@ -49,7 +48,7 @@ class _MatchItemState extends State<MatchItem> {
                           borderRadius: BorderRadius.circular(10),
                         )
                       : null,
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     vertical: 8,
                     horizontal: 16,
                   ),
@@ -67,7 +66,7 @@ class _MatchItemState extends State<MatchItem> {
             // Set indicator color to transparent to remove it
             indicatorColor: Colors.transparent,
             unselectedLabelColor: Colors.white.withOpacity(0.7),
-            unselectedLabelStyle: TextStyle(
+            unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -80,7 +79,7 @@ class _MatchItemState extends State<MatchItem> {
           title: Text(
             'Matches',
             style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 fontSize: 20,
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -88,7 +87,7 @@ class _MatchItemState extends State<MatchItem> {
             ),
           ),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             LiveItem(),
             UpComingItem(),
@@ -100,7 +99,7 @@ class _MatchItemState extends State<MatchItem> {
             Navigator.pushNamed(context, addMatch);
           },
           backgroundColor: AppColor.blueColor,
-          child: Icon(
+          child: const Icon(
             Icons.add,
             size: 20,
             color: Colors.white,

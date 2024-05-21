@@ -4,14 +4,12 @@ import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
-import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
-import 'package:cricket_app/custom_widgets/dropdown_widget.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
+import 'package:cricket_app/custom_widgets/points_table_widget.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/models/tournament.dart';
-import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -83,7 +81,7 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                       );
                     }
                     return DefaultTabController(
-                      length: 6,
+                      length: 7,
                       initialIndex: 0,
                       child: Column(
                         children: [
@@ -96,6 +94,7 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                               Tab(text: "Up coming"),
                               Tab(text: "Live"),
                               Tab(text: "Completed"),
+                              Tab(text: "Points Table"),
                             ],
                           ),
                           Expanded(
@@ -110,6 +109,10 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                                 const Live(),
                                 // Completed
                                 const Column(children: []),
+                                // Points Table
+                                PointsTableWidget(
+                                  tournamentId: widget.tournament.sId ?? '',
+                                ),
                               ],
                             ),
                           ),
@@ -487,7 +490,7 @@ class _TeamsState extends State<Teams> {
                         ],
                       ),
                       child: CircleAvatar(
-                        radius: 40,
+                        radius: 30,
                         backgroundImage: CachedNetworkImageProvider(
                           team?.team?.image ?? '',
                         ),
@@ -497,7 +500,7 @@ class _TeamsState extends State<Teams> {
                     Text(
                       team?.team?.name ?? "",
                       style: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -619,9 +622,9 @@ class _ScheduleMatchWidgetState extends State<ScheduleMatchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Expanded(
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -727,27 +730,32 @@ class _UpcomingState extends State<Upcoming> {
             child: Text(state.message),
           );
         }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: TournamentCubit.get(context)
-                    .upcomingMatchDetailsList
-                    .length,
-                itemBuilder: (ctx, index) {
-                  var match =
-                      TournamentCubit.get(ctx).upcomingMatchDetailsList[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 5),
-                    child: UpCommingMachesCard(match: match, admin: true),
-                  );
-                },
+        return RefreshIndicator(
+          onRefresh: () async {
+            TournamentCubit.get(context).upComingMatches();
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: TournamentCubit.get(context)
+                      .upcomingMatchDetailsList
+                      .length,
+                  itemBuilder: (ctx, index) {
+                    var match = TournamentCubit.get(ctx)
+                        .upcomingMatchDetailsList[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 5),
+                      child: UpCommingMachesCard(match: match, admin: true),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
@@ -769,6 +777,7 @@ class _LiveState extends State<Live> {
     }
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -778,7 +787,8 @@ class _LiveState extends State<Live> {
           child: BlocConsumer<TournamentCubit, TournamentState>(
             listener: (context, state) {
               if (state is TournamentLiveMatchesSuccess) {
-                TournamentCubit.get(context).liveMatchDetailsList = state.response.data;
+                TournamentCubit.get(context).liveMatchDetailsList =
+                    state.response.data;
               }
             },
             builder: (context, state) {
@@ -792,21 +802,24 @@ class _LiveState extends State<Live> {
 
               return ListView.builder(
                   itemCount:
-                  TournamentCubit.get(context).liveMatchDetailsList.length,
+                      TournamentCubit.get(context).liveMatchDetailsList.length,
                   itemBuilder: (context, index) {
-                    var match =
-                    TournamentCubit.get(context).liveMatchDetailsList[index];
+                    var match = TournamentCubit.get(context)
+                        .liveMatchDetailsList[index];
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       child: InkWell(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LiveDetails(match: match),
-                            ),
-                          );
+                          Navigator.pushNamed(context, setOpenings, arguments: {
+                            "matchId": match.sId.toString(),
+                            "teamABatting": match.team1Batting,
+                            "teamBBatting": match.team2Batting,
+                            "teamAId": match.team1?.id.toString(),
+                            "teamBId": match.team2?.id.toString(),
+                            "squad1": match.squad1 ?? [],
+                            "squad2": match.squad2 ?? [],
+                          });
                         },
                         child: Hero(
                           tag: match.sId.toString(),
@@ -823,7 +836,6 @@ class _LiveState extends State<Live> {
     );
   }
 }
-
 
 class ButtonWidget extends StatelessWidget {
   const ButtonWidget({super.key, this.onTap, this.color, required this.text});

@@ -50,7 +50,7 @@ abstract class AdminUrl {
   static final getLiveMatches = "${AppUrl.baseUrl}/get-live-matches-for-user";
   static final getLiveAdminMatches = "${AppUrl.baseUrl}/get-live-matches";
   static final startMatch = "${AppUrl.baseUrl}/start-match";
-  static final getMatch = "${AppUrl.baseUrl}/get-matchesdetails";
+  static final getMatch = "${AppUrl.baseUrl}/get-match-details";
   static final getMatchAdmin = "${AppUrl.baseUrl}/get-matchdetails-for-admin";
   static final getCompletedMatches = "${AppUrl.baseUrl}/get-completed-matches";
   static final getCompletedMatchesByAdmin =
@@ -78,4 +78,6 @@ abstract class AdminUrl {
 
 abstract class UserUrl {
   static final getPlayerDetails = "${AppUrl.baseUrl}/player-details";
+  static final getFiveTournaments = "${AppUrl.baseUrl}/last-five-tournaments";
+  static final getTournamentPoints = "${AppUrl.baseUrl}/tournament-points";
 }

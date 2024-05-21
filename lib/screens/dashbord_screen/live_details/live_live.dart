@@ -199,15 +199,15 @@ class _LiveLiveState extends State<LiveLive> {
                   children: [
                     CircleAvatar(
                       backgroundImage: CachedNetworkImageProvider(
-                        widget.match!.openingBowler!.imageUrl ?? "",
+                        widget.match?.openingBowler?.imageUrl ?? "",
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Text(widget.match!.openingBowler!.name ?? "Bowler"),
+                    Text(widget.match?.openingBowler?.name ?? "Bowler"),
                     const Spacer(),
                     if (bowlerStatsIndex != -1)
                       Text(
-                        "${widget.match!.bowlerStats![bowlerStatsIndex].runsGiven}-${widget.match!.bowlerStats![bowlerStatsIndex].wickets} (${widget.match!.bowlerStats![bowlerStatsIndex].overs}.${widget.match?.team1Batting == true ? widget.match?.team2Balls : widget.match?.team1Balls})",
+                        "${widget.match?.bowlerStats![bowlerStatsIndex].runsGiven}-${widget.match!.bowlerStats![bowlerStatsIndex].wickets} (${widget.match!.bowlerStats![bowlerStatsIndex].overs}.${widget.match?.team1Batting == true ? widget.match?.team2Balls : widget.match?.team1Balls})",
                       ),
                   ],
                 ),

@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/tournament_widget.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
@@ -59,13 +61,13 @@ class _SeriesState extends State<Series> {
           return Column(
             children: [
               Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 2,
-                  ),
+                child: ListView.builder(
+                  // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  //   crossAxisCount: 1,
+                  //   crossAxisSpacing: 10,
+                  //   mainAxisSpacing: 10,
+                  //   childAspectRatio: 2,
+                  // ),
                   // separatorBuilder: (context, index) => const Divider(),
                   padding: const EdgeInsets.all(8),
                   itemBuilder: (context, index) {
@@ -80,9 +82,44 @@ class _SeriesState extends State<Series> {
                           ),
                         );
                       },
-                      child: TournamentWidget(
-                        tournament: tournament,
-                        isAdmin: false,
+                      // child: TournamentWidget(
+                      //   tournament: tournament,
+                      //   isAdmin: false,
+                      // ),
+                      child: Card(
+                        elevation: 1,
+                        color: Colors.white,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12)),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: CachedNetworkImageProvider(
+                                tournament.image ?? '',
+                              ),
+                            ),
+                            title: Text(
+                              '${tournament.seriesName}',
+                              style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                            subtitle: Text(
+                              '${tournament.seriesLocation}',
+                              style: GoogleFonts.inter(
+                                  textStyle: const TextStyle(
+                                fontSize: 12,
+                                color: AppColor.grayColor,
+                                fontWeight: FontWeight.w400,
+                              )),
+                            ),
+                          ),
+                        ),
                       ),
                     );
                   },

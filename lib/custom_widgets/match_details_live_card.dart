@@ -73,29 +73,37 @@ class _MatchDetailsLiveCardState extends State<MatchDetailsLiveCard> {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        match != null
-                            ? match?.tournamentInfo != null ? "${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}" : ""
-                            : '',
-                        style: GoogleFonts.inter(
-                          textStyle: const TextStyle(
-                            fontSize: 14,
-                            color: AppColor.blueColor,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        match == null ? 'City' : 'At ${match?.cityOrTown}',
-                        style: GoogleFonts.inter(
-                            textStyle: const TextStyle(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            match != null
+                                ? match?.tournamentInfo != null
+                                    ? "${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}"
+                                    : ""
+                                : '',
+                            style: GoogleFonts.inter(
+                              textStyle: const TextStyle(
                                 fontSize: 14,
-                                color: AppColor.grayColor,
-                                fontWeight: FontWeight.w400)),
+                                color: AppColor.blueColor,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            match == null ? 'City' : 'At ${match?.cityOrTown}',
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.grayColor,
+                                    fontWeight: FontWeight.w400)),
+                          ),
+                          const SizedBox(height: 4),
+                        ],
                       ),
                       const Spacer(),
                       if (match != null) MatchStatusWidget(match: match),

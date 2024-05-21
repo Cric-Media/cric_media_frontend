@@ -252,16 +252,21 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        title: Visibility(
-          visible: match != null,
-          child: Text(
-            "${match?.team1?.name ?? ''} VS ${match?.team2?.name ?? ''}",
-            style: const TextStyle(
-              color: AppColor.blueColor,
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+        backgroundColor: Colors.grey.shade200,
+        title: BlocBuilder<MatchCubit, MatchState>(
+          builder: (context, state) {
+            return Visibility(
+              visible: match != null,
+              child: Text(
+                "${match?.team1?.name ?? ''} VS ${match?.team2?.name ?? ''}",
+                style: const TextStyle(
+                  color: AppColor.blueColor,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            );
+          },
         ),
         actions: [
           TextButton(

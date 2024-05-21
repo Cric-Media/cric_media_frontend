@@ -10,6 +10,7 @@ import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/notifier.dart';
 import 'package:cricket_app/models/over.dart' as Over;
 import 'package:cricket_app/models/player.dart';
+import 'package:cricket_app/models/points_table.dart';
 import 'package:cricket_app/models/score_card.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/models/tournament.dart';
@@ -247,7 +248,6 @@ class AdminController {
     final headers = {"Content-Type": "application/json"};
     final body = {"adminId": adminId};
     final response = await ApiManager.postRequest(body, url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       List<Team> teams = [];
@@ -354,7 +354,6 @@ class AdminController {
         : "${AdminUrl.getUncomingMatchesByAdmin}/$adminId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
 
     if (resBody['success']) {
@@ -375,7 +374,6 @@ class AdminController {
         : "${AdminUrl.getCompletedMatchesByAdmin}/$adminId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
 
     if (resBody['success']) {
@@ -396,7 +394,6 @@ class AdminController {
         : "${AdminUrl.getLiveAdminMatches}/$adminId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
 
     if (resBody['success']) {
@@ -414,7 +411,6 @@ class AdminController {
     final url = "${AdminUrl.getMatch}/$matchId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(
@@ -432,7 +428,6 @@ class AdminController {
     final url = AdminUrl.action;
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.postRequest(data, url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(resBody, (data) => null);
@@ -445,7 +440,6 @@ class AdminController {
     final url = "${AdminUrl.matchScoreCards}/$matchId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       List<ScoreCard> scoreCards = [];
@@ -466,7 +460,6 @@ class AdminController {
     final url = "${AdminUrl.getMatchOvers}/$matchId?page=$page&limit=$limit";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       List<Over.Over> overs = [];
@@ -484,7 +477,6 @@ class AdminController {
     final headers = {"Content-Type": "application/json"};
     final body = {"matchId": matchId, "playerId": playerId};
     final response = await ApiManager.putRequest(body, url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(resBody, (data) => null);
@@ -498,7 +490,6 @@ class AdminController {
     final headers = {"Content-Type": "application/json"};
     final body = {"matchId": matchId, "reason": reason};
     final response = await ApiManager.putRequest(body, url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(
@@ -611,7 +602,6 @@ class AdminController {
   Future<ApiResponse> getTournament(String tournamentId) async {
     final url = "${AdminUrl.getTournament}/$tournamentId";
     final response = await ApiManager.getRequest(url);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(
@@ -654,7 +644,6 @@ class AdminController {
       "type": type,
     };
     final response = await ApiManager.putRequest(body, url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(resBody, (data) => null);
@@ -699,7 +688,6 @@ class AdminController {
     final url = "${AdminUrl.adminInvitations}/$adminId";
 
     final response = await ApiManager.getRequest(url);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       List<Notifier> notifiers = [];
@@ -727,7 +715,6 @@ class AdminController {
       "type": type,
     };
     final response = await ApiManager.putRequest(body, url, headers: headers);
-    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(resBody, (data) => null);
@@ -779,6 +766,40 @@ class AdminController {
         matches.add(MatchDetails.fromJson(match));
       }
       return ApiResponse.fromJson(resBody, (data) => matches);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> getFiveTournaments() async {
+    final url = UserUrl.getFiveTournaments;
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<Tournament> tournaments = [];
+      for (var tournament in resBody['data']) {
+        tournaments.add(Tournament.fromJson(tournament));
+      }
+      return ApiResponse.fromJson(resBody, (data) => tournaments);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> getTournamentPoints(String tournamentId) async {
+    final url = "${UserUrl.getTournamentPoints}/$tournamentId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<PointsTable> pointsTable = [];
+      for (var point in resBody['data']) {
+        pointsTable.add(PointsTable.fromJson(point));
+      }
+      return ApiResponse.fromJson(resBody, (data) => pointsTable);
     } else {
       throw AppException(resBody['message']);
     }

@@ -42,31 +42,44 @@ class _UpComingTabState extends State<UpComingTab> {
                   child: CircularProgressIndicator(),
                 );
               }
-              return ListView.builder(
-                  itemCount:
-                      MatchCubit.get(context).upcomingMatchDetailsList.length,
-                  itemBuilder: (context, index) {
-                    var match =
-                        MatchCubit.get(context).upcomingMatchDetailsList[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => UpcomingMatchDetails(
-                                  match: match,
+              return RefreshIndicator(
+                onRefresh:  () async{
+                  MatchCubit.get(context).getUpcomingMatches(user: true);
+
+                },
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+
+                          itemCount:
+                              MatchCubit.get(context).upcomingMatchDetailsList.length,
+                          itemBuilder: (context, index) {
+                            var match =
+                                MatchCubit.get(context).upcomingMatchDetailsList[index];
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 5.0),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => UpcomingMatchDetails(
+                                          match: match,
+                                        ),
+                                      ));
+                                },
+                                child: Hero(
+                                  tag: match.sId.toString(),
+                                  child: UpCommingMachesCard(match: match),
                                 ),
-                              ));
-                        },
-                        child: Hero(
-                          tag: match.sId.toString(),
-                          child: UpCommingMachesCard(match: match),
-                        ),
-                      ),
-                    );
-                  });
+                              ),
+                            );
+                          }),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         ),
