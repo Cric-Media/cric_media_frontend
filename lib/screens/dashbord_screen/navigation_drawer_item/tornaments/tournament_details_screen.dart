@@ -102,7 +102,7 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                               children: [
                                 Home(tournament: widget.tournament),
                                 Teams(teamsSheet: teamsSheet),
-                                const Column(children: []),
+                                const Groups(),
                                 // Upcoming
                                 const Upcoming(),
                                 // Live
@@ -359,6 +359,81 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void createGroup() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          children: <Widget>[
+            Container(
+              height: 50,
+              width: double.infinity,
+              color: AppColor.blueColor,
+              child: const Center(
+                child: Text(
+                  'Create Group',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      onChanged: (value) {
+                        // set group name
+                        TournamentCubit.get(context).groupName = value;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: "Group Name",
+                        hintText: "Enter Group Name",
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    BlocConsumer<TournamentCubit, TournamentState>(
+                      listener: (context, state) {
+                        if (state is TournamentGroupToTournamentSuccess) {
+                          Navigator.pop(context);
+                          TournamentCubit.get(context).groupName = null;
+                          showSnack(context, message: state.response.message);
+                        } else if (state is TournamentGroupToTournamentError) {
+                          Navigator.pop(context);
+                          showSnack(context, message: state.message);
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is TournamentGroupToTournamentLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return ButtonWidget(
+                          text: "Create",
+                          color: Colors.blue[400],
+                          onTap: () {
+                            // create group
+                            TournamentCubit.get(context).groupToTournament();
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var tournament = TournamentCubit.get(context).tournament;
@@ -432,6 +507,7 @@ class _HomeState extends State<Home> {
                 child: ButtonWidget(
                   text: "CREATE GROUP",
                   color: Colors.blue[400],
+                  onTap: createGroup,
                 ),
               ),
             ],
@@ -512,34 +588,20 @@ class _TeamsState extends State<Teams> {
           Row(
             children: [
               Expanded(
-                child: GestureDetector(
+                child: ButtonWidget(
+                  text: "ADD TEAM",
+                  color: Colors.blue[400],
                   onTap: widget.teamsSheet,
-                  child: Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: Colors.indigo[300],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(child: Text("ADD TEAM")),
-                  ),
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: GestureDetector(
+                child: ButtonWidget(
+                  text: "DELETE TEAM",
+                  color: Colors.red[400],
                   onTap: () {
-                    deleteTeamSheet(
-                      TournamentCubit.get(context).tournament!,
-                    );
+                    deleteTeamSheet(TournamentCubit.get(context).tournament!);
                   },
-                  child: Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: Colors.red[300],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Center(child: Text("REMOVE TEAM")),
-                  ),
                 ),
               ),
             ],
@@ -602,6 +664,98 @@ class _TeamsState extends State<Teams> {
           ],
         );
       },
+    );
+  }
+}
+
+class Groups extends StatefulWidget {
+  const Groups({super.key});
+
+  @override
+  State<Groups> createState() => _GroupsState();
+}
+
+class _GroupsState extends State<Groups> {
+  void addTeamSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          children: <Widget>[
+            Container(
+              height: 50,
+              width: double.infinity,
+              color: AppColor.blueColor,
+              child: const Center(
+                child: Text(
+                  'Select Team',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
+            // show all the tournament teams
+            Column(
+              children: [
+                ...TournamentCubit.get(context)
+                    .tournament!
+                    .teams!
+                    .map((team) => ListTile(
+                          title: Text(team.team?.name ?? ''),
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(team.team?.image ?? ''),
+                          ),
+                          // TODO
+                          trailing: GestureDetector(
+                            onTap: () {
+                              // add team to group
+                              TournamentCubit.get(context).teamToGroup(""
+                                  // teamId: team.team?.id.toString() ?? '',
+                                  // groupId: "1",
+                                  );
+                            },
+                            child: const Icon(Icons.add),
+                          ),
+                        ))
+                    .toList(),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          const Spacer(),
+          Row(
+            children: [
+              Expanded(
+                child: ButtonWidget(
+                  text: "Add Team",
+                  color: Colors.blue[400],
+                  onTap: addTeamSheet,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: ButtonWidget(
+                  text: "Delete Team",
+                  color: Colors.red[400],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

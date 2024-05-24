@@ -30,6 +30,10 @@ final class TournamentGetFiveLoading extends TournamentState {}
 
 final class TournamentPointsLoading extends TournamentState {}
 
+final class TournamentGroupToTournamentLoading extends TournamentState {}
+
+final class TournamentTeamsToGroupLoading extends TournamentState {}
+
 // Success
 final class TournamentAddSuccess extends TournamentState {
   final ApiResponse response;
@@ -86,6 +90,16 @@ final class TournamentPointsSuccess extends TournamentState {
   TournamentPointsSuccess({required this.response});
 }
 
+final class TournamentGroupToTournamentSuccess extends TournamentState {
+  final ApiResponse response;
+  TournamentGroupToTournamentSuccess({required this.response});
+}
+
+final class TournamentTeamsToGroupSuccess extends TournamentState {
+  final ApiResponse response;
+  TournamentTeamsToGroupSuccess({required this.response});
+}
+
 // Error
 final class TournamentAddError extends TournamentState {
   final String message;
@@ -140,4 +154,14 @@ final class TournamentGetFiveError extends TournamentState {
 final class TournamentPointsError extends TournamentState {
   final String message;
   TournamentPointsError({required this.message});
+}
+
+final class TournamentTeamsToGroupError extends TournamentState {
+  final String message;
+  TournamentTeamsToGroupError({required this.message});
+}
+
+final class TournamentGroupToTournamentError extends TournamentState {
+  final String message;
+  TournamentGroupToTournamentError({required this.message});
 }

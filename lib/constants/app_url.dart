@@ -74,6 +74,8 @@ abstract class AdminUrl {
   static final addTournamentMatch = "${AppUrl.baseUrl}/add-tournament-match";
   static final tournamentUpcoming = "${AppUrl.baseUrl}/tournament-upcoming";
   static final tournamentLive = "${AppUrl.baseUrl}/tournament-live";
+  static final groupToTournament = "${AppUrl.baseUrl}/group-to-tournament";
+  static final teamToGroup = "${AppUrl.baseUrl}/team-to-group";
 }
 
 abstract class UserUrl {

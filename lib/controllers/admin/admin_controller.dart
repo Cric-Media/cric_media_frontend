@@ -804,4 +804,33 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> groupToTournament({
+    required String groupName,
+    required String tournamentId,
+  }) async {
+    final url = "${AdminUrl.groupToTournament}/$tournamentId";
+    final headers = {"Content-Type": "application/json"};
+    final body = {"groupName": groupName};
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> teamToGroup(String tournamentId) async {
+    final url = "${AdminUrl.teamToGroup}/$tournamentId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }

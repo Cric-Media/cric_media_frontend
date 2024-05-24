@@ -6,6 +6,7 @@ import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/points_table.dart';
 import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/utils/app_exception.dart';
+import 'package:cricket_app/utils/network.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,6 +28,8 @@ class TournamentCubit extends Cubit<TournamentState> {
   TextEditingController numberOfTeams = TextEditingController();
 
   Tournament? tournament;
+
+  String? groupName;
 
   // Lists
   List<Tournament> tournaments = [];
@@ -68,6 +71,13 @@ class TournamentCubit extends Cubit<TournamentState> {
   void addTournament() async {
     emit(TournamentAddLoading());
     try {
+      var network = await Network.check();
+
+      if (!network) {
+        emit(TournamentAddError(
+            message: "Please check your internet connection"));
+        return;
+      }
       var data = {
         'image': image,
         'series_name': seriesName.text.trim(),
@@ -92,6 +102,13 @@ class TournamentCubit extends Cubit<TournamentState> {
   void updateTournament(String tournamentId) async {
     emit(TournamentUpdateLoading());
     try {
+      var network = await Network.check();
+
+      if (!network) {
+        emit(TournamentUpdateError(
+            message: "Please check your internet connection"));
+        return;
+      }
       var data = {
         'id': tournamentId,
         'image': image,
@@ -119,6 +136,13 @@ class TournamentCubit extends Cubit<TournamentState> {
   void getTournament(String tournamentId) async {
     emit(TournamentGetLoading());
     try {
+      var network = await Network.check();
+
+      if (!network) {
+        emit(TournamentGetError(
+            message: "Please check your internet connection"));
+        return;
+      }
       final response = await adminController.getTournament(tournamentId);
       emit(TournamentGetSuccess(response: response));
     } catch (e) {
@@ -133,6 +157,13 @@ class TournamentCubit extends Cubit<TournamentState> {
   void getInitialTournaments({required bool isAdmin}) async {
     emit(TournamentGetInitialLoading());
     try {
+      var network = await Network.check();
+
+      if (!network) {
+        emit(TournamentGetInitialError(
+            message: "Please check your internet connection"));
+        return;
+      }
       final response = await adminController.getInitialTournaments(
         isAdmin: isAdmin,
       );
@@ -152,6 +183,13 @@ class TournamentCubit extends Cubit<TournamentState> {
   }) async {
     emit(TournamentAddTeamLoading());
     try {
+      var network = await Network.check();
+
+      if (!network) {
+        emit(TournamentAddTeamError(
+            message: "Please check your internet connection"));
+        return;
+      }
       final response = await adminController.addTeamToTournament(
         tournamentId: tournamentId,
         teamId: teamId,
@@ -172,6 +210,13 @@ class TournamentCubit extends Cubit<TournamentState> {
   }) async {
     emit(TournamentRemoveTeamLoading());
     try {
+      var network = await Network.check();
+
+      if (!network) {
+        emit(TournamentRemoveTeamError(
+            message: "Please check your internet connection"));
+        return;
+      }
       final response = await adminController.removeTeamFromTournament(
         tournamentId: tournamentId,
         teamId: teamId,
@@ -190,6 +235,12 @@ class TournamentCubit extends Cubit<TournamentState> {
   void upComingMatches() async {
     emit(TournamentUpcomingMatchesLoading());
     try {
+      var network = await Network.check();
+      if (!network) {
+        emit(TournamentUpcomingMatchesError(
+            message: "Please check your internet connection"));
+        return;
+      }
       final response = await adminController.upComingMatches(
         tournament?.sId ?? "",
       );
@@ -206,6 +257,12 @@ class TournamentCubit extends Cubit<TournamentState> {
   void getLiveMatches() async {
     emit(TournamentLiveMatchesLoading());
     try {
+      var network = await Network.check();
+      if (!network) {
+        emit(TournamentLiveMatchesError(
+            message: "Please check your internet connection"));
+        return;
+      }
       final response = await adminController.liveMatches(
         tournament?.sId ?? "",
       );
@@ -222,6 +279,12 @@ class TournamentCubit extends Cubit<TournamentState> {
   void getFiveTournaments() async {
     emit(TournamentGetFiveLoading());
     try {
+      var network = await Network.check();
+      if (!network) {
+        emit(TournamentGetFiveError(
+            message: "Please check your internet connection"));
+        return;
+      }
       final response = await adminController.getFiveTournaments();
       emit(TournamentGetFiveSuccess(response: response));
     } catch (e) {
@@ -234,9 +297,15 @@ class TournamentCubit extends Cubit<TournamentState> {
   }
 
   void getTournamentPoints(String tournamentId) async {
-    print("*********" + tournamentId);
     emit(TournamentPointsLoading());
     try {
+      var network = await Network.check();
+
+      if (!network) {
+        emit(TournamentPointsError(
+            message: "Please check your internet connection"));
+        return;
+      }
       final response = await adminController.getTournamentPoints(tournamentId);
       emit(TournamentPointsSuccess(response: response));
     } catch (e) {
@@ -244,6 +313,56 @@ class TournamentCubit extends Cubit<TournamentState> {
         emit(TournamentPointsError(message: e.message));
       } else {
         emit(TournamentPointsError(message: "Something went wrong"));
+      }
+    }
+  }
+
+  void groupToTournament() async {
+    emit(TournamentGroupToTournamentLoading());
+    try {
+      var network = await Network.check();
+      if (!network) {
+        emit(TournamentGroupToTournamentError(
+            message: "Please check your internet connection"));
+        return;
+      }
+      if (groupName == null || groupName!.isEmpty) {
+        emit(TournamentGroupToTournamentError(
+            message: "Please enter group name"));
+        return;
+      }
+      final response = await adminController.groupToTournament(
+        tournamentId: tournament?.sId ?? '',
+        groupName: groupName ?? '',
+      );
+      emit(TournamentGroupToTournamentSuccess(response: response));
+    } catch (e) {
+      print(e);
+      if (e is AppException) {
+        emit(TournamentGroupToTournamentError(message: e.message));
+      } else {
+        emit(TournamentGroupToTournamentError(message: "Something went wrong"));
+      }
+    }
+  }
+
+  void teamToGroup(String tournamentId) async {
+    emit(TournamentTeamsToGroupLoading());
+    try {
+      var network = await Network.check();
+
+      if (!network) {
+        emit(TournamentTeamsToGroupError(
+            message: "Please check your internet connection"));
+        return;
+      }
+      final response = await adminController.teamToGroup(tournamentId);
+      emit(TournamentTeamsToGroupSuccess(response: response));
+    } catch (e) {
+      if (e is AppException) {
+        emit(TournamentTeamsToGroupError(message: e.message));
+      } else {
+        emit(TournamentTeamsToGroupError(message: "Something went wrong"));
       }
     }
   }
