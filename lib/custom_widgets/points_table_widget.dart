@@ -106,8 +106,8 @@ class _PointsTableWidgetState extends State<PointsTableWidget> {
                         Text(
                           TournamentCubit.get(context)
                               .pointsTable[index]
-                              .team!
-                              .name
+                              .team
+                              !.name
                               .toString()
                               .substring(0, 3),
                         ),

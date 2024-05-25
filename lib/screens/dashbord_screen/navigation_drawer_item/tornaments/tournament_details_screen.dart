@@ -6,7 +6,6 @@ import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
-import 'package:cricket_app/custom_widgets/points_table_widget.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/models/tournament.dart';
@@ -81,7 +80,7 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                       );
                     }
                     return DefaultTabController(
-                      length: 7,
+                      length: 6,
                       initialIndex: 0,
                       child: Column(
                         children: [
@@ -94,7 +93,7 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                               Tab(text: "Up coming"),
                               Tab(text: "Live"),
                               Tab(text: "Completed"),
-                              Tab(text: "Points Table"),
+                              // Tab(text: "Points Table"),
                             ],
                           ),
                           Expanded(
@@ -102,7 +101,9 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                               children: [
                                 Home(tournament: widget.tournament),
                                 Teams(teamsSheet: teamsSheet),
-                                const Groups(),
+                                Groups(
+                                  tournamentId: widget.tournament.sId ?? '',
+                                ),
                                 // Upcoming
                                 const Upcoming(),
                                 // Live
@@ -110,9 +111,9 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                                 // Completed
                                 const Column(children: []),
                                 // Points Table
-                                PointsTableWidget(
-                                  tournamentId: widget.tournament.sId ?? '',
-                                ),
+                                // PointsTableWidget(
+                                //   tournamentId: widget.tournament.sId ?? '',
+                                // ),
                               ],
                             ),
                           ),
@@ -638,12 +639,12 @@ class _TeamsState extends State<Teams> {
                 },
                 itemCount: tournament.teams!.length,
                 itemBuilder: (context, index) {
-                  Team? team = tournament!.teams![index].team;
+                  Team? team = tournament.teams![index].team;
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundImage: NetworkImage(team!.image ?? ''),
                     ),
-                    title: Text(team!.name.toString()),
+                    title: Text(team.name.toString()),
                     trailing: TextButton(
                       onPressed: () {
                         TournamentCubit.get(context).removeTeam(
@@ -669,14 +670,15 @@ class _TeamsState extends State<Teams> {
 }
 
 class Groups extends StatefulWidget {
-  const Groups({super.key});
+  final String tournamentId;
+  const Groups({super.key, required this.tournamentId});
 
   @override
   State<Groups> createState() => _GroupsState();
 }
 
 class _GroupsState extends State<Groups> {
-  void addTeamSheet() {
+  void addTeamSheet(Group group) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -697,31 +699,117 @@ class _GroupsState extends State<Groups> {
               ),
             ),
             // show all the tournament teams
-            Column(
-              children: [
-                ...TournamentCubit.get(context)
-                    .tournament!
-                    .teams!
-                    .map((team) => ListTile(
-                          title: Text(team.team?.name ?? ''),
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(team.team?.image ?? ''),
-                          ),
-                          // TODO
-                          trailing: GestureDetector(
-                            onTap: () {
-                              // add team to group
-                              TournamentCubit.get(context).teamToGroup(""
-                                  // teamId: team.team?.id.toString() ?? '',
-                                  // groupId: "1",
+            BlocConsumer<TournamentCubit, TournamentState>(
+              listener: (context, state) {
+                if (state is TournamentTeamsToGroupSuccess) {
+                  Navigator.pop(context);
+                  TournamentCubit.get(context).getTournament(
+                    widget.tournamentId,
+                  );
+                } else if (state is TournamentTeamsToGroupError) {
+                  Navigator.pop(context);
+                  showSnack(context, message: state.message);
+                }
+              },
+              builder: (context, state) {
+                if (state is TournamentTeamsToGroupLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return Column(
+                  children: [
+                    ...TournamentCubit.get(context)
+                        .tournament!
+                        .teams!
+                        .map((team) => ListTile(
+                              title: Text(team.team?.name ?? ''),
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(team.team?.image ?? ''),
+                              ),
+                              trailing: GestureDetector(
+                                onTap: () {
+                                  TournamentCubit.get(context).teamToGroup(
+                                    teamId: team.team?.id ?? '',
+                                    groupId: group.id ?? '',
                                   );
-                            },
-                            child: const Icon(Icons.add),
-                          ),
-                        ))
-                    .toList(),
-              ],
+                                },
+                                child: const Icon(Icons.add),
+                              ),
+                            ))
+                        .toList(),
+                  ],
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void removeTeamSheer(Group group) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Column(
+          children: <Widget>[
+            Container(
+              height: 50,
+              width: double.infinity,
+              color: AppColor.blueColor,
+              child: const Center(
+                child: Text(
+                  'Select Team',
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
+            // show all the tournament teams
+            BlocConsumer<TournamentCubit, TournamentState>(
+              listener: (context, state) {
+                if (state is TournamentRemoveGroupTeamSuccess) {
+                  Navigator.pop(context);
+                  TournamentCubit.get(context).getTournament(
+                    widget.tournamentId,
+                  );
+                } else if (state is TournamentRemoveGroupTeamError) {
+                  Navigator.pop(context);
+                  showSnack(context, message: state.message);
+                }
+              },
+              builder: (context, state) {
+                if (state is TournamentRemoveGroupTeamLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return Column(
+                  children: [
+                    ...TournamentCubit.get(context)
+                        .tournament!
+                        .teams!
+                        .where((team) => group.teams!.contains(team.team?.id))
+                        .map((team) => ListTile(
+                              title: Text(team.team?.name ?? ''),
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(team.team?.image ?? ''),
+                              ),
+                              trailing: GestureDetector(
+                                onTap: () {
+                                  TournamentCubit.get(context).removeGroupTeam(
+                                    teamId: team.team?.id ?? '',
+                                    groupId: group.id ?? '',
+                                  );
+                                },
+                                child: const Icon(Icons.remove),
+                              ),
+                            ))
+                        .toList(),
+                  ],
+                );
+              },
             ),
           ],
         );
@@ -735,25 +823,81 @@ class _GroupsState extends State<Groups> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          const Spacer(),
-          Row(
-            children: [
-              Expanded(
-                child: ButtonWidget(
-                  text: "Add Team",
-                  color: Colors.blue[400],
-                  onTap: addTeamSheet,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: ButtonWidget(
-                  text: "Delete Team",
-                  color: Colors.red[400],
-                ),
-              ),
-            ],
-          ),
+          if (TournamentCubit.get(context).tournament?.groups != null &&
+              TournamentCubit.get(context).tournament!.groups!.isNotEmpty)
+            ListView.builder(
+              itemBuilder: (context, index) {
+                var group =
+                    TournamentCubit.get(context).tournament!.groups?[index];
+                return Column(
+                  children: [
+                    Container(
+                      color: Colors.grey.shade200,
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          Text("GROUP ${group?.name}"),
+                          const Spacer(),
+                          ElevatedButton(
+                            onPressed: () {
+                              addTeamSheet(group!);
+                            },
+                            child: const Text("Add"),
+                          ),
+                          const SizedBox(width: 8),
+                          if (group?.teams != null && group!.teams!.isNotEmpty)
+                            ElevatedButton(
+                              onPressed: () {
+                                removeTeamSheer(group);
+                              },
+                              child: const Text("Remove"),
+                            ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    GroupWidget(group: group!),
+                  ],
+                );
+              },
+              itemCount:
+                  TournamentCubit.get(context).tournament!.groups?.length,
+              shrinkWrap: true,
+            )
+          // ...TournamentCubit.get(context).tournament!.groups!.map(
+          //   (group) {
+          //     return Column(
+          //       children: [
+          //         Container(
+          //           color: Colors.grey.shade200,
+          //           padding: const EdgeInsets.symmetric(vertical: 4),
+          //           child: Row(
+          //             children: [
+          //               Text("GROUP ${group.name}"),
+          //               const Spacer(),
+          //               ElevatedButton(
+          //                 onPressed: () {
+          //                   addTeamSheet(group);
+          //                 },
+          //                 child: const Text("Add"),
+          //               ),
+          //               const SizedBox(width: 8),
+          //               ElevatedButton(
+          //                 onPressed: () {},
+          //                 child: const Text("Remove"),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //         const SizedBox(height: 8),
+          //         GroupWidget(
+          //           tournamentId: widget.tournamentId,
+          //           groupId: group.id ?? '',
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // ).toList(),
         ],
       ),
     );
@@ -1011,6 +1155,73 @@ class ButtonWidget extends StatelessWidget {
         child: Center(
             child: Text(text, style: const TextStyle(color: Colors.white))),
       ),
+    );
+  }
+}
+
+class GroupWidget extends StatelessWidget {
+  final Group group;
+  const GroupWidget({Key? key, required this.group}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Table(
+          columnWidths: const {
+            0: FlexColumnWidth(2),
+            1: FlexColumnWidth(1),
+            2: FlexColumnWidth(1),
+            3: FlexColumnWidth(1),
+            4: FlexColumnWidth(1),
+            5: FlexColumnWidth(1),
+          },
+          children: const [
+            TableRow(
+              // decoration: BoxDecoration(color: AppColor.blueColor),
+              children: [
+                Text("Team", style: TextStyle(fontWeight: FontWeight.bold)),
+                Text("P", style: TextStyle(fontWeight: FontWeight.bold)),
+                Text("W", style: TextStyle(fontWeight: FontWeight.bold)),
+                Text("L", style: TextStyle(fontWeight: FontWeight.bold)),
+                Text("D", style: TextStyle(fontWeight: FontWeight.bold)),
+                Text("NRR", style: TextStyle(fontWeight: FontWeight.bold)),
+                Text("Pts", style: TextStyle(fontWeight: FontWeight.bold)),
+              ],
+            ),
+          ],
+        ),
+        SingleChildScrollView(
+          child: Table(
+            border: TableBorder.all(color: Colors.grey),
+            defaultColumnWidth: const IntrinsicColumnWidth(flex: 1),
+            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+            textBaseline: TextBaseline.alphabetic,
+            columnWidths: const {
+              0: FlexColumnWidth(2),
+              1: FlexColumnWidth(1),
+              2: FlexColumnWidth(1),
+              3: FlexColumnWidth(1),
+              4: FlexColumnWidth(1),
+              5: FlexColumnWidth(1),
+            },
+            children: List.generate(
+              group.pointsTable?.length ?? 0,
+              (i) => TableRow(
+                children: [
+                  Text(group.pointsTable![i].team?.name ?? ''),
+                  Text(group.pointsTable![i].matchesPlayed.toString()),
+                  Text(group.pointsTable![i].wins.toString()),
+                  Text(group.pointsTable![i].losses.toString()),
+                  Text(group.pointsTable![i].draws.toString()),
+                  Text(group.pointsTable![i].netRunRate.toString()),
+                  Text(group.pointsTable![i].points.toString()),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

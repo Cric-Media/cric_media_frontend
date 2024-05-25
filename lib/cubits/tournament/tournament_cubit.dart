@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cricket_app/controllers/admin/admin_controller.dart';
@@ -146,6 +147,7 @@ class TournamentCubit extends Cubit<TournamentState> {
       final response = await adminController.getTournament(tournamentId);
       emit(TournamentGetSuccess(response: response));
     } catch (e) {
+      print(e);
       if (e is AppException) {
         emit(TournamentAddError(message: e.message));
       } else {
@@ -169,6 +171,7 @@ class TournamentCubit extends Cubit<TournamentState> {
       );
       emit(TournamentGetInitialSuccess(response: response));
     } catch (e) {
+      print(e);
       if (e is AppException) {
         emit(TournamentGetInitialError(message: e.message));
       } else {
@@ -296,7 +299,8 @@ class TournamentCubit extends Cubit<TournamentState> {
     }
   }
 
-  void getTournamentPoints(String tournamentId) async {
+  void getTournamentPoints(String tournamentId, {String? group}) async {
+    print(group);
     emit(TournamentPointsLoading());
     try {
       var network = await Network.check();
@@ -306,7 +310,10 @@ class TournamentCubit extends Cubit<TournamentState> {
             message: "Please check your internet connection"));
         return;
       }
-      final response = await adminController.getTournamentPoints(tournamentId);
+      final response = await adminController.getTournamentPoints(
+        tournamentId,
+        group: group,
+      );
       emit(TournamentPointsSuccess(response: response));
     } catch (e) {
       if (e is AppException) {
@@ -346,7 +353,7 @@ class TournamentCubit extends Cubit<TournamentState> {
     }
   }
 
-  void teamToGroup(String tournamentId) async {
+  void teamToGroup({required String teamId, required String groupId}) async {
     emit(TournamentTeamsToGroupLoading());
     try {
       var network = await Network.check();
@@ -356,13 +363,47 @@ class TournamentCubit extends Cubit<TournamentState> {
             message: "Please check your internet connection"));
         return;
       }
-      final response = await adminController.teamToGroup(tournamentId);
+      final response = await adminController.teamToGroup(
+        tournamentId: tournament?.sId ?? '',
+        teamId: teamId,
+        groupId: groupId,
+      );
       emit(TournamentTeamsToGroupSuccess(response: response));
     } catch (e) {
+      log(e.toString());
       if (e is AppException) {
         emit(TournamentTeamsToGroupError(message: e.message));
       } else {
         emit(TournamentTeamsToGroupError(message: "Something went wrong"));
+      }
+    }
+  }
+
+  void removeGroupTeam({
+    required String teamId,
+    required String groupId,
+  }) async {
+    emit(TournamentRemoveGroupTeamLoading());
+    try {
+      var network = await Network.check();
+
+      if (!network) {
+        emit(TournamentRemoveGroupTeamError(
+            message: "Please check your internet connection"));
+        return;
+      }
+      final response = await adminController.removeGroupTeam(
+        tournamentId: tournament?.sId ?? '',
+        teamId: teamId,
+        groupId: groupId,
+      );
+      emit(TournamentRemoveGroupTeamSuccess(response: response));
+    } catch (e) {
+      log(e.toString());
+      if (e is AppException) {
+        emit(TournamentRemoveGroupTeamError(message: e.message));
+      } else {
+        emit(TournamentRemoveGroupTeamError(message: "Something went wrong"));
       }
     }
   }

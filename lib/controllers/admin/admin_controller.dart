@@ -602,6 +602,7 @@ class AdminController {
   Future<ApiResponse> getTournament(String tournamentId) async {
     final url = "${AdminUrl.getTournament}/$tournamentId";
     final response = await ApiManager.getRequest(url);
+    log(response.body, level: 0);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(
@@ -619,6 +620,7 @@ class AdminController {
         "${AdminUrl.getTournaments}${isAdmin == true ? '?adminId=$adminId' : ''}";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
+    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       List<Tournament> tournaments = [];
@@ -788,8 +790,13 @@ class AdminController {
     }
   }
 
-  Future<ApiResponse> getTournamentPoints(String tournamentId) async {
-    final url = "${UserUrl.getTournamentPoints}/$tournamentId";
+  Future<ApiResponse> getTournamentPoints(
+    String tournamentId, {
+    String? group,
+  }) async {
+    final url = group == null
+        ? "${UserUrl.getTournamentPoints}/$tournamentId"
+        : "${UserUrl.getTournamentPoints}/$tournamentId?group=$group";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
     log(response.body);
@@ -821,11 +828,44 @@ class AdminController {
     }
   }
 
-  Future<ApiResponse> teamToGroup(String tournamentId) async {
-    final url = "${AdminUrl.teamToGroup}/$tournamentId";
+  Future<ApiResponse> teamToGroup({
+    required String tournamentId,
+    required String teamId,
+    required String groupId,
+  }) async {
+    final url = AdminUrl.teamToGroup;
     final headers = {"Content-Type": "application/json"};
-    final response = await ApiManager.getRequest(url, headers: headers);
-    log(response.body);
+    final body = {
+      "tournamentId": tournamentId,
+      "teamId": teamId,
+      "groupId": groupId
+    };
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> removeGroupTeam({
+    required String tournamentId,
+    required String teamId,
+    required String groupId,
+  }) async {
+    final url = AdminUrl.removeGroupTeam;
+    final headers = {"Content-Type": "application/json"};
+    final body = {
+      "tournamentId": tournamentId,
+      "teamId": teamId,
+      "groupId": groupId
+    };
+    final response = await ApiManager.putRequest(
+      body,
+      url,
+      headers: headers,
+    );
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(resBody, (data) => null);
