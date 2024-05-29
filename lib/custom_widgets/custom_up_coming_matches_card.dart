@@ -40,11 +40,11 @@ class UpCommingMachesCard extends StatelessWidget {
                       children: [
                         Text(
                           match != null
-                              ? match?.tournamentInfo != null ? "${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}" : ""
+                              ? match?.tournamentInfo != null ? "${match?.tournamentInfo?.matchType?.toUpperCase() ?? ''}-${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}" : ""
                               : '',
                           style: GoogleFonts.inter(
                             textStyle: const TextStyle(
-                              fontSize: 14,
+                              fontSize: 12,
                               color: AppColor.blueColor,
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline,

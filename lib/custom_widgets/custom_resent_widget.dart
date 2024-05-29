@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomResentWidget extends StatelessWidget {
   final MatchDetails? match;
@@ -36,7 +38,26 @@ class CustomResentWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        match != null
+                            ? match?.tournamentInfo != null
+                                ? "${match?.tournamentInfo?.matchType?.toUpperCase() ?? ''}-${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}"
+                                : ""
+                            : '',
+                        style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                            fontSize: 12,
+                            color: AppColor.blueColor,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
                       // Team 1
                       Row(
                         children: [
@@ -93,9 +114,9 @@ class CustomResentWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-                      if (match?.winningTeam == match?.team1?.id)
+                      if (match?.winningTeam != null)
                         const SizedBox(height: 32),
-                      if (match?.winningTeam == match?.team1?.id)
+                      if (match?.winningTeam != null)
                         Text(
                           "${match?.team1?.name} won by $winningWickets wickets",
                           style: const TextStyle(

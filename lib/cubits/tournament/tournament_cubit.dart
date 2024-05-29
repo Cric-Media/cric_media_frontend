@@ -31,6 +31,8 @@ class TournamentCubit extends Cubit<TournamentState> {
   Tournament? tournament;
 
   String? groupName;
+  int? totalMatches;
+  int? qualifiersNumber;
 
   // Lists
   List<Tournament> tournaments = [];
@@ -42,6 +44,8 @@ class TournamentCubit extends Cubit<TournamentState> {
 
   // Selected variables
   String? selectedMatchType;
+  String? selectedGroupId;
+  String? selectedGroup;
 
   // Helper function
   pickImage() async {
@@ -249,6 +253,7 @@ class TournamentCubit extends Cubit<TournamentState> {
       );
       emit(TournamentUpcomingMatchesSuccess(response: response));
     } catch (e) {
+      print(e);
       if (e is AppException) {
         emit(TournamentUpcomingMatchesError(message: e.message));
       } else {
@@ -341,10 +346,11 @@ class TournamentCubit extends Cubit<TournamentState> {
       final response = await adminController.groupToTournament(
         tournamentId: tournament?.sId ?? '',
         groupName: groupName ?? '',
+        totalMatches: totalMatches,
+        qualifiersNumber: qualifiersNumber,
       );
       emit(TournamentGroupToTournamentSuccess(response: response));
     } catch (e) {
-      print(e);
       if (e is AppException) {
         emit(TournamentGroupToTournamentError(message: e.message));
       } else {

@@ -14,6 +14,7 @@ import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 import 'package:cricket_app/utils/network.dart';
+import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'match_states.dart';
@@ -183,6 +184,8 @@ class MatchCubit extends Cubit<MatchState> {
   addMatchDetails({
     String? tournamentId,
     String? tournamentMatchType,
+    String? groupId,
+    int? totalMatches,
   }) async {
     emit(MatchAddDetailsLoading());
     final url = (tournamentId != null && tournamentMatchType != null)
@@ -194,21 +197,42 @@ class MatchCubit extends Cubit<MatchState> {
     try {
       var body;
       if (tournamentId != null && tournamentMatchType != null) {
-        body = {
-          "admin": adminId.toString(),
-          "team1": team1?.id.toString(),
-          "team2": team2?.id.toString(),
-          "matchType": matchType.toString(),
-          "ballType": ballType.toString(),
-          "pitchType": pitchType.toString(),
-          "numberOfOvers": numberOfOvers ?? 0,
-          "oversPerBowler": oversPerBowler ?? 0,
-          "cityOrTown": cityTown.toString(),
-          "ground": ground.toString(),
-          "matchDateTime": "$matchDateTime $country",
-          "tournamentId": tournamentId,
-          "tournamentMatchType": tournamentMatchType,
-        };
+        if (groupId != null) {
+          log(totalMatches.toString());
+          body = {
+            "admin": adminId.toString(),
+            "team1": team1?.id.toString(),
+            "team2": team2?.id.toString(),
+            "matchType": matchType.toString(),
+            "ballType": ballType.toString(),
+            "pitchType": pitchType.toString(),
+            "numberOfOvers": numberOfOvers ?? 0,
+            "oversPerBowler": oversPerBowler ?? 0,
+            "cityOrTown": cityTown.toString(),
+            "ground": ground.toString(),
+            "matchDateTime": "$matchDateTime $country",
+            "tournamentId": tournamentId,
+            "tournamentMatchType": tournamentMatchType,
+            "groupId": groupId.toString(),
+            "totalMatches": totalMatches?.toInt(),
+          };
+        } else {
+          body = {
+            "admin": adminId.toString(),
+            "team1": team1?.id.toString(),
+            "team2": team2?.id.toString(),
+            "matchType": matchType.toString(),
+            "ballType": ballType.toString(),
+            "pitchType": pitchType.toString(),
+            "numberOfOvers": numberOfOvers ?? 0,
+            "oversPerBowler": oversPerBowler ?? 0,
+            "cityOrTown": cityTown.toString(),
+            "ground": ground.toString(),
+            "matchDateTime": "$matchDateTime $country",
+            "tournamentId": tournamentId,
+            "tournamentMatchType": tournamentMatchType,
+          };
+        }
       } else {
         body = {
           "admin": adminId.toString(),

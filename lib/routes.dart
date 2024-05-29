@@ -204,11 +204,18 @@ class Routes {
         );
 
       case addTournamentMatch:
-        final tournament = settings.arguments as Tournament?;
+        final args = settings.arguments as Map<String, dynamic>;
+        final tournament = args['tournament'];
+        final groupId = args['groupId'];
+        final totalMatches = args['totalMatches'];
         return MaterialPageRoute(
           builder: (context) => BlocProvider<MatchCubit>(
             create: (context) => MatchCubit(),
-            child: AddTournamentMatchScreen(tournament: tournament!),
+            child: AddTournamentMatchScreen(
+              tournament: tournament!,
+              groupId: groupId,
+              totalMatches: totalMatches,
+            ),
           ),
         );
 

@@ -729,6 +729,7 @@ class AdminController {
     final url = "${AdminUrl.tournamentUpcoming}/$tournamentId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
+    log(response.body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       List<MatchDetails> matches = [];
@@ -815,10 +816,21 @@ class AdminController {
   Future<ApiResponse> groupToTournament({
     required String groupName,
     required String tournamentId,
+    int? totalMatches,
+    int? qualifiersNumber,
   }) async {
     final url = "${AdminUrl.groupToTournament}/$tournamentId";
     final headers = {"Content-Type": "application/json"};
-    final body = {"groupName": groupName};
+
+    Map body = {};
+    if (totalMatches == null && qualifiersNumber == null) {
+      body = {"groupName": groupName};
+    }
+    body = {
+      "groupName": groupName,
+      "totalMatches": totalMatches,
+      "qualifiersNumber": qualifiersNumber,
+    };
     final response = await ApiManager.putRequest(body, url, headers: headers);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {

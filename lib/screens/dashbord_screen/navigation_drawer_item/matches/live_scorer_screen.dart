@@ -314,6 +314,7 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
             match = state.res.data;
             handleInningsCompleted();
           } else if (state is MatchLiveActionError) {
+            print(state.message);
             showSnack(context, message: state.message);
           } else if (state is MatchSetManOfTheMatchSuccess) {
             Navigator.pushNamedAndRemoveUntil(
@@ -1426,6 +1427,12 @@ class ManOfTheMatchWidget extends StatefulWidget {
 }
 
 class _ManOfTheMatchWidgetState extends State<ManOfTheMatchWidget> {
+  @override
+  void initState() {
+    MatchCubit.get(context).manOfTheMatch = null;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DropdownButton<Player>(

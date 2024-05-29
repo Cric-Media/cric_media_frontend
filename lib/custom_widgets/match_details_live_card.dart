@@ -79,7 +79,7 @@ class _MatchDetailsLiveCardState extends State<MatchDetailsLiveCard> {
                           Text(
                             match != null
                                 ? match?.tournamentInfo != null
-                                    ? "${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}"
+                                    ? "${match?.tournamentInfo?.matchType?.toUpperCase() ?? ''}-${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}"
                                     : ""
                                 : '',
                             style: GoogleFonts.inter(

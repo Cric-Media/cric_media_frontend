@@ -104,8 +104,10 @@ class TeamModel {
 class Group {
   String? name;
   List<PointsTable>? pointsTable;
-  List<String>? teams;
+  // List<Team>? teams;
+  List<TeamStatus>? teams;
   String? id;
+  int? totalMatches;
 
   Group({this.name, this.pointsTable, this.teams, this.id});
 
@@ -118,8 +120,21 @@ class Group {
         pointsTable!.add(PointsTable.fromJson(v));
       });
     }
-    teams = json['teams'] == null ? [] : json['teams'].cast<String>();
+    if (json['teams'] != null) {
+      teams = <TeamStatus>[];
+      json['teams'].forEach((v) {
+        teams!.add(TeamStatus.fromJson(v));
+      });
+    }
+    // teams = json['teams'] == null ? [] : json['teams'].cast<String>();
+    // if (json['teams'] != null) {
+    //   teams = <Team>[];
+    //   json['teams'].forEach((v) {
+    //     teams!.add(Team.fromJson(v));
+    //   });
+    // }
     id = json['_id'];
+    totalMatches = json['totalMatches'];
   }
 
   // to json
@@ -129,8 +144,39 @@ class Group {
     if (pointsTable != null) {
       data['pointsTable'] = pointsTable!.map((v) => v.toJson()).toList();
     }
-    data['teams'] = teams;
+    if (teams != null) {
+      data['teams'] = teams!.map((v) => v.toJson()).toList();
+    }
+    // data['teams'] = teams;
+    // if (teams != null) {
+    //   data['teams'] = teams!.map((v) => v.toJson()).toList();
+    // }
     data['_id'] = id;
+    data['totalMatches'] = totalMatches;
     return data;
+  }
+}
+
+class TeamStatus {
+  Team? team;
+  bool? qualified;
+  bool? eliminated;
+
+  TeamStatus({this.team, this.qualified, this.eliminated});
+
+  factory TeamStatus.fromJson(Map<String, dynamic> json) {
+    return TeamStatus(
+      team: json['team'] != null ? Team.fromJson(json['team']) : null,
+      qualified: json['qualified'],
+      eliminated: json['eliminated'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'team': team?.toJson(),
+      'qualified': qualified,
+      'eliminated': eliminated,
+    };
   }
 }

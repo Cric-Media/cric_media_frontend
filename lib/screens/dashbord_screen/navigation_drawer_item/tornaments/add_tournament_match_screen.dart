@@ -17,7 +17,14 @@ import 'package:intl/intl.dart';
 
 class AddTournamentMatchScreen extends StatefulWidget {
   final Tournament tournament;
-  const AddTournamentMatchScreen({super.key, required this.tournament});
+  final String? groupId;
+  final int? totalMatches;
+  const AddTournamentMatchScreen({
+    super.key,
+    required this.tournament,
+    this.groupId,
+    this.totalMatches,
+  });
 
   @override
   State<AddTournamentMatchScreen> createState() =>
@@ -94,7 +101,7 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
         foregroundColor: Colors.white,
         backgroundColor: AppColor.blueColor,
         title: const Text(
-          'Add Match',
+          'Add Tournament Match',
           style: TextStyle(
             fontSize: 20,
             color: Colors.white,
@@ -124,6 +131,7 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                   spaceBetween: spaceBetween,
                   teamNo: 1,
                   tournament: widget.tournament,
+                  groupId: widget.groupId,
                 ),
                 Positioned(
                   top: -15,
@@ -153,6 +161,7 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                   spaceBetween: spaceBetween,
                   teamNo: 2,
                   tournament: widget.tournament,
+                  groupId: widget.groupId,
                 ),
               ],
             ),
@@ -516,9 +525,11 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                               tournamentId: widget.tournament.sId,
                               tournamentMatchType: TournamentCubit.get(context)
                                   .selectedMatchType,
+                              groupId: widget.groupId,
+                              totalMatches: widget.totalMatches,
                             );
                           },
-                          child: const Text('Add'),
+                          child: const Text('Create new match'),
                         );
                       },
                     ),
@@ -541,11 +552,13 @@ class SelectTeamWidget extends StatefulWidget {
     required this.containerWidth,
     required this.spaceBetween,
     required this.tournament,
+    this.groupId,
   });
 
   final double startingLeftPosition, containerWidth, spaceBetween;
   final int teamNo;
   final Tournament tournament;
+  final String? groupId;
 
   @override
   State<SelectTeamWidget> createState() => _SelectTeamWidgetState();
@@ -589,25 +602,44 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
                 child: BlocConsumer<TeamCubit, TeamState>(
                   listener: (context, state) {},
                   builder: (context, state) {
-                    var teams;
                     if (state is TeamGetInitialLoading) {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
                     } else if (state is TeamGetInitial) {
+                      List<Team> teams = [];
+                      if (widget.groupId != null) {
+                        int groupIndex = -1;
+                        groupIndex = widget.tournament.groups!.indexWhere(
+                          (group) => group.id == widget.groupId,
+                        );
+
+                        if (groupIndex != -1) {
+                          teams = state.response.data;
+                          // teams = widget.tournament.groups![groupIndex].teams!;
+                          teams = widget.tournament.groups![groupIndex].teams!
+                              .map(
+                                (team) => team.team!,
+                              )
+                              .toList();
+                        } else {
+                          teams = state.response.data;
+                        }
+                      } else {
+                        teams = state.response.data;
+                      }
                       return ListView.separated(
                         separatorBuilder: (context, index) {
                           return const Divider();
                         },
                         // itemCount: state.response.data.length,
-                        itemCount: widget.tournament.teams?.length ?? 0,
+                        // itemCount: widget.tournament.teams?.length ?? 0,
+                        itemCount: teams.length,
                         itemBuilder: (context, index) {
                           // Team team = state.response.data[index];
 
                           // If match is series match then...
-                          Team team =
-                              widget.tournament.teams?[index].team ?? Team();
-                          //TODO if match not series match
+                          Team team = teams[index];
                           return ListTile(
                             leading: CircleAvatar(
                               backgroundImage: NetworkImage(team.image ?? ''),
@@ -616,23 +648,9 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
                             trailing: TextButton(
                               onPressed: () {
                                 if (widget.teamNo == 1) {
-                                  if (team.id != matchCubit.team2?.id) {
-                                    matchCubit.team1 = team;
-                                  } else {
-                                    showSnack(
-                                      context,
-                                      message: 'Team already selected',
-                                    );
-                                  }
+                                  matchCubit.team1 = team;
                                 } else {
-                                  if (team.id != matchCubit.team1?.id) {
-                                    matchCubit.team2 = team;
-                                  } else {
-                                    showSnack(
-                                      context,
-                                      message: 'Team already selected',
-                                    );
-                                  }
+                                  matchCubit.team2 = team;
                                 }
                                 setState(() {});
                                 Navigator.pop(context);
