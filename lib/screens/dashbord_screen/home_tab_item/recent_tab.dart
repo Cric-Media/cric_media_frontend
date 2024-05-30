@@ -3,6 +3,7 @@ import 'package:cricket_app/custom_widgets/custom_resent_widget.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 class RecentTab extends StatefulWidget {
   const RecentTab({super.key});
@@ -30,23 +31,31 @@ class _RecentTabState extends State<RecentTab> {
       },
       builder: (context, state) {
         if (state is MatchGetCompletedLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return ListView.builder(itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: const CustomResentWidget(),
+              ),
+            );
+          });
         } else if (state is MatchGetCompletedError) {
           return Center(child: Text(state.message));
         }
         return RefreshIndicator(
-          onRefresh:  () async{
-        MatchCubit.get(context).getCompletedMatches(user: true);
-        },
+          onRefresh: () async {
+            MatchCubit.get(context).getCompletedMatches(user: true);
+          },
           child: Column(
             children: [
               const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
-                    itemCount:
-                        MatchCubit.get(context).completedMatchDetailsList.length,
+                    itemCount: MatchCubit.get(context)
+                        .completedMatchDetailsList
+                        .length,
                     itemBuilder: (context, index) {
                       var match = MatchCubit.get(context)
                           .completedMatchDetailsList[index];

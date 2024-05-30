@@ -71,7 +71,7 @@ class _MainPageState extends State<DashBoardScreen> {
               children: [
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 10),
-                  height: size.height * 0.080,
+                  height: size.height * 0.100,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -154,43 +154,44 @@ class _MainPageState extends State<DashBoardScreen> {
                       ),
                     ),
                     GestureDetector(
-                        onTap: () {
-                          getVlaue(2);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 15),
-                          width: size.width * 0.15,
-                          height: size.height,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(
-                                height: 6,
+                      onTap: () {
+                        getVlaue(2);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 15),
+                        width: size.width * 0.15,
+                        height: size.height,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Image.asset(
+                              'assets/icons/Series.png',
+                              color: value == 2
+                                  ? AppColor.blueColor
+                                  : Colors.grey.withOpacity(0.8),
+                              width: value == 2
+                                  ? size.width * 0.058
+                                  : size.width * 0.056,
+                            ),
+                            const SizedBox(
+                              height: 2,
+                            ),
+                            Text(
+                              'Series',
+                              style: TextStyle(
+                                fontFamily: 'public',
+                                fontSize: size.width * 0.03,
+                                fontWeight: FontWeight.w500,
                               ),
-                              Image.asset(
-                                'assets/image/tornament.png',
-                                color: value == 2
-                                    ? AppColor.blueColor
-                                    : Colors.grey.withOpacity(0.8),
-                                width: value == 2
-                                    ? size.width * 0.058
-                                    : size.width * 0.056,
-                              ),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                              Text(
-                                'Series',
-                                style: TextStyle(
-                                  fontFamily: 'public',
-                                  fontSize: size.width * 0.03,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     GestureDetector(
                         onTap: () {
                           getVlaue(3);

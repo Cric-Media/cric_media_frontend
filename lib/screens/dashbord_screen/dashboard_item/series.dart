@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
-import 'package:cricket_app/custom_widgets/tournament_widget.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
-import 'package:cricket_app/screens/dashbord_screen/home_tab_item/up_coming_series_screen.dart';
+import 'package:cricket_app/screens/dashbord_screen/home_tab_item/series_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -78,7 +77,7 @@ class _SeriesState extends State<Series> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const UpCommingSeriesScreen(),
+                            builder: (context) => const SeriesDetailsScreen(),
                           ),
                         );
                       },

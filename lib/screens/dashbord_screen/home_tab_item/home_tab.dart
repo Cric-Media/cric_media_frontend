@@ -69,7 +69,7 @@ class _HomeTabState extends State<HomeTab> {
             return Column(
               children: [
                 if (liveMatches.isNotEmpty)
-                  Column(
+                   Column(
                     children: [
                       SizedBox(height: screenWidth * 0.030),
                       Padding(

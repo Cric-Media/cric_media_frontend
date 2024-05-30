@@ -3,6 +3,7 @@ import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -35,53 +36,76 @@ class _NotificationScreenState extends State<NotificationScreen> {
             onRefresh: () async {
               AdminCubit.get(context).adminInvitations();
             },
-            child: Stack(
+            child: Column(
               children: [
-                Column(
-                  children: [
-                    Expanded(
-                      child: BlocConsumer<AdminCubit, AdminState>(
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Column(
+                        children: [
+                          Expanded(
+                            child: BlocConsumer<AdminCubit, AdminState>(
+                              listener: (context, state) {
+                                if (state is AdminInvitationsSuccess) {
+                                  AdminCubit.get(context).notifiers =
+                                      state.response.data;
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is AdminInvitationsLoading) {
+                                  return ListView.builder(
+                                      itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 5.0),
+                                      child: Shimmer.fromColors(
+                                        baseColor: Colors.grey[300]!,
+                                        highlightColor: Colors.grey[100]!,
+                                        child: Container(
+                                          height: 100,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  });
+                                } else if (state is AdminInvitationsError) {
+                                  return Center(
+                                    child: Text(state.message),
+                                  );
+                                }
+                                if (AdminCubit.get(context).notifiers.isEmpty) {
+                                  return const Center(
+                                    child: Text('No Notifications'),
+                                  );
+                                }
+                                return const Notifications();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      BlocConsumer<AdminCubit, AdminState>(
                         listener: (context, state) {
-                          if (state is AdminInvitationsSuccess) {
-                            AdminCubit.get(context).notifiers =
-                                state.response.data;
+                          if (state is AdminInvitationResponseSuccess) {
+                            AdminCubit.get(context).adminInvitations();
                           }
                         },
                         builder: (context, state) {
-                          if (state is AdminInvitationsLoading) {
+                          if (state is AdminInvitationResponseLoading) {
                             return const Center(
                               child: CircularProgressIndicator(),
                             );
-                          } else if (state is AdminInvitationsError) {
-                            return Center(
-                              child: Text(state.message),
-                            );
                           }
-                          if (AdminCubit.get(context).notifiers.isEmpty) {
-                            return const Center(
-                              child: Text('No Notifications'),
-                            );
-                          }
-                          return const Notifications();
+                          return Container();
                         },
                       ),
-                    ),
-                  ],
-                ),
-                BlocConsumer<AdminCubit, AdminState>(
-                  listener: (context, state) {
-                    if (state is AdminInvitationResponseSuccess) {
-                      AdminCubit.get(context).adminInvitations();
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is AdminInvitationResponseLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return Container();
-                  },
+                    ],
+                  ),
                 ),
               ],
             ),

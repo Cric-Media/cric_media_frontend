@@ -506,6 +506,7 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                           // AppDialogs.closeDialog(context);
                           // Navigator.pop(context);
                           showSnack(context, message: state.res.message);
+                          TournamentCubit.get(context).upComingMatches();
                           Navigator.pop(context);
                         }
                         if (state is MatchAddDetailsError) {
@@ -623,10 +624,16 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
                               )
                               .toList();
                         } else {
+                          // teams = widget.tournament.teams!
+                          //     .map((t) => t.team!)
+                          //     .toList();
                           teams = state.response.data;
                         }
                       } else {
-                        teams = state.response.data;
+                        teams = widget.tournament.teams!
+                            .map((t) => t.team!)
+                            .toList();
+                        // teams = state.response.data;
                       }
                       return ListView.separated(
                         separatorBuilder: (context, index) {

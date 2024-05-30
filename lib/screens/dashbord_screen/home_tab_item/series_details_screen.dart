@@ -1,30 +1,28 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class UpCommingSeriesScreen extends StatefulWidget {
-  const UpCommingSeriesScreen({super.key});
+class SeriesDetailsScreen extends StatefulWidget {
+  const SeriesDetailsScreen({super.key});
 
   @override
-  State<UpCommingSeriesScreen> createState() => _UpCommingSeriesScreen();
+  State<SeriesDetailsScreen> createState() => _UpCommingSeriesScreen();
 }
 
-class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
+class _UpCommingSeriesScreen extends State<SeriesDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: Color(0XFFFBFBFB),
+      backgroundColor: const Color(0XFFFBFBFB),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'Onging Series'.toUpperCase(),
           style: GoogleFonts.inter(
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
             fontSize: 17,
             color: Colors.black,
             fontWeight: FontWeight.w600,
@@ -64,13 +62,13 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                       Text(
                         'Afghanistan tour of pakistan',
                         style: GoogleFonts.inter(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                           fontSize: 16,
                           color: Colors.black,
                           fontWeight: FontWeight.w700,
                         )),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
@@ -78,25 +76,25 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                           Text(
                             'Start Date:',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
                             '14/12/2020',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: AppColor.hintColor,
                                     fontWeight: FontWeight.w500)),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
@@ -104,25 +102,25 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                           Text(
                             'End Date:',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
                             '  12/11/2020',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: AppColor.hintColor,
                                     fontWeight: FontWeight.w500)),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
@@ -130,25 +128,25 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                           Text(
                             'Stadium:',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
                             '   Peshawar',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: AppColor.hintColor,
                                     fontWeight: FontWeight.w500)),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
@@ -156,25 +154,25 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                           Text(
                             'Province:',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
                             '  sand',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: AppColor.hintColor,
                                     fontWeight: FontWeight.w500)),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
@@ -182,25 +180,25 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                           Text(
                             'Boll:',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 15,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
                             '           tens',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: AppColor.hintColor,
                                     fontWeight: FontWeight.w500)),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Row(
@@ -208,18 +206,18 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                           Text(
                             'Teams:',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
                             '      20',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: AppColor.hintColor,
                                     fontWeight: FontWeight.w500)),
@@ -231,18 +229,18 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                           Text(
                             'over:',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500)),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           Text(
                             '          28',
                             style: GoogleFonts.inter(
-                                textStyle: TextStyle(
+                                textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: AppColor.hintColor,
                                     fontWeight: FontWeight.w500)),
@@ -254,7 +252,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                         child: Text(
                           'Spansard by: luqman ali',
                           style: GoogleFonts.inter(
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                             fontSize: 8,
                             color: Colors.black,
                             fontWeight: FontWeight.w600,
@@ -266,7 +264,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Card(
@@ -279,7 +277,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 10.0,
                   ),
                   child: Column(
@@ -290,8 +288,8 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15.0),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 15.0),
                             child: Text(
                               'A',
                               style: TextStyle(
@@ -308,7 +306,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                 title: Text(
                                   'Group',
                                   style: GoogleFonts.inter(
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                           fontSize: 18,
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700)),
@@ -321,7 +319,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -329,14 +327,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -346,7 +344,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -354,14 +352,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -371,7 +369,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -379,14 +377,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -396,7 +394,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -404,14 +402,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -421,7 +419,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -429,14 +427,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                 ],
@@ -449,8 +447,8 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15.0),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 15.0),
                             child: Text(
                               'B',
                               style: TextStyle(
@@ -467,7 +465,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                 title: Text(
                                   'Group',
                                   style: GoogleFonts.inter(
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                           fontSize: 18,
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700)),
@@ -480,7 +478,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -488,14 +486,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -505,7 +503,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -513,14 +511,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -530,7 +528,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -538,14 +536,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -555,7 +553,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -563,14 +561,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -580,7 +578,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -588,14 +586,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                 ],
@@ -606,7 +604,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                       ),
                       Row(
                         children: [
-                          Text(
+                          const Text(
                             'C',
                             style: TextStyle(
                                 fontSize: 20,
@@ -621,7 +619,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                   title: Text(
                                 'Group',
                                 style: GoogleFonts.inter(
-                                    textStyle: TextStyle(
+                                    textStyle: const TextStyle(
                                         fontSize: 18,
                                         color: Colors.black,
                                         fontWeight: FontWeight.w700)),
@@ -634,8 +632,8 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 15.0),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 15.0),
                             child: Text(
                               'D',
                               style: TextStyle(
@@ -652,7 +650,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                 title: Text(
                                   'Group',
                                   style: GoogleFonts.inter(
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                           fontSize: 18,
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700)),
@@ -665,7 +663,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -673,14 +671,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -690,7 +688,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -698,14 +696,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -715,7 +713,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -723,14 +721,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -740,7 +738,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -748,14 +746,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -765,7 +763,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
@@ -773,14 +771,14 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                                       Text(
                                         'Pakistan',
                                         style: GoogleFonts.inter(
-                                            textStyle: TextStyle(
+                                            textStyle: const TextStyle(
                                                 fontSize: 17,
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w600)),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                 ],
@@ -794,7 +792,7 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Card(
@@ -806,9 +804,8 @@ class _UpCommingSeriesScreen extends State<UpCommingSeriesScreen> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5)),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5.0),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.0),
                   child: Column(
                     children: [
                       Row(

@@ -13,6 +13,7 @@ import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TournamentDetailsScreen extends StatefulWidget {
   final Tournament tournament;
@@ -990,21 +991,15 @@ class _ScheduleMatchWidgetState extends State<ScheduleMatchWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Group Match?",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  textBaseline: TextBaseline.alphabetic,
-                  decoration: TextDecoration.underline),
-            ),
-            // ...TournamentCubit.get(context)!
-            //     .tournament!
-            //     .groups!
-            //     .map((group) {
-            //       return Text(group?.name ?? '');
-            // })
-            //     .toList(),
+            if (TournamentCubit.get(context).tournament!.groups!.isNotEmpty)
+              const Text(
+                "Group Match?",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    textBaseline: TextBaseline.alphabetic,
+                    decoration: TextDecoration.underline),
+              ),
             const SizedBox(height: 8),
             GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -1066,7 +1061,6 @@ class _ScheduleMatchWidgetState extends State<ScheduleMatchWidget> {
                   TournamentCubit.get(context).tournament?.groups?.length,
               shrinkWrap: true,
             ),
-            // const Divider(),
             const Text(
               "Select Match Type",
               style: TextStyle(
@@ -1183,9 +1177,16 @@ class _UpcomingState extends State<Upcoming> {
       },
       builder: (context, state) {
         if (state is TournamentUpcomingMatchesLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return ListView.builder(itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              child: Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: const UpCommingMachesCard(),
+              ),
+            );
+          });
         } else if (state is TournamentUpcomingMatchesError) {
           return Center(
             child: Text(state.message),

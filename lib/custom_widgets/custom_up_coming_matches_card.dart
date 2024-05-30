@@ -40,7 +40,9 @@ class UpCommingMachesCard extends StatelessWidget {
                       children: [
                         Text(
                           match != null
-                              ? match?.tournamentInfo != null ? "${match?.tournamentInfo?.matchType?.toUpperCase() ?? ''}-${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}" : ""
+                              ? match?.tournamentInfo != null
+                                  ? "${match?.tournamentInfo?.matchType?.toUpperCase() ?? ''}-${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}"
+                                  : ""
                               : '',
                           style: GoogleFonts.inter(
                             textStyle: const TextStyle(
@@ -86,9 +88,7 @@ class UpCommingMachesCard extends StatelessWidget {
                             const SizedBox(width: 15),
                             Expanded(
                               child: Text(
-                                match != null
-                                    ? match?.team1?.name ?? ''
-                                    : 'PAK',
+                                match != null ? match?.team1?.name ?? '' : '',
                                 style: GoogleFonts.inter(
                                     textStyle: const TextStyle(
                                   fontSize: 13,
@@ -119,9 +119,7 @@ class UpCommingMachesCard extends StatelessWidget {
                             const SizedBox(width: 15),
                             Expanded(
                               child: Text(
-                                match != null
-                                    ? match?.team2?.name ?? ''
-                                    : 'AFG',
+                                match != null ? match?.team2?.name ?? '' : '',
                                 style: GoogleFonts.inter(
                                   textStyle: const TextStyle(
                                     fontSize: 13,
@@ -164,61 +162,65 @@ class UpCommingMachesCard extends StatelessWidget {
                     ),
                   )),
               Expanded(
-                  flex: 3,
-                  child: Container(
-                    color: const Color(0xffECECEC),
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.center,
-                          width: 80,
-                          height: 30,
-                          decoration: BoxDecoration(
-                              color: AppColor.blueColor,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Text(
-                            'Upcoming',
-                            style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
+                flex: 3,
+                child: Container(
+                  color: const Color(0xffECECEC),
+                  height: 200,
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 80,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            color: AppColor.blueColor,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Text(
+                          'Upcoming',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.white,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 15),
-                        const Text(
-                          'Watch Live At',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: AppColor.hintColor,
-                              fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 15),
+                      const Text(
+                        'Watch Live At',
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: AppColor.hintColor,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        match != null
+                            ? match!.matchDateTime!.split("-").first
+                            : '6:00 pm',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColor.blackColor,
+                          fontWeight: FontWeight.w700,
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          match != null
-                              ? match!.matchDateTime!.split("-").first
-                              : '6:00 pm',
-                          style: const TextStyle(
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        match != null
+                            ? match!.matchDateTime!.split("-").last
+                            : '09-04-2023',
+                        style: const TextStyle(
                             fontSize: 12,
                             color: AppColor.blackColor,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 7),
-                        Text(
-                          match != null
-                              ? match!.matchDateTime!.split("-").last
-                              : '09-04-2023',
-                          style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColor.blackColor,
-                              fontWeight: FontWeight.w700),
-                        )
-                      ],
-                    ),
-                  ))
+                            fontWeight: FontWeight.w700),
+                        textAlign: TextAlign.center,
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
