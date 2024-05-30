@@ -409,7 +409,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                 );
                           Global().removeUserId();
                           Global().deleteIds();
-                          Global().logoutUser();
+                          Global().logoutUser(context);
                         },
                         child: Container(
                           height: 50,

@@ -16,22 +16,25 @@ class Tournament {
   List<Group>? groups;
   String? sId;
   int? iV;
+  Team? winner;
 
-  Tournament(
-      {this.admins,
-      this.image,
-      this.seriesName,
-      this.seriesLocation,
-      this.tournamentType,
-      this.numberOfOvers,
-      this.numberOfTeams,
-      this.startDate,
-      this.endDate,
-      this.teams,
-      this.semiFinalTeams,
-      this.groups,
-      this.sId,
-      this.iV});
+  Tournament({
+    this.admins,
+    this.image,
+    this.seriesName,
+    this.seriesLocation,
+    this.tournamentType,
+    this.numberOfOvers,
+    this.numberOfTeams,
+    this.startDate,
+    this.endDate,
+    this.teams,
+    this.semiFinalTeams,
+    this.groups,
+    this.sId,
+    this.iV,
+    this.winner,
+  });
 
   Tournament.fromJson(Map<String, dynamic> json) {
     admins = json['admins'] == null ? [] : json['admins'].cast<String>();
@@ -59,6 +62,8 @@ class Tournament {
       });
     }
     sId = json['_id'];
+    iV = json['__v'];
+    winner = json['winner'] != null ? Team.fromJson(json['winner']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -81,6 +86,7 @@ class Tournament {
     }
     data['_id'] = sId;
     data['__v'] = iV;
+    data['winner'] = winner?.toJson();
     return data;
   }
 }

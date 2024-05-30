@@ -25,26 +25,27 @@ class TournamentWidget extends StatelessWidget {
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            addTournament,
-                            arguments: tournament,
-                          );
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.only(right: 8, top: 8),
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 20,
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.black,
+                      if (tournament.winner == null)
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              addTournament,
+                              arguments: tournament,
+                            );
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.only(right: 8, top: 8),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 20,
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     ],
                   ),
             footer: AspectRatio(
@@ -116,31 +117,43 @@ class TournamentWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "from ${DateFormat.MMMMEEEEd().format(DateTime.parse(tournament.startDate!))}",
-                        style: GoogleFonts.inter(
-                          textStyle: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
+                  if (tournament.winner != null)
+                    Text(
+                      "Tournament Over.",
+                      style: GoogleFonts.inter(
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Text(
-                        "to ${DateFormat.MMMMEEEEd().format(DateTime.parse(tournament.endDate!))}",
-                        style: GoogleFonts.inter(
-                          textStyle: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
+                    )
+                  else
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "from ${DateFormat.MMMMEEEEd().format(DateTime.parse(tournament.startDate!))}",
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
+                        Text(
+                          "to ${DateFormat.MMMMEEEEd().format(DateTime.parse(tournament.endDate!))}",
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),

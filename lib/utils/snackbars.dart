@@ -14,6 +14,8 @@ void showSnack(
   String actionLabel = 'Action',
   VoidCallback? action,
 }) {
+  // hide previous snackbar
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   // Create the Snackbar
   final snackBar = SnackBar(
     // Remove "Exception:" from the message and display it

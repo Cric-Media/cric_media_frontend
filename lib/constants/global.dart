@@ -1,3 +1,4 @@
+import 'package:cricket_app/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Global {
@@ -35,14 +36,15 @@ class Global {
   String playerCacheKey = 'playersCache';
   String playerCacheTimeKey = 'playersCacheTime';
 
-  Future<void> logoutUser() async {
+  Future<void> logoutUser(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await prefs.remove(playerCacheKey);
     await prefs.remove(playerCacheTimeKey);
-
-    print("User logged out and local storage cleared.");
     await prefs.clear();
+
+    // remove all the routes
+    Routes.removeAllRoutes(context);
   }
 
   // Set all user info

@@ -2,6 +2,7 @@ import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/tournament_widget.dart';
+import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -81,11 +82,17 @@ class _TornamentItemState extends State<TornamentItem> {
                       var tournament =
                           TournamentCubit.get(context).tournaments[index];
                       return GestureDetector(
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          tournamentDetails,
-                          arguments: tournament,
-                        ),
+                        onTap: () {
+                          if (tournament.winner != null) {
+                            showSnack(context, message: "Tournament is over.");
+                          } else {
+                            Navigator.pushNamed(
+                              context,
+                              tournamentDetails,
+                              arguments: tournament,
+                            );
+                          }
+                        },
                         child: Hero(
                           tag: tournament.sId.toString(),
                           child: TournamentWidget(tournament: tournament),
