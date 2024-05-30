@@ -171,6 +171,8 @@ class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
                                                     ?.tournament
                                                     ?.sId ??
                                                 '',
+                                            tournament: widget.match!
+                                                .tournamentInfo!.tournament!,
                                           )
                                         else
                                           const Center(

@@ -1,11 +1,14 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
+import 'package:cricket_app/models/tournament.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PointsTableWidget extends StatefulWidget {
   final String tournamentId;
-  const PointsTableWidget({Key? key, required this.tournamentId})
+  final Tournament tournament;
+  const PointsTableWidget(
+      {Key? key, required this.tournamentId, required this.tournament})
       : super(key: key);
 
   @override
@@ -27,7 +30,7 @@ class _PointsTableWidgetState extends State<PointsTableWidget> {
         children: [
           Table(
             columnWidths: const {
-              0: FlexColumnWidth(2),
+              0: FlexColumnWidth(1),
               1: FlexColumnWidth(2),
               2: FlexColumnWidth(1),
               3: FlexColumnWidth(1),
@@ -40,7 +43,7 @@ class _PointsTableWidgetState extends State<PointsTableWidget> {
                 decoration: BoxDecoration(color: AppColor.blueColor),
                 children: [
                   Text(
-                    "Position",
+                    "Pos",
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.white),
                   ),
@@ -83,6 +86,8 @@ class _PointsTableWidgetState extends State<PointsTableWidget> {
               } else if (state is TournamentPointsError) {
                 return Center(child: Text(state.message));
               }
+              var semiFinalTeams = widget.tournament.semiFinalTeams;
+
               return SingleChildScrollView(
                 child: Table(
                   border: TableBorder.all(color: Colors.grey),
@@ -90,7 +95,7 @@ class _PointsTableWidgetState extends State<PointsTableWidget> {
                   defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                   textBaseline: TextBaseline.alphabetic,
                   columnWidths: const {
-                    0: FlexColumnWidth(2),
+                    0: FlexColumnWidth(1),
                     1: FlexColumnWidth(2),
                     2: FlexColumnWidth(1),
                     3: FlexColumnWidth(1),
@@ -100,43 +105,27 @@ class _PointsTableWidgetState extends State<PointsTableWidget> {
                   },
                   children: List.generate(
                     TournamentCubit.get(context).pointsTable.length,
-                    (index) => TableRow(
-                      children: [
-                        Text((index + 1).toString()),
-                        Text(
-                          TournamentCubit.get(context)
-                              .pointsTable[index]
-                              .team
-                              !.name
-                              .toString()
-                              .substring(0, 3),
-                        ),
-                        Text(TournamentCubit.get(context)
-                            .pointsTable[index]
-                            .matchesPlayed
-                            .toString()),
-                        Text(TournamentCubit.get(context)
-                            .pointsTable[index]
-                            .wins
-                            .toString()),
-                        Text(TournamentCubit.get(context)
-                            .pointsTable[index]
-                            .losses
-                            .toString()),
-                        Text(TournamentCubit.get(context)
-                            .pointsTable[index]
-                            .draws
-                            .toString()),
-                        Text(TournamentCubit.get(context)
-                            .pointsTable[index]
-                            .netRunRate
-                            .toString()),
-                        Text(TournamentCubit.get(context)
-                            .pointsTable[index]
-                            .points
-                            .toString()),
-                      ],
-                    ),
+                    (index) {
+                      var pt = TournamentCubit.get(context).pointsTable[index];
+                      bool? isQualified;
+                      if (pt.finalQualifier != null) {}
+                      return TableRow(
+                        children: [
+                          Text((index + 1).toString()),
+                          // if (semiFinalTeams!.isNotEmpty)
+                          // Text(
+                          //     "${pt.semiQualifier == true ? 'Q' : 'E'} ${pt.team!.name.toString().substring(0, 3)}"),
+                          // else
+                          Text(pt.team!.name.toString().substring(0, 3)),
+                          Text(pt.matchesPlayed.toString()),
+                          Text(pt.wins.toString()),
+                          Text(pt.losses.toString()),
+                          Text(pt.draws.toString()),
+                          Text(pt.netRunRate.toString()),
+                          Text(pt.points.toString()),
+                        ],
+                      );
+                    },
                   ),
                 ),
               );

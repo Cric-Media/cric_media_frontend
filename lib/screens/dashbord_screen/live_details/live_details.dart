@@ -215,6 +215,8 @@ class _LiveDetails extends State<LiveDetails> {
                                                       ?.tournament
                                                       ?.sId ??
                                                   '',
+                                              tournament: match!
+                                                  .tournamentInfo!.tournament!,
                                             ),
                                         ],
                                       )

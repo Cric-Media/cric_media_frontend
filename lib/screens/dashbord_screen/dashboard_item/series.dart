@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
-import 'package:cricket_app/screens/dashbord_screen/home_tab_item/series_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -74,11 +74,10 @@ class _SeriesState extends State<Series> {
                         TournamentCubit.get(context).tournaments[index];
                     return GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushNamed(
                           context,
-                          MaterialPageRoute(
-                            builder: (context) => const SeriesDetailsScreen(),
-                          ),
+                          seriesDetails,
+                          arguments: tournament.sId,
                         );
                       },
                       // child: TournamentWidget(

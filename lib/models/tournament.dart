@@ -12,6 +12,7 @@ class Tournament {
   String? startDate;
   String? endDate;
   List<TeamModel>? teams;
+  List<String>? semiFinalTeams;
   List<Group>? groups;
   String? sId;
   int? iV;
@@ -27,6 +28,7 @@ class Tournament {
       this.startDate,
       this.endDate,
       this.teams,
+      this.semiFinalTeams,
       this.groups,
       this.sId,
       this.iV});
@@ -47,6 +49,9 @@ class Tournament {
         teams!.add(TeamModel.fromJson(v));
       });
     }
+    semiFinalTeams = json['semiFinalTeams'] == null
+        ? []
+        : json['semiFinalTeams'].cast<String>();
     if (json['groups'] != null) {
       groups = <Group>[];
       json['groups'].forEach((v) {
@@ -70,6 +75,7 @@ class Tournament {
     if (teams != null) {
       data['teams'] = teams!.map((v) => v.toJson()).toList();
     }
+    data['semiFinalTeams'] = semiFinalTeams;
     if (groups != null) {
       data['groups'] = groups!.map((v) => v.toJson()).toList();
     }

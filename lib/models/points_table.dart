@@ -3,6 +3,8 @@ import 'package:cricket_app/models/team.dart';
 class PointsTable {
   String? tournament;
   Team? team;
+  bool? semiQualifier;
+  bool? finalQualifier;
   int? matchesPlayed;
   int? wins;
   int? losses;
@@ -16,6 +18,8 @@ class PointsTable {
   PointsTable({
     this.tournament,
     this.team,
+    this.semiQualifier,
+    this.finalQualifier,
     this.matchesPlayed = 0,
     this.wins = 0,
     this.losses = 0,
@@ -31,6 +35,8 @@ class PointsTable {
     return PointsTable(
       tournament: json['tournament'],
       team: json['team'] != null ? Team.fromJson(json['team']) : null,
+      semiQualifier: json['semiQualifier'],
+      finalQualifier: json['finalQualifier'],
       matchesPlayed: json['matchesPlayed'],
       wins: json['wins'],
       losses: json['losses'],
@@ -47,6 +53,8 @@ class PointsTable {
     return {
       'tournament': tournament,
       'team': team?.toJson(),
+      'semiQualifier': semiQualifier,
+      'finalQualifier': finalQualifier,
       'matchesPlayed': matchesPlayed,
       'wins': wins,
       'losses': losses,
