@@ -1,9 +1,9 @@
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
+import 'package:cricket_app/custom_widgets/shimmers/live_match_shimmer.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shimmer/shimmer.dart';
 
 class LiveTab extends StatefulWidget {
   const LiveTab({super.key});
@@ -35,16 +35,12 @@ class _LiveTabState extends State<LiveTab> {
             },
             builder: (context, state) {
               if (state is MatchLiveLoading) {
-                return  ListView.builder(
+                return ListView.builder(
                     itemCount: 5,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: const MatchDetailsLiveCard(),
-                        ),
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5.0),
+                        child: LiveMatchPlaceholder(),
                       );
                     });
               } else if (state is MatchGetLiveError) {

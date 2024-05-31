@@ -1,6 +1,7 @@
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
+import 'package:cricket_app/custom_widgets/shimmers/live_match_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -35,8 +36,11 @@ class _LiveItem extends State<LiveItem> {
               },
               builder: (context, state) {
                 if (state is MatchLiveLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                  return ListView.builder(
+                    itemBuilder: (context, index) {
+                      return const LiveMatchPlaceholder();
+                    },
+                    itemCount: 6,
                   );
                 } else if (state is MatchGetLiveError) {
                   return Center(child: Text(state.message));

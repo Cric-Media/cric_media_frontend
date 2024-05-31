@@ -280,464 +280,314 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
               child: const Text("Match")),
         ],
       ),
-      body: BlocConsumer<MatchCubit, MatchState>(
-        listener: (context, state) {
-          if (state is MatchGetSuccess) {
-            match = state.res.data;
-            MatchCubit.get(context).resetBools();
-            if (match!.playerStats != null) {
-              striker = match?.playerStats?.firstWhere(
-                (p) => p.player?.id == match!.striker?.id,
-                orElse: () => PlayerStats(
-                  player: match?.nonStriker,
-                  runs: 0,
-                  ballsFaced: 0,
-                  fours: 0,
-                  sixes: 0,
-                  strikeRate: 0,
-                ),
-              );
+      body: RefreshIndicator(
+        onRefresh: () async {
+          MatchCubit.get(context).getMatch(widget.matchId);
+        },
+        child: BlocConsumer<MatchCubit, MatchState>(
+          listener: (context, state) {
+            if (state is MatchGetSuccess) {
+              match = state.res.data;
+              MatchCubit.get(context).resetBools();
+              if (match!.playerStats != null) {
+                striker = match?.playerStats?.firstWhere(
+                  (p) => p.player?.id == match!.striker?.id,
+                  orElse: () => PlayerStats(
+                    player: match?.nonStriker,
+                    runs: 0,
+                    ballsFaced: 0,
+                    fours: 0,
+                    sixes: 0,
+                    strikeRate: 0,
+                  ),
+                );
 
-              nonStriker = match?.playerStats?.firstWhere(
-                (p) => p.player?.id == match!.nonStriker?.id,
-                orElse: () => PlayerStats(
-                  player: match?.nonStriker,
-                  runs: 0,
-                  ballsFaced: 0,
-                  fours: 0,
-                  sixes: 0,
-                  strikeRate: 0,
+                nonStriker = match?.playerStats?.firstWhere(
+                  (p) => p.player?.id == match!.nonStriker?.id,
+                  orElse: () => PlayerStats(
+                    player: match?.nonStriker,
+                    runs: 0,
+                    ballsFaced: 0,
+                    fours: 0,
+                    sixes: 0,
+                    strikeRate: 0,
+                  ),
+                );
+              }
+            } else if (state is MatchGetForInningSuccess) {
+              match = state.res.data;
+              handleInningsCompleted();
+            } else if (state is MatchLiveActionError) {
+              print(state.message);
+              showSnack(context, message: state.message);
+            } else if (state is MatchSetManOfTheMatchSuccess) {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, dashboard, (route) => false);
+            } else if (state is MatchStartStopSuccess) {
+              match = state.res.data;
+            }
+          },
+          builder: (context, state) {
+            int? bowlerStatsIndex = match?.bowlerStats?.indexWhere(
+                (element) => element.player?.id == match?.openingBowler?.id);
+
+            if (match != null && match!.matchStatus! > 1) {
+              var team = match?.winningTeam == match?.team1?.id
+                  ? match?.squad1
+                  : match?.squad2;
+
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    if (match!.matchStatus! > 1)
+                      Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              "Match has been completed",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+
+                            // choose man of the match
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                const Text("Man of the match ?"),
+                                ManOfTheMatchWidget(team: team),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            OutlinedButton(
+                              onPressed: () {
+                                MatchCubit.get(context).setManOfTheMatch(
+                                  matchId: widget.matchId,
+                                  playerId: MatchCubit.get(context)
+                                      .manOfTheMatch
+                                      ?.id
+                                      .toString(),
+                                );
+                              },
+                              child: const Text("Continue"),
+                            ),
+                          ],
+                        ),
+                      ),
+                    // if (match?.currentInning?.number == 2 &&
+                    //     match?.currentInning?.started == false)
+                    //   Center(
+                    //     child: Column(
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       children: [
+                    //         const SizedBox(height: 20),
+                    //         ElevatedButton(
+                    //           onPressed: () {
+                    //             handleInningsCompleted();
+                    //           },
+                    //           child: const Text("Change Innings"),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                  ],
                 ),
               );
             }
-          } else if (state is MatchGetForInningSuccess) {
-            match = state.res.data;
-            handleInningsCompleted();
-          } else if (state is MatchLiveActionError) {
-            print(state.message);
-            showSnack(context, message: state.message);
-          } else if (state is MatchSetManOfTheMatchSuccess) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, dashboard, (route) => false);
-          } else if (state is MatchStartStopSuccess) {
-            match = state.res.data;
-          }
-        },
-        builder: (context, state) {
-          int? bowlerStatsIndex = match?.bowlerStats?.indexWhere(
-              (element) => element.player?.id == match?.openingBowler?.id);
 
-          if (match != null && match!.matchStatus! > 1) {
-            var team = match?.winningTeam == match?.team1?.id
-                ? match?.squad1
-                : match?.squad2;
-
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  if (match!.matchStatus! > 1)
-                    Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            "Match has been completed",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-
-                          // choose man of the match
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const Text("Man of the match ?"),
-                              ManOfTheMatchWidget(team: team),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          OutlinedButton(
-                            onPressed: () {
-                              MatchCubit.get(context).setManOfTheMatch(
-                                matchId: widget.matchId,
-                                playerId: MatchCubit.get(context)
-                                    .manOfTheMatch
-                                    ?.id
-                                    .toString(),
-                              );
-                            },
-                            child: const Text("Continue"),
-                          ),
-                        ],
-                      ),
-                    ),
-                  // if (match?.currentInning?.number == 2 &&
-                  //     match?.currentInning?.started == false)
-                  //   Center(
-                  //     child: Column(
-                  //       crossAxisAlignment: CrossAxisAlignment.center,
-                  //       children: [
-                  //         const SizedBox(height: 20),
-                  //         ElevatedButton(
-                  //           onPressed: () {
-                  //             handleInningsCompleted();
-                  //           },
-                  //           child: const Text("Change Innings"),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                ],
-              ),
-            );
-          }
-
-          return Stack(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      //* Innings section
-                      Card(
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              // Inning section
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    match?.currentInning?.number == 1
-                                        ? "1st Inning"
-                                        : "2nd Inning",
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge,
-                                  ),
-                                  if (match != null) const Text("CRR"),
-                                ],
-                              ),
-                              // score section
-                              const SizedBox(height: 20),
-                              if (match != null)
+            return Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        //* Innings section
+                        Card(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                // Inning section
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    if (match?.team1Batting == true)
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "${match?.team1Score} - ${match?.team1Outs}",
-                                            style: const TextStyle(
-                                              fontSize: 23,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            "${match?.team2Overs}.${match?.team2Balls}",
-                                            style:
-                                                const TextStyle(fontSize: 18),
-                                          ),
-                                          // if (match?.team2Batting == true)
-                                          //   Text(
-                                          //     "${match?.team2Score} - ${match?.team2Outs} (${match?.team1Overs}.${match?.team1Balls})",
-                                          //   ),
-                                        ],
-                                      ),
-                                    if (match?.team2Batting == true)
-                                      Row(
-                                        children: [
-                                          Text(
-                                            "${match?.team2Score} - ${match?.team2Outs}",
-                                            style: const TextStyle(
-                                              fontSize: 23,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            "${match?.team1Overs}.${match?.team1Balls}",
-                                            style:
-                                                const TextStyle(fontSize: 18),
-                                          ),
-                                        ],
-                                      ),
-                                    // Row(
-                                    //   children: [
-                                    //     if (match?.team1Batting == true)
-                                    //       Text(
-                                    //         "${match?.team1Score} - ${match?.team1Outs} (${match?.team2Overs}.${match?.team2Balls})",
-                                    //       ),
-                                    //     if (match?.team2Batting == true)
-                                    //       Text(
-                                    //         "${match?.team2Score} - ${match?.team2Outs} (${match?.team1Overs}.${match?.team1Balls})",
-                                    //       ),
-                                    //   ],
-                                    // ),
-                                    if (match?.team1Batting == true)
-                                      Text(
-                                        "${match?.team1CurrentRunRate ?? 0}",
-                                        style: const TextStyle(fontSize: 18),
-                                      ),
-                                    if (match?.team2Batting == true)
-                                      Text(
-                                        "${match?.team2CurrentRunRate ?? 0}",
-                                        style: const TextStyle(fontSize: 18),
-                                      ),
+                                    Text(
+                                      match?.currentInning?.number == 1
+                                          ? "1st Inning"
+                                          : "2nd Inning",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge,
+                                    ),
+                                    if (match != null) const Text("CRR"),
                                   ],
                                 ),
-                            ],
+                                // score section
+                                const SizedBox(height: 20),
+                                if (match != null)
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      if (match?.team1Batting == true)
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "${match?.team1Score} - ${match?.team1Outs}",
+                                              style: const TextStyle(
+                                                fontSize: 23,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              "${match?.team2Overs}.${match?.team2Balls}",
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                            ),
+                                            // if (match?.team2Batting == true)
+                                            //   Text(
+                                            //     "${match?.team2Score} - ${match?.team2Outs} (${match?.team1Overs}.${match?.team1Balls})",
+                                            //   ),
+                                          ],
+                                        ),
+                                      if (match?.team2Batting == true)
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "${match?.team2Score} - ${match?.team2Outs}",
+                                              style: const TextStyle(
+                                                fontSize: 23,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 8),
+                                            Text(
+                                              "${match?.team1Overs}.${match?.team1Balls}",
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                            ),
+                                          ],
+                                        ),
+                                      // Row(
+                                      //   children: [
+                                      //     if (match?.team1Batting == true)
+                                      //       Text(
+                                      //         "${match?.team1Score} - ${match?.team1Outs} (${match?.team2Overs}.${match?.team2Balls})",
+                                      //       ),
+                                      //     if (match?.team2Batting == true)
+                                      //       Text(
+                                      //         "${match?.team2Score} - ${match?.team2Outs} (${match?.team1Overs}.${match?.team1Balls})",
+                                      //       ),
+                                      //   ],
+                                      // ),
+                                      if (match?.team1Batting == true)
+                                        Text(
+                                          "${match?.team1CurrentRunRate ?? 0}",
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                      if (match?.team2Batting == true)
+                                        Text(
+                                          "${match?.team2CurrentRunRate ?? 0}",
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                    ],
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 5),
-                      //* Batsmen and bowler section
-                      Card(
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              // Batsmen section
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      'Batsmen',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
+                        const SizedBox(height: 5),
+                        //* Batsmen and bowler section
+                        Card(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                // Batsmen section
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        'Batsmen',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: const Text("R"),
+                                    Expanded(
+                                      flex: 3,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: const Text("R"),
+                                            ),
                                           ),
-                                        ),
-                                        // SizedBox(width: 20),
-                                        Expanded(
-                                          child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: const Text("B"),
+                                          // SizedBox(width: 20),
+                                          Expanded(
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: const Text("B"),
+                                            ),
                                           ),
-                                        ),
-                                        // SizedBox(width: 20),
-                                        Expanded(
-                                          child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: const Text("4"),
+                                          // SizedBox(width: 20),
+                                          Expanded(
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: const Text("4"),
+                                            ),
                                           ),
-                                        ),
-                                        // SizedBox(width: 20),
-                                        Expanded(
-                                          child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: const Text("6"),
+                                          // SizedBox(width: 20),
+                                          Expanded(
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: const Text("6"),
+                                            ),
                                           ),
-                                        ),
-                                        // SizedBox(width: 20),
-                                        Expanded(
-                                          child: Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: const Text("S"),
+                                          // SizedBox(width: 20),
+                                          Expanded(
+                                            child: Container(
+                                              alignment: Alignment.centerLeft,
+                                              child: const Text("S"),
+                                            ),
                                           ),
-                                        ),
-                                        // SizedBox(width: 20),
-                                      ],
+                                          // SizedBox(width: 20),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const Divider(),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        '${match?.striker?.name ?? "Striker"} *',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
                                     ),
-                                  )
-                                ],
-                              ),
-                              const Divider(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      '${match?.striker?.name ?? "Striker"} *',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            "${striker?.runs ?? 0}",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "${striker?.ballsFaced ?? 0}",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "${striker?.fours ?? 0}",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "${striker?.sixes ?? 0}",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "${striker?.strikeRate?.toStringAsFixed(0) ?? 0}",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      match?.nonStriker?.name ?? 'Non Striker',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            "${nonStriker?.runs ?? 0}",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "${nonStriker?.ballsFaced ?? 0}",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "${nonStriker?.fours ?? 0}",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "${nonStriker?.sixes ?? 0}",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "${nonStriker?.strikeRate?.toStringAsFixed(0) ?? 0}",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(height: 16),
-                              // Bowler section
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      'Bowler',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                  ),
-                                  const Expanded(
-                                    flex: 3,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            "O",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "R",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Text(
-                                            "W",
-                                            textAlign: TextAlign.left,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const Divider(),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      match?.openingBowler?.name ?? 'Bowler',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
-                                    ),
-                                  ),
-                                  if (bowlerStatsIndex != null &&
-                                      bowlerStatsIndex != -1)
                                     Expanded(
                                       flex: 3,
                                       child: Row(
@@ -746,459 +596,624 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              "${match?.bowlerStats?[bowlerStatsIndex].overs}",
+                                              "${striker?.runs ?? 0}",
                                               textAlign: TextAlign.left,
                                             ),
                                           ),
                                           Expanded(
                                             child: Text(
-                                              "${match?.bowlerStats?[bowlerStatsIndex].runsGiven}",
+                                              "${striker?.ballsFaced ?? 0}",
                                               textAlign: TextAlign.left,
                                             ),
                                           ),
                                           Expanded(
                                             child: Text(
-                                              "${match?.bowlerStats?[bowlerStatsIndex].wickets}",
+                                              "${striker?.fours ?? 0}",
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "${striker?.sixes ?? 0}",
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "${striker?.strikeRate?.toStringAsFixed(0) ?? 0}",
                                               textAlign: TextAlign.left,
                                             ),
                                           ),
                                         ],
                                       ),
                                     )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      //* This over section
-                      Card(
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              // Over section
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'This Over:',
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  if (match != null)
+                                  ],
+                                ),
+                                Row(
+                                  children: [
                                     Expanded(
-                                      child: Wrap(
-                                        spacing: 4,
-                                        children: match!.currentOver!.balls!
-                                            .map((e) => Container(
-                                                  margin: const EdgeInsets.only(
-                                                    bottom: 8,
-                                                  ),
-                                                  child: CircleAvatar(
-                                                    radius: 16,
-                                                    backgroundColor: e
-                                                                .runsScored ==
-                                                            4
-                                                        ? Colors.lightBlue
-                                                        : (e.extraType ==
-                                                                    "byes" ||
-                                                                e.extraType ==
-                                                                    "leg byes")
-                                                            ? Colors.orange
-                                                            : (e.extraType ==
-                                                                    "no ball")
-                                                                ? Colors
-                                                                    .deepOrange
-                                                                : e.runsScored ==
-                                                                        6
-                                                                    ? Colors
-                                                                        .pink
-                                                                    : e.isExtra ==
-                                                                            true
-                                                                        ? Colors
-                                                                            .brown
-                                                                        : e.isWicket ==
-                                                                                true
-                                                                            ? Colors.red
-                                                                            : Colors.grey,
-                                                    child: Text(
-                                                      (e.extraType == 'wides')
-                                                          ? "WD"
-                                                          : (e.isWicket == true)
-                                                              ? "W"
-                                                              : (e.extraType ==
-                                                                      "byes")
-                                                                  ? "b${e.runsScored}"
-                                                                  : (e.extraType ==
-                                                                          "leg byes")
-                                                                      ? "lb${e.runsScored}"
-                                                                      : (e.extraType ==
-                                                                              "no ball")
-                                                                          ? "NB${e.runsScored == 1 ? '' : e.runsScored}"
-                                                                          : e.runsScored
-                                                                              .toString(),
-                                                      style: const TextStyle(
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ))
-                                            .toList(),
+                                      flex: 2,
+                                      child: Text(
+                                        match?.nonStriker?.name ??
+                                            'Non Striker',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
                                       ),
                                     ),
-                                ],
-                              ),
-                            ],
+                                    Expanded(
+                                      flex: 3,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              "${nonStriker?.runs ?? 0}",
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "${nonStriker?.ballsFaced ?? 0}",
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "${nonStriker?.fours ?? 0}",
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "${nonStriker?.sixes ?? 0}",
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "${nonStriker?.strikeRate?.toStringAsFixed(0) ?? 0}",
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(height: 16),
+                                // Bowler section
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        'Bowler',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                    ),
+                                    const Expanded(
+                                      flex: 3,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              "O",
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "R",
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              "W",
+                                              textAlign: TextAlign.left,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const Divider(),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Text(
+                                        match?.openingBowler?.name ?? 'Bowler',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                    ),
+                                    if (bowlerStatsIndex != null &&
+                                        bowlerStatsIndex != -1)
+                                      Expanded(
+                                        flex: 3,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                "${match?.bowlerStats?[bowlerStatsIndex].overs}",
+                                                textAlign: TextAlign.left,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                "${match?.bowlerStats?[bowlerStatsIndex].runsGiven}",
+                                                textAlign: TextAlign.left,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                "${match?.bowlerStats?[bowlerStatsIndex].wickets}",
+                                                textAlign: TextAlign.left,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 5),
-                      //* Action buttons
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Card(
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                        const SizedBox(height: 5),
+                        //* This over section
+                        Card(
+                          color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                // Over section
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Extra',
+                                      'This Over:',
                                       style:
                                           Theme.of(context).textTheme.bodyLarge,
                                     ),
-                                    Wrap(
-                                      spacing: 10,
-                                      direction: Axis.horizontal,
-                                      children: [
-                                        CheckboxWidget(
-                                          text: "Wide",
-                                          value: MatchCubit.get(context).wide ??
-                                              false,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              MatchCubit.get(context).wide =
-                                                  value;
-                                            });
-                                          },
+                                    const SizedBox(width: 8),
+                                    if (match != null)
+                                      Expanded(
+                                        child: Wrap(
+                                          spacing: 4,
+                                          children: match!.currentOver!.balls!
+                                              .map((e) => Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                      bottom: 8,
+                                                    ),
+                                                    child: CircleAvatar(
+                                                      radius: 16,
+                                                      backgroundColor: e
+                                                                  .runsScored ==
+                                                              4
+                                                          ? Colors.lightBlue
+                                                          : (e.extraType ==
+                                                                      "byes" ||
+                                                                  e.extraType ==
+                                                                      "leg byes")
+                                                              ? Colors.orange
+                                                              : (e.extraType ==
+                                                                      "no ball")
+                                                                  ? Colors
+                                                                      .deepOrange
+                                                                  : e.runsScored ==
+                                                                          6
+                                                                      ? Colors
+                                                                          .pink
+                                                                      : e.isExtra ==
+                                                                              true
+                                                                          ? Colors
+                                                                              .brown
+                                                                          : e.isWicket == true
+                                                                              ? Colors.red
+                                                                              : Colors.grey,
+                                                      child: Text(
+                                                        (e.extraType == 'wides')
+                                                            ? "WD"
+                                                            : (e.isWicket ==
+                                                                    true)
+                                                                ? "W"
+                                                                : (e.extraType ==
+                                                                        "byes")
+                                                                    ? "b${e.runsScored}"
+                                                                    : (e.extraType ==
+                                                                            "leg byes")
+                                                                        ? "lb${e.runsScored}"
+                                                                        : (e.extraType ==
+                                                                                "no ball")
+                                                                            ? "NB${e.runsScored == 1 ? '' : e.runsScored}"
+                                                                            : e.runsScored.toString(),
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ))
+                                              .toList(),
                                         ),
-                                        CheckboxWidget(
-                                          text: "No Ball",
-                                          value:
-                                              MatchCubit.get(context).noBall ??
-                                                  false,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              MatchCubit.get(context).noBall =
-                                                  value;
-                                            });
-                                          },
-                                        ),
-                                        CheckboxWidget(
-                                          text: "Byes",
-                                          value: MatchCubit.get(context).byes ??
-                                              false,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              MatchCubit.get(context).byes =
-                                                  value;
-                                            });
-                                          },
-                                        ),
-                                        CheckboxWidget(
-                                          text: "Leg Byes",
-                                          value:
-                                              MatchCubit.get(context).legByes ??
-                                                  false,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              MatchCubit.get(context).legByes =
-                                                  value;
-                                            });
-                                          },
-                                        ),
-
-                                        const SizedBox(width: 32),
-                                        // ElevatedButton(
-                                        //   onPressed: () {},
-                                        //   child: const Text("Out"),
-                                        // ),
-                                        // const SizedBox(width: 32),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            MatchCubit.get(context)
-                                                .swapPlayersAction(
-                                              matchId: widget.matchId,
-                                              actionType: "swap",
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: AppColor.blueColor,
-                                            foregroundColor: Colors.white,
-                                          ),
-                                          child: const Text("Swap Batsman"),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            handlePlayerOut(
-                                              context,
-                                              widget.matchId,
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: AppColor.blueColor,
-                                            foregroundColor: Colors.white,
-                                          ),
-                                          child: const Text("Out"),
-                                        ),
-
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            if (match != null &&
-                                                match?.currentInning?.number ==
-                                                    2 &&
-                                                match?.currentInning?.started ==
-                                                    false) {
-                                              handleInningsCompleted();
-                                            }
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: match != null &&
-                                                    match?.currentInning
-                                                            ?.number ==
-                                                        2 &&
-                                                    match?.currentInning
-                                                            ?.started ==
-                                                        false
-                                                ? AppColor.blueColor
-                                                : Colors.grey,
-                                            foregroundColor: Colors.white,
-                                          ),
-                                          child: const Text("Change Innings"),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
                                   ],
                                 ),
-                              ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      //* Action buttons
-                      SizedBox(
-                        height: 200,
-                        child: Row(
+                        ),
+                        const SizedBox(height: 5),
+                        //* Action buttons
+                        Row(
                           children: [
                             Expanded(
-                              flex: 2,
                               child: Card(
                                 color: Colors.white,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          handleStopMatch(context);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: AppColor.blueColor,
-                                          foregroundColor: Colors.white,
-                                        ),
-                                        child: Text(
-                                          match?.matchStopped?.stop == true
-                                              ? 'Resume'
-                                              : "Stop",
-                                        ),
+                                      Text(
+                                        'Extra',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
                                       ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          if (match?.currentOver?.balls !=
-                                                  null &&
-                                              match!.currentOver!.balls!
-                                                  .isEmpty) {
-                                            handleOverCompletion();
-                                          }
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              match?.currentOver?.balls !=
-                                                          null &&
-                                                      match!.currentOver!.balls!
-                                                          .isEmpty
+                                      Wrap(
+                                        spacing: 10,
+                                        direction: Axis.horizontal,
+                                        children: [
+                                          CheckboxWidget(
+                                            text: "Wide",
+                                            value:
+                                                MatchCubit.get(context).wide ??
+                                                    false,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                MatchCubit.get(context).wide =
+                                                    value;
+                                              });
+                                            },
+                                          ),
+                                          CheckboxWidget(
+                                            text: "No Ball",
+                                            value: MatchCubit.get(context)
+                                                    .noBall ??
+                                                false,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                MatchCubit.get(context).noBall =
+                                                    value;
+                                              });
+                                            },
+                                          ),
+                                          CheckboxWidget(
+                                            text: "Byes",
+                                            value:
+                                                MatchCubit.get(context).byes ??
+                                                    false,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                MatchCubit.get(context).byes =
+                                                    value;
+                                              });
+                                            },
+                                          ),
+                                          CheckboxWidget(
+                                            text: "Leg Byes",
+                                            value: MatchCubit.get(context)
+                                                    .legByes ??
+                                                false,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                MatchCubit.get(context)
+                                                    .legByes = value;
+                                              });
+                                            },
+                                          ),
+
+                                          const SizedBox(width: 32),
+                                          // ElevatedButton(
+                                          //   onPressed: () {},
+                                          //   child: const Text("Out"),
+                                          // ),
+                                          // const SizedBox(width: 32),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              MatchCubit.get(context)
+                                                  .swapPlayersAction(
+                                                matchId: widget.matchId,
+                                                actionType: "swap",
+                                              );
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  AppColor.blueColor,
+                                              foregroundColor: Colors.white,
+                                            ),
+                                            child: const Text("Swap Batsman"),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              handlePlayerOut(
+                                                context,
+                                                widget.matchId,
+                                              );
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  AppColor.blueColor,
+                                              foregroundColor: Colors.white,
+                                            ),
+                                            child: const Text("Out"),
+                                          ),
+
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              if (match != null &&
+                                                  match?.currentInning
+                                                          ?.number ==
+                                                      2 &&
+                                                  match?.currentInning
+                                                          ?.started ==
+                                                      false) {
+                                                handleInningsCompleted();
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: match != null &&
+                                                      match?.currentInning
+                                                              ?.number ==
+                                                          2 &&
+                                                      match?.currentInning
+                                                              ?.started ==
+                                                          false
                                                   ? AppColor.blueColor
                                                   : Colors.grey,
-                                          foregroundColor: Colors.white,
-                                        ),
-                                        child: const Text("Bowler"),
-                                      ),
-                                      if (match != null)
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            if (match!.matchStatus! > 1) {
-                                              handleMatchCompletion();
-                                            }
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                match!.matchStatus! > 1
-                                                    ? AppColor.blueColor
-                                                    : Colors.grey,
-                                            foregroundColor: Colors.white,
+                                              foregroundColor: Colors.white,
+                                            ),
+                                            child: const Text("Change Innings"),
                                           ),
-                                          child: const Text("Finish"),
-                                        ),
+                                        ],
+                                      ),
                                     ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Card(
-                                elevation: 6,
-                                color: Colors.white,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: Colors.grey.shade300,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Action',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
-                                        ),
-                                        Wrap(
-                                          spacing: 4,
-                                          direction: Axis.horizontal,
-                                          children: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                // if (MatchCubit.get(context).wide ==
-                                                //     true) {
-                                                //   MatchCubit.get(context).wideAction(
-                                                //     matchId: widget.matchId,
-                                                //     actionType: "wide",
-                                                //     extraType: "wides",
-                                                //     extraRuns: 0,
-                                                //   );
-                                                // } else {
-                                                //   MatchCubit.get(context).scoreAction(
-                                                //     widget.matchId,
-                                                //     0,
-                                                //   );
-                                                // }
-                                                action(0);
-                                              },
-                                              child: const Text("0"),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                action(1);
-                                              },
-                                              child: const Text("1"),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                // MatchCubit.get(context).scoreAction(
-                                                //   widget.matchId,
-                                                //   2,
-                                                // );
-                                                action(2);
-                                              },
-                                              child: const Text("2"),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                // if (MatchCubit.get(context).wide !=
-                                                //     true) {
-                                                //   MatchCubit.get(context)
-                                                //       .scoreAction(widget.matchId, 3);
-                                                // }
-                                                action(3);
-                                              },
-                                              child: const Text("3"),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                // if (MatchCubit.get(context).wide !=
-                                                //     true) {
-                                                //   MatchCubit.get(context).scoreAction(
-                                                //     widget.matchId,
-                                                //     4,
-                                                //   );
-                                                // } else if (MatchCubit.get(context)
-                                                //         .wide ==
-                                                //     true) {
-                                                //   MatchCubit.get(context).wideAction(
-                                                //     matchId: widget.matchId,
-                                                //     actionType: "wide",
-                                                //     extraType: "wides",
-                                                //     extraRuns: 4,
-                                                //   );
-                                                // }
-                                                action(4);
-                                              },
-                                              child: const Text("4"),
-                                            ),
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                // if (MatchCubit.get(context).wide !=
-                                                //     true) {
-                                                //   MatchCubit.get(context).scoreAction(
-                                                //     widget.matchId,
-                                                //     6,
-                                                //   );
-                                                // }
-                                                action(6);
-                                              },
-                                              child: const Text("6"),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 5),
+                        //* Action buttons
+                        SizedBox(
+                          height: 200,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Card(
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            handleStopMatch(context);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColor.blueColor,
+                                            foregroundColor: Colors.white,
+                                          ),
+                                          child: Text(
+                                            match?.matchStopped?.stop == true
+                                                ? 'Resume'
+                                                : "Stop",
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            if (match?.currentOver?.balls !=
+                                                    null &&
+                                                match!.currentOver!.balls!
+                                                    .isEmpty) {
+                                              handleOverCompletion();
+                                            }
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                match?.currentOver?.balls !=
+                                                            null &&
+                                                        match!.currentOver!
+                                                            .balls!.isEmpty
+                                                    ? AppColor.blueColor
+                                                    : Colors.grey,
+                                            foregroundColor: Colors.white,
+                                          ),
+                                          child: const Text("Bowler"),
+                                        ),
+                                        if (match != null)
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              if (match!.matchStatus! > 1) {
+                                                handleMatchCompletion();
+                                              }
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  match!.matchStatus! > 1
+                                                      ? AppColor.blueColor
+                                                      : Colors.grey,
+                                              foregroundColor: Colors.white,
+                                            ),
+                                            child: const Text("Finish"),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Card(
+                                  elevation: 6,
+                                  color: Colors.white,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Action',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge,
+                                          ),
+                                          Wrap(
+                                            spacing: 4,
+                                            direction: Axis.horizontal,
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  // if (MatchCubit.get(context).wide ==
+                                                  //     true) {
+                                                  //   MatchCubit.get(context).wideAction(
+                                                  //     matchId: widget.matchId,
+                                                  //     actionType: "wide",
+                                                  //     extraType: "wides",
+                                                  //     extraRuns: 0,
+                                                  //   );
+                                                  // } else {
+                                                  //   MatchCubit.get(context).scoreAction(
+                                                  //     widget.matchId,
+                                                  //     0,
+                                                  //   );
+                                                  // }
+                                                  action(0);
+                                                },
+                                                child: const Text("0"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  action(1);
+                                                },
+                                                child: const Text("1"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  // MatchCubit.get(context).scoreAction(
+                                                  //   widget.matchId,
+                                                  //   2,
+                                                  // );
+                                                  action(2);
+                                                },
+                                                child: const Text("2"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  // if (MatchCubit.get(context).wide !=
+                                                  //     true) {
+                                                  //   MatchCubit.get(context)
+                                                  //       .scoreAction(widget.matchId, 3);
+                                                  // }
+                                                  action(3);
+                                                },
+                                                child: const Text("3"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  // if (MatchCubit.get(context).wide !=
+                                                  //     true) {
+                                                  //   MatchCubit.get(context).scoreAction(
+                                                  //     widget.matchId,
+                                                  //     4,
+                                                  //   );
+                                                  // } else if (MatchCubit.get(context)
+                                                  //         .wide ==
+                                                  //     true) {
+                                                  //   MatchCubit.get(context).wideAction(
+                                                  //     matchId: widget.matchId,
+                                                  //     actionType: "wide",
+                                                  //     extraType: "wides",
+                                                  //     extraRuns: 4,
+                                                  //   );
+                                                  // }
+                                                  action(4);
+                                                },
+                                                child: const Text("4"),
+                                              ),
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  // if (MatchCubit.get(context).wide !=
+                                                  //     true) {
+                                                  //   MatchCubit.get(context).scoreAction(
+                                                  //     widget.matchId,
+                                                  //     6,
+                                                  //   );
+                                                  // }
+                                                  action(6);
+                                                },
+                                                child: const Text("6"),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              if (state is MatchLiveActionLoading ||
-                  state is MatchSetManOfTheMatchLoading ||
-                  state is MatchStartStopLoading)
-                const Center(child: CircularProgressIndicator()),
-            ],
-          );
-        },
+                if (state is MatchLiveActionLoading ||
+                    state is MatchSetManOfTheMatchLoading ||
+                    state is MatchStartStopLoading)
+                  const Center(child: CircularProgressIndicator()),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

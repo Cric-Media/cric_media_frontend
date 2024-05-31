@@ -452,8 +452,12 @@ class Routes {
         );
 
       case seriesDetails:
+        final args = settings.arguments as Map<String, dynamic>;
+        final tournamentId = args['id'];
         return MaterialPageRoute(
-          builder: (context) => const SeriesDetailsScreen(),
+          builder: (context) => SeriesDetailsScreen(
+            tournamentId: tournamentId,
+          ),
         );
 
       default:

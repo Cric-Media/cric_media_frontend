@@ -2,6 +2,7 @@
 
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
+import 'package:cricket_app/custom_widgets/shimmers/upcoming_match_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,8 +30,11 @@ class _UpComingItem extends State<UpComingItem> {
       },
       builder: (context, state) {
         if (state is MatchUpcommingLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return ListView.builder(
+            itemBuilder: (context, index) {
+              return UpcomingMatchPlaceholder();
+            },
+            itemCount: 6,
           );
         } else if (state is MatchGetUpcommingError) {
           return Center(

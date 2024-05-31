@@ -105,6 +105,7 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                                 Teams(teamsSheet: teamsSheet),
                                 Groups(
                                   tournamentId: widget.tournament.sId ?? '',
+                                  isAdmin: true,
                                 ),
                                 // Upcoming
                                 const Upcoming(),
@@ -707,8 +708,9 @@ class _TeamsState extends State<Teams> {
 
 class Groups extends StatefulWidget {
   final String tournamentId;
+  final bool? isAdmin;
 
-  const Groups({super.key, required this.tournamentId});
+  const Groups({super.key, required this.tournamentId, this.isAdmin});
 
   @override
   State<Groups> createState() => _GroupsState();
@@ -909,6 +911,7 @@ class _GroupsState extends State<Groups> {
                       bool groupCondition = group.name != 'qualifier' &&
                           group.name != 'semiFinal' &&
                           group.name != 'final';
+
                       return Column(
                         children: [
                           Container(
@@ -925,7 +928,7 @@ class _GroupsState extends State<Groups> {
                                 else
                                   Text("${group.name?.toUpperCase()}"),
                                 const Spacer(),
-                                if (groupCondition)
+                                if (groupCondition && widget.isAdmin == true)
                                   Row(
                                     children: [
                                       ElevatedButton(

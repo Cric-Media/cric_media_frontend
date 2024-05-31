@@ -2,10 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
+import 'package:cricket_app/custom_widgets/shimmers/series_shimmer.dart';
+import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class Series extends StatefulWidget {
   const Series({super.key});
@@ -53,81 +56,190 @@ class _SeriesState extends State<Series> {
         },
         builder: (context, state) {
           if (state is TournamentGetInitialLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                // shimmer
+                return const SeriesShimmer();
+              },
+              itemCount: 10,
             );
           }
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  //   crossAxisCount: 1,
-                  //   crossAxisSpacing: 10,
-                  //   mainAxisSpacing: 10,
-                  //   childAspectRatio: 2,
-                  // ),
-                  // separatorBuilder: (context, index) => const Divider(),
-                  padding: const EdgeInsets.all(8),
-                  itemBuilder: (context, index) {
-                    var tournament =
-                        TournamentCubit.get(context).tournaments[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          seriesDetails,
-                          arguments: tournament.sId,
-                        );
-                      },
-                      // child: TournamentWidget(
-                      //   tournament: tournament,
-                      //   isAdmin: false,
-                      // ),
-                      child: Card(
-                        elevation: 1,
-                        color: Colors.white,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12)),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage: CachedNetworkImageProvider(
-                                tournament.image ?? '',
-                              ),
-                            ),
-                            title: Text(
-                              '${tournament.seriesName}',
-                              style: GoogleFonts.inter(
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            subtitle: Text(
-                              '${tournament.seriesLocation}',
-                              style: GoogleFonts.inter(
-                                  textStyle: const TextStyle(
-                                fontSize: 12,
-                                color: AppColor.grayColor,
-                                fontWeight: FontWeight.w400,
-                              )),
+          return RefreshIndicator(
+            onRefresh: () async {
+              TournamentCubit.get(context)
+                  .getInitialTournaments(isAdmin: false);
+            },
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    //   crossAxisCount: 1,
+                    //   crossAxisSpacing: 10,
+                    //   mainAxisSpacing: 10,
+                    //   childAspectRatio: 2,
+                    // ),
+                    // separatorBuilder: (context, index) => const Divider(),
+                    padding: const EdgeInsets.all(8),
+                    itemBuilder: (context, index) {
+                      var tournament =
+                          TournamentCubit.get(context).tournaments[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            seriesDetails,
+                            arguments: {'id': tournament.sId},
+                          );
+                        },
+                        child: SeriesWidget(tournament: tournament),
+                      );
+                    },
+                    itemCount: TournamentCubit.get(context).tournaments.length,
+                    shrinkWrap: true,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class SeriesWidget extends StatelessWidget {
+  final Tournament tournament;
+  const SeriesWidget({Key? key, required this.tournament}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 1,
+      color: Colors.white,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(12)),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundImage: CachedNetworkImageProvider(
+              tournament.image ?? '',
+            ),
+          ),
+          title: Text(
+            '${tournament.seriesName}',
+            style: GoogleFonts.inter(
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+                fontSize: 15,
+              ),
+            ),
+          ),
+          subtitle: Text(
+            '${tournament.seriesLocation}',
+            style: GoogleFonts.inter(
+                textStyle: const TextStyle(
+              fontSize: 12,
+              color: AppColor.grayColor,
+              fontWeight: FontWeight.w400,
+            )),
+          ),
+          trailing: tournament.winner != null
+              ? Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Winner of tournament',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              color: AppColor.grayColor,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                  itemCount: TournamentCubit.get(context).tournaments.length,
-                  shrinkWrap: true,
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          tournament.winner?.name ?? '',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              color: AppColor.grayColor,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Starts on',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              color: AppColor.grayColor,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          DateFormat('dd MMM, yyyy')
+                              .format(DateTime.parse(tournament.startDate!)),
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              color: AppColor.grayColor,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Ends on',
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              color: AppColor.grayColor,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          DateFormat('dd MMM, yyyy')
+                              .format(DateTime.parse(tournament.endDate!)),
+                          style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              color: AppColor.grayColor,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          );
-        },
+        ),
       ),
     );
   }

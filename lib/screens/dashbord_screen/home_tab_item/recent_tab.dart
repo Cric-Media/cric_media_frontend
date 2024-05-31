@@ -1,9 +1,9 @@
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_resent_widget.dart';
+import 'package:cricket_app/custom_widgets/shimmers/recent_match_placeholder.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shimmer/shimmer.dart';
 
 class RecentTab extends StatefulWidget {
   const RecentTab({super.key});
@@ -32,13 +32,9 @@ class _RecentTabState extends State<RecentTab> {
       builder: (context, state) {
         if (state is MatchGetCompletedLoading) {
           return ListView.builder(itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: const CustomResentWidget(),
-              ),
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 5.0),
+              child: RecentMatchPlaceholder(),
             );
           });
         } else if (state is MatchGetCompletedError) {

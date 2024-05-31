@@ -1,10 +1,9 @@
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
-import 'package:cricket_app/custom_widgets/shimmers/upcoming_shimmer.dart';
+import 'package:cricket_app/custom_widgets/shimmers/upcoming_match_placeholder.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/upcoming_match_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shimmer/shimmer.dart';
 
 class UpComingTab extends StatefulWidget {
   const UpComingTab({super.key});
@@ -41,13 +40,9 @@ class _UpComingTabState extends State<UpComingTab> {
             builder: (context, state) {
               if (state is MatchUpcommingLoading) {
                 return ListView.builder(itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: const UpcomingShimmer(),
-                    ),
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                    child: UpcomingMatchPlaceholder(),
                   );
                 });
               }
