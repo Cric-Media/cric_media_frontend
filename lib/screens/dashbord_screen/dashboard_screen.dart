@@ -19,8 +19,8 @@ class _MainPageState extends State<DashBoardScreen> {
   List<Widget> screens = [
     const Home(),
     const News(),
-    const Video(),
     const Series(),
+    const Video(),
     const Menu(),
   ];
 
@@ -44,7 +44,8 @@ class _MainPageState extends State<DashBoardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: const Color(0XFFFBFBFB),
+      // backgroundColor: const Color(0XFFFBFBFB),
+      backgroundColor: Colors.white,
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [

@@ -39,7 +39,8 @@ class _HomeState extends State<Home> {
     return DefaultTabController(
         length: 4,
         child: Scaffold(
-          backgroundColor: const Color(0XFFFBFBFB),
+          // backgroundColor: const Color(0XFFFBFBFB),
+          backgroundColor: Colors.white,
           appBar: AppBar(
             bottom: const TabBar(
               dividerHeight: 3,
@@ -125,7 +126,7 @@ class AppDrawer extends StatefulWidget {
 
 class _AppDrawerState extends State<AppDrawer> {
   int indix = -1;
-  Admin? user;
+  Admin? admin;
 
   signinConfirmation() {
     AppDialogs.showConfirmationDialog(context,
@@ -142,11 +143,11 @@ class _AppDrawerState extends State<AppDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    user = BlocProvider.of<AuthCubit>(context).admin;
+    admin = BlocProvider.of<AuthCubit>(context).admin;
 
     return BlocConsumer<AdminCubit, AdminState>(
       listener: (context, state) {
-        user = BlocProvider.of<AuthCubit>(context).admin;
+        admin = BlocProvider.of<AuthCubit>(context).admin;
       },
       builder: (context, state) {
         return Drawer(
@@ -157,9 +158,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 DrawerHeader(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(
-                        AppIcons.logo,
-                      ),
+                      image: AssetImage(AppIcons.logo),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -173,7 +172,7 @@ class _AppDrawerState extends State<AppDrawer> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            user?.name ?? "",
+                            admin?.name ?? "",
                             style: const TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
@@ -181,7 +180,7 @@ class _AppDrawerState extends State<AppDrawer> {
                             ),
                           ),
                           Text(
-                            user?.email ?? "",
+                            admin?.email ?? "",
                             style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
@@ -197,12 +196,15 @@ class _AppDrawerState extends State<AppDrawer> {
                     InkWell(
                       onTap: () {
                         indexes(0);
-                        user == null
+                        admin == null
                             ? signinConfirmation()
                             : Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const ProfileItem()));
+                                  builder: (context) =>
+                                      ProfileItem(admin: admin!),
+                                ),
+                              );
                       },
                       child: Container(
                         height: 50,
@@ -238,7 +240,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     InkWell(
                       onTap: () {
                         indexes(1);
-                        user == null
+                        admin == null
                             ? signinConfirmation()
                             : Navigator.pushNamed(context, playerItem);
                       },
@@ -276,7 +278,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     InkWell(
                       onTap: () {
                         indexes(2);
-                        user == null
+                        admin == null
                             ? signinConfirmation()
                             : Navigator.pushNamed(
                                 context,
@@ -317,7 +319,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     InkWell(
                       onTap: () {
                         indexes(3);
-                        user == null
+                        admin == null
                             ? signinConfirmation()
                             : Navigator.push(
                                 context,
@@ -358,7 +360,7 @@ class _AppDrawerState extends State<AppDrawer> {
                     InkWell(
                       onTap: () {
                         indexes(4);
-                        user == null
+                        admin == null
                             ? signinConfirmation()
                             : Navigator.push(
                                 context,
@@ -397,11 +399,11 @@ class _AppDrawerState extends State<AppDrawer> {
                     const SizedBox(
                       height: 5,
                     ),
-                    if (user != null)
+                    if (admin != null)
                       InkWell(
                         onTap: () {
                           indexes(5);
-                          user == null
+                          admin == null
                               ? signinConfirmation()
                               : Navigator.pushReplacementNamed(
                                   context,

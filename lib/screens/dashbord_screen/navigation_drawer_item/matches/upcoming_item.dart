@@ -2,7 +2,7 @@
 
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
-import 'package:cricket_app/custom_widgets/shimmers/upcoming_match_placeholder.dart';
+import 'package:cricket_app/custom_widgets/placeholders/upcoming_match_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

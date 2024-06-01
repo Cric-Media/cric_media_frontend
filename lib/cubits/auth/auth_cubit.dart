@@ -10,6 +10,8 @@ part 'auth_states.dart';
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
 
+  static AuthCubit get(context) => BlocProvider.of<AuthCubit>(context);
+
   final auth = AuthController();
   Admin? _admin;
 

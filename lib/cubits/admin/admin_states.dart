@@ -7,6 +7,8 @@ class AdminInitial extends AdminState {}
 // Loading states
 class AdminLoading extends AdminState {}
 
+class AdminDetailsLoading extends AdminState {}
+
 class AdminSharePlayerLoading extends AdminState {}
 
 class AdminShareTeamLoading extends AdminState {}
@@ -18,6 +20,12 @@ class AdminInvitationResponseLoading extends AdminState {}
 class AdminShareLoading extends AdminState {}
 
 // Success states
+
+class AdminDetailsSuccess extends AdminState {
+  final ApiResponse response;
+  AdminDetailsSuccess(this.response);
+}
+
 class AdminGetOtherAdminsSuccess extends AdminState {
   final ApiResponse response;
   AdminGetOtherAdminsSuccess(this.response);
@@ -53,7 +61,13 @@ class AdminShareSuccess extends AdminState {
   AdminShareSuccess(this.response);
 }
 
-// Failute states
+// ! Failute states
+
+class AdminDetailsError extends AdminState {
+  final String message;
+  AdminDetailsError(this.message);
+}
+
 class AdminGetOtherAdminsError extends AdminState {
   final String message;
   AdminGetOtherAdminsError(this.message);

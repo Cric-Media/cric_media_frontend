@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/admin.dart';
+import 'package:cricket_app/models/admin_details.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/notifier.dart';
@@ -19,6 +20,20 @@ import 'package:cricket_app/utils/app_exception.dart';
 import 'package:http/http.dart';
 
 class AdminController {
+  Future<ApiResponse> getAdminDetails() async {
+    final adminId = await Global().getAdminId();
+    final url = "${AdminUrl.adminDetails}/$adminId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(
+          resBody, (data) => AdminDetails.fromJson(resBody['data']));
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
   Future<ApiResponse> getOtherAdmins({
     int page = 1,
     int limit = 20,

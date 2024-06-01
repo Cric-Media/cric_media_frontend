@@ -4,6 +4,7 @@ import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
+import 'package:cricket_app/custom_widgets/placeholders/player_placeholder.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/team.dart';
@@ -53,28 +54,35 @@ class _PlayerItemState extends State<PlayerItem> {
         },
         builder: (context, state) {
           if (state is PlayerGetInitialLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return ListView.separated(
+              itemBuilder: (context, index) => const PlayerPlaceholder(),
+              separatorBuilder: (context, index) => const Divider(),
+              itemCount: 6,
             );
           } else if (state is PlayerEmptyState) {
             return const Center(
               child: Text("No Players Found"),
             );
           }
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => const Divider(),
-                  itemCount: players.length,
-                  // Adjusted for simplicity
-                  itemBuilder: (context, index) {
-                    return PlayerTile(player: players[index]);
-                  },
-                ),
-              )
-            ],
+          return RefreshIndicator(
+            onRefresh: () async {
+              BlocProvider.of<PlayerCubit>(context).getPlayersByAdminId();
+            },
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemCount: players.length,
+                    // Adjusted for simplicity
+                    itemBuilder: (context, index) {
+                      return PlayerTile(player: players[index]);
+                    },
+                  ),
+                )
+              ],
+            ),
           );
         },
       ),

@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../constants/app_color.dart';
-import '../../../constants/app_images.dart';
 import '../../../custom_widgets/custom_up_coming_matches_card.dart';
 
 class UpcomingMatchDetails extends StatefulWidget {
@@ -44,16 +43,6 @@ class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
               ),
             ),
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Image.asset(
-                AppIcons.search,
-                width: 24,
-                height: 24,
-              ),
-            )
-          ],
           centerTitle: true,
         ),
         body: Padding(

@@ -1,6 +1,7 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
+import 'package:cricket_app/custom_widgets/placeholders/tournament_placeholder.dart';
 import 'package:cricket_app/custom_widgets/tournament_widget.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +58,12 @@ class _TornamentItemState extends State<TornamentItem> {
         },
         builder: (context, state) {
           if (state is TournamentGetInitialLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return const TournamentPlaceholder();
+              },
+              itemCount: 6,
+              shrinkWrap: true,
             );
           }
           return RefreshIndicator(

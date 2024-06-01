@@ -1,6 +1,6 @@
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
-import 'package:cricket_app/custom_widgets/shimmers/live_match_shimmer.dart';
+import 'package:cricket_app/custom_widgets/placeholders/live_match_shimmer.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

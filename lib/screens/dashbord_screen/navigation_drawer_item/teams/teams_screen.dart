@@ -5,6 +5,7 @@ import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
+import 'package:cricket_app/custom_widgets/placeholders/player_placeholder.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/team.dart';
@@ -68,7 +69,6 @@ class _TeamsScreenState extends State<TeamsScreen> {
         if (state is TeamGetInitial) {
           teams = state.response.data;
         } else if (state is TeamGetError) {
-          print(state.message);
         } else if (state is TeamDeleteLoading) {
           AppDialogs.loadingDialog(context);
         } else if (state is TeamDeleteError) {
@@ -88,8 +88,9 @@ class _TeamsScreenState extends State<TeamsScreen> {
         }
       }, builder: (context, state) {
         if (state is TeamGetInitialLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return ListView.builder(
+            itemBuilder: (context, index) => const PlayerPlaceholder(),
+            itemCount: 6,
           );
         }
         return Padding(

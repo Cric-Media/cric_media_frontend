@@ -1,4 +1,5 @@
 import 'package:cricket_app/controllers/admin/admin_controller.dart';
+import 'package:cricket_app/models/admin_details.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/notifier.dart';
 import 'package:cricket_app/utils/app_exception.dart';
@@ -15,6 +16,26 @@ class AdminCubit extends Cubit<AdminState> {
 
   // Variables
   List<Notifier> notifiers = [];
+  AdminDetails? adminDetails;
+
+  getAdminDetails() async {
+    emit(AdminDetailsLoading());
+    try {
+      final network = await Network.check();
+      if (!network) {
+        emit(AdminDetailsError("No network available"));
+        return;
+      }
+      final response = await adminController.getAdminDetails();
+      emit(AdminDetailsSuccess(response));
+    } catch (error) {
+      if (error is AppException) {
+        emit(AdminDetailsError(error.message));
+      } else {
+        emit(AdminDetailsError("Something went wrong"));
+      }
+    }
+  }
 
   Future<void> getInitialOtherAdmins({
     int page = 1,

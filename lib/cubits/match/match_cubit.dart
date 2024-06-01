@@ -14,7 +14,6 @@ import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 import 'package:cricket_app/utils/network.dart';
-import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'match_states.dart';
@@ -699,7 +698,8 @@ class MatchCubit extends Cubit<MatchState> {
   getBannerMatches(int matchStatus) async {
     if (matchStatus == 0) {
       emit(MatchBannerUpcomingLoading());
-    } else {
+    }
+    if (matchStatus == 1) {
       emit(MatchBannerLiveLoading());
     }
     try {

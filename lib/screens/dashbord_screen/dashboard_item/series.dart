@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
-import 'package:cricket_app/custom_widgets/shimmers/series_shimmer.dart';
+import 'package:cricket_app/custom_widgets/placeholders/series_shimmer.dart';
 import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
 import 'package:flutter/material.dart';

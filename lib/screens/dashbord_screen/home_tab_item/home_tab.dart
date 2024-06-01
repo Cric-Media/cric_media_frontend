@@ -6,6 +6,9 @@ import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
+import 'package:cricket_app/custom_widgets/placeholders/live_match_shimmer.dart';
+import 'package:cricket_app/custom_widgets/placeholders/series_shimmer.dart';
+import 'package:cricket_app/custom_widgets/placeholders/upcoming_match_placeholder.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/series.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/upcoming_match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
@@ -110,6 +113,14 @@ class _HomeTabState extends State<HomeTab> {
                       ),
                       SizedBox(height: screenWidth * 0.026),
                     ],
+                  )
+                else if (state is MatchBannerLiveLoading)
+                  const Column(
+                    children: [
+                      LiveMatchPlaceholder(),
+                      SizedBox(height: 8),
+                      LiveMatchPlaceholder(),
+                    ],
                   ),
                 if (upcommingMatches.isNotEmpty)
                   Column(
@@ -166,7 +177,16 @@ class _HomeTabState extends State<HomeTab> {
                       //     child: const UpCommingMachesCard()),
                       SizedBox(height: screenWidth * 0.030),
                     ],
+                  )
+                else if (state is MatchBannerUpcomingLoading)
+                  const Column(
+                    children: [
+                      UpcomingMatchPlaceholder(),
+                      SizedBox(height: 8),
+                      UpcomingMatchPlaceholder(),
+                    ],
                   ),
+
                 BlocConsumer<TournamentCubit, TournamentState>(
                   builder: (context, state) {
                     return Column(children: [
@@ -216,6 +236,20 @@ class _HomeTabState extends State<HomeTab> {
                                 .toList()
                           ],
                         )
+                      else if (state is TournamentGetFiveLoading)
+                        const Column(
+                          children: [
+                            SizedBox(height: 8),
+                            SeriesShimmer(),
+                            SizedBox(height: 8),
+                            SizedBox(height: 8),
+                            SeriesShimmer(),
+                            SizedBox(height: 8),
+                            SizedBox(height: 8),
+                            SeriesShimmer(),
+                            SizedBox(height: 8),
+                          ],
+                        ),
                     ]);
                   },
                   listener: (context, state) {
