@@ -18,7 +18,6 @@ class SeriesDetailsScreen extends StatefulWidget {
 class _SeriesDetailssScreen extends State<SeriesDetailsScreen> {
   @override
   void initState() {
-    print(widget.tournamentId);
     TournamentCubit.get(context).getTournament(widget.tournamentId ?? '');
     super.initState();
   }
@@ -49,8 +48,13 @@ class _SeriesDetailssScreen extends State<SeriesDetailsScreen> {
         },
         builder: (context, state) {
           if (state is TournamentGetLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            // create beautiful placeholder widget based on below screen
+            return Container(
+              height: screenHeight,
+              width: screenWidth,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
           var tournament = TournamentCubit.get(context).tournament;
@@ -84,9 +88,7 @@ class _SeriesDetailssScreen extends State<SeriesDetailsScreen> {
                                   fontWeight: FontWeight.w700,
                                 )),
                               ),
-                              const SizedBox(
-                                height: 5,
-                              ),
+                              const SizedBox(height: 5),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,

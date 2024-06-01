@@ -440,6 +440,7 @@ class Routes {
         final tournament = args['tournament'];
         final groupId = args['groupId'];
         final totalMatches = args['totalMatches'];
+        final matchType = args['matchType'];
         return MaterialPageRoute(
           builder: (context) => BlocProvider<MatchCubit>(
             create: (context) => MatchCubit(),
@@ -447,6 +448,7 @@ class Routes {
               tournament: tournament!,
               groupId: groupId,
               totalMatches: totalMatches,
+              matchType: matchType,
             ),
           ),
         );

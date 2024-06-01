@@ -19,11 +19,13 @@ class AddTournamentMatchScreen extends StatefulWidget {
   final Tournament tournament;
   final String? groupId;
   final int? totalMatches;
+  final String? matchType;
   const AddTournamentMatchScreen({
     super.key,
     required this.tournament,
     this.groupId,
     this.totalMatches,
+    this.matchType,
   });
 
   @override
@@ -132,6 +134,7 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                   teamNo: 1,
                   tournament: widget.tournament,
                   groupId: widget.groupId,
+                  matchType: widget.matchType,
                 ),
                 Positioned(
                   top: -15,
@@ -162,6 +165,7 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                   teamNo: 2,
                   tournament: widget.tournament,
                   groupId: widget.groupId,
+                  matchType: widget.matchType,
                 ),
               ],
             ),
@@ -290,7 +294,6 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                                     MatchCubit.get(context).numberOfOvers =
                                         int.tryParse(value);
                                   },
-                                  readOnly: true,
                                   controller: TextEditingController(
                                     text: MatchCubit.get(context)
                                         .numberOfOvers
@@ -554,12 +557,14 @@ class SelectTeamWidget extends StatefulWidget {
     required this.spaceBetween,
     required this.tournament,
     this.groupId,
+    this.matchType,
   });
 
   final double startingLeftPosition, containerWidth, spaceBetween;
   final int teamNo;
   final Tournament tournament;
   final String? groupId;
+  final String? matchType;
 
   @override
   State<SelectTeamWidget> createState() => _SelectTeamWidgetState();
@@ -630,9 +635,31 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
                           teams = state.response.data;
                         }
                       } else {
-                        teams = widget.tournament.teams!
-                            .map((t) => t.team!)
-                            .toList();
+                        if (widget.matchType == 'semiFinal') {
+                          teams = widget.tournament.teams!
+                              .where(
+                                (t) {
+                                  return widget.tournament.semiFinalTeams!
+                                      .contains(t.team?.id);
+                                },
+                              )
+                              .map((t) => t.team!)
+                              .toList();
+                        } else if (widget.matchType == 'final') {
+                          teams = widget.tournament.teams!
+                              .where(
+                                (t) {
+                                  return widget.tournament.finalTeams!
+                                      .contains(t.team?.id);
+                                },
+                              )
+                              .map((t) => t.team!)
+                              .toList();
+                        } else {
+                          teams = widget.tournament.teams!
+                              .map((t) => t.team!)
+                              .toList();
+                        }
                         // teams = state.response.data;
                       }
                       return ListView.separated(

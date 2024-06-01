@@ -115,7 +115,7 @@ class CustomResentWidget extends StatelessWidget {
                         ],
                       ),
                       if (match?.winningTeam != null)
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 16),
                       if (match?.winningTeam != null)
                         Text(
                           "${match?.team1?.name} won by $winningWickets wickets",
@@ -138,7 +138,8 @@ class CustomResentWidget extends StatelessWidget {
                         children: [
                           CachedNetworkImage(
                             imageUrl: match?.manOfTheMatch?.imageUrl ?? "",
-                            height: 100,
+                            height: 80,
+                            width: 80,
                           ),
                           Text(
                             match?.manOfTheMatch?.name ?? "",

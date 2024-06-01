@@ -38,24 +38,32 @@ class UpCommingMachesCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          match != null
-                              ? match?.tournamentInfo != null
-                                  ? "${match?.tournamentInfo?.matchType?.toUpperCase() ?? ''}-${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}"
-                                  : ""
-                              : '',
-                          style: GoogleFonts.inter(
-                            textStyle: const TextStyle(
-                              fontSize: 12,
-                              color: AppColor.blueColor,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
-                            ),
+                        Visibility(
+                          visible:
+                              match != null && match?.tournamentInfo != null,
+                          child: Column(
+                            children: [
+                              Text(
+                                match != null
+                                    ? match?.tournamentInfo != null
+                                        ? "${match?.tournamentInfo?.matchType?.toUpperCase() ?? ''}-${match?.tournamentInfo?.tournament?.seriesName} of ${match?.tournamentInfo?.tournament?.seriesLocation}"
+                                        : ""
+                                    : '',
+                                style: GoogleFonts.inter(
+                                  textStyle: const TextStyle(
+                                    fontSize: 12,
+                                    color: AppColor.blueColor,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4),
+                            ],
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 4),
                         Text(
                           match != null
                               ? "${match?.cityOrTown} City, ${match?.ground} Ground."
@@ -133,30 +141,31 @@ class UpCommingMachesCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            admin == null
-                                ? const SizedBox.shrink()
-                                : Expanded(
-                                    child: OutlinedButton(
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          startMatch,
-                                          arguments: {'match': match},
-                                        );
-                                      },
-                                      child: const Text(
-                                        "Start Match",
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: AppColor.blueColor,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
+                        Visibility(
+                          visible: admin != null,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      startMatch,
+                                      arguments: {'match': match},
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Start Match",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: AppColor.blueColor,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                          ],
+                                ),
+                              ),
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -165,7 +174,6 @@ class UpCommingMachesCard extends StatelessWidget {
                 flex: 3,
                 child: Container(
                   color: const Color(0xffECECEC),
-                  height: 200,
                   padding: const EdgeInsets.all(8),
                   child: Column(
                     children: [
@@ -198,7 +206,7 @@ class UpCommingMachesCard extends StatelessWidget {
                       Text(
                         match != null
                             ? match!.matchDateTime!.split("-").first
-                            : '6:00 pm',
+                            : '',
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColor.blackColor,
@@ -210,7 +218,7 @@ class UpCommingMachesCard extends StatelessWidget {
                       Text(
                         match != null
                             ? match!.matchDateTime!.split("-").last
-                            : '09-04-2023',
+                            : '',
                         style: const TextStyle(
                             fontSize: 12,
                             color: AppColor.blackColor,

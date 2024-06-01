@@ -209,14 +209,34 @@ class _LiveDetails extends State<LiveDetails> {
                                               ),
                                             ),
                                           if (match?.tournamentInfo != null)
-                                            PointsTableWidget(
-                                              tournamentId: match
-                                                      ?.tournamentInfo
-                                                      ?.tournament
-                                                      ?.sId ??
-                                                  '',
-                                              tournament: match!
-                                                  .tournamentInfo!.tournament!,
+                                            Column(
+                                              children: [
+                                                // if (match!
+                                                //         .tournamentInfo!
+                                                //         .tournament!
+                                                //         .groups
+                                                //         ?.isNotEmpty ??
+                                                //     false)
+                                                //   Groups(
+                                                //     tournamentId: match!
+                                                //             .tournamentInfo!
+                                                //             .tournament
+                                                //             ?.sId ??
+                                                //         '',
+                                                //     isAdmin: false,
+                                                //   )
+                                                // else
+                                                PointsTableWidget(
+                                                  tournamentId: match
+                                                          ?.tournamentInfo
+                                                          ?.tournament
+                                                          ?.sId ??
+                                                      '',
+                                                  tournament: match!
+                                                      .tournamentInfo!
+                                                      .tournament!,
+                                                ),
+                                              ],
                                             ),
                                         ],
                                       )

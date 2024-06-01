@@ -23,11 +23,8 @@ class _UpComingTabState extends State<UpComingTab> {
 
   @override
   Widget build(BuildContext context) {
-    // final screenWidth = MediaQuery.of(context).size.width;
-    // final screenHeight = MediaQuery.of(context).size.height;
-
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: Column(children: [
         Expanded(
           child: BlocConsumer<MatchCubit, MatchState>(

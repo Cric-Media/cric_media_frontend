@@ -22,7 +22,6 @@ class _MainPageState extends State<DashBoardScreen> {
     const Video(),
     const Series(),
     const Menu(),
-    Container(),
   ];
 
   int value = 0;
@@ -36,245 +35,77 @@ class _MainPageState extends State<DashBoardScreen> {
     super.initState();
   }
 
-  getVlaue(int x) {
+  void getVlaue(int x) {
     value = x;
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0XFFFBFBFB),
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          value == 0
-              ? const Home()
-              : value == 1
-                  ? const News()
-                  : value == 2
-                      ? const Series()
-                      : value == 3
-                          ? const Video()
-                          : value == 4
-                              ? const Menu()
-                              : Container(),
-          const SizedBox(
-            height: 4,
-          ),
-          SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
+          screens[value],
+          const SizedBox(height: 4),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(12),
+                topLeft: Radius.circular(12),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  height: size.height * 0.100,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(12),
-                        topLeft: Radius.circular(12)),
-                  ),
-                  child: Row(children: [
-                    GestureDetector(
-                        onTap: () {
-                          getVlaue(0);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 10),
-                          width: size.width * 0.15,
-                          height: size.height,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Image.asset(
-                                'assets/icons/Home.png',
-                                color: value == 0
-                                    ? AppColor.blueColor
-                                    : Colors.grey.withOpacity(0.8),
-                                width: value == 0
-                                    ? size.width * 0.058
-                                    : size.width * 0.056,
-                              ),
-                              Text(
-                                'Home',
-                                style: TextStyle(
-                                  fontFamily: 'public',
-                                  fontSize: size.width * 0.03,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                    GestureDetector(
-                      onTap: () {
-                        getVlaue(1);
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 15),
-                        width: size.width * 0.15,
-                        height: size.height,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Image.asset(
-                              'assets/icons/News.png',
-                              width: value == 1
-                                  ? size.width * 0.058
-                                  : size.width * 0.056,
-                              color: value == 1
-                                  ? AppColor.blueColor
-                                  : Colors.grey.withOpacity(0.8),
-                            ),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              'News',
-                              style: TextStyle(
-                                fontFamily: 'public',
-                                fontSize: size.width * 0.03,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        getVlaue(2);
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 15),
-                        width: size.width * 0.15,
-                        height: size.height,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Image.asset(
-                              'assets/icons/Series.png',
-                              color: value == 2
-                                  ? AppColor.blueColor
-                                  : Colors.grey.withOpacity(0.8),
-                              width: value == 2
-                                  ? size.width * 0.058
-                                  : size.width * 0.056,
-                            ),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              'Series',
-                              style: TextStyle(
-                                fontFamily: 'public',
-                                fontSize: size.width * 0.03,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          getVlaue(3);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 15),
-                          width: size.width * 0.15,
-                          height: size.height,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Image.asset(
-                                'assets/icons/Video.png',
-                                color: value == 3
-                                    ? AppColor.blueColor
-                                    : Colors.grey.withOpacity(0.8),
-                                width: value == 3
-                                    ? size.width * 0.058
-                                    : size.width * 0.056,
-                              ),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                              Text(
-                                'Video',
-                                style: TextStyle(
-                                  fontFamily: 'public',
-                                  fontSize: size.width * 0.03,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
-                    GestureDetector(
-                      onTap: () {
-                        getVlaue(4);
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 15),
-                        width: size.width * 0.15,
-                        height: size.height,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Image.asset(
-                              'assets/icons/more.png',
-                              color: value == 4
-                                  ? AppColor.blueColor
-                                  : Colors.grey.withOpacity(0.8),
-                              width: value == 4
-                                  ? size.width * 0.058
-                                  : size.width * 0.056,
-                            ),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              'Menu',
-                              style: TextStyle(
-                                fontFamily: 'public',
-                                fontSize: size.width * 0.03,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ]),
-                )
+                _buildNavItem('Home', 'assets/icons/Home.png', 0),
+                _buildNavItem('News', 'assets/icons/News.png', 1),
+                _buildNavItem('Series', 'assets/icons/Series.png', 2),
+                _buildNavItem('Video', 'assets/icons/Video.png', 3),
+                _buildNavItem('Menu', 'assets/icons/more.png', 4),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildNavItem(String label, String iconPath, int index) {
+    return GestureDetector(
+      onTap: () {
+        getVlaue(index);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              iconPath,
+              color: value == index
+                  ? AppColor.blueColor
+                  : Colors.grey.withOpacity(0.8),
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: TextStyle(
+                fontFamily: 'public',
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: value == index
+                    ? AppColor.blueColor
+                    : Colors.grey.withOpacity(0.8),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

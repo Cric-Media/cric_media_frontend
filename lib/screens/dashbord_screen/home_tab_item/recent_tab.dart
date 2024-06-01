@@ -57,7 +57,7 @@ class _RecentTabState extends State<RecentTab> {
                           .completedMatchDetailsList[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 5),
+                            horizontal: 4.0, vertical: 5),
                         child: InkWell(
                           onTap: () {
                             // Navigator.push(

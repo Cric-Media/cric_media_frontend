@@ -1,11 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_indicator/carousel_indicator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
+import 'package:cricket_app/screens/dashbord_screen/dashboard_item/series.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/upcoming_match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:flutter/material.dart';
@@ -199,42 +200,16 @@ class _HomeTabState extends State<HomeTab> {
                                 .map(
                                   (tournament) => Padding(
                                     padding: const EdgeInsets.only(top: 5),
-                                    child: Card(
-                                      elevation: 1,
-                                      color: Colors.white,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12)),
-                                        child: ListTile(
-                                          leading: CircleAvatar(
-                                            backgroundImage:
-                                                CachedNetworkImageProvider(
-                                              tournament.image ?? '',
-                                            ),
-                                          ),
-                                          title: Text(
-                                            '${tournament.seriesName}',
-                                            style: GoogleFonts.inter(
-                                              textStyle: const TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.black,
-                                                fontSize: 15,
-                                              ),
-                                            ),
-                                          ),
-                                          subtitle: Text(
-                                            '${tournament.seriesLocation}',
-                                            style: GoogleFonts.inter(
-                                                textStyle: const TextStyle(
-                                              fontSize: 12,
-                                              color: AppColor.grayColor,
-                                              fontWeight: FontWeight.w400,
-                                            )),
-                                          ),
-                                        ),
-                                      ),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          seriesDetails,
+                                          arguments: {'id': tournament.sId},
+                                        );
+                                      },
+                                      child:
+                                          SeriesWidget(tournament: tournament),
                                     ),
                                   ),
                                 )

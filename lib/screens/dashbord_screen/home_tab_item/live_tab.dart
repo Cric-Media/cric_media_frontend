@@ -24,7 +24,7 @@ class _LiveTabState extends State<LiveTab> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: Column(children: [
         Expanded(
           child: BlocConsumer<MatchCubit, MatchState>(
@@ -80,7 +80,7 @@ class _LiveTabState extends State<LiveTab> {
             },
           ),
         ),
-        const SizedBox(height: 70)
+        const SizedBox(height: 32)
       ]),
     );
   }

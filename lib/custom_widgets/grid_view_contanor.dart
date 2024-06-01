@@ -63,9 +63,9 @@ class GridViewContanor extends StatelessWidget {
                           physics: NeverScrollableScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 20.0,
-                            mainAxisSpacing: 20.0,
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 10.0,
+                            mainAxisSpacing: 10.0,
                           ),
                           itemCount: match != null
                               ? match?.squad1?.length
@@ -159,18 +159,24 @@ class SquadPlayer extends StatelessWidget {
       children: [
         Expanded(
           child: Center(
-            child: CachedNetworkImage(
-              imageUrl: player?.imageUrl ?? '',
-              imageBuilder: (context, imageProvider) => Container(
-                width: 80,
-                height: 120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+            // child: CachedNetworkImage(
+            //   imageUrl: player?.imageUrl ?? '',
+            //   imageBuilder: (context, imageProvider) => Container(
+            //     width: 80,
+            //     height: 120,
+            //     decoration: BoxDecoration(
+            //       shape: BoxShape.rectangle,
+            //       image: DecorationImage(
+            //         image: imageProvider,
+            //         fit: BoxFit.cover,
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            child: CircleAvatar(
+              radius: 40,
+              backgroundImage: CachedNetworkImageProvider(
+                player?.imageUrl ?? '',
               ),
             ),
           ),

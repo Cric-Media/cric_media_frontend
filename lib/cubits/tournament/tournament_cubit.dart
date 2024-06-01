@@ -413,4 +413,32 @@ class TournamentCubit extends Cubit<TournamentState> {
       }
     }
   }
+
+  void removeGroup({
+    required String groupId,
+    required String tournamentId,
+  }) async {
+    emit(TournamentRemoveGroupLoading());
+    try {
+      var network = await Network.check();
+
+      if (!network) {
+        emit(TournamentRemoveGroupError(
+            message: "Please check your internet connection"));
+        return;
+      }
+      final response = await adminController.removeGroup(
+        tournamentId: tournament?.sId ?? '',
+        groupId: groupId,
+      );
+      emit(TournamentRemoveGroupSuccess(response: response));
+    } catch (e) {
+      log(e.toString());
+      if (e is AppException) {
+        emit(TournamentRemoveGroupError(message: e.message));
+      } else {
+        emit(TournamentRemoveGroupError(message: "Something went wrong"));
+      }
+    }
+  }
 }

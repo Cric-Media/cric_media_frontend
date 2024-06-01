@@ -22,7 +22,7 @@ class LiveInfo extends StatelessWidget {
             elevation: 2,
             child: Container(
               width: screenWidth,
-              height: 130,
+              height: 100,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12), color: Colors.white),
               child: Padding(
@@ -40,7 +40,7 @@ class LiveInfo extends StatelessWidget {
                     //           color: AppColor.blueColor,
                     //           fontWeight: FontWeight.w700)),
                     // ),
-                    const SizedBox(height: 5),
+                    const SizedBox(height: 6),
                     Expanded(
                       child: Row(
                         children: [
@@ -56,7 +56,7 @@ class LiveInfo extends StatelessWidget {
                             child: Text(
                               match != null
                                   ? "\t\t${match?.matchDateTime}"
-                                  : '   Wed, 8 Jan 2024- 2:30 pm',
+                                  : '',
                               style: GoogleFonts.inter(
                                   textStyle: const TextStyle(
                                 fontSize: 14,
@@ -69,47 +69,35 @@ class LiveInfo extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    // Row(
-                    //   children: [
-                    //     Text(
-                    //       'Match No :   ',
-                    //       style: GoogleFonts.inter(
-                    //           textStyle: TextStyle(
-                    //               fontSize: 14,
-                    //               color: Colors.black,
-                    //               fontWeight: FontWeight.w600)),
-                    //     ),
-                    //     Text(
-                    //       '    1st Odi',
-                    //       style: GoogleFonts.inter(
-                    //           textStyle: TextStyle(
-                    //         fontSize: 14,
-                    //         color: AppColor.hintColor,
-                    //         fontWeight: FontWeight.w600,
-                    //       )),
-                    //     )
-                    //   ],
-                    // ),
+
                     Expanded(
                       child: Row(
                         children: [
-                          Text(
-                            'Toss :\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t',
-                            style: GoogleFonts.inter(
-                                textStyle: const TextStyle(
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                text: 'Toss: ',
+                                style: GoogleFonts.inter(
+                                  textStyle: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
-                                    fontWeight: FontWeight.w600)),
-                          ),
-                          Expanded(
-                            child: Text(
-                              match != null ? "${match?.tossDetails}" : '',
-                              style: GoogleFonts.inter(
-                                  textStyle: const TextStyle(
-                                fontSize: 14,
-                                color: AppColor.hintColor,
-                                fontWeight: FontWeight.w600,
-                              )),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text:
+                                        match != null ? match?.tossDetails : '',
+                                    style: GoogleFonts.inter(
+                                      textStyle: const TextStyle(
+                                        fontSize: 14,
+                                        color: AppColor.hintColor,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           )
                         ],

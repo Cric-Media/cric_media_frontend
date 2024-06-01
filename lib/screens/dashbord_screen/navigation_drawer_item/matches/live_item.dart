@@ -22,7 +22,7 @@ class _LiveItem extends State<LiveItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(4.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,7 +55,9 @@ class _LiveItem extends State<LiveItem> {
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 5),
+                        horizontal: 4.0,
+                        vertical: 5,
+                      ),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, setOpenings, arguments: {

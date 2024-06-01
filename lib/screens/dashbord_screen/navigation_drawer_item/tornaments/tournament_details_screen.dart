@@ -896,71 +896,106 @@ class _GroupsState extends State<Groups> {
 
   @override
   Widget build(BuildContext context) {
+    var groups = TournamentCubit.get(context).tournament!.groups;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            if (TournamentCubit.get(context).tournament?.groups != null &&
-                TournamentCubit.get(context).tournament!.groups!.isNotEmpty)
-              Column(
-                children: TournamentCubit.get(context)
-                        .tournament!
-                        .groups
-                        ?.map((group) {
-                      bool groupCondition = group.name != 'qualifier' &&
-                          group.name != 'semiFinal' &&
-                          group.name != 'final';
+        child: BlocConsumer<TournamentCubit, TournamentState>(
+          listener: (context, state) {
+            if (state is TournamentRemoveGroupSuccess) {
+              TournamentCubit.get(context).getTournament(widget.tournamentId);
+            }
+          },
+          builder: (context, state) {
+            if (state is TournamentRemoveGroupLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Column(
+              children: [
+                if (TournamentCubit.get(context).tournament?.groups != null &&
+                    TournamentCubit.get(context).tournament!.groups!.isNotEmpty)
+                  Column(
+                    children: TournamentCubit.get(context)
+                            .tournament!
+                            .groups
+                            ?.map((group) {
+                          bool groupCondition = group.name != 'qualifier' &&
+                              group.name != 'semiFinal' &&
+                              group.name != 'final';
 
-                      return Column(
-                        children: [
-                          Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Row(
-                              children: [
-                                if (groupCondition)
-                                  Text("GROUP ${group.name}")
-                                else
-                                  Text("${group.name?.toUpperCase()}"),
-                                const Spacer(),
-                                if (groupCondition && widget.isAdmin == true)
-                                  Row(
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          teamsSheet(group);
-                                        },
-                                        child: const Text("Add"),
+                          return Column(
+                            children: [
+                              Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  children: [
+                                    Visibility(
+                                      visible: widget.isAdmin == true &&
+                                          groups!.isNotEmpty,
+                                      child: Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              TournamentCubit.get(context)
+                                                  .removeGroup(
+                                                groupId: group.id ?? '',
+                                                tournamentId:
+                                                    widget.tournamentId,
+                                              );
+                                            },
+                                            child: const Icon(Icons.delete),
+                                          ),
+                                          const SizedBox(width: 8),
+                                        ],
                                       ),
-                                      const SizedBox(width: 8),
-                                      if (group.teams != null &&
-                                          group.teams!.isNotEmpty)
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            removeTeamSheet(group);
-                                          },
-                                          child: const Text("Remove"),
-                                        ),
-                                    ],
-                                  ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          GroupWidget(group: group),
-                          const SizedBox(height: 16),
-                        ],
-                      );
-                    }).toList() ??
-                    [],
-              ),
-            const SizedBox(height: 8),
-          ],
+                                    ),
+                                    if (groupCondition)
+                                      Text("GROUP ${group.name}")
+                                    else
+                                      Text("${group.name?.toUpperCase()}"),
+                                    const Spacer(),
+                                    if (groupCondition &&
+                                        widget.isAdmin == true)
+                                      Row(
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              teamsSheet(group);
+                                            },
+                                            child: const Text("Add"),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          if (group.teams != null &&
+                                              group.teams!.isNotEmpty)
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                removeTeamSheet(group);
+                                              },
+                                              child: const Text("Remove"),
+                                            ),
+                                        ],
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              GroupWidget(group: group),
+                              const SizedBox(height: 16),
+                            ],
+                          );
+                        }).toList() ??
+                        [],
+                  ),
+                const SizedBox(height: 8),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -1137,6 +1172,8 @@ class _ScheduleMatchWidgetState extends State<ScheduleMatchWidget> {
                       "tournament": TournamentCubit.get(context).tournament,
                       "groupId": TournamentCubit.get(context).selectedGroupId,
                       "totalMatches": TournamentCubit.get(context).totalMatches,
+                      "matchType":
+                          TournamentCubit.get(context).selectedMatchType,
                     },
                   );
                 },

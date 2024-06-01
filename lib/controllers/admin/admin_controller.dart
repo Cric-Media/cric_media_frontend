@@ -885,4 +885,20 @@ class AdminController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> removeGroup({
+    required String tournamentId,
+    required String groupId,
+  }) async {
+    final url = AdminUrl.removeGroupFromTournament;
+    final headers = {"Content-Type": "application/json"};
+    final body = {"tournamentId": tournamentId, "groupId": groupId};
+    final response = await ApiManager.putRequest(body, url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }
