@@ -92,6 +92,7 @@ class _HomeTabState extends State<HomeTab> {
                       SliderWidget(
                         autoPlayDuration: 1000,
                         autoPlayAnimationDuration: 1000,
+                        type: 1,
                         items: liveMatches.map((match) {
                           return Builder(
                             builder: (BuildContext context) {
@@ -146,6 +147,7 @@ class _HomeTabState extends State<HomeTab> {
                       SliderWidget(
                         autoPlayDuration: 3000,
                         autoPlayAnimationDuration: 2000,
+                        type: 0,
                         items: upcommingMatches.map((match) {
                           return Builder(
                             builder: (BuildContext context) {
@@ -384,11 +386,13 @@ class SliderWidget extends StatefulWidget {
   final List<Widget>? items;
   final int? autoPlayAnimationDuration;
   final int? autoPlayDuration;
+  final int? type;
   const SliderWidget(
       {super.key,
       this.items,
       this.autoPlayAnimationDuration,
-      this.autoPlayDuration});
+      this.autoPlayDuration,
+      this.type});
 
   @override
   State<SliderWidget> createState() => _SliderWidgetState();
@@ -402,7 +406,7 @@ class _SliderWidgetState extends State<SliderWidget> {
       children: [
         CarouselSlider(
           options: CarouselOptions(
-            aspectRatio: 2,
+            aspectRatio: widget.type! == 1 ? 2.4 : 2.2,
             viewportFraction: 1,
             initialPage: 0,
             enableInfiniteScroll: true,

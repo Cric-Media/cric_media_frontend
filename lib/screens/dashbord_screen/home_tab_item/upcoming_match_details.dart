@@ -152,7 +152,10 @@ class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
                                     child: Column(
                                       children: [
                                         if (widget.match?.tournamentInfo !=
-                                            null)
+                                                null &&
+                                            widget.match?.tournamentInfo
+                                                    ?.tournament !=
+                                                null)
                                           PointsTableWidget(
                                             tournamentId: widget
                                                     .match

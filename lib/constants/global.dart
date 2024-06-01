@@ -1,4 +1,3 @@
-import 'package:cricket_app/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Global {
@@ -43,8 +42,32 @@ class Global {
     await prefs.remove(playerCacheTimeKey);
     await prefs.clear();
 
+    // // reassign cubits
+    // BlocProvider.of<AdminCubit>(context).close();
+    // BlocProvider.of<PlayerCubit>(context).close();
+    // BlocProvider.of<TeamCubit>(context).close();
+    // BlocProvider.of<MatchCubit>(context).close();
+    // BlocProvider.of<TournamentCubit>(context).close();
+
+    // // create new instances of cubits
+    // BlocProvider<AdminCubit>(
+    //   create: (_) => AdminCubit(),
+    // );
+    // BlocProvider<PlayerCubit>(
+    //   create: (_) => PlayerCubit(),
+    // );
+    // BlocProvider<TeamCubit>(
+    //   create: (_) => TeamCubit()..getInitialTeams(),
+    // );
+    // BlocProvider<MatchCubit>(
+    //   create: (_) => MatchCubit(),
+    // );
+    // BlocProvider<TournamentCubit>(
+    //   create: (_) => TournamentCubit(),
+    // );
+
     // remove all the routes
-    Routes.removeAllRoutes(context);
+    // Routes.removeAllRoutes(context);
   }
 
   // Set all user info

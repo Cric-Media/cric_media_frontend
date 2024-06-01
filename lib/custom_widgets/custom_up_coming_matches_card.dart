@@ -82,8 +82,8 @@ class UpCommingMachesCard extends StatelessWidget {
                         Row(
                           children: [
                             SizedBox(
-                              // width: 35,
-                              // height: 35,
+                              width: 35,
+                              height: 35,
                               child: match != null
                                   ? CircleAvatar(
                                       backgroundImage:
@@ -113,8 +113,8 @@ class UpCommingMachesCard extends StatelessWidget {
                         Row(
                           children: [
                             SizedBox(
-                              // width: 35,
-                              // height: 35,
+                              width: 35,
+                              height: 35,
                               child: match != null
                                   ? CircleAvatar(
                                       backgroundImage:
@@ -144,26 +144,34 @@ class UpCommingMachesCard extends StatelessWidget {
                         if (admin != null)
                           Visibility(
                             visible: admin != null,
-                            child: Row(
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: OutlinedButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        startMatch,
-                                        arguments: {'match': match},
-                                      );
-                                    },
-                                    child: const Text(
-                                      "Start Match",
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        color: AppColor.blueColor,
-                                        fontWeight: FontWeight.w700,
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: 30,
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pushNamed(
+                                              context,
+                                              startMatch,
+                                              arguments: {'match': match},
+                                            );
+                                          },
+                                          child: const Text(
+                                            "Start",
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: AppColor.blueColor,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               ],
                             ),

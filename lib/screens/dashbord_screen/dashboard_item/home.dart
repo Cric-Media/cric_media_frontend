@@ -405,10 +405,9 @@ class _AppDrawerState extends State<AppDrawer> {
                           indexes(5);
                           admin == null
                               ? signinConfirmation()
-                              : Navigator.pushReplacementNamed(
-                                  context,
-                                  dashboard,
-                                );
+                              : Navigator.pushNamedAndRemoveUntil(
+                                  context, dashboard, (route) => false);
+
                           Global().removeUserId();
                           Global().deleteIds();
                           Global().logoutUser(context);

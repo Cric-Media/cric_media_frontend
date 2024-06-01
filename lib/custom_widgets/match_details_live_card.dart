@@ -169,9 +169,7 @@ class _MatchDetailsLiveCardState extends State<MatchDetailsLiveCard> {
                                 ),
                               ),
                       ),
-                      const SizedBox(
-                        width: 15,
-                      ),
+                      const SizedBox(width: 15),
                       Text(
                         match?.team2?.name ?? '',
                         style: GoogleFonts.inter(
@@ -207,14 +205,12 @@ class _MatchDetailsLiveCardState extends State<MatchDetailsLiveCard> {
                       )
                     ],
                   ),
-                  if (match != null)
+                  if (match != null && match!.matchStatus! > 1)
                     Visibility(
                       visible: match!.matchStatus! > 1,
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: 12,
-                          ),
+                          const SizedBox(height: 12),
                           Center(
                             child: Text(
                               '$winningTeam won by $winningWickets wickets',
