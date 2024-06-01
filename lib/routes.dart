@@ -226,9 +226,12 @@
 // }
 
 import 'package:cricket_app/constants/routes_names.dart';
+import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
+import 'package:cricket_app/cubits/teams/team_cubit.dart';
+import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/screens/auth_screen/forget_password/change_password_screen.dart';
 import 'package:cricket_app/screens/auth_screen/forget_password/forget_password.dart';
@@ -323,9 +326,16 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (context) => AuthCubit(),
+              BlocProvider<AdminCubit>(create: (context) => AdminCubit()),
+              BlocProvider<PlayerCubit>(create: (context) => PlayerCubit()),
+              BlocProvider<TeamCubit>(
+                create: (context) => TeamCubit()..getInitialTeams(),
               ),
+              BlocProvider<MatchCubit>(create: (context) => MatchCubit()),
+              BlocProvider<TournamentCubit>(
+                create: (context) => TournamentCubit(),
+              ),
+              BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
               BlocProvider<MatchCubit>(
                 create: (context) => MatchCubit()
                   ..getLiveMatches(

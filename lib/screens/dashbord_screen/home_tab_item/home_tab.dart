@@ -406,7 +406,7 @@ class _SliderWidgetState extends State<SliderWidget> {
       children: [
         CarouselSlider(
           options: CarouselOptions(
-            aspectRatio: widget.type! == 1 ? 2.4 : 2.2,
+            aspectRatio: widget.type! == 1 ? 2.2 : 2,
             viewportFraction: 1,
             initialPage: 0,
             enableInfiniteScroll: true,
@@ -434,9 +434,10 @@ class _SliderWidgetState extends State<SliderWidget> {
           index: currentIndex,
           color: AppColor.grayColor,
           activeColor: AppColor.blueColor,
-          height: 10,
-          width: 10,
-          space: 5,
+          height: 6,
+          width: 6,
+          space: 4,
+          cornerRadius: 3,
         ),
       ],
     );
