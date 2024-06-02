@@ -4,6 +4,7 @@ import 'package:cricket_app/custom_widgets/placeholders/live_match_shimmer.dart'
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class LiveTab extends StatefulWidget {
   const LiveTab({super.key});
@@ -13,12 +14,48 @@ class LiveTab extends StatefulWidget {
 }
 
 class _LiveTabState extends State<LiveTab> {
+  InterstitialAd? interstitialAd;
   @override
   void initState() {
     if (MatchCubit.get(context).liveMatchDetailsList.isEmpty) {
       MatchCubit.get(context).getLiveMatches(user: true);
     }
+    createInterstitialAd();
     super.initState();
+  }
+
+  createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: "ca-app-pub-4072951366400579/6244843447",
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) => interstitialAd = ad,
+        onAdFailedToLoad: (error) => interstitialAd = null,
+      ),
+    );
+  }
+
+  showInterstitialAd() {
+    if (interstitialAd != null) {
+      interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          createInterstitialAd();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          createInterstitialAd();
+        },
+      );
+      interstitialAd?.show();
+      interstitialAd = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    showInterstitialAd();
+    super.dispose();
   }
 
   @override
