@@ -6,6 +6,7 @@ import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_info.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_live.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/scorecard_tab.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tournament_details_screen.dart';
 import 'package:cricket_app/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -197,7 +198,43 @@ class _LiveDetails extends State<LiveDetails> {
                                 : value == 3
                                     ? Column(
                                         children: [
-                                          if (match?.tournamentInfo == null)
+                                          if (widget.match?.tournamentInfo !=
+                                                  null &&
+                                              widget.match?.tournamentInfo
+                                                      ?.tournament !=
+                                                  null)
+                                            Column(
+                                              children: [
+                                                if (widget
+                                                        .match!
+                                                        .tournamentInfo!
+                                                        .group ==
+                                                    null)
+                                                  PointsTableWidget(
+                                                    tournamentId: widget
+                                                            .match
+                                                            ?.tournamentInfo
+                                                            ?.tournament
+                                                            ?.sId ??
+                                                        '',
+                                                    tournament: widget
+                                                        .match!
+                                                        .tournamentInfo!
+                                                        .tournament!,
+                                                  )
+                                                else
+                                                  Groups(
+                                                    tournamentId: widget
+                                                            .match
+                                                            ?.tournamentInfo
+                                                            ?.tournament
+                                                            ?.sId ??
+                                                        '',
+                                                    isAdmin: false,
+                                                  )
+                                              ],
+                                            )
+                                          else
                                             const Center(
                                               child: Text(
                                                 "Points Table is only available for tournament matches",
@@ -207,37 +244,7 @@ class _LiveDetails extends State<LiveDetails> {
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
-                                            ),
-                                          if (match?.tournamentInfo != null)
-                                            Column(
-                                              children: [
-                                                // if (match!
-                                                //         .tournamentInfo!
-                                                //         .tournament!
-                                                //         .groups
-                                                //         ?.isNotEmpty ??
-                                                //     false)
-                                                //   Groups(
-                                                //     tournamentId: match!
-                                                //             .tournamentInfo!
-                                                //             .tournament
-                                                //             ?.sId ??
-                                                //         '',
-                                                //     isAdmin: false,
-                                                //   )
-                                                // else
-                                                PointsTableWidget(
-                                                  tournamentId: match
-                                                          ?.tournamentInfo
-                                                          ?.tournament
-                                                          ?.sId ??
-                                                      '',
-                                                  tournament: match!
-                                                      .tournamentInfo!
-                                                      .tournament!,
-                                                ),
-                                              ],
-                                            ),
+                                            )
                                         ],
                                       )
                                     : Container(),

@@ -175,14 +175,14 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 }
               },
               listener: (context, state) {
-                if (state is AuthLoading) {
+                if (state is AuthSendOtpLoading) {
                   isLoading = true;
                 }
-                if (state is AuthSuccess) {
+                if (state is AuthSendOtpSuccess) {
                   isLoading = false;
                   Navigator.pushNamed(context, verifyEmailForPassword);
                 }
-                if (state is AuthError) {
+                if (state is AuthSendOtpError) {
                   isLoading = false;
                   showSnack(context, message: state.message);
                 }

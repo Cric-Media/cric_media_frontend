@@ -66,9 +66,7 @@ class _UpComingTabState extends State<UpComingTab> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            UpcomingMatchDetails(
-                                          match: match,
-                                        ),
+                                            UpcomingMatchDetails(match: match),
                                       ));
                                 },
                                 child: Hero(

@@ -135,9 +135,7 @@ class _VerifyEmailForPasswordScreenState
                             animationDuration:
                                 const Duration(milliseconds: 300),
                           ),
-                          SizedBox(
-                            height: screenWidth * 0.040,
-                          ),
+                          SizedBox(height: screenWidth * 0.040),
                           // resent otp
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,9 +172,7 @@ class _VerifyEmailForPasswordScreenState
                                   ))
                             ],
                           ),
-                          SizedBox(
-                            height: screenWidth * 0.040,
-                          ),
+                          SizedBox(height: screenWidth * 0.040),
                           CustomButton(
                             buttonText: 'Verify',
                             onTap: () {
@@ -207,7 +203,7 @@ class _VerifyEmailForPasswordScreenState
                       }
                     },
                     listener: (context, state) {
-                      if (state is AuthLoading) {
+                      if (state is AuthLoading || state is AuthSendOtpLoading) {
                         isLoading = true;
                       }
                       if (state is AuthSuccess) {
@@ -215,6 +211,10 @@ class _VerifyEmailForPasswordScreenState
                         Navigator.pushNamed(context, changePassword);
                       }
                       if (state is AuthError) {
+                        isLoading = false;
+                        showSnack(context, message: state.message);
+                      }
+                      if (state is AuthSendOtpError) {
                         isLoading = false;
                         showSnack(context, message: state.message);
                       }

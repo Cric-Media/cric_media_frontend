@@ -6,9 +6,16 @@ class AuthInitial extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
+class AuthSendOtpLoading extends AuthState {}
+
 class AuthSuccess extends AuthState {
   final ApiResponse response;
   AuthSuccess(this.response);
+}
+
+class AuthSendOtpSuccess extends AuthState {
+  final ApiResponse response;
+  AuthSendOtpSuccess(this.response);
 }
 
 class AuthSignin extends AuthState {
@@ -25,4 +32,10 @@ class AuthError extends AuthState {
   final String message;
 
   AuthError(this.message);
+}
+
+class AuthSendOtpError extends AuthState {
+  final String message;
+
+  AuthSendOtpError(this.message);
 }

@@ -144,35 +144,41 @@ class _ScorecardTabState extends State<ScorecardTab> {
                                                   ),
                                                 ),
                                                 const SizedBox(width: 8),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      batsman.player?.name ??
-                                                          "",
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        fontSize: 14,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 8),
-                                                    if (dismissal!.fielder !=
-                                                        null)
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
                                                       Text(
-                                                        "${dismissal.type} ${dismissal.fielder?.name} by ${dismissal.outBy?.name}",
+                                                        batsman.player?.name ??
+                                                            "",
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 14,
+                                                        ),
                                                       ),
-                                                    if (dismissal.fielder ==
-                                                        null)
-                                                      dismissal.type ==
-                                                              "Not Out"
-                                                          ? Text(
-                                                              "${dismissal.type}")
-                                                          : Text(
-                                                              "${dismissal.type} ${dismissal.outBy?.name}",
-                                                            ),
-                                                  ],
+                                                      const SizedBox(height: 8),
+                                                      if (dismissal!.fielder !=
+                                                          null)
+                                                        Text(
+                                                          "${dismissal.type} ${dismissal.fielder?.name} by ${dismissal.outBy?.name}",
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          maxLines: 2,
+                                                        ),
+                                                      if (dismissal.fielder ==
+                                                          null)
+                                                        dismissal.type ==
+                                                                "Not Out"
+                                                            ? Text(
+                                                                "${dismissal.type}")
+                                                            : Text(
+                                                                "${dismissal.type} ${dismissal.outBy?.name}",
+                                                              ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),

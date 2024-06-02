@@ -470,6 +470,7 @@ class MatchStopped {
 class TournamentInfo {
   Tournament? tournament;
   String? matchType;
+  String? group;
 
   TournamentInfo({this.tournament, this.matchType});
 
@@ -478,6 +479,7 @@ class TournamentInfo {
         ? Tournament.fromJson(json['tournament'])
         : null;
     matchType = json['matchType'];
+    group = json['group'];
   }
 
   Map<String, dynamic> toJson() {
@@ -486,7 +488,7 @@ class TournamentInfo {
       data['tournament'] = tournament!.toJson();
     }
     data['matchType'] = matchType;
+    data['group'] = group;
     return data;
   }
 }
-

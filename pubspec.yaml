@@ -61,7 +61,6 @@ dependencies:
   country_state_city: ^0.1.6
   carousel_slider: ^4.2.1
   carousel_indicator: ^1.0.6
-  shimmer: ^3.0.0
   flutter_native_splash: ^2.4.0
 
   

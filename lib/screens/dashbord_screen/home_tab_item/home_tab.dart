@@ -26,9 +26,6 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   @override
   void initState() {
-    if (TournamentCubit.get(context).fiveTournaments.isEmpty) {
-      TournamentCubit.get(context).getFiveTournaments();
-    }
     loadInitialData(context);
     super.initState();
   }
@@ -39,11 +36,15 @@ class _HomeTabState extends State<HomeTab> {
         MatchCubit.get(context).getBannerMatches(1),
       if (MatchCubit.get(context).upcomingBannerMatches.isEmpty)
         MatchCubit.get(context).getBannerMatches(0),
-    ]).then((_) {
-      // Handle completion here, if needed.
-    }).catchError((error) {
-      // Handle errors here, if any.
-    });
+      if (TournamentCubit.get(context).fiveTournaments.isEmpty)
+        TournamentCubit.get(context).getFiveTournaments(),
+    ]);
+  }
+
+  void refreshData(BuildContext context) {
+    MatchCubit.get(context).getBannerMatches(1);
+    MatchCubit.get(context).getBannerMatches(0);
+    TournamentCubit.get(context).getFiveTournaments();
   }
 
   @override
@@ -54,328 +55,336 @@ class _HomeTabState extends State<HomeTab> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: SingleChildScrollView(
-        child: BlocConsumer<MatchCubit, MatchState>(
-          listener: (context, state) {
-            if (state is MatchBannerLiveSuccess) {
-              MatchCubit.get(context).liveBannerMatches = state.res.data;
-            }
-            if (state is MatchBannerUpcomingSuccess) {
-              MatchCubit.get(context).upcomingBannerMatches = state.res.data;
-            }
-          },
-          builder: (context, state) {
-            var upcommingMatches =
-                MatchCubit.get(context).upcomingBannerMatches;
-            var liveMatches = MatchCubit.get(context).liveBannerMatches;
-            return Column(
-              children: [
-                if (liveMatches.isNotEmpty)
-                  Column(
-                    children: [
-                      SizedBox(height: screenWidth * 0.030),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Matches',
-                              style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                      fontSize: screenWidth * 0.040,
-                                      color: AppColor.blackColor,
-                                      fontWeight: FontWeight.w800)),
+        child: Column(
+          children: [
+            BlocConsumer<MatchCubit, MatchState>(
+              listener: (context, state) {
+                if (state is MatchBannerLiveSuccess) {
+                  MatchCubit.get(context).liveBannerMatches = state.res.data;
+                }
+                if (state is MatchBannerUpcomingSuccess) {
+                  MatchCubit.get(context).upcomingBannerMatches =
+                      state.res.data;
+                }
+              },
+              builder: (context, state) {
+                var upcommingMatches =
+                    MatchCubit.get(context).upcomingBannerMatches;
+                var liveMatches = MatchCubit.get(context).liveBannerMatches;
+                return Column(
+                  children: [
+                    if (liveMatches.isNotEmpty)
+                      Column(
+                        children: [
+                          SizedBox(height: screenWidth * 0.030),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Matches',
+                                  style: GoogleFonts.inter(
+                                      textStyle: TextStyle(
+                                          fontSize: screenWidth * 0.040,
+                                          color: AppColor.blackColor,
+                                          fontWeight: FontWeight.w800)),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      SliderWidget(
-                        autoPlayDuration: 1000,
-                        autoPlayAnimationDuration: 1000,
-                        type: 1,
-                        items: liveMatches.map((match) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          LiveDetails(match: match),
-                                    ),
+                          ),
+                          const SizedBox(height: 5),
+                          SliderWidget(
+                            autoPlayDuration: 1000,
+                            autoPlayAnimationDuration: 1000,
+                            type: 1,
+                            items: liveMatches.map((match) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              LiveDetails(match: match),
+                                        ),
+                                      );
+                                    },
+                                    child: MatchDetailsLiveCard(match: match),
                                   );
                                 },
-                                child: MatchDetailsLiveCard(match: match),
                               );
-                            },
-                          );
-                        }).toList(),
+                            }).toList(),
+                          ),
+                          SizedBox(height: screenWidth * 0.026),
+                        ],
+                      )
+                    else if (state is MatchBannerLiveLoading)
+                      const Column(
+                        children: [
+                          LiveMatchPlaceholder(),
+                          SizedBox(height: 8),
+                          LiveMatchPlaceholder(),
+                        ],
                       ),
-                      SizedBox(height: screenWidth * 0.026),
-                    ],
-                  )
-                else if (state is MatchBannerLiveLoading)
-                  const Column(
-                    children: [
-                      LiveMatchPlaceholder(),
-                      SizedBox(height: 8),
-                      LiveMatchPlaceholder(),
-                    ],
-                  ),
-                if (upcommingMatches.isNotEmpty)
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Up Coming',
-                              style: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                    fontSize: screenWidth * 0.038,
-                                    color: AppColor.blackColor,
-                                    fontWeight: FontWeight.w800),
-                              ),
+                    if (upcommingMatches.isNotEmpty)
+                      Column(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Up Coming',
+                                  style: GoogleFonts.inter(
+                                    textStyle: TextStyle(
+                                        fontSize: screenWidth * 0.038,
+                                        color: AppColor.blackColor,
+                                        fontWeight: FontWeight.w800),
+                                  ),
+                                ),
+                                const Spacer(),
+                              ],
                             ),
-                            const Spacer(),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      SliderWidget(
-                        autoPlayDuration: 3000,
-                        autoPlayAnimationDuration: 2000,
-                        type: 0,
-                        items: upcommingMatches.map((match) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              return InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          UpcomingMatchDetails(match: match),
-                                    ),
+                          ),
+                          const SizedBox(height: 5),
+                          SliderWidget(
+                            autoPlayDuration: 3000,
+                            autoPlayAnimationDuration: 2000,
+                            type: 0,
+                            items: upcommingMatches.map((match) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              UpcomingMatchDetails(
+                                                  match: match),
+                                        ),
+                                      );
+                                    },
+                                    child: UpCommingMachesCard(match: match),
                                   );
                                 },
-                                child: UpCommingMachesCard(match: match),
                               );
-                            },
-                          );
-                        }).toList(),
+                            }).toList(),
+                          ),
+                          // InkWell(
+                          //     onTap: () {
+                          //       Navigator.push(
+                          //         context,
+                          //         MaterialPageRoute(
+                          //           builder: (context) => const UpcomingMatchDetails(),
+                          //         ),
+                          //       );
+                          //     },
+                          //     child: const UpCommingMachesCard()),
+                          SizedBox(height: screenWidth * 0.030),
+                        ],
+                      )
+                    else if (state is MatchBannerUpcomingLoading)
+                      const Column(
+                        children: [
+                          UpcomingMatchPlaceholder(),
+                          SizedBox(height: 8),
+                          UpcomingMatchPlaceholder(),
+                        ],
                       ),
-                      // InkWell(
-                      //     onTap: () {
-                      //       Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //           builder: (context) => const UpcomingMatchDetails(),
-                      //         ),
-                      //       );
-                      //     },
-                      //     child: const UpCommingMachesCard()),
-                      SizedBox(height: screenWidth * 0.030),
-                    ],
-                  )
-                else if (state is MatchBannerUpcomingLoading)
-                  const Column(
-                    children: [
-                      UpcomingMatchPlaceholder(),
-                      SizedBox(height: 8),
-                      UpcomingMatchPlaceholder(),
-                    ],
-                  ),
 
-                BlocConsumer<TournamentCubit, TournamentState>(
-                  builder: (context, state) {
-                    return Column(children: [
-                      if (TournamentCubit.get(context)
-                          .fiveTournaments
-                          .isNotEmpty)
-                        Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'Ongoing Series',
-                                    style: GoogleFonts.inter(
-                                        textStyle: TextStyle(
-                                            fontSize: screenWidth * 0.038,
-                                            color: AppColor.blackColor,
-                                            fontWeight: FontWeight.w800)),
+                    BlocConsumer<TournamentCubit, TournamentState>(
+                      builder: (context, state) {
+                        return Column(children: [
+                          if (TournamentCubit.get(context)
+                              .fiveTournaments
+                              .isNotEmpty)
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Ongoing Series',
+                                        style: GoogleFonts.inter(
+                                            textStyle: TextStyle(
+                                                fontSize: screenWidth * 0.038,
+                                                color: AppColor.blackColor,
+                                                fontWeight: FontWeight.w800)),
+                                      ),
+                                      const Spacer(),
+                                    ],
                                   ),
-                                  const Spacer(),
-                                ],
-                              ),
+                                ),
+                                SizedBox(
+                                  height: screenWidth * 0.020,
+                                ),
+                                ...TournamentCubit.get(context)
+                                    .fiveTournaments
+                                    .map(
+                                      (tournament) => Padding(
+                                        padding: const EdgeInsets.only(top: 5),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                              context,
+                                              seriesDetails,
+                                              arguments: {'id': tournament.sId},
+                                            );
+                                          },
+                                          child: SeriesWidget(
+                                              tournament: tournament),
+                                        ),
+                                      ),
+                                    )
+                                    .toList()
+                              ],
+                            )
+                          else if (state is TournamentGetFiveLoading)
+                            const Column(
+                              children: [
+                                SizedBox(height: 8),
+                                SeriesShimmer(),
+                                SizedBox(height: 8),
+                                SizedBox(height: 8),
+                                SeriesShimmer(),
+                                SizedBox(height: 8),
+                                SizedBox(height: 8),
+                                SeriesShimmer(),
+                                SizedBox(height: 8),
+                              ],
                             ),
-                            SizedBox(
-                              height: screenWidth * 0.020,
-                            ),
-                            ...TournamentCubit.get(context)
-                                .fiveTournaments
-                                .map(
-                                  (tournament) => Padding(
-                                    padding: const EdgeInsets.only(top: 5),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          seriesDetails,
-                                          arguments: {'id': tournament.sId},
-                                        );
-                                      },
-                                      child:
-                                          SeriesWidget(tournament: tournament),
-                                    ),
-                                  ),
-                                )
-                                .toList()
-                          ],
-                        )
-                      else if (state is TournamentGetFiveLoading)
-                        const Column(
-                          children: [
-                            SizedBox(height: 8),
-                            SeriesShimmer(),
-                            SizedBox(height: 8),
-                            SizedBox(height: 8),
-                            SeriesShimmer(),
-                            SizedBox(height: 8),
-                            SizedBox(height: 8),
-                            SeriesShimmer(),
-                            SizedBox(height: 8),
-                          ],
-                        ),
-                    ]);
-                  },
-                  listener: (context, state) {
-                    if (state is TournamentGetFiveSuccess) {
-                      TournamentCubit.get(context).fiveTournaments =
-                          state.response.data;
-                    }
-                  },
-                ),
-                // const SizedBox(height: 10),
-                // Align(
-                //   alignment: Alignment.topLeft,
-                //   child: Text(
-                //     'Trending News',
-                //     style: GoogleFonts.inter(
-                //         textStyle: const TextStyle(
-                //       fontSize: 17,
-                //       color: Colors.black,
-                //       fontWeight: FontWeight.w700,
-                //     )),
-                //   ),
-                // ),
-                // const SizedBox(
-                //   height: 6,
-                // ),
-                // ClipRRect(
-                //   borderRadius: BorderRadius.circular(12),
-                //   child: InkWell(
-                //     onTap: () {
-                //       Navigator.push(
-                //           context,
-                //           MaterialPageRoute(
-                //               builder: (context) => const NewsDetails()));
-                //     },
-                //     child: Card(
-                //       color: Colors.white,
-                //       elevation: 2,
-                //       child: Container(
-                //         width: screenWidth,
-                //         height: screenHeight * 0.38,
-                //         decoration: BoxDecoration(
-                //           color: Colors.white,
-                //           borderRadius: BorderRadius.circular(15),
-                //         ),
-                //         child: Padding(
-                //           padding: const EdgeInsets.symmetric(
-                //               horizontal: 10, vertical: 5),
-                //           child: Column(
-                //             mainAxisAlignment: MainAxisAlignment.start,
-                //             crossAxisAlignment: CrossAxisAlignment.start,
-                //             children: [
-                //               Container(
-                //                 //     decoration: BoxDecoration(color: Colors.amber),
-                //                 width: screenWidth,
-                //                 decoration: BoxDecoration(
-                //                     borderRadius: BorderRadius.circular(12)),
-                //                 height: 170,
-                //                 child: ClipRRect(
-                //                   borderRadius: BorderRadius.circular(12),
-                //                   child: Image.asset(
-                //                     AppIcons.match_1,
-                //                     fit: BoxFit.cover,
-                //                   ),
-                //                 ),
-                //               ),
-                //               const SizedBox(
-                //                 height: 15,
-                //               ),
-                //               Text(
-                //                 'Pakistan and India Set to Renew Rivalry',
-                //                 style: GoogleFonts.inter(
-                //                     textStyle: const TextStyle(
-                //                   fontSize: 15,
-                //                   color: Colors.black,
-                //                   fontWeight: FontWeight.w600,
-                //                 )),
-                //               ),
-                //               const SizedBox(
-                //                 height: 5,
-                //               ),
-                //               Text(
-                //                 'The world of cricket, few matchups generate as'
-                //                 ' much anticipation and excitement as a clash '
-                //                 '  between Pakistan and India. Once again, these '
-                //                 '   two cricketing giants are set to renew their historic '
-                //                 ' rivalry, and fans across the '
-                //                 '  globe are eagerly awaiting the showdown.',
-                //                 style: GoogleFonts.inter(
-                //                     textStyle: const TextStyle(
-                //                   fontSize: 12,
-                //                   color: AppColor.grayColor,
-                //                   fontWeight: FontWeight.w300,
-                //                 )),
-                //               )
-                //             ],
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // SizedBox(
-                //   height: 800,
-                //   child: ListView.builder(
-                //     physics: const NeverScrollableScrollPhysics(),
-                //     itemCount: 5,
-                //     itemBuilder: (context, index) {
-                //       return Padding(
-                //           padding: const EdgeInsets.only(top: 5),
-                //           child: InkWell(
-                //               onTap: () {
-                //                 Navigator.push(
-                //                     context,
-                //                     MaterialPageRoute(
-                //                         builder: (context) =>
-                //                             const NewsDetails()));
-                //               },
-                //               child: const Custom_Contanor_trading_news()));
-                //     },
-                //   ),
-                // ),
-              ],
-            );
-          },
+                        ]);
+                      },
+                      listener: (context, state) {
+                        if (state is TournamentGetFiveSuccess) {
+                          TournamentCubit.get(context).fiveTournaments =
+                              state.response.data;
+                        }
+                      },
+                    ),
+                    // const SizedBox(height: 10),
+                    // Align(
+                    //   alignment: Alignment.topLeft,
+                    //   child: Text(
+                    //     'Trending News',
+                    //     style: GoogleFonts.inter(
+                    //         textStyle: const TextStyle(
+                    //       fontSize: 17,
+                    //       color: Colors.black,
+                    //       fontWeight: FontWeight.w700,
+                    //     )),
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   height: 6,
+                    // ),
+                    // ClipRRect(
+                    //   borderRadius: BorderRadius.circular(12),
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //               builder: (context) => const NewsDetails()));
+                    //     },
+                    //     child: Card(
+                    //       color: Colors.white,
+                    //       elevation: 2,
+                    //       child: Container(
+                    //         width: screenWidth,
+                    //         height: screenHeight * 0.38,
+                    //         decoration: BoxDecoration(
+                    //           color: Colors.white,
+                    //           borderRadius: BorderRadius.circular(15),
+                    //         ),
+                    //         child: Padding(
+                    //           padding: const EdgeInsets.symmetric(
+                    //               horizontal: 10, vertical: 5),
+                    //           child: Column(
+                    //             mainAxisAlignment: MainAxisAlignment.start,
+                    //             crossAxisAlignment: CrossAxisAlignment.start,
+                    //             children: [
+                    //               Container(
+                    //                 //     decoration: BoxDecoration(color: Colors.amber),
+                    //                 width: screenWidth,
+                    //                 decoration: BoxDecoration(
+                    //                     borderRadius: BorderRadius.circular(12)),
+                    //                 height: 170,
+                    //                 child: ClipRRect(
+                    //                   borderRadius: BorderRadius.circular(12),
+                    //                   child: Image.asset(
+                    //                     AppIcons.match_1,
+                    //                     fit: BoxFit.cover,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //               const SizedBox(
+                    //                 height: 15,
+                    //               ),
+                    //               Text(
+                    //                 'Pakistan and India Set to Renew Rivalry',
+                    //                 style: GoogleFonts.inter(
+                    //                     textStyle: const TextStyle(
+                    //                   fontSize: 15,
+                    //                   color: Colors.black,
+                    //                   fontWeight: FontWeight.w600,
+                    //                 )),
+                    //               ),
+                    //               const SizedBox(
+                    //                 height: 5,
+                    //               ),
+                    //               Text(
+                    //                 'The world of cricket, few matchups generate as'
+                    //                 ' much anticipation and excitement as a clash '
+                    //                 '  between Pakistan and India. Once again, these '
+                    //                 '   two cricketing giants are set to renew their historic '
+                    //                 ' rivalry, and fans across the '
+                    //                 '  globe are eagerly awaiting the showdown.',
+                    //                 style: GoogleFonts.inter(
+                    //                     textStyle: const TextStyle(
+                    //                   fontSize: 12,
+                    //                   color: AppColor.grayColor,
+                    //                   fontWeight: FontWeight.w300,
+                    //                 )),
+                    //               )
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // SizedBox(
+                    //   height: 800,
+                    //   child: ListView.builder(
+                    //     physics: const NeverScrollableScrollPhysics(),
+                    //     itemCount: 5,
+                    //     itemBuilder: (context, index) {
+                    //       return Padding(
+                    //           padding: const EdgeInsets.only(top: 5),
+                    //           child: InkWell(
+                    //               onTap: () {
+                    //                 Navigator.push(
+                    //                     context,
+                    //                     MaterialPageRoute(
+                    //                         builder: (context) =>
+                    //                             const NewsDetails()));
+                    //               },
+                    //               child: const Custom_Contanor_trading_news()));
+                    //     },
+                    //   ),
+                    // ),
+                  ],
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

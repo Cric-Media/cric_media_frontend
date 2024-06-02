@@ -175,7 +175,6 @@ class TournamentCubit extends Cubit<TournamentState> {
       );
       emit(TournamentGetInitialSuccess(response: response));
     } catch (e) {
-      print(e);
       if (e is AppException) {
         emit(TournamentGetInitialError(message: e.message));
       } else {
@@ -284,7 +283,7 @@ class TournamentCubit extends Cubit<TournamentState> {
     }
   }
 
-  void getFiveTournaments() async {
+  Future<void> getFiveTournaments() async {
     emit(TournamentGetFiveLoading());
     try {
       var network = await Network.check();

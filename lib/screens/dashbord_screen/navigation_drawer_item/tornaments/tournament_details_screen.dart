@@ -6,6 +6,8 @@ import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
+import 'package:cricket_app/custom_widgets/placeholders/live_match_shimmer.dart';
+import 'package:cricket_app/custom_widgets/placeholders/upcoming_match_placeholder.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/models/tournament.dart';
@@ -13,7 +15,6 @@ import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:shimmer/shimmer.dart';
 
 class TournamentDetailsScreen extends StatefulWidget {
   final Tournament tournament;
@@ -928,7 +929,16 @@ class _GroupsState extends State<Groups> {
                               Container(
                                 height: 50,
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[300],
+                                  // color: Colors.grey[300],
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      // Colors.lightBlue[100]!,
+                                      Colors.lightBlue[300]!,
+                                      Colors.lightBlue[500]!,
+                                      Colors.lightBlue[700]!,
+                                      Colors.lightBlue[900]!,
+                                    ],
+                                  ),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 padding:
@@ -956,9 +966,21 @@ class _GroupsState extends State<Groups> {
                                       ),
                                     ),
                                     if (groupCondition)
-                                      Text("GROUP ${group.name}")
+                                      Text(
+                                        "GROUP ${group.name}",
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
                                     else
-                                      Text("${group.name?.toUpperCase()}"),
+                                      Text(
+                                        "${group.name?.toUpperCase()}",
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     const Spacer(),
                                     if (groupCondition &&
                                         widget.isAdmin == true)
@@ -1217,16 +1239,12 @@ class _UpcomingState extends State<Upcoming> {
       },
       builder: (context, state) {
         if (state is TournamentUpcomingMatchesLoading) {
-          return ListView.builder(itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: const UpCommingMachesCard(),
-              ),
-            );
-          });
+          return ListView.builder(
+            itemBuilder: (context, index) {
+              return const UpcomingMatchPlaceholder();
+            },
+            itemCount: 6,
+          );
         } else if (state is TournamentUpcomingMatchesError) {
           return Center(
             child: Text(state.message),
@@ -1294,8 +1312,11 @@ class _LiveState extends State<Live> {
             },
             builder: (context, state) {
               if (state is TournamentLiveMatchesLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return const LiveMatchPlaceholder();
+                  },
+                  itemCount: 6,
                 );
               } else if (state is TournamentLiveMatchesError) {
                 return Center(child: Text(state.message));
@@ -1332,7 +1353,7 @@ class _LiveState extends State<Live> {
             },
           ),
         ),
-        const SizedBox(height: 70)
+        const SizedBox(height: 70),
       ]),
     );
   }

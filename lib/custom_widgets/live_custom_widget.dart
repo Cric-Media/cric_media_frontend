@@ -211,7 +211,7 @@ class LiveCustomWidgt extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(right: 10.0),
                         child: Text(
-                          'Last ${match?.team1?.recentPerformance?[team1Index ?? 0].history?.length} ${match?.team1?.recentPerformance?[team1Index!].history?.length} ${match?.team1?.recentPerformance?[team1Index!].history?.length == 1 ? "Match" : "Matches"}',
+                          'Last ${match?.team1?.recentPerformance?[team1Index!].history?.length} ${match?.team1?.recentPerformance?[team1Index!].history?.length == 1 ? "Match" : "Matches"}',
                           style: GoogleFonts.inter(
                               textStyle: const TextStyle(
                             fontSize: 14,

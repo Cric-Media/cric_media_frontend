@@ -76,20 +76,20 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void sendOtpForPasswordChange() async {
-    emit(AuthLoading());
+    emit(AuthSendOtpLoading());
     try {
       var network = await Network.check();
       if (network) {
         var response = await auth.sendOtpForPasswordChange();
-        emit(AuthSuccess(response));
+        emit(AuthSendOtpSuccess(response));
       } else {
-        emit(AuthError('No internet connection'));
+        emit(AuthSendOtpError('No internet connection'));
       }
     } catch (err) {
       if (err is! AppException) {
-        emit(AuthError('Something went wrong'));
+        emit(AuthSendOtpError('Something went wrong'));
       } else {
-        emit(AuthError(err.toString()));
+        emit(AuthSendOtpError(err.toString()));
       }
     }
   }
