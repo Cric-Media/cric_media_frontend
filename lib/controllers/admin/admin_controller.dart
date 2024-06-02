@@ -674,8 +674,13 @@ class AdminController {
     required String teamId,
   }) async {
     final url = AdminUrl.teamToTournament;
+    final adminId = await Global().getAdminId();
     final headers = {"Content-Type": "application/json"};
-    final body = {"tournamentId": tournamentId, "teamId": teamId};
+    final body = {
+      "tournamentId": tournamentId,
+      "teamId": teamId,
+      "adminId": adminId,
+    };
     final response = await ApiManager.putRequest(body, url, headers: headers);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
@@ -690,7 +695,12 @@ class AdminController {
     required String teamId,
   }) async {
     final url = AdminUrl.teamToTournament;
-    final body = {"tournamentId": tournamentId, "teamId": teamId};
+    final adminId = Global().getAdminId();
+    final body = {
+      "tournamentId": tournamentId,
+      "teamId": teamId,
+      "adminId": adminId,
+    };
     final response = await ApiManager.deleteRequest(url, body);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
@@ -835,16 +845,18 @@ class AdminController {
     int? qualifiersNumber,
   }) async {
     final url = "${AdminUrl.groupToTournament}/$tournamentId";
+    final adminId = await Global().getAdminId();
     final headers = {"Content-Type": "application/json"};
 
     Map body = {};
     if (totalMatches == null && qualifiersNumber == null) {
-      body = {"groupName": groupName};
+      body = {"groupName": groupName, "adminId": adminId};
     }
     body = {
       "groupName": groupName,
       "totalMatches": totalMatches,
       "qualifiersNumber": qualifiersNumber,
+      "adminId": adminId,
     };
     final response = await ApiManager.putRequest(body, url, headers: headers);
     var resBody = jsonDecode(response.body);
@@ -861,11 +873,13 @@ class AdminController {
     required String groupId,
   }) async {
     final url = AdminUrl.teamToGroup;
+    final adminId = await Global().getAdminId();
     final headers = {"Content-Type": "application/json"};
     final body = {
       "tournamentId": tournamentId,
       "teamId": teamId,
-      "groupId": groupId
+      "groupId": groupId,
+      "adminId": adminId,
     };
     final response = await ApiManager.putRequest(body, url, headers: headers);
     var resBody = jsonDecode(response.body);
@@ -882,11 +896,13 @@ class AdminController {
     required String groupId,
   }) async {
     final url = AdminUrl.removeGroupTeam;
+    final adminId = await Global().getAdminId();
     final headers = {"Content-Type": "application/json"};
     final body = {
       "tournamentId": tournamentId,
       "teamId": teamId,
-      "groupId": groupId
+      "groupId": groupId,
+      "adminId": adminId,
     };
     final response = await ApiManager.putRequest(
       body,
@@ -906,8 +922,13 @@ class AdminController {
     required String groupId,
   }) async {
     final url = AdminUrl.removeGroupFromTournament;
+    final adminId = await Global().getAdminId();
     final headers = {"Content-Type": "application/json"};
-    final body = {"tournamentId": tournamentId, "groupId": groupId};
+    final body = {
+      "tournamentId": tournamentId,
+      "groupId": groupId,
+      "adminId": adminId
+    };
     final response = await ApiManager.putRequest(body, url, headers: headers);
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {

@@ -204,7 +204,11 @@ class _LiveDetails extends State<LiveDetails> {
                     myBanner == null
                         ? Container()
                         : Container(
-                            margin: const EdgeInsets.only(bottom: 12),
+                            margin: const EdgeInsets.only(
+                              // bottom: 4,
+                              left: 8,
+                              right: 8,
+                            ),
                             height: 52,
                             child: AdWidget(ad: myBanner!),
                           ),

@@ -246,7 +246,10 @@ class _LiveInfoState extends State<LiveInfo> {
               ? Container()
               : Container(
                   width: screenWidth,
-                  margin: const EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   height: 80,
                   child: AdWidget(ad: nativeAd!),
                 ),
