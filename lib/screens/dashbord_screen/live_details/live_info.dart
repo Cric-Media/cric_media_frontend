@@ -26,9 +26,9 @@ class _LiveInfoState extends State<LiveInfo> {
   createNativeAd() {
     nativeAd = NativeAd(
       adUnitId: "ca-app-pub-4072951366400579/1227873371",
+      factoryId: 'listTile',
       listener: AdMobService.nativeAdListener,
       request: const AdRequest(),
-      factoryId: 'adFactoryExample',
     )..load();
   }
 
@@ -242,15 +242,14 @@ class _LiveInfoState extends State<LiveInfo> {
               ),
             ),
           ),
-          const SizedBox(height: 8),
           nativeAd == null
               ? Container()
-              : SizedBox(
+              : Container(
                   width: screenWidth,
+                  margin: const EdgeInsets.only(top: 10),
                   height: 80,
                   child: AdWidget(ad: nativeAd!),
                 ),
-          const SizedBox(height: 8),
         ],
       ),
     );

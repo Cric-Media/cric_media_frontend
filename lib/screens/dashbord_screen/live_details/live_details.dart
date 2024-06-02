@@ -6,6 +6,7 @@ import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_info.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_live.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/scorecard_tab.dart';
+import 'package:cricket_app/services/ad_mob_service.dart';
 import 'package:cricket_app/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,14 +23,12 @@ class LiveDetails extends StatefulWidget {
 
 class _LiveDetails extends State<LiveDetails> {
   MatchDetails? match;
-  BannerAd? myBanner;
-  bool _isAdLoaded = false;
+  BannerAd? myBanner = null;
 
   int value = 0;
-  void getVlaue(int x) {
-    setState(() {
-      value = x;
-    });
+  getVlaue(int x) {
+    value = x;
+    setState(() {});
   }
 
   @override
@@ -44,21 +43,11 @@ class _LiveDetails extends State<LiveDetails> {
     createBannerAd();
   }
 
-  void createBannerAd() {
-    myBanner = BannerAd(
+  createBannerAd() {
+    myBanner ??= BannerAd(
       adUnitId: "ca-app-pub-4072951366400579/1184088450",
       size: AdSize.fullBanner,
-      listener: BannerAdListener(
-        onAdLoaded: (Ad ad) {
-          setState(() {
-            _isAdLoaded = true;
-          });
-        },
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          ad.dispose();
-          print('Ad failed to load: $error');
-        },
-      ),
+      listener: AdMobService.bannerAdListener,
       request: const AdRequest(),
     )..load();
   }
@@ -67,13 +56,13 @@ class _LiveDetails extends State<LiveDetails> {
   void dispose() {
     // Remove the listener for the 'match' event when the widget is disposed
     SocketService.instance.socket.off('match-${widget.match?.sId}');
-    myBanner?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return DefaultTabController(
       length: 4, // change the number to 4, when adding points table
@@ -129,9 +118,8 @@ class _LiveDetails extends State<LiveDetails> {
                         width: screenWidth,
                         height: 60,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                        ),
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white),
                         child: Row(
                           children: [
                             const SizedBox(width: 25),
@@ -143,75 +131,83 @@ class _LiveDetails extends State<LiveDetails> {
                                 'Info',
                                 style: GoogleFonts.inter(
                                   textStyle: TextStyle(
-                                    fontSize: 16,
-                                    color:
-                                        value == 0 ? Colors.black : Colors.grey,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                                      fontSize: 16,
+                                      color: value == 0
+                                          ? Colors.black
+                                          : Colors.grey,
+                                      fontWeight: FontWeight.w700),
                                 ),
                               ),
                             ),
                             const SizedBox(width: 30),
                             InkWell(
-                              onTap: () {
-                                getVlaue(1);
-                              },
-                              child: Text(
-                                'Live',
-                                style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                    fontSize: 16,
-                                    color:
-                                        value == 1 ? Colors.black : Colors.grey,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ),
+                                onTap: () {
+                                  getVlaue(1);
+                                },
+                                child: Text(
+                                  'Live',
+                                  style: GoogleFonts.inter(
+                                      textStyle: TextStyle(
+                                          fontSize: 16,
+                                          color: value == 1
+                                              ? Colors.black
+                                              : Colors.grey,
+                                          fontWeight: FontWeight.w700)),
+                                )),
                             const SizedBox(width: 30),
                             InkWell(
-                              onTap: () {
-                                getVlaue(2);
-                              },
-                              child: Text(
-                                'Scorecard',
-                                style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                    fontSize: 16,
-                                    color:
-                                        value == 2 ? Colors.black : Colors.grey,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
+                                onTap: () {
+                                  getVlaue(2);
+                                },
+                                child: Text(
+                                  'Scorecard',
+                                  style: GoogleFonts.inter(
+                                      textStyle: TextStyle(
+                                          fontSize: 16,
+                                          color: value == 2
+                                              ? Colors.black
+                                              : Colors.grey,
+                                          fontWeight: FontWeight.w700)),
+                                )),
+                            const SizedBox(
+                              width: 30,
                             ),
-                            const SizedBox(width: 30),
                             InkWell(
-                              onTap: () {
-                                getVlaue(3);
-                              },
-                              child: Text(
-                                'Points Table',
-                                style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                    fontSize: 16,
-                                    color:
-                                        value == 3 ? Colors.black : Colors.grey,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ),
+                                onTap: () {
+                                  getVlaue(3);
+                                },
+                                child: Text(
+                                  'Points Table',
+                                  style: GoogleFonts.inter(
+                                      textStyle: TextStyle(
+                                          fontSize: 16,
+                                          color: value == 3
+                                              ? Colors.black
+                                              : Colors.grey,
+                                          fontWeight: FontWeight.w700)),
+                                )),
                           ],
                         ),
+                        // child: TabBar(
+                        //   tabs: [
+                        //     Tab(text: 'Info'),
+                        //     Tab(text: 'Live'),
+                        //     Tab(text: 'Scorecard'),
+                        //     Tab(text: 'Points Table'),
+                        //   ],
+                        //   indicatorColor: Colors.green,
+                        //   labelColor: AppColor.blackColor,
+                        //   unselectedLabelColor: AppColor.grayColor,
+                        // ),
                       ),
                     ),
-                    if (_isAdLoaded)
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 12),
-                        height: 52,
-                        child: AdWidget(ad: myBanner!),
-                      ),
+                    myBanner == null
+                        ? Container()
+                        : Container(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            height: 52,
+                            child: AdWidget(ad: myBanner!),
+                          ),
                     value == 0
                         ? LiveInfo(match: match)
                         : value == 1
