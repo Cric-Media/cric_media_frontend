@@ -897,7 +897,7 @@ class _GroupsState extends State<Groups> {
 
   @override
   Widget build(BuildContext context) {
-    var groups = TournamentCubit.get(context).tournament!.groups;
+    var groups = TournamentCubit.get(context).tournament?.groups;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SingleChildScrollView(

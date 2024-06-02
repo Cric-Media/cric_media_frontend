@@ -1,12 +1,36 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/custom_widgets/grid_view_contanor.dart';
 import 'package:cricket_app/models/match_details.dart';
+import 'package:cricket_app/services/ad_mob_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class LiveInfo extends StatelessWidget {
+class LiveInfo extends StatefulWidget {
   final MatchDetails? match;
   const LiveInfo({super.key, this.match});
+
+  @override
+  State<LiveInfo> createState() => _LiveInfoState();
+}
+
+class _LiveInfoState extends State<LiveInfo> {
+  NativeAd? nativeAd;
+
+  @override
+  void initState() {
+    super.initState();
+    createNativeAd();
+  }
+
+  createNativeAd() {
+    nativeAd = NativeAd(
+      adUnitId: "ca-app-pub-4072951366400579/1227873371",
+      listener: AdMobService.nativeAdListener,
+      request: const AdRequest(),
+      factoryId: 'adFactoryExample',
+    )..load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +78,8 @@ class LiveInfo extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              match != null
-                                  ? "\t\t${match?.matchDateTime}"
+                              widget.match != null
+                                  ? "\t\t${widget.match?.matchDateTime}"
                                   : '',
                               style: GoogleFonts.inter(
                                   textStyle: const TextStyle(
@@ -86,8 +110,9 @@ class LiveInfo extends StatelessWidget {
                                 ),
                                 children: <TextSpan>[
                                   TextSpan(
-                                    text:
-                                        match != null ? match?.tossDetails : '',
+                                    text: widget.match != null
+                                        ? widget.match?.tossDetails
+                                        : '',
                                     style: GoogleFonts.inter(
                                       textStyle: const TextStyle(
                                         fontSize: 14,
@@ -108,7 +133,7 @@ class LiveInfo extends StatelessWidget {
               ),
             ),
           ),
-          GridViewContanor(match: match),
+          GridViewContanor(match: widget.match),
           Card(
             color: Colors.white,
             elevation: 2,
@@ -147,9 +172,9 @@ class LiveInfo extends StatelessWidget {
                                     fontWeight: FontWeight.w600)),
                           ),
                           Text(
-                            match != null
-                                ? "${match?.cityOrTown}"
-                                : ' Karachi cricket stadium',
+                            widget.match != null
+                                ? "${widget.match?.cityOrTown}"
+                                : '',
                             style: GoogleFonts.inter(
                                 textStyle: const TextStyle(
                               fontSize: 14,
@@ -174,7 +199,9 @@ class LiveInfo extends StatelessWidget {
                           ),
                           Expanded(
                             child: Text(
-                              match != null ? "${match?.ground}" : 'Pakistan',
+                              widget.match != null
+                                  ? "${widget.match?.ground}"
+                                  : 'Team',
                               style: GoogleFonts.inter(
                                   textStyle: const TextStyle(
                                 fontSize: 14,
@@ -215,6 +242,15 @@ class LiveInfo extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 8),
+          nativeAd == null
+              ? Container()
+              : SizedBox(
+                  width: screenWidth,
+                  height: 80,
+                  child: AdWidget(ad: nativeAd!),
+                ),
+          const SizedBox(height: 8),
         ],
       ),
     );

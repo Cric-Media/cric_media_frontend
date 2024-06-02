@@ -1,10 +1,8 @@
-import 'package:cricket_app/custom_widgets/points_table_widget.dart';
+import 'package:cricket_app/custom_widgets/match_points_table.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/info.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/live.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/scoreCard.dart';
-import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/tornaments/tournament_details_screen.dart'
-    show Groups;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -148,55 +146,7 @@ class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
                           : value == 3
                               ? Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      if (widget.match?.tournamentInfo !=
-                                              null &&
-                                          widget.match?.tournamentInfo
-                                                  ?.tournament !=
-                                              null)
-                                        Column(
-                                          children: [
-                                            if (widget.match!.tournamentInfo!
-                                                    .group ==
-                                                null)
-                                              PointsTableWidget(
-                                                tournamentId: widget
-                                                        .match
-                                                        ?.tournamentInfo
-                                                        ?.tournament
-                                                        ?.sId ??
-                                                    '',
-                                                tournament: widget
-                                                    .match!
-                                                    .tournamentInfo!
-                                                    .tournament!,
-                                              )
-                                            else
-                                              Groups(
-                                                tournamentId: widget
-                                                        .match
-                                                        ?.tournamentInfo
-                                                        ?.tournament
-                                                        ?.sId ??
-                                                    '',
-                                                isAdmin: false,
-                                              )
-                                          ],
-                                        )
-                                      else
-                                        const Center(
-                                          child: Text(
-                                            "Points Table is only available for tournament matches",
-                                            style: TextStyle(
-                                              color: AppColor.blackColor,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        )
-                                    ],
-                                  ),
+                                  child: MatchPointsTable(match: widget.match),
                                 )
                               : Container(),
             ],
