@@ -229,6 +229,7 @@ import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
+import 'package:cricket_app/cubits/news/news_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
@@ -258,6 +259,7 @@ import 'package:cricket_app/screens/dashbord_screen/notification_screen.dart';
 import 'package:cricket_app/screens/splash_screen.dart/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:upgrader/upgrader.dart';
 
 class Routes {
   static removeAllRoutes(BuildContext context) {
@@ -270,7 +272,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => AuthCubit(),
-            child: const SplashScreen(),
+            child: UpgradeAlert(child: const SplashScreen()),
           ),
         );
 
@@ -342,6 +344,7 @@ class Routes {
                     user: true,
                   ),
               ),
+              BlocProvider<NewsCubit>(create: (context) => NewsCubit()),
             ],
             child: const DashBoardScreen(),
           ),

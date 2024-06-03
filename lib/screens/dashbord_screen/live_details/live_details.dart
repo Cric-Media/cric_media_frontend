@@ -24,6 +24,7 @@ class LiveDetails extends StatefulWidget {
 class _LiveDetails extends State<LiveDetails> {
   MatchDetails? match;
   BannerAd? myBanner = null;
+  InterstitialAd? interstitialAd;
 
   int value = 0;
   getVlaue(int x) {
@@ -41,6 +42,7 @@ class _LiveDetails extends State<LiveDetails> {
       MatchCubit.get(context).getInitialOvers(widget.match!.sId.toString());
     });
     createBannerAd();
+    createInterstitialAd();
   }
 
   createBannerAd() {
@@ -52,8 +54,37 @@ class _LiveDetails extends State<LiveDetails> {
     )..load();
   }
 
+  createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: "ca-app-pub-4072951366400579/6244843447",
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) => interstitialAd = ad,
+        onAdFailedToLoad: (error) => interstitialAd = null,
+      ),
+    );
+  }
+
+  showInterstitialAd() {
+    if (interstitialAd != null) {
+      interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          createInterstitialAd();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          createInterstitialAd();
+        },
+      );
+      interstitialAd?.show();
+      interstitialAd = null;
+    }
+  }
+
   @override
   void dispose() {
+    showInterstitialAd();
     // Remove the listener for the 'match' event when the widget is disposed
     SocketService.instance.socket.off('match-${widget.match?.sId}');
     super.dispose();
@@ -209,7 +240,7 @@ class _LiveDetails extends State<LiveDetails> {
                               left: 8,
                               right: 8,
                             ),
-                            height: 52,
+                            height: 60,
                             child: AdWidget(ad: myBanner!),
                           ),
                     value == 0

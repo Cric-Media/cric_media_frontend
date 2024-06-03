@@ -99,7 +99,7 @@ class _LiveLiveState extends State<LiveLive> {
                 left: 8,
                 right: 8,
               ),
-              height: 52,
+              height: 60,
               child: AdWidget(ad: myBanner!),
             ),
       const SizedBox(height: 8),

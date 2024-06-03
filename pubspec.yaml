@@ -63,6 +63,7 @@ dependencies:
   carousel_indicator: ^1.0.6
   flutter_native_splash: ^2.4.0
   google_mobile_ads: ^5.1.0
+  upgrader: ^10.3.0
 
   
 dev_dependencies:

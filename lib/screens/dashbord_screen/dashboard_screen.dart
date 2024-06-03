@@ -18,7 +18,7 @@ class DashBoardScreen extends StatefulWidget {
 class _MainPageState extends State<DashBoardScreen> {
   List<Widget> screens = [
     const Home(),
-    const News(),
+    const NewsScreen(),
     const Series(),
     const Video(),
     const Menu(),
@@ -66,7 +66,7 @@ class _MainPageState extends State<DashBoardScreen> {
                 _buildNavItem('News', 'assets/icons/News.png', 1),
                 _buildNavItem('Series', 'assets/icons/Series.png', 2),
                 _buildNavItem('Video', 'assets/icons/Video.png', 3),
-                _buildNavItem('Menu', 'assets/icons/more.png', 4),
+                _buildNavItem('More', 'assets/icons/more.png', 4),
               ],
             ),
           ),

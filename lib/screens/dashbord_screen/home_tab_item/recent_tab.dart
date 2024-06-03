@@ -27,6 +27,10 @@ class _RecentTabState extends State<RecentTab> {
       listener: (context, state) {
         if (state is MatchGetCompletedSuccess) {
           MatchCubit.get(context).completedMatchDetailsList = state.res.data;
+        } else if (state is MatchGetMoreCompletedSuccess) {
+          MatchCubit.get(context)
+              .completedMatchDetailsList
+              .addAll(state.res.data);
         }
       },
       builder: (context, state) {
@@ -75,6 +79,19 @@ class _RecentTabState extends State<RecentTab> {
                         ),
                       );
                     }),
+              ),
+              BlocBuilder<MatchCubit, MatchState>(
+                builder: (context, state) {
+                  if (state is MatchGetMoreCompletedLoading) {
+                    return const CircularProgressIndicator();
+                  }
+                  return ElevatedButton(
+                      onPressed: () {
+                        MatchCubit.get(context)
+                            .getCompletedMatches(user: true, more: true);
+                      },
+                      child: const Text("Load more"));
+                },
               ),
               const SizedBox(height: 70),
             ],

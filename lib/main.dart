@@ -1,5 +1,6 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
+import 'package:cricket_app/cubits/news/news_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
             BlocProvider<TournamentCubit>(
               create: (context) => TournamentCubit(),
             ),
+            BlocProvider<NewsCubit>(create: (context) => NewsCubit()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

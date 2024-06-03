@@ -382,14 +382,20 @@ class AdminController {
     }
   }
 
-  Future<ApiResponse> getCompletedMatches({bool user = false}) async {
+  Future<ApiResponse> getCompletedMatches({
+    bool user = false,
+    required int page,
+    int limit = 20,
+  }) async {
     final adminId = await Global().getAdminId();
     final url = user
-        ? AdminUrl.getCompletedMatches
+        ? "${AdminUrl.getCompletedMatches}?page=$page&limit=$limit"
         : "${AdminUrl.getCompletedMatchesByAdmin}/$adminId";
     final headers = {"Content-Type": "application/json"};
     final response = await ApiManager.getRequest(url, headers: headers);
     var resBody = jsonDecode(response.body);
+
+    log(response.body);
 
     if (resBody['success']) {
       List<MatchDetails> matches = [];

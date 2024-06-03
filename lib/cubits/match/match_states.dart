@@ -11,6 +11,8 @@ final class MatchUpcommingLoading extends MatchState {}
 
 final class MatchGetCompletedLoading extends MatchState {}
 
+final class MatchGetMoreCompletedLoading extends MatchState {}
+
 final class MatchLiveLoading extends MatchState {}
 
 final class MatchStartLoading extends MatchState {}
@@ -49,6 +51,11 @@ final class MatchUpcommingSuccess extends MatchState {
 final class MatchGetCompletedSuccess extends MatchState {
   final ApiResponse res;
   MatchGetCompletedSuccess(this.res);
+}
+
+final class MatchGetMoreCompletedSuccess extends MatchState {
+  final ApiResponse res;
+  MatchGetMoreCompletedSuccess(this.res);
 }
 
 final class MatchGetLiveSuccess extends MatchState {

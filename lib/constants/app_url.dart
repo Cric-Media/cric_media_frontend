@@ -86,4 +86,7 @@ abstract class UserUrl {
   static final getPlayerDetails = "${AppUrl.baseUrl}/player-details";
   static final getFiveTournaments = "${AppUrl.baseUrl}/last-five-tournaments";
   static final getTournamentPoints = "${AppUrl.baseUrl}/tournament-points";
+
+  // * News Section ***
+  static final getNews = "${AppUrl.baseUrl}/superadmin/api/news";
 }

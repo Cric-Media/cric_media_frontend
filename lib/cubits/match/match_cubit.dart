@@ -61,6 +61,9 @@ class MatchCubit extends Cubit<MatchState> {
   List<over.Over> overs = [];
   int overPage = 2, overLimit = 2;
 
+  // Pagination variables
+  int recentPage = 1;
+
   // functions
   resetBools() {
     wide = false;
@@ -272,22 +275,35 @@ class MatchCubit extends Cubit<MatchState> {
     }
   }
 
-  getCompletedMatches({bool user = false}) async {
-    emit(MatchGetCompletedLoading());
+  getCompletedMatches({bool user = false, bool more = false}) async {
+    if (more) {
+      recentPage++;
+      emit(MatchGetMoreCompletedLoading());
+    } else {
+      emit(MatchGetCompletedLoading());
+    }
     try {
       var network = await Network.check();
       if (network) {
-        var response = await adminController.getCompletedMatches(user: user);
-        emit(MatchGetCompletedSuccess(response));
+        var response = await adminController.getCompletedMatches(
+          user: user,
+          page: recentPage,
+        );
+        if (more) {
+          emit(MatchGetMoreCompletedSuccess(response));
+        } else {
+          emit(MatchGetCompletedSuccess(response));
+        }
       } else {
-        emit(MatchGetCompletedError('No internet connection'));
+        recentPage--;
+        if (!more) emit(MatchGetCompletedError('No internet connection'));
       }
     } catch (err) {
-      // if exception type is not AppException then emit "Something went wrong"
+      recentPage--;
       if (err is! AppException) {
-        emit(MatchGetCompletedError('Something went wrong'));
+        if (!more) emit(MatchGetCompletedError('Something went wrong'));
       } else {
-        emit(MatchGetCompletedError(err.toString()));
+        if (!more) emit(MatchGetCompletedError(err.toString()));
       }
     }
   }
