@@ -1,5 +1,6 @@
 import 'package:cricket_app/cubits/news/news_cubit.dart';
 import 'package:cricket_app/custom_widgets/news_card.dart';
+import 'package:cricket_app/custom_widgets/placeholders/news_placeholder.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
 import 'package:cricket_app/screens/dashbord_screen/new_details.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,12 @@ class _NewsScreenState extends State<NewsScreen> {
           },
           builder: (context, state) {
             if (state is NewsGetLoadingState) {
-              return const Center(child: CircularProgressIndicator());
+              return ListView.builder(
+                itemBuilder: (context, index) {
+                  return const NewsPlaceholder();
+                },
+                itemCount: 6,
+              );
             } else if (state is NewsGetErrorState) {
               return Center(child: Text(state.error));
             }

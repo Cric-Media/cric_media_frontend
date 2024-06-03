@@ -1,9 +1,12 @@
 import 'package:cricket_app/cubits/social_link/social_link_cubit.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
 import 'package:cricket_app/utils/launch_url.dart';
+import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_update/in_app_update.dart';
 
 class MoreScreen extends StatefulWidget {
   const MoreScreen({super.key});
@@ -14,6 +17,8 @@ class MoreScreen extends StatefulWidget {
 
 class _MoreScreenState extends State<MoreScreen> {
   int indix = 0;
+  AppUpdateInfo? _updateInfo;
+  bool _flexibleUpdateAvailable = false;
 
   @override
   void initState() {
@@ -28,6 +33,25 @@ class _MoreScreenState extends State<MoreScreen> {
     setState(() {
       indix = value;
     });
+  }
+
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        _updateInfo = info;
+      });
+    }).catchError((e) {
+      showSnack(context, message: e.toString());
+    });
+  }
+
+  Future<void> share() async {
+    await FlutterShare.share(
+      title: 'Share',
+      text: 'Download the app from playstore',
+      linkUrl: 'https://play.google.com/store/apps',
+      chooserTitle: 'Share',
+    );
   }
 
   @override
@@ -141,6 +165,10 @@ class _MoreScreenState extends State<MoreScreen> {
                             height: 5,
                           ),
                           ListTile(
+                              onTap: () {
+                                launchURL(
+                                    'https://play.google.com/store/apps/details?id=<YOUR_APP_ID>');
+                              },
                               title: Text(
                                 'Rate Us',
                                 style: GoogleFonts.inter(
@@ -159,6 +187,16 @@ class _MoreScreenState extends State<MoreScreen> {
                             color: Color(0xffA3A1A1),
                           ),
                           ListTile(
+                              onTap: () async {
+                                await checkForUpdate();
+                                _updateInfo?.updateAvailability ==
+                                        UpdateAvailability.updateAvailable
+                                    ? InAppUpdate.performImmediateUpdate()
+                                    : showSnack(
+                                        context,
+                                        message: 'No update available',
+                                      );
+                              },
                               title: Text(
                                 'Check For Update',
                                 style: GoogleFonts.inter(
@@ -195,8 +233,11 @@ class _MoreScreenState extends State<MoreScreen> {
                             color: Color(0xffA3A1A1),
                           ),
                           ListTile(
+                              onTap: () async {
+                                share();
+                              },
                               title: Text(
-                                'Invite friends',
+                                'Invite Friends',
                                 style: GoogleFonts.inter(
                                     textStyle: const TextStyle(
                                         fontSize: 17,

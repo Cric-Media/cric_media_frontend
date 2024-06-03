@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/models/news.dart';
 import 'package:flutter/material.dart';
@@ -11,66 +9,65 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWith = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Card(
       elevation: 2,
       color: Colors.white,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Hero(
-              tag: news?.sId ?? '',
-              child: Container(
-                height: 100,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: NetworkImage(news?.image ?? ''),
-                    fit: BoxFit.cover,
-                  ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image
+            Container(
+              width: screenWidth * 0.2,
+              height: screenWidth * 0.2, // Maintaining a square aspect ratio
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: DecorationImage(
+                  image: NetworkImage(news?.image ?? ''),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-          ),
-          SizedBox(width: 8),
-          Expanded(
-            flex: 3,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  news?.title ?? '',
-                  style: GoogleFonts.inter(
-                      textStyle: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                  )),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                ),
-                SizedBox(height: 5),
-                Text(
-                  news?.description ?? '',
-                  style: GoogleFonts.inter(
-                      textStyle: TextStyle(
-                    fontSize: 13,
-                    color: AppColor.hintColor,
-                    fontWeight: FontWeight.w300,
-                  )),
-                  textAlign: TextAlign.start,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 4,
-                )
-              ],
+            const SizedBox(width: 16.0),
+            // Text content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    news?.title ?? '',
+                    style: GoogleFonts.inter(
+                      textStyle: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black,
+                      ),
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    news?.description ?? '',
+                    style: GoogleFonts.inter(
+                      textStyle: const TextStyle(
+                        fontSize: 13,
+                        color: AppColor.hintColor,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                ],
+              ),
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }
