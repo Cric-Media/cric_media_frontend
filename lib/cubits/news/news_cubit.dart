@@ -19,9 +19,9 @@ class NewsCubit extends Cubit<NewsState> {
   void getNews({bool more = false}) async {
     if (more) {
       newsPage++;
-      emit(NewsGetLoadingState());
-    } else {
       emit(NewsGetMoreLoadingState());
+    } else {
+      emit(NewsGetLoadingState());
     }
 
     var network = await Network.check();
@@ -40,6 +40,12 @@ class NewsCubit extends Cubit<NewsState> {
     } catch (e) {
       if (more) {
         newsPage--;
+        if (e is! AppException) {
+          emit(NewsGetMoreErrorState(error: "Something went wrong"));
+        } else {
+          emit(NewsGetMoreErrorState(error: e.message));
+        }
+      } else {
         if (e is! AppException) {
           emit(NewsGetErrorState(error: "Something went wrong"));
         } else {

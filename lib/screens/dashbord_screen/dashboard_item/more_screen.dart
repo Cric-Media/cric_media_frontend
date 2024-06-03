@@ -1,5 +1,6 @@
 import 'package:cricket_app/cubits/social_link/social_link_cubit.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
+import 'package:cricket_app/utils/launch_url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -98,6 +99,10 @@ class _MoreScreenState extends State<MoreScreen> {
                                     var sl =
                                         SocialLinkCubit.get(context).sl[index];
                                     return ListTile(
+                                        onTap: () async {
+                                          // using url launcher, navigate to the link
+                                          await launchURL(sl.link ?? '');
+                                        },
                                         title: Text(
                                           sl.mediaType ?? '',
                                           style: GoogleFonts.inter(

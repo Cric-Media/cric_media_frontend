@@ -42,7 +42,7 @@ class _NewsScreenState extends State<NewsScreen> {
       ),
       drawer: AppDrawer(screenWidth: screenWidth),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: BlocConsumer<NewsCubit, NewsState>(
           listener: (context, state) {
             if (state is NewsGetSuccessState) {
@@ -67,21 +67,31 @@ class _NewsScreenState extends State<NewsScreen> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       var news = NewsCubit.get(context).news[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NewsDetails(news: news),
-                                ),
-                              );
-                            },
-                            child: NewsCard(news: news)),
-                      );
+                      return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NewsDetails(news: news),
+                              ),
+                            );
+                          },
+                          child: NewsCard(news: news));
                     },
                   ),
+                ),
+                BlocBuilder<NewsCubit, NewsState>(
+                  builder: (context, state) {
+                    if (state is NewsGetMoreLoadingState) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return ElevatedButton(
+                      onPressed: () {
+                        NewsCubit.get(context).getNews(more: true);
+                      },
+                      child: const Text("Load More"),
+                    );
+                  },
                 ),
                 const SizedBox(height: 70),
               ],

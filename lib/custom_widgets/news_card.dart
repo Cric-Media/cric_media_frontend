@@ -22,17 +22,21 @@ class NewsCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            child: Container(
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: NetworkImage(news?.image ?? ''),
-                  fit: BoxFit.cover,
+            child: Hero(
+              tag: news?.sId ?? '',
+              child: Container(
+                height: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: NetworkImage(news?.image ?? ''),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
           ),
+          SizedBox(width: 8),
           Expanded(
             flex: 3,
             child: Column(
@@ -60,8 +64,7 @@ class NewsCard extends StatelessWidget {
                     fontWeight: FontWeight.w300,
                   )),
                   textAlign: TextAlign.start,
-                  overflow:
-                      TextOverflow.ellipsis, // Changed from clip to ellipsis
+                  overflow: TextOverflow.ellipsis,
                   maxLines: 4,
                 )
               ],

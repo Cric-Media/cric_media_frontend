@@ -28,3 +28,8 @@ final class NewsGetErrorState extends NewsState {
   final String error;
   NewsGetErrorState({required this.error});
 }
+
+final class NewsGetMoreErrorState extends NewsState {
+  final String error;
+  NewsGetMoreErrorState({required this.error});
+}

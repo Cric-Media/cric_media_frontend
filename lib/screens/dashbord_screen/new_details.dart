@@ -41,13 +41,16 @@ class _NewsDetailsState extends State<NewsDetails> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: screenWdith,
-                height: screenHeight * 0.25,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.news?.image ?? '',
+              Hero(
+                tag: widget.news?.sId ?? '',
+                child: SizedBox(
+                  width: screenWdith,
+                  height: screenHeight * 0.25,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.news?.image ?? '',
+                    ),
                   ),
                 ),
               ),
