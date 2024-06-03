@@ -1,8 +1,8 @@
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
-import 'package:cricket_app/screens/dashbord_screen/dashboard_item/menu.dart';
-import 'package:cricket_app/screens/dashbord_screen/dashboard_item/news.dart';
+import 'package:cricket_app/screens/dashbord_screen/dashboard_item/more_screen.dart';
+import 'package:cricket_app/screens/dashbord_screen/dashboard_item/news_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/series.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/video.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class _MainPageState extends State<DashBoardScreen> {
     const NewsScreen(),
     const Series(),
     const Video(),
-    const Menu(),
+    const MoreScreen(),
   ];
 
   int value = 0;

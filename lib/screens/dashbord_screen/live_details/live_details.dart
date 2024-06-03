@@ -23,7 +23,7 @@ class LiveDetails extends StatefulWidget {
 
 class _LiveDetails extends State<LiveDetails> {
   MatchDetails? match;
-  BannerAd? myBanner = null;
+  BannerAd? myBanner;
   InterstitialAd? interstitialAd;
 
   int value = 0;

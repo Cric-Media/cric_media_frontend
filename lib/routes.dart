@@ -231,6 +231,7 @@ import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/news/news_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
+import 'package:cricket_app/cubits/social_link/social_link_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/models/tournament.dart';
@@ -345,6 +346,8 @@ class Routes {
                   ),
               ),
               BlocProvider<NewsCubit>(create: (context) => NewsCubit()),
+              BlocProvider<SocialLinkCubit>(
+                  create: (context) => SocialLinkCubit()),
             ],
             child: const DashBoardScreen(),
           ),

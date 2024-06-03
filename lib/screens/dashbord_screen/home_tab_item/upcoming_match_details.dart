@@ -5,6 +5,7 @@ import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/scoreCard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../../constants/app_color.dart';
 import '../../../custom_widgets/custom_up_coming_matches_card.dart';
@@ -18,10 +19,52 @@ class UpcomingMatchDetails extends StatefulWidget {
 }
 
 class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
+  InterstitialAd? interstitialAd;
+
   int value = 0;
   getVlaue(int x) {
     value = x;
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    createInterstitialAd();
+    super.initState();
+  }
+
+  createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: "ca-app-pub-4072951366400579/6244843447",
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) => interstitialAd = ad,
+        onAdFailedToLoad: (error) => interstitialAd = null,
+      ),
+    );
+  }
+
+  showInterstitialAd() {
+    if (interstitialAd != null) {
+      interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          createInterstitialAd();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          createInterstitialAd();
+        },
+      );
+      interstitialAd?.show();
+      interstitialAd = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    showInterstitialAd();
+    super.dispose();
   }
 
   @override

@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/models/news.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class NewsDetails extends StatefulWidget {
-  const NewsDetails({super.key});
+  final News? news;
+  const NewsDetails({super.key, this.news});
 
   @override
   State<NewsDetails> createState() => _NewsDetailsState();
@@ -43,14 +46,14 @@ class _NewsDetailsState extends State<NewsDetails> {
                 height: screenHeight * 0.25,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    AppIcons.newsbaner,
-                    fit: BoxFit.contain,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.news?.image ?? '',
                   ),
                 ),
               ),
               Text(
-                '15-2-2024',
+                DateFormat('dd MMMM yyyy')
+                    .format(DateTime.parse(widget.news?.createdAt ?? '')),
                 style: GoogleFonts.inter(
                     textStyle: const TextStyle(
                   fontSize: 14,
@@ -64,7 +67,7 @@ class _NewsDetailsState extends State<NewsDetails> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Text(
-                  'Pakistan and India Set to Renew Rivalry',
+                  widget.news?.title ?? '',
                   style: GoogleFonts.inter(
                       textStyle: const TextStyle(
                     fontSize: 18,
@@ -81,10 +84,7 @@ class _NewsDetailsState extends State<NewsDetails> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  'The world of cricket, few matchups generate as much anticipation '
-                  '   and excitement as a clash between Pakistan and India. Once again,The world of cricket, few matchups generate as much anticipation and excitement as a clash between Pakistan and India. Once again,The worl d of cricket, few matchups generate as much anticipation and excitement as a clash between Pakistan and India. Once again, these two cricketing giants are set to renew their historic rivalry, and fans across the globe are eagerly awaiting the showdown. these two cricketing giants are set to renew their historic rivalry, and fans across the globe are eagerly awaiting the showdown.'
-                  'The worl d of cricket, few matchups generateThe world of cricket, few matchups generate as much anticipation and excitement as a clash between Pakistan and India. Once again, these two cricketing giants are set to renew their historic rivalry, and fans across the globe are eagerly awaiting the showdown. as much anticipation and excitement as a clash between Pakistan and India. Once again, these two cricketing giants are set to renew their historic rivalry, and fans across the globe are eagerly awaiting the showdown.'
-                  'The world of cricket, few matchups generate as much anticipation and excitement as a clash between Pakistan and India. Once again, these two cricketing giants are set to renew their historic rivalry, and fans across the globe are eagerly awaiting the showdown.',
+                  widget.news?.description ?? '',
                   style: GoogleFonts.inter(
                     textStyle: const TextStyle(
                       fontSize: 14,

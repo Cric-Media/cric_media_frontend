@@ -5,6 +5,7 @@ import 'package:cricket_app/constants/app_url.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/news.dart';
 import 'package:cricket_app/models/player.dart';
+import 'package:cricket_app/models/social_link.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 
@@ -23,6 +24,7 @@ class UserController {
   }
 
   // * News Section ***
+
   Future<ApiResponse> getNews({required int page, int limit = 20}) async {
     final url = "${UserUrl.getNews}?page=$page&limit=$limit";
     var headers = <String, String>{
@@ -37,6 +39,24 @@ class UserController {
         news.add(News.fromJson(v));
       });
       return ApiResponse.fromJson(resBody, (data) => news);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  // * Social Link Section ***
+
+  Future<ApiResponse> getSocialLinks() async {
+    final url = UserUrl.getSocialLink;
+    final response = await ApiManager.getRequest(url);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<SocialLink> socialLinks = [];
+      resBody['data'].forEach((v) {
+        socialLinks.add(SocialLink.fromJson(v));
+      });
+      return ApiResponse.fromJson(resBody, (data) => socialLinks);
     } else {
       throw AppException(resBody['message']);
     }
