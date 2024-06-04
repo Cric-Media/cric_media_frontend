@@ -25,6 +25,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SocketService.instance.connect();
   MobileAds.instance.initialize();
+  // MobileAds.instance.updateRequestConfiguration(
+  //     RequestConfiguration(testDeviceIds: ['YOUR_TEST_DEVICE_ID']));
+
+  // // Register the native ad factory
+  // MobileAds.instance.updateRequestConfiguration(
+  //   RequestConfiguration(
+  //     tagForChildDirectedTreatment: TagForChildDirectedTreatment.yes,
+  //     tagForUnderAgeOfConsent: TagForUnderAgeOfConsent.yes,
+  //   ),
+  // );
+
   runApp(const MyApp());
 }
 

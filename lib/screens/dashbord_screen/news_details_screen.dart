@@ -35,7 +35,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   createBannerAd() {
     myBanner ??= BannerAd(
       adUnitId: dotenv.env['BANNER_AD_UNIT_ID'] ?? '',
-      size: AdSize.largeBanner,
+      size: AdSize.banner,
       listener: AdMobService.bannerAdListener,
       request: const AdRequest(),
     )..load();
@@ -72,9 +72,11 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   createNativeAd() {
     nativeAd = NativeAd(
       adUnitId: dotenv.env['NATIVE_AD_UNIT_ID'] ?? '',
-      factoryId: 'listTile',
       listener: AdMobService.nativeAdListener,
       request: const AdRequest(),
+      nativeTemplateStyle: NativeTemplateStyle(
+        templateType: TemplateType.small,
+      ),
     )..load();
   }
 
@@ -181,11 +183,13 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   myBanner == null
                       ? const SizedBox.shrink()
                       : Container(
+                          color: Colors.red,
                           height: myBanner!.size.height.toDouble(),
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          width: screenWdith,
-                          child: AdWidget(ad: myBanner!),
+                          margin: const EdgeInsets.symmetric(vertical: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 2),
+                          width: myBanner!.size.width.toDouble(),
+                          alignment: Alignment.center,
+                          child: Center(child: AdWidget(ad: myBanner!)),
                         ),
                   const SizedBox(height: 7),
                   Padding(
@@ -209,7 +213,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       : Container(
                           margin: const EdgeInsets.symmetric(
                             horizontal: 8,
-                            vertical: 4,
+                            vertical: 2,
                           ),
                           height: 150,
                           child: AdWidget(ad: nativeAd!),

@@ -3,6 +3,7 @@ import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/info.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/live.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/match_Details_tabs/scoreCard.dart';
+import 'package:cricket_app/services/ad_mob_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,6 +22,8 @@ class UpcomingMatchDetails extends StatefulWidget {
 
 class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
   InterstitialAd? interstitialAd;
+  BannerAd? myBanner;
+  NativeAd? nativeAd;
 
   int value = 0;
   getVlaue(int x) {
@@ -30,8 +33,29 @@ class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
 
   @override
   void initState() {
+    createBannerAd();
+    createNativeAd();
+
     createInterstitialAd();
     super.initState();
+  }
+
+  createBannerAd() {
+    myBanner ??= BannerAd(
+      adUnitId: dotenv.env['BANNER_AD_UNIT_ID'] ?? '',
+      size: AdSize.banner,
+      listener: AdMobService.bannerAdListener,
+      request: const AdRequest(),
+    )..load();
+  }
+
+  createNativeAd() {
+    nativeAd = NativeAd(
+      adUnitId: dotenv.env['NATIVE_AD_UNIT_ID'] ?? '',
+      factoryId: 'listTile',
+      listener: AdMobService.nativeAdListener,
+      request: const AdRequest(),
+    )..load();
   }
 
   createInterstitialAd() {
@@ -168,6 +192,7 @@ class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
                           )),
                     ],
                   ),
+
                   // child: TabBar(
                   //   tabs: [
                   //     Tab(text: 'Info'),
@@ -181,6 +206,17 @@ class _UpcomingMatchDetailsState extends State<UpcomingMatchDetails> {
                   // ),
                 ),
               ),
+              myBanner == null
+                  ? const SizedBox.shrink()
+                  : Container(
+                      color: Colors.red,
+                      height: myBanner!.size.height.toDouble(),
+                      margin: const EdgeInsets.only(top: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      width: myBanner!.size.width.toDouble(),
+                      alignment: Alignment.center,
+                      child: Center(child: AdWidget(ad: myBanner!)),
+                    ),
               value == 0
                   ? Info(match: widget.match)
                   : value == 1

@@ -111,9 +111,9 @@ class GridViewContanor extends StatelessWidget {
                           physics: NeverScrollableScrollPhysics(),
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 16.0,
-                            mainAxisSpacing: 16.0,
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 10.0,
+                            mainAxisSpacing: 10.0,
                           ),
                           itemCount:
                               match?.squad2?.length, // Example number of items

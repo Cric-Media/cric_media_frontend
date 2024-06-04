@@ -27,10 +27,19 @@ class _LiveInfoState extends State<LiveInfo> {
   createNativeAd() {
     nativeAd = NativeAd(
       adUnitId: dotenv.env['NATIVE_AD_UNIT_ID'] ?? '',
-      factoryId: 'listTile',
       listener: AdMobService.nativeAdListener,
       request: const AdRequest(),
+      nativeTemplateStyle: NativeTemplateStyle(
+        templateType: TemplateType.small,
+      ),
+      nativeAdOptions: NativeAdOptions(),
     )..load();
+  }
+
+  @override
+  void dispose() {
+    nativeAd?.dispose();
+    super.dispose();
   }
 
   @override
@@ -246,12 +255,9 @@ class _LiveInfoState extends State<LiveInfo> {
           nativeAd == null
               ? Container()
               : Container(
+                  height: 120,
                   width: screenWidth,
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  height: 150,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: AdWidget(ad: nativeAd!),
                 ),
         ],
