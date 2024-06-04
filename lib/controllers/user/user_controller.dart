@@ -81,4 +81,26 @@ class UserController {
       throw AppException(resBody['message']);
     }
   }
+
+  // * Report Section ***
+  Future<ApiResponse> postReport(
+    String? name,
+    String? contactNo,
+    String? report,
+  ) async {
+    final url = UserUrl.report;
+    var body = {
+      'name': name.toString(),
+      'contactNo': contactNo.toString(),
+      'report': report.toString(),
+    };
+    final response = await ApiManager.postRequest(body, url);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }

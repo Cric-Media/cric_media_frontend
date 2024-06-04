@@ -231,6 +231,7 @@ import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/news/news_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
+import 'package:cricket_app/cubits/report/report_cubit.dart';
 import 'package:cricket_app/cubits/social_link/social_link_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
@@ -241,6 +242,7 @@ import 'package:cricket_app/screens/auth_screen/forget_password/verify_email_for
 import 'package:cricket_app/screens/auth_screen/sigin_screen/signIn.dart';
 import 'package:cricket_app/screens/auth_screen/signUp_screen/signUp_screen.dart';
 import 'package:cricket_app/screens/auth_screen/signUp_screen/verify_email_screen.dart';
+import 'package:cricket_app/screens/dashbord_screen/dashboard_item/report_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/home_tab_item/series_details_screen.dart';
 import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/add_new_player_screen.dart';
@@ -475,6 +477,14 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) => SeriesDetailsScreen(
             tournamentId: tournamentId,
+          ),
+        );
+
+      case report:
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider<ReportCubit>(
+            create: (context) => ReportCubit(),
+            child: const ReportScreen(),
           ),
         );
 

@@ -18,6 +18,7 @@ const addMatch = '/add-match';
 const startMatch = '/start-match';
 const setOpenings = '/set-openings';
 const liveScorer = '/live-scorer';
+const report = '/report';
 
 // Admin
 const adminMatches = "/admin-matches";

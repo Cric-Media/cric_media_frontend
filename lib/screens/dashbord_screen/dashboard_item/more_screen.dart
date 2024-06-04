@@ -1,3 +1,4 @@
+import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/social_link/social_link_cubit.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
 import 'package:cricket_app/utils/launch_url.dart';
@@ -218,6 +219,9 @@ class _MoreScreenState extends State<MoreScreen> {
                             color: Color(0xffA3A1A1),
                           ),
                           ListTile(
+                              onTap: () {
+                                Navigator.pushNamed(context, report);
+                              },
                               title: Text(
                                 'Report a problem',
                                 style: GoogleFonts.inter(
