@@ -10,6 +10,7 @@ import 'package:cricket_app/services/ad_mob_service.dart';
 import 'package:cricket_app/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -47,7 +48,7 @@ class _LiveDetails extends State<LiveDetails> {
 
   createBannerAd() {
     myBanner ??= BannerAd(
-      adUnitId: "ca-app-pub-4072951366400579/1184088450",
+      adUnitId: dotenv.env['BANNER_AD_UNIT_ID'] ?? '',
       size: AdSize.fullBanner,
       listener: AdMobService.bannerAdListener,
       request: const AdRequest(),
@@ -56,7 +57,7 @@ class _LiveDetails extends State<LiveDetails> {
 
   createInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: "ca-app-pub-4072951366400579/6244843447",
+      adUnitId: dotenv.env['INTERSTITIAL_AD_UNIT_ID'] ?? '',
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) => interstitialAd = ad,

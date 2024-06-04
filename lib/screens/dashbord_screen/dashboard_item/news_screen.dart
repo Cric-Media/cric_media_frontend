@@ -16,7 +16,9 @@ class NewsScreen extends StatefulWidget {
 class _NewsScreenState extends State<NewsScreen> {
   @override
   void initState() {
-    NewsCubit.get(context).getNews();
+    if (NewsCubit.get(context).news.isEmpty) {
+      NewsCubit.get(context).getNews();
+    }
     super.initState();
   }
 
@@ -63,44 +65,56 @@ class _NewsScreenState extends State<NewsScreen> {
             } else if (state is NewsGetErrorState) {
               return Center(child: Text(state.error));
             }
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // const SizedBox(height: 7),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: NewsCubit.get(context).news.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      var news = NewsCubit.get(context).news[index];
-                      return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NewsDetails(news: news),
-                              ),
+            return RefreshIndicator(
+              onRefresh: () async {
+                NewsCubit.get(context).getNews();
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (NewsCubit.get(context).news.isNotEmpty)
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: NewsCubit.get(context).news.length +
+                            1, // Add one for the "Load More" button
+                        itemBuilder: (context, index) {
+                          if (index < NewsCubit.get(context).news.length) {
+                            var news = NewsCubit.get(context).news[index];
+                            return InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        NewsDetails(news: news),
+                                  ),
+                                );
+                              },
+                              child: NewsCard(news: news),
                             );
-                          },
-                          child: NewsCard(news: news));
-                    },
-                  ),
-                ),
-                BlocBuilder<NewsCubit, NewsState>(
-                  builder: (context, state) {
-                    if (state is NewsGetMoreLoadingState) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    return ElevatedButton(
-                      onPressed: () {
-                        NewsCubit.get(context).getNews(more: true);
-                      },
-                      child: const Text("Load More"),
-                    );
-                  },
-                ),
-                const SizedBox(height: 70),
-              ],
+                          } else {
+                            return BlocBuilder<NewsCubit, NewsState>(
+                              builder: (context, state) {
+                                if (state is NewsGetMoreLoadingState) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                return ElevatedButton(
+                                  onPressed: () {
+                                    NewsCubit.get(context).getNews(more: true);
+                                  },
+                                  child: const Text("Load More"),
+                                );
+                              },
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  const SizedBox(height: 70),
+                ],
+              ),
             );
           },
         ),

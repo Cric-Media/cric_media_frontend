@@ -3,6 +3,7 @@ import 'package:cricket_app/custom_widgets/grid_view_contanor.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/services/ad_mob_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -25,7 +26,7 @@ class _LiveInfoState extends State<LiveInfo> {
 
   createNativeAd() {
     nativeAd = NativeAd(
-      adUnitId: "ca-app-pub-4072951366400579/1227873371",
+      adUnitId: dotenv.env['NATIVE_AD_UNIT_ID'] ?? '',
       factoryId: 'listTile',
       listener: AdMobService.nativeAdListener,
       request: const AdRequest(),

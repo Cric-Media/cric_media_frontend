@@ -3,11 +3,9 @@ import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/custom_widgets/recent_live_batsman_card.dart';
 import 'package:cricket_app/models/match_details.dart';
-import 'package:cricket_app/services/ad_mob_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class LiveLive extends StatefulWidget {
   final MatchDetails? match;
@@ -18,21 +16,10 @@ class LiveLive extends StatefulWidget {
 }
 
 class _LiveLiveState extends State<LiveLive> {
-  BannerAd? myBanner;
   @override
   void initState() {
     MatchCubit.get(context).getInitialOvers(widget.match!.sId.toString());
-    createBannerAd();
     super.initState();
-  }
-
-  createBannerAd() {
-    myBanner ??= BannerAd(
-      adUnitId: "ca-app-pub-4072951366400579/1184088450",
-      size: AdSize.fullBanner,
-      listener: AdMobService.bannerAdListener,
-      request: const AdRequest(),
-    )..load();
   }
 
   @override
@@ -91,17 +78,7 @@ class _LiveLiveState extends State<LiveLive> {
           ),
         ),
       ),
-      myBanner == null
-          ? Container()
-          : Container(
-              margin: const EdgeInsets.only(
-                // bottom: 4,
-                left: 8,
-                right: 8,
-              ),
-              height: 60,
-              child: AdWidget(ad: myBanner!),
-            ),
+
       const SizedBox(height: 8),
       Card(
         elevation: 2,

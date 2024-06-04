@@ -53,10 +53,43 @@ class _RecentTabState extends State<RecentTab> {
               const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
-                    itemCount: MatchCubit.get(context)
-                        .completedMatchDetailsList
-                        .length,
-                    itemBuilder: (context, index) {
+                  itemCount:
+                      MatchCubit.get(context).completedMatchDetailsList.length +
+                          1,
+                  itemBuilder: (context, index) {
+                    if (index ==
+                        MatchCubit.get(context)
+                            .completedMatchDetailsList
+                            .length) {
+                      // This is the last item, which is the "Load More" button
+                      return BlocBuilder<MatchCubit, MatchState>(
+                        builder: (context, state) {
+                          if (state is MatchGetMoreCompletedLoading) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 5),
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          }
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 4.0, vertical: 5),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                MatchCubit.get(context).getCompletedMatches(
+                                    user: true, more: true);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                              ),
+                              child: const Text("Load more"),
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      // This is a regular match item
                       var match = MatchCubit.get(context)
                           .completedMatchDetailsList[index];
                       return Padding(
@@ -64,10 +97,6 @@ class _RecentTabState extends State<RecentTab> {
                             horizontal: 4.0, vertical: 5),
                         child: InkWell(
                           onTap: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => recentDetails()));
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -78,20 +107,9 @@ class _RecentTabState extends State<RecentTab> {
                           child: CustomResentWidget(match: match),
                         ),
                       );
-                    }),
-              ),
-              BlocBuilder<MatchCubit, MatchState>(
-                builder: (context, state) {
-                  if (state is MatchGetMoreCompletedLoading) {
-                    return const CircularProgressIndicator();
-                  }
-                  return ElevatedButton(
-                      onPressed: () {
-                        MatchCubit.get(context)
-                            .getCompletedMatches(user: true, more: true);
-                      },
-                      child: const Text("Load more"));
-                },
+                    }
+                  },
+                ),
               ),
               const SizedBox(height: 70),
             ],

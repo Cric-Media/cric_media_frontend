@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/models/news.dart';
+import 'package:cricket_app/services/ad_mob_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
 class NewsDetails extends StatefulWidget {
@@ -14,6 +17,71 @@ class NewsDetails extends StatefulWidget {
 }
 
 class _NewsDetailsState extends State<NewsDetails> {
+  BannerAd? myBanner;
+  InterstitialAd? interstitialAd;
+  NativeAd? nativeAd;
+
+  @override
+  void initState() {
+    createBannerAd();
+    createInterstitialAd();
+    createNativeAd();
+
+    super.initState();
+  }
+
+  createBannerAd() {
+    myBanner ??= BannerAd(
+      adUnitId: dotenv.env['BANNER_AD_UNIT_ID'] ?? '',
+      size: AdSize.fullBanner,
+      listener: AdMobService.bannerAdListener,
+      request: const AdRequest(),
+    )..load();
+  }
+
+  createInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: dotenv.env['INTERSTITIAL_AD_UNIT_ID'] ?? '',
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) => interstitialAd = ad,
+        onAdFailedToLoad: (error) => interstitialAd = null,
+      ),
+    );
+  }
+
+  showInterstitialAd() {
+    if (interstitialAd != null) {
+      interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad) {
+          ad.dispose();
+          createInterstitialAd();
+        },
+        onAdFailedToShowFullScreenContent: (ad, error) {
+          ad.dispose();
+          createInterstitialAd();
+        },
+      );
+      interstitialAd?.show();
+      interstitialAd = null;
+    }
+  }
+
+  createNativeAd() {
+    nativeAd = NativeAd(
+      adUnitId: dotenv.env['NATIVE_AD_UNIT_ID'] ?? '',
+      factoryId: 'listTile',
+      listener: AdMobService.nativeAdListener,
+      request: const AdRequest(),
+    )..load();
+  }
+
+  @override
+  void dispose() {
+    showInterstitialAd();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWdith = MediaQuery.of(context).size.width;
@@ -63,7 +131,7 @@ class _NewsDetailsState extends State<NewsDetails> {
                   color: Colors.black,
                   fontWeight: FontWeight.w500,
                 )),
-                maxLines: 10,
+                maxLines: 1,
                 textAlign: TextAlign.start,
               ),
               const SizedBox(height: 10),
@@ -81,9 +149,15 @@ class _NewsDetailsState extends State<NewsDetails> {
                   textAlign: TextAlign.start,
                 ),
               ),
-              const SizedBox(
-                height: 7,
-              ),
+              myBanner == null
+                  ? const SizedBox.shrink()
+                  : Container(
+                      height: 100,
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      width: screenWdith,
+                      child: AdWidget(ad: myBanner!),
+                    ),
+              const SizedBox(height: 7),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
@@ -100,6 +174,16 @@ class _NewsDetailsState extends State<NewsDetails> {
                   // Optional: Use it if you want to limit the text to a certain number of lines
                 ),
               ),
+              nativeAd == null
+                  ? Container()
+                  : Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      height: 80,
+                      child: AdWidget(ad: nativeAd!),
+                    ),
             ],
           ),
         ),

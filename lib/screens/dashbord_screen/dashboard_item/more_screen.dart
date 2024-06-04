@@ -49,7 +49,8 @@ class _MoreScreenState extends State<MoreScreen> {
     await FlutterShare.share(
       title: 'Share',
       text: 'Download the app from playstore',
-      linkUrl: 'https://play.google.com/store/apps',
+      linkUrl:
+          'https://play.google.com/store/apps/details?id=com.cricmediascorer.af',
       chooserTitle: 'Share',
     );
   }
@@ -167,15 +168,16 @@ class _MoreScreenState extends State<MoreScreen> {
                           ListTile(
                               onTap: () {
                                 launchURL(
-                                    'https://play.google.com/store/apps/details?id=<YOUR_APP_ID>');
+                                    'https://play.google.com/store/apps/details?id=com.cricmediascorer.af');
                               },
                               title: Text(
                                 'Rate Us',
                                 style: GoogleFonts.inter(
-                                    textStyle: const TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w400)),
+                                  textStyle: const TextStyle(
+                                      fontSize: 17,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400),
+                                ),
                               ),
                               trailing: const Icon(
                                 Icons.arrow_right,
@@ -253,14 +255,32 @@ class _MoreScreenState extends State<MoreScreen> {
                             thickness: 1,
                             color: Color(0xffA3A1A1),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Text(
-                              'About',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 15.0),
+                            child: RichText(
+                              text: TextSpan(
+                                style: DefaultTextStyle.of(context).style,
+                                children: const <TextSpan>[
+                                  TextSpan(
+                                    text: 'About\t\t\t',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '(Coming Soon.)',
+                                    style: TextStyle(
+                                      fontSize:
+                                          14, // make the font size smaller
+                                      color: Colors.black,
+                                      // fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           const SizedBox(

@@ -2,6 +2,7 @@ import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/models/news.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class NewsCard extends StatelessWidget {
   final News? news;
@@ -20,14 +21,17 @@ class NewsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image
-            Container(
-              width: screenWidth * 0.2,
-              height: screenWidth * 0.2, // Maintaining a square aspect ratio
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: NetworkImage(news?.image ?? ''),
-                  fit: BoxFit.cover,
+            Hero(
+              tag: news?.sId ?? '',
+              child: Container(
+                width: screenWidth * 0.2,
+                height: screenWidth * 0.2, // Maintaining a square aspect ratio
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: NetworkImage(news?.image ?? ''),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -54,7 +58,7 @@ class NewsCard extends StatelessWidget {
                     news?.description ?? '',
                     style: GoogleFonts.inter(
                       textStyle: const TextStyle(
-                        fontSize: 13,
+                        fontSize: 14,
                         color: AppColor.hintColor,
                         fontWeight: FontWeight.w300,
                       ),
@@ -62,6 +66,20 @@ class NewsCard extends StatelessWidget {
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
+                  ),
+                  // Show date here
+                  const SizedBox(height: 4.0),
+                  Text(
+                    DateFormat('dd MMMM yyyy')
+                        .format(DateTime.parse(news?.createdAt ?? '')),
+                    style: GoogleFonts.inter(
+                        textStyle: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    )),
+                    maxLines: 1,
+                    textAlign: TextAlign.start,
                   ),
                 ],
               ),
