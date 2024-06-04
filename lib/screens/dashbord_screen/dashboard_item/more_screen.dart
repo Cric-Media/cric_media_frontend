@@ -4,6 +4,7 @@ import 'package:cricket_app/utils/launch_url.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:in_app_update/in_app_update.dart';
@@ -49,8 +50,7 @@ class _MoreScreenState extends State<MoreScreen> {
     await FlutterShare.share(
       title: 'Share',
       text: 'Download the app from playstore',
-      linkUrl:
-          'https://play.google.com/store/apps/details?id=com.cricmediascorer.af',
+      linkUrl: dotenv.env['PLAY_STORE_URL'] ?? '',
       chooserTitle: 'Share',
     );
   }
@@ -167,8 +167,7 @@ class _MoreScreenState extends State<MoreScreen> {
                           ),
                           ListTile(
                               onTap: () {
-                                launchURL(
-                                    'https://play.google.com/store/apps/details?id=com.cricmediascorer.af');
+                                launchURL(dotenv.env['PLAY_STORE_URL'] ?? '');
                               },
                               title: Text(
                                 'Rate Us',

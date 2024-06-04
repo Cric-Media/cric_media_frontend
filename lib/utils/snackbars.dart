@@ -25,6 +25,7 @@ void showSnack(
     ),
     // Set the background color to blue
     backgroundColor: AppColor.blueColor,
+
     // Show the Snackbar for 3 seconds
     duration: const Duration(seconds: 3),
     // If an action is provided, add a button to the Snackbar

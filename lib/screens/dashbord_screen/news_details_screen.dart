@@ -10,15 +10,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
-class NewsDetails extends StatefulWidget {
+class NewsDetailsScreen extends StatefulWidget {
   final News? news;
-  const NewsDetails({super.key, this.news});
+  const NewsDetailsScreen({super.key, this.news});
 
   @override
-  State<NewsDetails> createState() => _NewsDetailsState();
+  State<NewsDetailsScreen> createState() => _NewsDetailsScreenState();
 }
 
-class _NewsDetailsState extends State<NewsDetails> {
+class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   BannerAd? myBanner;
   InterstitialAd? interstitialAd;
   NativeAd? nativeAd;
@@ -35,7 +35,7 @@ class _NewsDetailsState extends State<NewsDetails> {
   createBannerAd() {
     myBanner ??= BannerAd(
       adUnitId: dotenv.env['BANNER_AD_UNIT_ID'] ?? '',
-      size: AdSize.fullBanner,
+      size: AdSize.largeBanner,
       listener: AdMobService.bannerAdListener,
       request: const AdRequest(),
     )..load();

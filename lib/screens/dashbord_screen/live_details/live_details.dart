@@ -49,7 +49,7 @@ class _LiveDetails extends State<LiveDetails> {
   createBannerAd() {
     myBanner ??= BannerAd(
       adUnitId: dotenv.env['BANNER_AD_UNIT_ID'] ?? '',
-      size: AdSize.fullBanner,
+      size: AdSize.largeBanner,
       listener: AdMobService.bannerAdListener,
       request: const AdRequest(),
     )..load();
@@ -236,9 +236,10 @@ class _LiveDetails extends State<LiveDetails> {
                     myBanner == null
                         ? const SizedBox.shrink()
                         : Container(
-                            height: myBanner!.size.height.toDouble(),
+                            height: myBanner?.size.height.toDouble(),
                             margin: const EdgeInsets.symmetric(vertical: 4),
-                            width: screenWidth,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            width: myBanner?.size.width.toDouble(),
                             child: AdWidget(ad: myBanner!),
                           ),
                     value == 0

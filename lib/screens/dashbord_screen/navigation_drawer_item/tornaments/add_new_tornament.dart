@@ -5,7 +5,7 @@ import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/costom_text_field.dart';
 import 'package:cricket_app/custom_widgets/custom_button.dart';
 import 'package:cricket_app/models/tournament.dart';
-import 'package:cricket_app/utils/snackbars.dart';
+import 'package:cricket_app/utils/app_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -469,7 +469,15 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                     );
                     Navigator.pop(context);
                   } else if (state is TournamentUpdateError) {
-                    showSnack(context, message: state.message);
+                    AppDialogs.showErrorDialog(
+                      context,
+                      errorMessage: state.message,
+                    );
+                  } else if (state is TournamentAddError) {
+                    AppDialogs.showErrorDialog(
+                      context,
+                      errorMessage: state.message,
+                    );
                   }
                 },
                 builder: (context, state) {

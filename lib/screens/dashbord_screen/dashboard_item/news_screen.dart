@@ -2,7 +2,7 @@ import 'package:cricket_app/cubits/news/news_cubit.dart';
 import 'package:cricket_app/custom_widgets/news_card.dart';
 import 'package:cricket_app/custom_widgets/placeholders/news_placeholder.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
-import 'package:cricket_app/screens/dashbord_screen/new_details.dart';
+import 'package:cricket_app/screens/dashbord_screen/news_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -87,7 +87,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        NewsDetails(news: news),
+                                        NewsDetailsScreen(news: news),
                                   ),
                                 );
                               },
