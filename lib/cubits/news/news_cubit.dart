@@ -54,4 +54,25 @@ class NewsCubit extends Cubit<NewsState> {
       }
     }
   }
+
+  void viewNews(String newsId) async {
+    emit(NewsViewLoadingState());
+
+    var network = await Network.check();
+    if (!network) {
+      emit(NewsViewErrorState(error: "No Internet Connection"));
+      return;
+    }
+
+    try {
+      var res = await UserController().viewNews(newsId);
+      emit(NewsViewSuccessState(response: res));
+    } catch (e) {
+      if (e is! AppException) {
+        emit(NewsViewErrorState(error: "Something went wrong"));
+      } else {
+        emit(NewsViewErrorState(error: e.message));
+      }
+    }
+  }
 }

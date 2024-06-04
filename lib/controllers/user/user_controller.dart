@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cricket_app/constants/app_url.dart';
+import 'package:cricket_app/constants/global.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/news.dart';
 import 'package:cricket_app/models/player.dart';
@@ -39,6 +40,25 @@ class UserController {
         news.add(News.fromJson(v));
       });
       return ApiResponse.fromJson(resBody, (data) => news);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  Future<ApiResponse> viewNews(String newsId) async {
+    final url = UserUrl.viewNews;
+    final adminId = await Global().getAdminId();
+    var body;
+    if (adminId != null) {
+      body = {'newsId': newsId, 'adminId': adminId};
+    } else {
+      body = {'newsId': newsId};
+    }
+    final response = await ApiManager.putRequest(body, url);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
     } else {
       throw AppException(resBody['message']);
     }

@@ -251,7 +251,7 @@ class _LiveInfoState extends State<LiveInfo> {
                     horizontal: 8,
                     vertical: 4,
                   ),
-                  height: 80,
+                  height: 150,
                   child: AdWidget(ad: nativeAd!),
                 ),
         ],

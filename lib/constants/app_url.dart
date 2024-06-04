@@ -89,6 +89,7 @@ abstract class UserUrl {
 
   // * News Section ***
   static final getNews = "${AppUrl.baseUrl}/superadmin/api/news";
+  static final viewNews = "${AppUrl.baseUrl}/superadmin/api/view-news";
 
   // * Social Links Section ***
   static final getSocialLink = "${AppUrl.baseUrl}/superadmin/api/sociallinks";

@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/cubits/news/news_cubit.dart';
 import 'package:cricket_app/models/news.dart';
 import 'package:cricket_app/services/ad_mob_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -26,7 +28,7 @@ class _NewsDetailsState extends State<NewsDetails> {
     createBannerAd();
     createInterstitialAd();
     createNativeAd();
-
+    NewsCubit.get(context).viewNews(widget.news?.sId ?? '');
     super.initState();
   }
 
@@ -100,93 +102,123 @@ class _NewsDetailsState extends State<NewsDetails> {
           )),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10.0,
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Hero(
-                tag: widget.news?.sId ?? '',
-                child: SizedBox(
-                  width: screenWdith,
-                  height: screenHeight * 0.25,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.news?.image ?? '',
-                    ),
-                  ),
-                ),
-              ),
-              Text(
-                DateFormat('dd MMMM yyyy')
-                    .format(DateTime.parse(widget.news?.createdAt ?? '')),
-                style: GoogleFonts.inter(
-                    textStyle: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                )),
-                maxLines: 1,
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: Text(
-                  widget.news?.title ?? '',
-                  style: GoogleFonts.inter(
-                      textStyle: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.brown,
-                    fontWeight: FontWeight.w700,
-                  )),
-                  maxLines: 10,
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              myBanner == null
-                  ? const SizedBox.shrink()
-                  : Container(
-                      height: 100,
-                      margin: const EdgeInsets.symmetric(vertical: 10),
+      body: BlocConsumer<NewsCubit, NewsState>(
+        listener: (context, state) {
+          if (state is NewsViewSuccessState) {
+            NewsCubit.get(context).getNews();
+          }
+        },
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10.0,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Hero(
+                    tag: widget.news?.sId ?? '',
+                    child: SizedBox(
                       width: screenWdith,
-                      child: AdWidget(ad: myBanner!),
-                    ),
-              const SizedBox(height: 7),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  widget.news?.description ?? '',
-                  style: GoogleFonts.inter(
-                    textStyle: const TextStyle(
-                      fontSize: 14,
-                      color: AppColor.hintColor,
-                      fontWeight: FontWeight.w600,
+                      height: screenHeight * 0.25,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.news?.image ?? '',
+                        ),
+                      ),
                     ),
                   ),
-                  textAlign: TextAlign.start,
-                  // Changed from clip to ellipsis
-                  // Optional: Use it if you want to limit the text to a certain number of lines
-                ),
-              ),
-              nativeAd == null
-                  ? Container()
-                  : Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      height: 80,
-                      child: AdWidget(ad: nativeAd!),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          DateFormat('dd MMMM yyyy').format(
+                              DateTime.parse(widget.news?.createdAt ?? '')),
+                          style: GoogleFonts.inter(
+                              textStyle: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          )),
+                          maxLines: 1,
+                          textAlign: TextAlign.start,
+                        ),
+                        Text(
+                          "Viewers ${widget.news?.viewers?.length}",
+                          style: GoogleFonts.inter(
+                              textStyle: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          )),
+                          maxLines: 1,
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
                     ),
-            ],
-          ),
-        ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Text(
+                      widget.news?.title ?? '',
+                      style: GoogleFonts.inter(
+                          textStyle: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.brown,
+                        fontWeight: FontWeight.w700,
+                      )),
+                      maxLines: 10,
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  myBanner == null
+                      ? const SizedBox.shrink()
+                      : Container(
+                          height: myBanner!.size.height.toDouble(),
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          width: screenWdith,
+                          child: AdWidget(ad: myBanner!),
+                        ),
+                  const SizedBox(height: 7),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      widget.news?.description ?? '',
+                      style: GoogleFonts.inter(
+                        textStyle: const TextStyle(
+                          fontSize: 14,
+                          color: AppColor.hintColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      textAlign: TextAlign.start,
+                      // Changed from clip to ellipsis
+                      // Optional: Use it if you want to limit the text to a certain number of lines
+                    ),
+                  ),
+                  nativeAd == null
+                      ? Container()
+                      : Container(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          height: 150,
+                          child: AdWidget(ad: nativeAd!),
+                        ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }

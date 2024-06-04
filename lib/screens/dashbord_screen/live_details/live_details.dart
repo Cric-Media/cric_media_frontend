@@ -234,14 +234,11 @@ class _LiveDetails extends State<LiveDetails> {
                       ),
                     ),
                     myBanner == null
-                        ? Container()
+                        ? const SizedBox.shrink()
                         : Container(
-                            margin: const EdgeInsets.only(
-                              // bottom: 4,
-                              left: 8,
-                              right: 8,
-                            ),
-                            height: 60,
+                            height: myBanner!.size.height.toDouble(),
+                            margin: const EdgeInsets.symmetric(vertical: 4),
+                            width: screenWidth,
                             child: AdWidget(ad: myBanner!),
                           ),
                     value == 0
