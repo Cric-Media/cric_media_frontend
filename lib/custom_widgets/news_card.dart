@@ -69,17 +69,35 @@ class NewsCard extends StatelessWidget {
                   ),
                   // Show date here
                   const SizedBox(height: 4.0),
-                  Text(
-                    DateFormat('dd MMMM yyyy')
-                        .format(DateTime.parse(news?.createdAt ?? '')),
-                    style: GoogleFonts.inter(
-                        textStyle: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    )),
-                    maxLines: 1,
-                    textAlign: TextAlign.start,
+                  Row(
+                    children: [
+                      Text(
+                        DateFormat('dd MMMM yyyy')
+                            .format(DateTime.parse(news?.createdAt ?? '')),
+                        style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        )),
+                        maxLines: 1,
+                        textAlign: TextAlign.start,
+                      ),
+                      // Show time here
+                      const SizedBox(width: 4.0),
+                      Text(
+                        DateFormat('hh:mm a')
+                            .format(DateTime.parse(news?.createdAt ?? '')),
+                        style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        )),
+                        maxLines: 1,
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
                   ),
                 ],
               ),

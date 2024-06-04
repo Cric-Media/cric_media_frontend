@@ -78,7 +78,9 @@ class _RecentTabState extends State<RecentTab> {
                             child: ElevatedButton(
                               onPressed: () {
                                 MatchCubit.get(context).getCompletedMatches(
-                                    user: true, more: true);
+                                  user: true,
+                                  more: true,
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,

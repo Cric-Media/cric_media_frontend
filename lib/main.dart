@@ -1,11 +1,6 @@
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/cubits/admin/admin_cubit.dart';
-import 'package:cricket_app/cubits/news/news_cubit.dart';
-import 'package:cricket_app/cubits/player/player_cubit.dart';
-import 'package:cricket_app/cubits/social_link/social_link_cubit.dart';
-import 'package:cricket_app/cubits/teams/team_cubit.dart';
-import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/providers/add_new_player_provider.dart';
+import 'package:cricket_app/providers/bloc_providers.dart';
 import 'package:cricket_app/providers/registration_provider.dart';
 import 'package:cricket_app/providers/team_provider.dart';
 import 'package:cricket_app/providers/user_login_provider.dart';
@@ -17,8 +12,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-
-import 'cubits/match/match_cubit.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -60,20 +53,7 @@ class MyApp extends StatelessWidget {
           }
         },
         child: MultiBlocProvider(
-          providers: [
-            BlocProvider<AdminCubit>(create: (context) => AdminCubit()),
-            BlocProvider<PlayerCubit>(create: (context) => PlayerCubit()),
-            BlocProvider<TeamCubit>(
-              create: (context) => TeamCubit()..getInitialTeams(),
-            ),
-            BlocProvider<MatchCubit>(create: (context) => MatchCubit()),
-            BlocProvider<TournamentCubit>(
-              create: (context) => TournamentCubit(),
-            ),
-            BlocProvider<NewsCubit>(create: (context) => NewsCubit()),
-            BlocProvider<SocialLinkCubit>(
-                create: (context) => SocialLinkCubit()),
-          ],
+          providers: providers,
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Cric Media',

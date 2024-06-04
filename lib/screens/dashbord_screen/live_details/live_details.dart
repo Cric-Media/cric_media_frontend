@@ -236,7 +236,6 @@ class _LiveDetails extends State<LiveDetails> {
                     myBanner == null
                         ? const SizedBox.shrink()
                         : Container(
-                            color: Colors.red,
                             height: myBanner!.size.height.toDouble(),
                             margin: const EdgeInsets.only(top: 2),
                             padding: const EdgeInsets.symmetric(horizontal: 2),

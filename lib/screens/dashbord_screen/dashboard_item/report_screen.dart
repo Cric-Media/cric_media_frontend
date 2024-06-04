@@ -16,6 +16,9 @@ class ReportScreen extends StatelessWidget {
         child: Column(
           children: [
             TextFormField(
+              onChanged: (value) {
+                ReportCubit.get(context).name = value;
+              },
               decoration: const InputDecoration(
                 labelText: 'Name',
                 hintText: 'Enter your name',
@@ -23,6 +26,9 @@ class ReportScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             TextFormField(
+              onChanged: (value) {
+                ReportCubit.get(context).contactNumber = value;
+              },
               decoration: const InputDecoration(
                 labelText: 'Contact Number',
                 hintText: 'Enter your contact number',
@@ -31,6 +37,9 @@ class ReportScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
             TextFormField(
+              onChanged: (value) {
+                ReportCubit.get(context).report = value;
+              },
               decoration: const InputDecoration(
                 labelText: 'Report',
                 hintText: 'Write your report here',

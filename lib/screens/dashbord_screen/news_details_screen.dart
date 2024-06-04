@@ -88,7 +88,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWdith = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: const Color(0XFFFBFBFB),
@@ -123,7 +123,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   Hero(
                     tag: widget.news?.sId ?? '',
                     child: SizedBox(
-                      width: screenWdith,
+                      width: screenWidth,
                       height: screenHeight * 0.25,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
@@ -139,17 +139,35 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          DateFormat('dd MMMM yyyy').format(
-                              DateTime.parse(widget.news?.createdAt ?? '')),
-                          style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          )),
-                          maxLines: 1,
-                          textAlign: TextAlign.start,
+                        Row(
+                          children: [
+                            Text(
+                              DateFormat('dd MMMM yyyy').format(
+                                  DateTime.parse(widget.news?.createdAt ?? '')),
+                              style: GoogleFonts.inter(
+                                  textStyle: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              )),
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                            ),
+                            // show time
+                            const SizedBox(width: 5),
+                            Text(
+                              DateFormat('hh:mm a').format(
+                                  DateTime.parse(widget.news?.createdAt ?? '')),
+                              style: GoogleFonts.inter(
+                                  textStyle: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              )),
+                              maxLines: 1,
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
                         ),
                         Text(
                           "Viewers ${widget.news?.viewers?.length}",
@@ -182,14 +200,15 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   ),
                   myBanner == null
                       ? const SizedBox.shrink()
-                      : Container(
-                          color: Colors.red,
-                          height: myBanner!.size.height.toDouble(),
-                          margin: const EdgeInsets.symmetric(vertical: 4),
-                          padding: const EdgeInsets.symmetric(horizontal: 2),
-                          width: myBanner!.size.width.toDouble(),
-                          alignment: Alignment.center,
-                          child: Center(child: AdWidget(ad: myBanner!)),
+                      : Center(
+                          child: Container(
+                            height: myBanner!.size.height.toDouble(),
+                            margin: const EdgeInsets.only(top: 2),
+                            padding: const EdgeInsets.symmetric(horizontal: 2),
+                            width: myBanner!.size.width.toDouble(),
+                            alignment: Alignment.center,
+                            child: AdWidget(ad: myBanner!),
+                          ),
                         ),
                   const SizedBox(height: 7),
                   Padding(
@@ -211,11 +230,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   nativeAd == null
                       ? Container()
                       : Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          height: 150,
+                          height: 120,
+                          width: screenWidth,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: AdWidget(ad: nativeAd!),
                         ),
                 ],

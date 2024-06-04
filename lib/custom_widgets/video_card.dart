@@ -1,12 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
-import 'package:cricket_app/constants/app_images.dart';
+import 'package:cricket_app/models/video.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class VideoCard extends StatelessWidget {
-  const VideoCard({super.key});
+  final Video? video;
+  const VideoCard({super.key, this.video});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class VideoCard extends StatelessWidget {
       color: Colors.white,
       child: Container(
         width: screenWith,
-        height: 130,
+        // height: 130,
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(12)),
         child: Column(
@@ -30,29 +33,29 @@ class VideoCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  height: 130,
-                  width: 140,
+                  height: 100,
+                  width: 100,
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 4,
+                  ),
                   decoration: BoxDecoration(),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        bottomLeft: Radius.circular(12)),
-                    child: Image.asset(
-                      AppIcons.azam,
-                      fit: BoxFit.cover,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: CachedNetworkImageProvider(
+                      video?.thumbnail ?? '',
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 5.0),
+                const SizedBox(width: 10),
+                Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Pakistan and India Set to fact',
+                        video?.title ?? '',
                         style: GoogleFonts.inter(
-                            // ignore: prefer_const_constructors
                             textStyle: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
@@ -61,12 +64,9 @@ class VideoCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
-                      SizedBox(
-                        height: 5,
-                      ),
+                      SizedBox(height: 5),
                       Text(
-                        'It is a long established  fact that\ngoddsf ddf '
-                        'a reader will be \n distracted  the readable It is a\n long established  fact that \n  goddsf ddf',
+                        video?.description ?? '',
                         style: GoogleFonts.inter(
                             textStyle: TextStyle(
                           fontSize: 13,
@@ -76,8 +76,39 @@ class VideoCard extends StatelessWidget {
                         textAlign: TextAlign.start,
                         overflow: TextOverflow
                             .ellipsis, // Changed from clip to ellipsis
-                        maxLines: 4,
-                      )
+                        maxLines: 2,
+                      ),
+                      const SizedBox(height: 4.0),
+                      Row(
+                        children: [
+                          Text(
+                            DateFormat('dd MMMM yyyy')
+                                .format(DateTime.parse(video?.createdAt ?? '')),
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            )),
+                            maxLines: 1,
+                            textAlign: TextAlign.start,
+                          ),
+                          // Show time here
+                          const SizedBox(width: 4.0),
+                          Text(
+                            DateFormat('hh:mm a')
+                                .format(DateTime.parse(video?.createdAt ?? '')),
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            )),
+                            maxLines: 1,
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 )

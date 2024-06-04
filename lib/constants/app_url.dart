@@ -96,4 +96,7 @@ abstract class UserUrl {
 
   // * Report Section ***
   static final report = "${AppUrl.baseUrl}/superadmin/api/report";
+
+  // * Videos Section ***
+  static final videos = "${AppUrl.baseUrl}/superadmin/api/videos";
 }

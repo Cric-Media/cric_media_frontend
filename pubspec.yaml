@@ -67,6 +67,7 @@ dependencies:
   url_launcher: ^6.2.6
   in_app_update: ^4.2.3
   flutter_share: ^2.0.0
+  video_player: ^2.8.6
 
   
 dev_dependencies:

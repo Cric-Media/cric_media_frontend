@@ -21,6 +21,7 @@ class NewsCubit extends Cubit<NewsState> {
       newsPage++;
       emit(NewsGetMoreLoadingState());
     } else {
+      newsPage = 1;
       emit(NewsGetLoadingState());
     }
 

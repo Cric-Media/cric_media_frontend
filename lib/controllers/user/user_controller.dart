@@ -7,6 +7,7 @@ import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/news.dart';
 import 'package:cricket_app/models/player.dart';
 import 'package:cricket_app/models/social_link.dart';
+import 'package:cricket_app/models/video.dart';
 import 'package:cricket_app/utils/api_manager.dart';
 import 'package:cricket_app/utils/app_exception.dart';
 
@@ -99,6 +100,24 @@ class UserController {
     var resBody = jsonDecode(response.body);
     if (resBody['success']) {
       return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
+  // * Video Section ***
+
+  Future<ApiResponse> getVideos(int page, int limit) async {
+    final url = "${UserUrl.videos}?page=$page&limit=$limit";
+    final response = await ApiManager.getRequest(url);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<Video> videos = [];
+      resBody['data'].forEach((v) {
+        videos.add(Video.fromJson(v));
+      });
+      return ApiResponse.fromJson(resBody, (data) => videos);
     } else {
       throw AppException(resBody['message']);
     }

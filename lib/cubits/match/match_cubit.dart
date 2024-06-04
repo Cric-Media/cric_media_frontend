@@ -280,6 +280,7 @@ class MatchCubit extends Cubit<MatchState> {
       recentPage++;
       emit(MatchGetMoreCompletedLoading());
     } else {
+      recentPage = 1;
       emit(MatchGetCompletedLoading());
     }
     try {

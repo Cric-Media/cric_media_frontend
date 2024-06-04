@@ -20,7 +20,7 @@ class _MainPageState extends State<DashBoardScreen> {
     const Home(),
     const NewsScreen(),
     const Series(),
-    const Video(),
+    const VideosScreen(),
     const MoreScreen(),
   ];
 

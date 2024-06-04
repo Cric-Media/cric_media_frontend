@@ -226,16 +226,12 @@
 // }
 
 import 'package:cricket_app/constants/routes_names.dart';
-import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/auth/auth_cubit.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
-import 'package:cricket_app/cubits/news/news_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/report/report_cubit.dart';
-import 'package:cricket_app/cubits/social_link/social_link_cubit.dart';
-import 'package:cricket_app/cubits/teams/team_cubit.dart';
-import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/models/tournament.dart';
+import 'package:cricket_app/providers/bloc_providers.dart';
 import 'package:cricket_app/screens/auth_screen/forget_password/change_password_screen.dart';
 import 'package:cricket_app/screens/auth_screen/forget_password/forget_password.dart';
 import 'package:cricket_app/screens/auth_screen/forget_password/verify_email_for_password_screen.dart';
@@ -330,27 +326,7 @@ class Routes {
       case dashboard:
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
-            providers: [
-              BlocProvider<AdminCubit>(create: (context) => AdminCubit()),
-              BlocProvider<PlayerCubit>(create: (context) => PlayerCubit()),
-              BlocProvider<TeamCubit>(
-                create: (context) => TeamCubit()..getInitialTeams(),
-              ),
-              BlocProvider<MatchCubit>(create: (context) => MatchCubit()),
-              BlocProvider<TournamentCubit>(
-                create: (context) => TournamentCubit(),
-              ),
-              BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
-              BlocProvider<MatchCubit>(
-                create: (context) => MatchCubit()
-                  ..getLiveMatches(
-                    user: true,
-                  ),
-              ),
-              BlocProvider<NewsCubit>(create: (context) => NewsCubit()),
-              BlocProvider<SocialLinkCubit>(
-                  create: (context) => SocialLinkCubit()),
-            ],
+            providers: providers,
             child: const DashBoardScreen(),
           ),
         );
