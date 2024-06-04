@@ -39,10 +39,10 @@ class _MoreScreenState extends State<MoreScreen> {
   Future<void> checkForUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
       setState(() {
-        _updateInfo = info;
+        _updateInfo ??= info;
       });
     }).catchError((e) {
-      showSnack(context, message: e.toString());
+      showSnack(context, message: "Failed to check for update");
     });
   }
 
@@ -190,13 +190,15 @@ class _MoreScreenState extends State<MoreScreen> {
                           ListTile(
                               onTap: () async {
                                 await checkForUpdate();
-                                _updateInfo?.updateAvailability ==
-                                        UpdateAvailability.updateAvailable
-                                    ? InAppUpdate.performImmediateUpdate()
-                                    : showSnack(
-                                        context,
-                                        message: 'No update available',
-                                      );
+                                if (_updateInfo != null) {
+                                  _updateInfo?.updateAvailability ==
+                                          UpdateAvailability.updateAvailable
+                                      ? InAppUpdate.performImmediateUpdate()
+                                      : showSnack(
+                                          context,
+                                          message: 'No update available',
+                                        );
+                                }
                               },
                               title: Text(
                                 'Check For Update',
