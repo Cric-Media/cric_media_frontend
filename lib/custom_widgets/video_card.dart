@@ -1,15 +1,39 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/models/video.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:video_player/video_player.dart';
 
-class VideoCard extends StatelessWidget {
+class VideoCard extends StatefulWidget {
   final Video? video;
   const VideoCard({super.key, this.video});
+
+  @override
+  State<VideoCard> createState() => _VideoCardState();
+}
+
+class _VideoCardState extends State<VideoCard> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.networkUrl(
+      Uri.parse(
+        widget.video?.videoUrl ??
+            'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      ),
+    )..initialize().then((_) {
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +56,41 @@ class VideoCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  height: 100,
-                  width: 100,
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 4,
-                    horizontal: 4,
-                  ),
-                  decoration: BoxDecoration(),
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: CachedNetworkImageProvider(
-                      video?.thumbnail ?? '',
+                Hero(
+                  tag: widget.video?.sId ?? '',
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Stack(
+                      children: [
+                        VideoPlayer(_controller),
+                        Center(
+                          child: IconButton(
+                            icon: Icon(
+                              _controller.value.isPlaying
+                                  ? Icons.pause
+                                  : Icons.play_arrow,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                if (_controller.value.isPlaying) {
+                                  _controller.pause();
+                                } else {
+                                  _controller.play();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -54,9 +101,9 @@ class VideoCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        video?.title ?? '',
+                        widget.video?.title ?? '',
                         style: GoogleFonts.inter(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: Colors.black,
@@ -64,11 +111,11 @@ class VideoCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
-                      SizedBox(height: 5),
+                      const SizedBox(height: 5),
                       Text(
-                        video?.description ?? '',
+                        widget.video?.description ?? '',
                         style: GoogleFonts.inter(
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                           fontSize: 13,
                           color: AppColor.hintColor,
                           fontWeight: FontWeight.w300,
@@ -82,8 +129,8 @@ class VideoCard extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            DateFormat('dd MMMM yyyy')
-                                .format(DateTime.parse(video?.createdAt ?? '')),
+                            DateFormat('dd MMMM yyyy').format(
+                                DateTime.parse(widget.video?.createdAt ?? '')),
                             style: GoogleFonts.inter(
                                 textStyle: const TextStyle(
                               fontSize: 12,
@@ -96,8 +143,8 @@ class VideoCard extends StatelessWidget {
                           // Show time here
                           const SizedBox(width: 4.0),
                           Text(
-                            DateFormat('hh:mm a')
-                                .format(DateTime.parse(video?.createdAt ?? '')),
+                            DateFormat('hh:mm a').format(
+                                DateTime.parse(widget.video?.createdAt ?? '')),
                             style: GoogleFonts.inter(
                                 textStyle: const TextStyle(
                               fontSize: 12,

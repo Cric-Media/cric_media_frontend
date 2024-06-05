@@ -271,7 +271,9 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => AuthCubit(),
-            child: UpgradeAlert(child: const SplashScreen()),
+            child: UpgradeAlert(
+              child: const SplashScreen(),
+            ),
           ),
         );
 
@@ -368,7 +370,10 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) => BlocProvider<MatchCubit>(
             create: (context) => MatchCubit(),
-            child: StartMatchScreen(match: args['match']),
+            child: StartMatchScreen(
+              match: args['match'],
+              refresh: args['refresh'] == null ? false : true,
+            ),
           ),
         );
 

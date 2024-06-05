@@ -1,6 +1,8 @@
 import 'package:cricket_app/cubits/video/video_cubit.dart';
+import 'package:cricket_app/custom_widgets/placeholders/video_placeholder.dart';
 import 'package:cricket_app/custom_widgets/video_card.dart';
 import 'package:cricket_app/screens/dashbord_screen/dashboard_item/home.dart';
+import 'package:cricket_app/screens/dashbord_screen/dashboard_item/video_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -78,8 +80,11 @@ class _VideosScreenState extends State<VideosScreen> {
               },
               builder: (context, state) {
                 if (state is VideosLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                  return Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) => const VideoPlaceholder(),
+                      itemCount: 6,
+                    ),
                   );
                 } else if (state is VideosError) {
                   return Center(
@@ -107,10 +112,14 @@ class _VideosScreenState extends State<VideosScreen> {
                           ),
                           child: InkWell(
                               onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => const VideoDetails()));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => VideoDetails(
+                                      video: video,
+                                    ),
+                                  ),
+                                );
                               },
                               child: VideoCard(video: video)),
                         );

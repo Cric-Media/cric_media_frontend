@@ -270,7 +270,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                       bookingFor = selectedBookingFor;
                     });
                   },
-                  items: ['Hard Bowl', 'Tennis Bowl ']
+                  items: ['Hard Ball', 'Tennis Ball ']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,

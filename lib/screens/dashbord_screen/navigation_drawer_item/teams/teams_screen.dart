@@ -437,23 +437,23 @@ class _TeamTileState extends State<TeamTile> {
                                     )),
                                   ),
                                 ),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: 8),
                                 Padding(
                                   padding: const EdgeInsets.only(top: 5),
-                                  child: Row(
-                                    children: [
-                                      const Text("Share access"),
-                                      const SizedBox(width: 10),
-                                      GestureDetector(
-                                        onTap: () {
-                                          adminsSheet(context);
-                                        },
-                                        child: Image.asset(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      adminsSheet(context);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        const Text("Share access"),
+                                        const SizedBox(width: 10),
+                                        Image.asset(
                                           'assets/image/invite.png',
                                           width: 20,
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],

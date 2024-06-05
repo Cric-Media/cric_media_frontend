@@ -4,6 +4,7 @@ import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
+import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/snackbars.dart';
@@ -13,7 +14,9 @@ import 'package:intl/intl.dart';
 
 class StartMatchScreen extends StatefulWidget {
   final MatchDetails match;
-  const StartMatchScreen({super.key, required this.match});
+  final bool? refresh;
+  const StartMatchScreen(
+      {super.key, required this.match, this.refresh = false});
 
   @override
   State<StartMatchScreen> createState() => _StartMatchScreenState();
@@ -586,6 +589,10 @@ class _StartMatchScreenState extends State<StartMatchScreen> {
                         } else if (state is MatchStartSuccess) {
                           showSnack(context, message: state.res.message);
                           MatchCubit.get(context).getUpcomingMatches();
+                          if (widget.refresh == true) {
+                            TournamentCubit.get(context).upComingMatches();
+                          }
+
                           Navigator.pop(context);
                         }
                         if (state is MatchStartError) {

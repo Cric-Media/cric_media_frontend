@@ -789,6 +789,22 @@ class AdminController {
     }
   }
 
+  Future<ApiResponse> completedMatches(String tournamentId) async {
+    final url = "${AdminUrl.tournamentCompleted}/$tournamentId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.getRequest(url, headers: headers);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      List<MatchDetails> matches = [];
+      for (var match in resBody['data']) {
+        matches.add(MatchDetails.fromJson(match));
+      }
+      return ApiResponse.fromJson(resBody, (data) => matches);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
   Future<ApiResponse> bannerMatches(int matchStatus) async {
     final url = "${AdminUrl.bannerMatches}?matchStatus=$matchStatus";
     final headers = {"Content-Type": "application/json"};

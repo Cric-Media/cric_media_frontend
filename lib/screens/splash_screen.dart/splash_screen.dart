@@ -17,7 +17,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   navigateBasedOnUserId();
+    // });
+    Future.delayed(const Duration(seconds: 3), () {
       navigateBasedOnUserId();
     });
   }
@@ -27,9 +30,11 @@ class _SplashScreenState extends State<SplashScreen> {
     final token = await Global().getToken();
 
     if (userId != null && token != null) {
-      Navigator.of(context).pushNamed(dashboard);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(dashboard, (route) => false);
     } else {
-      Navigator.of(context).pushNamed(dashboard);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(dashboard, (route) => false);
     }
   }
 

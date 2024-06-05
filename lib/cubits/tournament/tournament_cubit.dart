@@ -40,6 +40,7 @@ class TournamentCubit extends Cubit<TournamentState> {
   List<String> matchTypes = ["series", "qualifier", "semiFinal", "final"];
   List<MatchDetails> upcomingMatchDetailsList = [];
   List<MatchDetails> liveMatchDetailsList = [];
+  List<MatchDetails> completedMatchDetailsList = [];
   List<PointsTable> pointsTable = [];
 
   // Selected variables
@@ -279,6 +280,28 @@ class TournamentCubit extends Cubit<TournamentState> {
         emit(TournamentLiveMatchesError(message: e.message));
       } else {
         emit(TournamentLiveMatchesError(message: "Something went wrong"));
+      }
+    }
+  }
+
+  void getCompletedMatches() async {
+    emit(TournamentCompletedMatchesLoading());
+    try {
+      var network = await Network.check();
+      if (!network) {
+        emit(TournamentCompletedMatchesError(
+            message: "Please check your internet connection"));
+        return;
+      }
+      final response = await adminController.completedMatches(
+        tournament?.sId ?? "",
+      );
+      emit(TournamentCompletedMatchesSuccess(response: response));
+    } catch (e) {
+      if (e is AppException) {
+        emit(TournamentCompletedMatchesError(message: e.message));
+      } else {
+        emit(TournamentCompletedMatchesError(message: "Something went wrong"));
       }
     }
   }

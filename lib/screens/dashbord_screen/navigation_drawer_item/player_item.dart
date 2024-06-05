@@ -308,10 +308,6 @@ class _PlayerTileState extends State<PlayerTile> {
                         title: Text(admins[index].name.toString()),
                         trailing: TextButton(
                           onPressed: () {
-                            // BlocProvider.of<AdminCubit>(context).sharePlayer(
-                            //   playerId: widget.player.id.toString(),
-                            //   adminId: admins[index].id.toString(),
-                            // );
                             AdminCubit.get(context).shareAccess(
                               id: widget.player.id.toString(),
                               adminId: admins[index].id.toString(),

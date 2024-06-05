@@ -4,9 +4,11 @@ import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
+import 'package:cricket_app/custom_widgets/custom_resent_widget.dart';
 import 'package:cricket_app/custom_widgets/custom_up_coming_matches_card.dart';
 import 'package:cricket_app/custom_widgets/match_details_live_card.dart';
 import 'package:cricket_app/custom_widgets/placeholders/live_match_shimmer.dart';
+import 'package:cricket_app/custom_widgets/placeholders/recent_match_placeholder.dart';
 import 'package:cricket_app/custom_widgets/placeholders/upcoming_match_placeholder.dart';
 import 'package:cricket_app/models/admin.dart';
 import 'package:cricket_app/models/team.dart';
@@ -113,7 +115,7 @@ class _TournamentDetailsScreenState extends State<TournamentDetailsScreen> {
                                 // Live
                                 const Live(),
                                 // Completed
-                                const Column(children: []),
+                                const Completed(),
                                 // Points Table
                                 // PointsTableWidget(
                                 //   tournamentId: widget.tournament.sId ?? '',
@@ -523,7 +525,7 @@ class _HomeState extends State<Home> {
                       radius: 20,
                       backgroundColor: Colors.grey[300],
                       backgroundImage: AssetImage(
-                        tournament.tournamentType?.toLowerCase() == "hard bowl"
+                        tournament.tournamentType?.toLowerCase() == "hard ball"
                             ? "assets/icons/hard_ball.png"
                             : "assets/icons/tennis_ball.png",
                       ),
@@ -1187,6 +1189,8 @@ class _ScheduleMatchWidgetState extends State<ScheduleMatchWidget> {
             if (TournamentCubit.get(context).selectedMatchType != null)
               ElevatedButton(
                 onPressed: () {
+                  // close sheet
+                  Navigator.pop(context);
                   Navigator.pushNamed(
                     context,
                     addTournamentMatch,
@@ -1407,7 +1411,7 @@ class GroupWidget extends StatelessWidget {
               // decoration: BoxDecoration(color: AppColor.blueColor),
               children: [
                 Text("Team", style: TextStyle(fontWeight: FontWeight.bold)),
-                Text("P", style: TextStyle(fontWeight: FontWeight.bold)),
+                Text("M", style: TextStyle(fontWeight: FontWeight.bold)),
                 Text("W", style: TextStyle(fontWeight: FontWeight.bold)),
                 Text("L", style: TextStyle(fontWeight: FontWeight.bold)),
                 Text("D", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -1481,6 +1485,67 @@ class GroupWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class Completed extends StatefulWidget {
+  const Completed({super.key});
+
+  @override
+  State<Completed> createState() => _CompletedState();
+}
+
+class _CompletedState extends State<Completed> {
+  @override
+  void initState() {
+    TournamentCubit.get(context).getCompletedMatches();
+    if (TournamentCubit.get(context).completedMatchDetailsList.isEmpty) {}
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: Column(children: [
+        Expanded(
+          child: BlocConsumer<TournamentCubit, TournamentState>(
+            listener: (context, state) {
+              if (state is TournamentCompletedMatchesSuccess) {
+                TournamentCubit.get(context).completedMatchDetailsList =
+                    state.response.data;
+              }
+            },
+            builder: (context, state) {
+              if (state is TournamentCompletedMatchesLoading) {
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return const RecentMatchPlaceholder();
+                  },
+                  itemCount: 6,
+                );
+              } else if (state is TournamentCompletedMatchesError) {
+                return Center(child: Text(state.message));
+              }
+
+              return ListView.builder(
+                  itemCount:
+                      TournamentCubit.get(context).liveMatchDetailsList.length,
+                  itemBuilder: (context, index) {
+                    var match = TournamentCubit.get(context)
+                        .liveMatchDetailsList[index];
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: CustomResentWidget(match: match),
+                    );
+                  });
+            },
+          ),
+        ),
+        const SizedBox(height: 70),
+      ]),
     );
   }
 }

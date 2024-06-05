@@ -157,7 +157,10 @@ class UpCommingMachesCard extends StatelessWidget {
                                             Navigator.pushNamed(
                                               context,
                                               startMatch,
-                                              arguments: {'match': match},
+                                              arguments: {
+                                                'match': match,
+                                                'refresh': true,
+                                              },
                                             );
                                           },
                                           child: const Text(
