@@ -100,4 +100,5 @@ abstract class UserUrl {
 
   // * Videos Section ***
   static final videos = "${AppUrl.baseUrl}/superadmin/api/videos";
+  static final viewVideo = "${AppUrl.baseUrl}/superadmin/api/view-video";
 }

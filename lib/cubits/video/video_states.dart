@@ -10,6 +10,8 @@ final class VideosLoading extends VideoState {}
 
 final class VideosMoreLoading extends VideoState {}
 
+final class VideoViewLoading extends VideoState {}
+
 // * Success
 
 final class VideosSuccess extends VideoState {
@@ -22,9 +24,19 @@ final class VideosMoreSuccess extends VideoState {
   VideosMoreSuccess(this.res);
 }
 
+final class VideoViewSuccess extends VideoState {
+  final ApiResponse res;
+  VideoViewSuccess(this.res);
+}
+
 // ! Error
 
 final class VideosError extends VideoState {
   final String message;
   VideosError(this.message);
+}
+
+final class VideoViewError extends VideoState {
+  final String message;
+  VideoViewError(this.message);
 }

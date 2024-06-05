@@ -1,4 +1,5 @@
 import 'package:cricket_app/constants/app_color.dart';
+import 'package:cricket_app/cubits/video/video_cubit.dart';
 import 'package:cricket_app/models/video.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -22,6 +23,7 @@ class _VideoDetailsState extends State<VideoDetails> {
   @override
   void initState() {
     super.initState();
+    VideoCubit.get(context).viewVideo(widget.video?.sId ?? '');
     createInterstitialAd();
     _controller = VideoPlayerController.networkUrl(
       Uri.parse(

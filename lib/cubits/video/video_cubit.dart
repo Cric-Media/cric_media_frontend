@@ -1,6 +1,7 @@
 import 'package:cricket_app/controllers/user/user_controller.dart';
 import 'package:cricket_app/models/api_response.dart';
 import 'package:cricket_app/models/video.dart';
+import 'package:cricket_app/utils/app_exception.dart';
 import 'package:cricket_app/utils/network.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +34,6 @@ class VideoCubit extends Cubit<VideoState> {
 
       emit(VideosSuccess(res));
     } catch (e) {
-      print(e);
       if (!more) {
         if (e is ApiResponse) {
           emit(VideosError(e.message));
@@ -42,6 +42,27 @@ class VideoCubit extends Cubit<VideoState> {
         }
       } else {
         page--;
+      }
+    }
+  }
+
+  void viewVideo(String videoId) async {
+    emit(VideoViewLoading());
+
+    var network = await Network.check();
+    if (!network) {
+      emit(VideoViewError("No Internet Connection"));
+      return;
+    }
+
+    try {
+      var res = await UserController().viewVideo(videoId);
+      emit(VideoViewSuccess(res));
+    } catch (e) {
+      if (e is! AppException) {
+        emit(VideoViewError("Something went wrong"));
+      } else {
+        emit(VideoViewError(e.message));
       }
     }
   }

@@ -122,4 +122,23 @@ class UserController {
       throw AppException(resBody['message']);
     }
   }
+
+  Future<ApiResponse> viewVideo(String newsId) async {
+    final url = UserUrl.viewVideo;
+    final adminId = await Global().getAdminId();
+    var body;
+    if (adminId != null) {
+      body = {'videoId': newsId, 'adminId': adminId};
+    } else {
+      body = {'videoId': newsId};
+    }
+    final response = await ApiManager.putRequest(body, url);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
 }
