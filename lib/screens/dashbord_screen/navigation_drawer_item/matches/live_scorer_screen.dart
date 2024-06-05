@@ -274,7 +274,10 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LiveDetails(match: match),
+                      builder: (context) => LiveDetails(
+                        match: match,
+                        fromScorer: true,
+                      ),
                     ));
               },
               child: const Text("Match")),

@@ -102,7 +102,10 @@ class _RecentTabState extends State<RecentTab> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LiveDetails(match: match),
+                                builder: (context) => LiveDetails(
+                                  match: match,
+                                  fromScorer: false,
+                                ),
                               ),
                             );
                           },

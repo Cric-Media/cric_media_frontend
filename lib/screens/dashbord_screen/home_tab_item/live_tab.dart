@@ -65,7 +65,10 @@ class _LiveTabState extends State<LiveTab> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => LiveDetails(match: match),
+                                builder: (context) => LiveDetails(
+                                  match: match,
+                                  fromScorer: false,
+                                ),
                               ),
                             );
                           },

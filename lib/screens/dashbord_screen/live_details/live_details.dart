@@ -6,6 +6,7 @@ import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_info.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/live_live.dart';
 import 'package:cricket_app/screens/dashbord_screen/live_details/scorecard_tab.dart';
+import 'package:cricket_app/screens/dashbord_screen/navigation_drawer_item/matches/live_scorer_screen.dart';
 import 'package:cricket_app/services/ad_mob_service.dart';
 import 'package:cricket_app/services/socket_service.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class LiveDetails extends StatefulWidget {
   final MatchDetails? match;
-  const LiveDetails({super.key, this.match});
+  final bool fromScorer;
+  const LiveDetails({super.key, this.match, required this.fromScorer});
 
   @override
   State<LiveDetails> createState() => _LiveDetails();
@@ -26,6 +28,9 @@ class _LiveDetails extends State<LiveDetails> {
   MatchDetails? match;
   BannerAd? myBanner;
   InterstitialAd? interstitialAd;
+
+  // scaffold key
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   int value = 0;
   getVlaue(int x) {
@@ -99,165 +104,223 @@ class _LiveDetails extends State<LiveDetails> {
     return DefaultTabController(
       length: 4, // change the number to 4, when adding points table
       initialIndex: 0,
-      child: Scaffold(
-        backgroundColor: const Color(0XFFFBFBFB),
-        appBar: AppBar(
-          title: Text(
-            'Live Details '.toUpperCase(),
-            style: GoogleFonts.inter(
-              textStyle: const TextStyle(
-                  fontSize: 20,
-                  color: AppColor.blackColor,
-                  fontWeight: FontWeight.w700),
+      child: WillPopScope(
+        onWillPop: () {
+          if (widget.fromScorer) {
+            // Navigator.pushReplacement(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => LiveScorerScreen(
+            //         matchId: widget.match?.sId ?? '',
+            //       ),
+            //     ));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Helper(
+                    matchId: widget.match?.sId,
+                  ),
+                ));
+            return Future.value(true);
+          }
+          return Future.value(true);
+        },
+        child: Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: const Color(0XFFFBFBFB),
+          appBar: AppBar(
+            title: Text(
+              'Live Details '.toUpperCase(),
+              style: GoogleFonts.inter(
+                textStyle: const TextStyle(
+                    fontSize: 20,
+                    color: AppColor.blackColor,
+                    fontWeight: FontWeight.w700),
+              ),
             ),
+            centerTitle: true,
           ),
-          centerTitle: true,
-        ),
-        body: BlocConsumer<MatchCubit, MatchState>(
-          listener: (context, state) {
-            if (state is MatchGetSuccess) {
-              match = state.res.data;
-            } else if (state is MatchGetError) {
-              match = MatchDetails();
-            }
-          },
-          builder: (context, state) {
-            if (match == null || state is MatchGetLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is MatchGetError) {
-              return Center(
-                child: Text(state.message),
-              );
-            }
+          body: BlocConsumer<MatchCubit, MatchState>(
+            listener: (context, state) {
+              if (state is MatchGetSuccess) {
+                match = state.res.data;
+              } else if (state is MatchGetError) {
+                match = MatchDetails();
+              }
+            },
+            builder: (context, state) {
+              if (match == null || state is MatchGetLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is MatchGetError) {
+                return Center(
+                  child: Text(state.message),
+                );
+              }
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 5),
-                    Hero(
-                      tag: match?.sId.toString() ?? '',
-                      child: MatchDetailsLiveCard(match: match),
-                    ),
-                    const SizedBox(height: 5),
-                    Card(
-                      color: Colors.white,
-                      elevation: 2,
-                      child: Container(
-                        width: screenWidth,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.white),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 25),
-                            InkWell(
-                              onTap: () {
-                                getVlaue(0);
-                              },
-                              child: Text(
-                                'Info',
-                                style: GoogleFonts.inter(
-                                  textStyle: TextStyle(
-                                      fontSize: 16,
-                                      color: value == 0
-                                          ? Colors.black
-                                          : Colors.grey,
-                                      fontWeight: FontWeight.w700),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 5),
+                      Hero(
+                        tag: match?.sId.toString() ?? '',
+                        child: MatchDetailsLiveCard(match: match),
+                      ),
+                      const SizedBox(height: 5),
+                      Card(
+                        color: Colors.white,
+                        elevation: 2,
+                        child: Container(
+                          width: screenWidth,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white),
+                          child: Row(
+                            children: [
+                              const SizedBox(width: 25),
+                              InkWell(
+                                onTap: () {
+                                  getVlaue(0);
+                                },
+                                child: Text(
+                                  'Info',
+                                  style: GoogleFonts.inter(
+                                    textStyle: TextStyle(
+                                        fontSize: 16,
+                                        color: value == 0
+                                            ? Colors.black
+                                            : Colors.grey,
+                                        fontWeight: FontWeight.w700),
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 30),
-                            InkWell(
-                                onTap: () {
-                                  getVlaue(1);
-                                },
-                                child: Text(
-                                  'Live',
-                                  style: GoogleFonts.inter(
-                                      textStyle: TextStyle(
-                                          fontSize: 16,
-                                          color: value == 1
-                                              ? Colors.black
-                                              : Colors.grey,
-                                          fontWeight: FontWeight.w700)),
-                                )),
-                            const SizedBox(width: 30),
-                            InkWell(
-                                onTap: () {
-                                  getVlaue(2);
-                                },
-                                child: Text(
-                                  'Scorecard',
-                                  style: GoogleFonts.inter(
-                                      textStyle: TextStyle(
-                                          fontSize: 16,
-                                          color: value == 2
-                                              ? Colors.black
-                                              : Colors.grey,
-                                          fontWeight: FontWeight.w700)),
-                                )),
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            InkWell(
-                                onTap: () {
-                                  getVlaue(3);
-                                },
-                                child: Text(
-                                  'Points Table',
-                                  style: GoogleFonts.inter(
-                                      textStyle: TextStyle(
-                                          fontSize: 16,
-                                          color: value == 3
-                                              ? Colors.black
-                                              : Colors.grey,
-                                          fontWeight: FontWeight.w700)),
-                                )),
-                          ],
-                        ),
-                        // child: TabBar(
-                        //   tabs: [
-                        //     Tab(text: 'Info'),
-                        //     Tab(text: 'Live'),
-                        //     Tab(text: 'Scorecard'),
-                        //     Tab(text: 'Points Table'),
-                        //   ],
-                        //   indicatorColor: Colors.green,
-                        //   labelColor: AppColor.blackColor,
-                        //   unselectedLabelColor: AppColor.grayColor,
-                        // ),
-                      ),
-                    ),
-                    myBanner == null
-                        ? const SizedBox.shrink()
-                        : Container(
-                            height: myBanner!.size.height.toDouble(),
-                            margin: const EdgeInsets.only(top: 2),
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            width: myBanner!.size.width.toDouble(),
-                            alignment: Alignment.center,
-                            child: Center(child: AdWidget(ad: myBanner!)),
+                              const SizedBox(width: 30),
+                              InkWell(
+                                  onTap: () {
+                                    getVlaue(1);
+                                  },
+                                  child: Text(
+                                    'Live',
+                                    style: GoogleFonts.inter(
+                                        textStyle: TextStyle(
+                                            fontSize: 16,
+                                            color: value == 1
+                                                ? Colors.black
+                                                : Colors.grey,
+                                            fontWeight: FontWeight.w700)),
+                                  )),
+                              const SizedBox(width: 30),
+                              InkWell(
+                                  onTap: () {
+                                    getVlaue(2);
+                                  },
+                                  child: Text(
+                                    'Scorecard',
+                                    style: GoogleFonts.inter(
+                                        textStyle: TextStyle(
+                                            fontSize: 16,
+                                            color: value == 2
+                                                ? Colors.black
+                                                : Colors.grey,
+                                            fontWeight: FontWeight.w700)),
+                                  )),
+                              const SizedBox(
+                                width: 30,
+                              ),
+                              InkWell(
+                                  onTap: () {
+                                    getVlaue(3);
+                                  },
+                                  child: Text(
+                                    'Points Table',
+                                    style: GoogleFonts.inter(
+                                        textStyle: TextStyle(
+                                            fontSize: 16,
+                                            color: value == 3
+                                                ? Colors.black
+                                                : Colors.grey,
+                                            fontWeight: FontWeight.w700)),
+                                  )),
+                            ],
                           ),
-                    value == 0
-                        ? LiveInfo(match: match)
-                        : value == 1
-                            ? LiveLive(match: match)
-                            : value == 2
-                                ? ScorecardTab(match: match)
-                                : value == 3
-                                    ? MatchPointsTable(match: match)
-                                    : Container(),
-                  ],
+                          // child: TabBar(
+                          //   tabs: [
+                          //     Tab(text: 'Info'),
+                          //     Tab(text: 'Live'),
+                          //     Tab(text: 'Scorecard'),
+                          //     Tab(text: 'Points Table'),
+                          //   ],
+                          //   indicatorColor: Colors.green,
+                          //   labelColor: AppColor.blackColor,
+                          //   unselectedLabelColor: AppColor.grayColor,
+                          // ),
+                        ),
+                      ),
+                      myBanner == null
+                          ? const SizedBox.shrink()
+                          : Container(
+                              height: myBanner!.size.height.toDouble(),
+                              margin: const EdgeInsets.only(top: 2),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
+                              width: myBanner!.size.width.toDouble(),
+                              alignment: Alignment.center,
+                              child: Center(child: AdWidget(ad: myBanner!)),
+                            ),
+                      value == 0
+                          ? LiveInfo(match: match)
+                          : value == 1
+                              ? LiveLive(match: match)
+                              : value == 2
+                                  ? ScorecardTab(match: match)
+                                  : value == 3
+                                      ? MatchPointsTable(match: match)
+                                      : Container(),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class Helper extends StatefulWidget {
+  final String? matchId;
+  const Helper({Key? key, this.matchId}) : super(key: key);
+
+  @override
+  State<Helper> createState() => _HelperState();
+}
+
+class _HelperState extends State<Helper> {
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 1), () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LiveScorerScreen(
+              matchId: widget.matchId ?? '',
+            ),
+          ));
+    });
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: Text("Loading"),
       ),
     );
   }

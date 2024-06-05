@@ -50,7 +50,10 @@ class _CompleteItem extends State<CompleteItem> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => LiveDetails(match: match),
+                          builder: (context) => LiveDetails(
+                            match: match,
+                            fromScorer: false,
+                          ),
                         ),
                       );
                     },

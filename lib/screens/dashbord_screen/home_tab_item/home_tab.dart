@@ -106,8 +106,10 @@ class _HomeTabState extends State<HomeTab> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              LiveDetails(match: match),
+                                          builder: (context) => LiveDetails(
+                                            match: match,
+                                            fromScorer: false,
+                                          ),
                                         ),
                                       );
                                     },
