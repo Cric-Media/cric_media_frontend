@@ -271,9 +271,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) => BlocProvider(
             create: (context) => AuthCubit(),
-            child: UpgradeAlert(
-              child: const SplashScreen(),
-            ),
+            child: const SplashScreen(),
           ),
         );
 
@@ -329,7 +327,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) => MultiBlocProvider(
             providers: providers,
-            child: const DashBoardScreen(),
+            child: UpgradeAlert(child: const DashBoardScreen()),
           ),
         );
 

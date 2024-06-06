@@ -382,6 +382,29 @@ class _HomeTabState extends State<HomeTab> {
                     //     },
                     //   ),
                     // ),
+                    if (state is! MatchBannerLiveLoading &&
+                        state is! MatchBannerUpcomingLoading)
+                      Visibility(
+                        visible:
+                            MatchCubit.get(context).liveBannerMatches.isEmpty &&
+                                MatchCubit.get(context)
+                                    .upcomingBannerMatches
+                                    .isEmpty &&
+                                TournamentCubit.get(context)
+                                    .fiveTournaments
+                                    .isEmpty,
+                        child: const Center(
+                          child: Text(
+                            "Sorry, we couldn't find any data at the moment. Please try again later.",
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              // fontWeight: FontWeight.bold,
+                              color: AppColor.blackColor,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 );
               },
