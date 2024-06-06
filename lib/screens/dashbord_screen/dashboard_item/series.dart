@@ -63,6 +63,10 @@ class _SeriesState extends State<Series> {
               },
               itemCount: 10,
             );
+          } else if (state is TournamentGetInitialError) {
+            return Center(
+              child: Text(state.message),
+            );
           }
           return RefreshIndicator(
             onRefresh: () async {

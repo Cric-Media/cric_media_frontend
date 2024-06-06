@@ -72,6 +72,7 @@ class _VideosScreenState extends State<VideosScreen> {
             // ),
             BlocConsumer<VideoCubit, VideoState>(
               listener: (context, state) {
+                print(state);
                 if (state is VideosSuccess) {
                   VideoCubit.get(context).videos = state.res.data;
                 } else if (state is VideosMoreSuccess) {

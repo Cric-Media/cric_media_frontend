@@ -41,14 +41,14 @@ class VideoCubit extends Cubit<VideoState> {
       }
     } catch (e) {
       if (!more) {
-        if (e is ApiResponse) {
+        if (e is AppException) {
           emit(VideosError(e.message));
         } else {
           emit(VideosError('An error occurred. Please try again later.'));
         }
       } else {
         page--;
-        if (e is ApiResponse) {
+        if (e is AppException) {
           emit(VideosMoreError(e.message));
         } else {
           emit(VideosMoreError('An error occurred. Please try again later.'));
