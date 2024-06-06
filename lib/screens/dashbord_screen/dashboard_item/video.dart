@@ -101,29 +101,52 @@ class _VideosScreenState extends State<VideosScreen> {
                 }
                 return Expanded(
                   child: ListView.builder(
-                      itemCount: VideoCubit.get(context).videos.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        var video = VideoCubit.get(context).videos[index];
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 5.0,
-                            horizontal: 10,
-                          ),
-                          child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VideoDetails(
-                                      video: video,
-                                    ),
-                                  ),
-                                );
+                    itemCount: VideoCubit.get(context).videos.length + 1,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      if (index == VideoCubit.get(context).videos.length) {
+                        return BlocBuilder<VideoCubit, VideoState>(
+                          builder: (context, state) {
+                            if (state is VideosMoreLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            return ElevatedButton(
+                              onPressed: () {
+                                VideoCubit.get(context).getVideos(more: true);
                               },
-                              child: VideoCard(video: video)),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                              ),
+                              child: const Text('Load More'),
+                            );
+                          },
                         );
-                      }),
+                      }
+
+                      var video = VideoCubit.get(context).videos[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 5.0,
+                          horizontal: 10,
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => VideoDetails(
+                                  video: video,
+                                ),
+                              ),
+                            );
+                          },
+                          child: VideoCard(video: video),
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             ),

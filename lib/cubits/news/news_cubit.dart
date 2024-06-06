@@ -27,6 +27,9 @@ class NewsCubit extends Cubit<NewsState> {
 
     var network = await Network.check();
     if (!network) {
+      if (more) {
+        newsPage--;
+      }
       emit(NewsGetErrorState(error: "No Internet Connection"));
       return;
     }

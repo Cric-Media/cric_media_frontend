@@ -104,6 +104,9 @@ class _NewsScreenState extends State<NewsScreen> {
                                   onPressed: () {
                                     NewsCubit.get(context).getNews(more: true);
                                   },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                  ),
                                   child: const Text("Load More"),
                                 );
                               },

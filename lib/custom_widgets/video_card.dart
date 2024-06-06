@@ -80,13 +80,13 @@ class _VideoCardState extends State<VideoCard> {
                               color: Colors.white,
                             ),
                             onPressed: () {
-                              setState(() {
-                                if (_controller.value.isPlaying) {
-                                  _controller.pause();
-                                } else {
-                                  _controller.play();
-                                }
-                              });
+                              // setState(() {
+                              //   if (_controller.value.isPlaying) {
+                              //     _controller.pause();
+                              //   } else {
+                              //     _controller.play();
+                              //   }
+                              // });
                             },
                           ),
                         ),

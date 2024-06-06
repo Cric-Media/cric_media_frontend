@@ -18,8 +18,8 @@ class VideoCubit extends Cubit<VideoState> {
 
   void getVideos({bool more = false}) async {
     if (more) {
-      emit(VideosMoreLoading());
       page++;
+      emit(VideosMoreLoading());
     } else {
       page = 1;
       emit(VideosLoading());
@@ -27,12 +27,18 @@ class VideoCubit extends Cubit<VideoState> {
     try {
       var network = await Network.check();
       if (!network) {
+        if (more) {
+          page--;
+        }
         emit(VideosError('No internet connection'));
         return;
       }
       final res = await UserController().getVideos(page, limit);
-
-      emit(VideosSuccess(res));
+      if (more) {
+        emit(VideosMoreSuccess(res));
+      } else {
+        emit(VideosSuccess(res));
+      }
     } catch (e) {
       if (!more) {
         if (e is ApiResponse) {
@@ -42,6 +48,11 @@ class VideoCubit extends Cubit<VideoState> {
         }
       } else {
         page--;
+        if (e is ApiResponse) {
+          emit(VideosMoreError(e.message));
+        } else {
+          emit(VideosMoreError('An error occurred. Please try again later.'));
+        }
       }
     }
   }

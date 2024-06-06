@@ -36,6 +36,11 @@ final class VideosError extends VideoState {
   VideosError(this.message);
 }
 
+final class VideosMoreError extends VideoState {
+  final String message;
+  VideosMoreError(this.message);
+}
+
 final class VideoViewError extends VideoState {
   final String message;
   VideoViewError(this.message);

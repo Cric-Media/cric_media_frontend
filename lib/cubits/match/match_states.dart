@@ -139,6 +139,11 @@ final class MatchGetCompletedError extends MatchState {
   MatchGetCompletedError(this.message);
 }
 
+final class MatchGetMoreCompletedError extends MatchState {
+  final String message;
+  MatchGetMoreCompletedError(this.message);
+}
+
 final class MatchGetLiveError extends MatchState {
   final String message;
   MatchGetLiveError(this.message);

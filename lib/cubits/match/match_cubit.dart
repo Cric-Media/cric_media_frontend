@@ -296,15 +296,25 @@ class MatchCubit extends Cubit<MatchState> {
           emit(MatchGetCompletedSuccess(response));
         }
       } else {
-        recentPage--;
+        if (more) {
+          recentPage--;
+        }
         if (!more) emit(MatchGetCompletedError('No internet connection'));
       }
     } catch (err) {
-      recentPage--;
-      if (err is! AppException) {
-        if (!more) emit(MatchGetCompletedError('Something went wrong'));
+      if (more) {
+        recentPage--;
+        if (err is! AppException) {
+          emit(MatchGetMoreCompletedError('Something went wrong'));
+        } else {
+          emit(MatchGetMoreCompletedError(err.toString()));
+        }
       } else {
-        if (!more) emit(MatchGetCompletedError(err.toString()));
+        if (err is! AppException) {
+          emit(MatchGetCompletedError('Something went wrong'));
+        } else {
+          emit(MatchGetCompletedError(err.toString()));
+        }
       }
     }
   }
