@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cricket_app/models/api_response.dart';
+import 'package:cricket_app/utils/app_exception.dart';
 import 'package:http/http.dart';
 
 class ApiManager {
@@ -43,7 +44,8 @@ class ApiManager {
         headers: headers ?? {'Content-Type': 'application/json'});
   }
 
-  static Future<Response> deleteRequest(var url, var body, {dynamic headers}) async {
+  static Future<Response> deleteRequest(var url, var body,
+      {dynamic headers}) async {
     // Perform a GET request and return the response.
     return await delete(
       Uri.parse(url),
@@ -70,7 +72,7 @@ class ApiManager {
       }
       return ApiResponse.fromJson(body, (data) => null);
     } else {
-      throw Exception(body['message']);
+      throw AppException(body['message']);
     }
   }
 }

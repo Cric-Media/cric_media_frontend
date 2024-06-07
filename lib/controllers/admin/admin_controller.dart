@@ -302,8 +302,10 @@ class AdminController {
 
     var body = jsonDecode(json);
     if (body['success'] == true) {
+      print('success');
       return ApiResponse.fromJson(body, (data) => null);
     } else {
+      print("error");
       throw AppException(body['message']);
     }
   }

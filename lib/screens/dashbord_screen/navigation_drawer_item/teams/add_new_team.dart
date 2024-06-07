@@ -238,6 +238,9 @@ class _AddNewTeam extends State<AddNewTeam> {
                         } else if (!formKey.currentState!.validate()) {
                           return;
                         } else if (updatedTeam != null) {
+                          // update the fields
+                          updatedTeam?.name = nameController.text;
+                          updatedTeam?.location = locationController.text;
                           BlocProvider.of<TeamCubit>(context)
                               .updateTeam(updatedTeam!, image);
                         } else {
