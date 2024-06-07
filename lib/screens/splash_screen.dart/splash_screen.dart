@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
       height: screenHeight,
       decoration: const BoxDecoration(),
       child: ExtendedImage.asset(
-        'assets/image/splash_screen.webp',
+        'assets/image/splash.png',
         fit: BoxFit.cover,
         repeat: ImageRepeat.repeat,
       ),

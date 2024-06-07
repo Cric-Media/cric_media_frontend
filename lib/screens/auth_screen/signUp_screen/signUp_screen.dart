@@ -96,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     const SizedBox(height: 10),
                     CustomTextField(
                       isPassword: false,
-                      hintText: 'John Doe',
+                      hintText: 'Lal Khan',
                       iconImagePath: AppIcons.user,
                       controller: nameController,
                       validator: (value) {
@@ -157,7 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     CustomTextField(
                       controller: phoneController,
                       isPassword: false,
-                      hintText: '+923000000000',
+                      hintText: '0728251919',
                       iconImagePath:
                           AppIcons.phone, //  controller: emailController,
                       validator: (value) {
