@@ -205,7 +205,9 @@ class _MatchDetailsLiveCardState extends State<MatchDetailsLiveCard> {
                       )
                     ],
                   ),
-                  if (match != null && match!.matchStatus! > 1)
+                  if (match != null &&
+                      match!.matchStatus! > 1 &&
+                      match?.matchDropped == null)
                     Visibility(
                       visible: match!.matchStatus! > 1,
                       child: Column(
@@ -242,7 +244,28 @@ class MatchStatusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (match!.matchStatus! == 1 && match?.matchStopped?.stop == false) {
+    if (match!.matchStatus! > 1 &&
+        match?.matchDropped != null &&
+        match?.matchDropped?.dropped == true)
+      // ignore: curly_braces_in_flow_control_structures
+      return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(7),
+        ),
+        child: Text(
+          match?.matchDropped?.droppedReason ?? '',
+          style: GoogleFonts.inter(
+            textStyle: const TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
+    else if (match!.matchStatus! == 1 && match?.matchStopped?.stop == false) {
       return Container(
         alignment: Alignment.center,
         width: match?.currentInning?.started == false ? 100 : 55,
@@ -278,7 +301,9 @@ class MatchStatusWidget extends StatelessWidget {
           ),
         ),
       );
-    else if (match!.matchStatus! > 1 && match?.matchStopped?.stop == false)
+    else if (match!.matchStatus! > 1 &&
+        match?.matchStopped?.stop == false &&
+        match?.matchDropped == null)
       // ignore: curly_braces_in_flow_control_structures
       return Container(
         alignment: Alignment.center,

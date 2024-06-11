@@ -7,6 +7,7 @@ import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/dropdown_widget.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/models/tournament.dart';
 import 'package:cricket_app/utils/snackbars.dart';
@@ -20,12 +21,15 @@ class AddTournamentMatchScreen extends StatefulWidget {
   final String? groupId;
   final int? totalMatches;
   final String? matchType;
+  final MatchDetails? match;
+
   const AddTournamentMatchScreen({
     super.key,
     required this.tournament,
     this.groupId,
     this.totalMatches,
     this.matchType,
+    this.match,
   });
 
   @override
@@ -41,12 +45,55 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.match != null) {
+      initDetails();
+    }
     MatchCubit.get(context).numberOfOvers = widget.tournament.numberOfOvers;
     getAllCountries().then((value) {
       setState(() {
         countries = value;
       });
     });
+  }
+
+  initDetails() {
+    countries = [];
+    MatchCubit.get(context).team1 = widget.match?.team1;
+    MatchCubit.get(context).team2 = widget.match?.team2;
+    MatchCubit.get(context).matchType = widget.match?.matchType;
+    MatchCubit.get(context).ballType = widget.match?.ballType;
+    MatchCubit.get(context).pitchType = widget.match?.pitchType;
+    MatchCubit.get(context).numberOfOvers =
+        widget.match?.numberOfOvers?.toInt();
+    MatchCubit.get(context).oversPerBowler =
+        widget.match?.oversPerBowler?.toInt();
+    MatchCubit.get(context).cityTown = widget.match?.cityOrTown;
+    MatchCubit.get(context).ground = widget.match?.ground;
+    MatchCubit.get(context).country = null;
+    MatchCubit.get(context).country = extractCountry(
+      widget.match?.matchDateTime ?? '',
+    ).trim();
+    MatchCubit.get(context).matchDateTime = widget.match?.matchDateTime
+        ?.replaceAll(
+          "${MatchCubit.get(context).country}",
+          "",
+        )
+        .trim();
+  }
+
+  String extractCountry(String dateString) {
+    // Define a regular expression to capture the country part
+    RegExp regExp = RegExp(r' - \d{2}:\d{2} (.+)$');
+
+    // Use the regular expression to find a match in the string
+    Match? match = regExp.firstMatch(dateString);
+
+    // Extract the country name if a match is found
+    if (match != null && match.groupCount == 1) {
+      return match.group(1)!;
+    } else {
+      return 'No country found';
+    }
   }
 
   Future<void> _selectDateAndTime(BuildContext context) async {
@@ -336,6 +383,12 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                   color: Colors.grey.withOpacity(0.3)),
                               child: TextField(
+                                controller: widget.match == null
+                                    ? null
+                                    : TextEditingController()
+                                  ?..text = MatchCubit.get(context)
+                                      .oversPerBowler
+                                      .toString(),
                                 onChanged: (value) {
                                   MatchCubit.get(context).oversPerBowler =
                                       int.tryParse(value);
@@ -381,6 +434,11 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                                     borderRadius: BorderRadius.circular(8),
                                     color: Colors.grey.withOpacity(0.3)),
                                 child: TextField(
+                                  controller: widget.match == null
+                                      ? null
+                                      : TextEditingController()
+                                    ?..text =
+                                        MatchCubit.get(context).cityTown ?? '',
                                   onChanged: (value) {
                                     MatchCubit.get(context).cityTown = value;
                                   },
@@ -420,6 +478,11 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                                     borderRadius: BorderRadius.circular(8),
                                     color: Colors.grey.withOpacity(0.3)),
                                 child: TextField(
+                                  controller: widget.match == null
+                                      ? null
+                                      : TextEditingController()
+                                    ?..text =
+                                        MatchCubit.get(context).ground ?? '',
                                   onChanged: (value) {
                                     MatchCubit.get(context).ground = value;
                                   },
@@ -465,12 +528,22 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                           color: Colors.black,
                         ),
                         const SizedBox(width: 10),
-                        Text(
-                          MatchCubit.get(context).matchDateTime == null
-                              ? 'Select time'
-                              : 'Selected: ${MatchCubit.get(context).matchDateTime.toString()}',
-                          style: const TextStyle(
-                              fontSize: 15, color: Colors.black),
+                        Expanded(
+                          child: widget.match == null
+                              ? Text(
+                                  MatchCubit.get(context).matchDateTime == null
+                                      ? 'Select time'
+                                      : 'Selected: ${MatchCubit.get(context).matchDateTime.toString()}',
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.black),
+                                )
+                              : Text(
+                                  MatchCubit.get(context).matchDateTime == null
+                                      ? 'Select time'
+                                      : 'Selected: ${MatchCubit.get(context).matchDateTime.toString()}',
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.black),
+                                ),
                         ),
                       ],
                     ),
@@ -525,13 +598,26 @@ class _AddTournamentMatchScreenState extends State<AddTournamentMatchScreen> {
                         }
                         return ElevatedButton(
                           onPressed: () {
-                            MatchCubit.get(context).addMatchDetails(
-                              tournamentId: widget.tournament.sId,
-                              tournamentMatchType: TournamentCubit.get(context)
-                                  .selectedMatchType,
-                              groupId: widget.groupId,
-                              totalMatches: widget.totalMatches,
-                            );
+                            if (widget.match != null) {
+                              MatchCubit.get(context).addMatchDetails(
+                                tournamentId: widget.tournament.sId,
+                                tournamentMatchType:
+                                    TournamentCubit.get(context)
+                                        .selectedMatchType,
+                                groupId: widget.groupId,
+                                totalMatches: widget.totalMatches,
+                                matchId: widget.match?.sId,
+                              );
+                            } else {
+                              MatchCubit.get(context).addMatchDetails(
+                                tournamentId: widget.tournament.sId,
+                                tournamentMatchType:
+                                    TournamentCubit.get(context)
+                                        .selectedMatchType,
+                                groupId: widget.groupId,
+                                totalMatches: widget.totalMatches,
+                              );
+                            }
                           },
                           child: const Text('Create new match'),
                         );

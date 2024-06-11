@@ -14,6 +14,10 @@ class NewsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
+    // Custom date format to match the image
+    String formattedDate = DateFormat('d MMMM EEEE yyyy h:mm a')
+        .format(DateTime.parse(news?.createdAt ?? ''));
+
     return Directionality(
       textDirection: ui.TextDirection.rtl, // Use TextDirection from dart:ui
       child: Card(
@@ -29,7 +33,8 @@ class NewsCard extends StatelessWidget {
                 tag: news?.sId ?? '',
                 child: Container(
                   width: screenWidth * 0.2,
-                  height: screenWidth * 0.2, // Maintaining a square aspect ratio
+                  height:
+                      screenWidth * 0.2, // Maintaining a square aspect ratio
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
@@ -43,16 +48,16 @@ class NewsCard extends StatelessWidget {
               // Text content
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end, // Align text to the right
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Align text to the right
                   children: [
                     Text(
                       news?.title ?? '',
-                      style: GoogleFonts.inter(
-                        textStyle: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                        ),
+                      style: const TextStyle(
+                        fontFamily: "Pashto",
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: AppColor.blackColor,
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
@@ -61,49 +66,31 @@ class NewsCard extends StatelessWidget {
                     const SizedBox(height: 8.0),
                     Text(
                       news?.description ?? '',
-                      style: GoogleFonts.inter(
-                        textStyle: const TextStyle(
-                          fontSize: 14,
-                          color: AppColor.hintColor,
-                          fontWeight: FontWeight.w300,
-                        ),
+                      style: const TextStyle(
+                        fontFamily: "Pashto",
+                        fontSize: 13,
+                        color: AppColor.hintColor,
                       ),
                       textAlign: TextAlign.right, // Align text to the right
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ),
-                    // Show date here
-                    const SizedBox(height: 4.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end, // Align row to the right
-                      children: [
-                        Text(
-                          DateFormat('dd MMMM yyyy')
-                              .format(DateTime.parse(news?.createdAt ?? '')),
-                          style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                              )),
-                          maxLines: 1,
-                          textAlign: TextAlign.right, // Align text to the right
-                        ),
-                        // Show time here
-                        const SizedBox(width: 4.0),
-                        Text(
-                          DateFormat('hh:mm a')
-                              .format(DateTime.parse(news?.createdAt ?? '')),
-                          style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                              )),
-                          maxLines: 1,
-                          textAlign: TextAlign.right, // Align text to the right
-                        ),
-                      ],
+                    // Show date and time here
+                    const SizedBox(height: 8.0),
+                    Directionality(
+                      textDirection: ui.TextDirection.ltr,
+                      child: Text(
+                        formattedDate,
+                        style: GoogleFonts.inter(
+                            textStyle: const TextStyle(
+                          fontSize: 12,
+                          color: AppColor.grayColor,
+                          fontWeight: FontWeight.w500,
+                        )),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.right, // Align text to the right
+                      ),
                     ),
                   ],
                 ),

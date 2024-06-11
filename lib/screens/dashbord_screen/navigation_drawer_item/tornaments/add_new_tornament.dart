@@ -157,7 +157,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                                           TournamentCubit.get(context)
                                                   .imageUrl ??
                                               '') as ImageProvider
-                                      : AssetImage(AppIcons.profile),
+                                      : AssetImage(AppIcons.cup),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -191,10 +191,11 @@ class _AddNewTornamentState extends State<AddNewTornament> {
                 child: Text(
                   'Series Name',
                   style: GoogleFonts.inter(
-                      textStyle: TextStyle(
-                          fontSize: screenWidth * 0.035,
-                          fontWeight: FontWeight.w800,
-                          color: AppColor.blackColor)),
+                    textStyle: TextStyle(
+                        fontSize: screenWidth * 0.035,
+                        fontWeight: FontWeight.w800,
+                        color: AppColor.blackColor),
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
@@ -327,6 +328,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
               CustomTextField(
                 isPassword: false,
                 hintText: 'Enter number of over ',
+                keyboardType: TextInputType.number,
                 controller: TournamentCubit.get(context).numberOfOvers,
                 // iconImagePath: AppIcons.password,
                 //     controller: emailController,
@@ -354,6 +356,7 @@ class _AddNewTornamentState extends State<AddNewTornament> {
               CustomTextField(
                 isPassword: false,
                 hintText: 'Enter number of team',
+                keyboardType: TextInputType.number,
                 controller: TournamentCubit.get(context).numberOfTeams,
                 // iconImagePath: AppIcons.password,
                 //     controller: emailController,

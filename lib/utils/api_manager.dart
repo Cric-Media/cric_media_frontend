@@ -56,10 +56,16 @@ class ApiManager {
 
   static Future<Response> deleteWithBodyRequest(var body, var url,
       {dynamic headers}) async {
-    // Perform a GET request and return the response.
     return await delete(
       Uri.parse(url),
       body: jsonEncode(body),
+      headers: headers,
+    );
+  }
+
+  static Future<Response> deleteWithoutBody(var url, {dynamic headers}) async {
+    return await delete(
+      Uri.parse(url),
       headers: headers,
     );
   }

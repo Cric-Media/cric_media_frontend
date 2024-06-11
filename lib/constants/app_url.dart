@@ -58,6 +58,7 @@ abstract class AdminUrl {
       "${AppUrl.baseUrl}/get-completed-matches-for-admin";
   static final startStopMatch = "${AppUrl.baseUrl}/start-stop-match";
   static final bannerMatches = "${AppUrl.baseUrl}/get-banner-matches";
+  static final deleteMatch = "${AppUrl.baseUrl}/superadmin/api/match";
 
   // * Live URLs
   static final setOpenings = "${AppUrl.baseUrl}/set-openings";

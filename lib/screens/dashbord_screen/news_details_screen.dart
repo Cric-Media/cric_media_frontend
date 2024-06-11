@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/cubits/news/news_cubit.dart';
@@ -90,12 +92,15 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    // Custom date format to match the image
+    String formattedDate = DateFormat('d MMMM EEEE yyyy h:mm a')
+        .format(DateTime.parse(widget.news?.createdAt ?? ''));
     return Scaffold(
       backgroundColor: const Color(0XFFFBFBFB),
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'News Detail'.toUpperCase(),
+          'تفصیلات'.toUpperCase(),
           style: GoogleFonts.inter(
               textStyle: const TextStyle(
             fontSize: 18,
@@ -116,126 +121,121 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
               horizontal: 10.0,
             ),
             child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Hero(
-                    tag: widget.news?.sId ?? '',
-                    child: SizedBox(
-                      width: screenWidth,
-                      height: screenHeight * 0.25,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: CachedNetworkImage(
-                          imageUrl: widget.news?.image ?? '',
+              child: Directionality(
+                textDirection:
+                    ui.TextDirection.rtl, // Change text direction to RTL
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Hero(
+                      tag: widget.news?.sId ?? '',
+                      child: SizedBox(
+                        width: screenWidth,
+                        height: screenHeight * 0.25,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: CachedNetworkImage(
+                            imageUrl: widget.news?.image ?? '',
+                            // fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              DateFormat('dd MMMM yyyy').format(
-                                  DateTime.parse(widget.news?.createdAt ?? '')),
-                              style: GoogleFonts.inter(
-                                  textStyle: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                              )),
-                              maxLines: 1,
-                              textAlign: TextAlign.start,
-                            ),
-                            // show time
-                            const SizedBox(width: 5),
-                            Text(
-                              DateFormat('hh:mm a').format(
-                                  DateTime.parse(widget.news?.createdAt ?? '')),
-                              style: GoogleFonts.inter(
-                                  textStyle: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                              )),
-                              maxLines: 1,
-                              textAlign: TextAlign.start,
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "Viewers ${widget.news?.viewers?.length}",
-                          style: GoogleFonts.inter(
-                              textStyle: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          )),
-                          maxLines: 1,
-                          textAlign: TextAlign.start,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      widget.news?.title ?? '',
-                      style: GoogleFonts.inter(
-                          textStyle: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.brown,
-                        fontWeight: FontWeight.w700,
-                      )),
-                      maxLines: 10,
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  myBanner == null
-                      ? const SizedBox.shrink()
-                      : Center(
-                          child: Container(
-                            height: myBanner!.size.height.toDouble(),
-                            margin: const EdgeInsets.only(top: 2),
-                            padding: const EdgeInsets.symmetric(horizontal: 2),
-                            width: myBanner!.size.width.toDouble(),
-                            alignment: Alignment.center,
-                            child: AdWidget(ad: myBanner!),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Directionality(
+                                textDirection: ui.TextDirection.ltr,
+                                child: Text(
+                                  formattedDate,
+                                  style: GoogleFonts.inter(
+                                      textStyle: const TextStyle(
+                                    fontSize: 14,
+                                    color: AppColor.blackColor,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign
+                                      .right, // Align text to the right
+                                ),
+                              ),
+                            ],
                           ),
+                          Text(
+                            "ننداره کوونکي ${widget.news?.viewers?.length}",
+                            style: GoogleFonts.inter(
+                                textStyle: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            )),
+                            maxLines: 1,
+                            textAlign: TextAlign.start,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        widget.news?.title ?? '',
+                        style: const TextStyle(
+                          fontFamily: "Pashto",
+                          fontSize: 18,
+                          color: Colors.brown,
+                          fontWeight: FontWeight.w700,
                         ),
-                  const SizedBox(height: 7),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      widget.news?.description ?? '',
-                      style: GoogleFonts.inter(
-                        textStyle: const TextStyle(
+                        maxLines: 10,
+                        textAlign: TextAlign.start,
+                      ),
+                    ),
+                    myBanner == null
+                        ? const SizedBox.shrink()
+                        : Center(
+                            child: Container(
+                              height: myBanner!.size.height.toDouble(),
+                              margin: const EdgeInsets.only(top: 2),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
+                              width: myBanner!.size.width.toDouble(),
+                              alignment: Alignment.center,
+                              child: AdWidget(ad: myBanner!),
+                            ),
+                          ),
+                    const SizedBox(height: 7),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        widget.news?.description ?? '',
+                        style: const TextStyle(
+                          fontFamily: "Pashto",
                           fontSize: 14,
                           color: AppColor.hintColor,
                           fontWeight: FontWeight.w600,
                         ),
+                        textAlign: TextAlign.start,
+                        // Changed from clip to ellipsis
+                        // Optional: Use it if you want to limit the text to a certain number of lines
                       ),
-                      textAlign: TextAlign.start,
-                      // Changed from clip to ellipsis
-                      // Optional: Use it if you want to limit the text to a certain number of lines
                     ),
-                  ),
-                  nativeAd == null
-                      ? Container()
-                      : Container(
-                          height: 120,
-                          width: screenWidth,
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: AdWidget(ad: nativeAd!),
-                        ),
-                ],
+                    nativeAd == null
+                        ? Container()
+                        : Container(
+                            height: 120,
+                            width: screenWidth,
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: AdWidget(ad: nativeAd!),
+                          ),
+                  ],
+                ),
               ),
             ),
           );

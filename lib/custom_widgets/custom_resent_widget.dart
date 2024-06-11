@@ -136,10 +136,18 @@ class CustomResentWidget extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CachedNetworkImage(
-                            imageUrl: match?.manOfTheMatch?.imageUrl ?? "",
-                            height: 80,
-                            width: 80,
+                          Visibility(
+                            visible: match?.matchDropped?.dropped != true ||
+                                match?.manOfTheMatch != null,
+                            child: CachedNetworkImage(
+                                imageUrl: match?.manOfTheMatch?.imageUrl ?? "",
+                                height: 80,
+                                width: 80,
+                                errorWidget: (context, url, error) =>
+                                    const Icon(
+                                      Icons.image_outlined,
+                                      color: Colors.red,
+                                    )),
                           ),
                           Text(
                             match?.manOfTheMatch?.name ?? "",
@@ -150,14 +158,24 @@ class CustomResentWidget extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          const Text(
-                            "Player of the match",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
+                          if (match?.matchDropped?.dropped != true)
+                            const Text(
+                              "Player of the match",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          else
+                            const Text(
+                              "Match Dropped",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                          ),
                         ],
                       ),
                     ),

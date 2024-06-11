@@ -54,6 +54,7 @@ class MatchDetails {
   num? team2CurrentRunRate;
   num? team2RequiredRunRate;
   MatchStopped? matchStopped;
+  MatchDropped? matchDropped;
   TournamentInfo? tournamentInfo;
 
   MatchDetails({
@@ -107,6 +108,7 @@ class MatchDetails {
     this.team2CurrentRunRate,
     this.team2RequiredRunRate,
     this.matchStopped,
+    this.matchDropped,
     this.tournamentInfo,
   });
 
@@ -206,6 +208,9 @@ class MatchDetails {
     matchStopped = json['matchStopped'] != null
         ? MatchStopped.fromJson(json['matchStopped'])
         : null;
+    matchDropped = json['matchDropped'] != null
+        ? MatchDropped.fromJson(json['matchDropped'])
+        : null;
     tournamentInfo = json['tournamentInfo'] != null
         ? TournamentInfo.fromJson(json['tournamentInfo'])
         : null;
@@ -262,7 +267,8 @@ class MatchDetails {
     data['team1RequiredRunRate'] = team1RequiredRunRate;
     data['team2CurrentRunRate'] = team2CurrentRunRate;
     data['team2RequiredRunRate'] = team2RequiredRunRate;
-    data['matchStopped'] = matchStopped;
+    data['matchStopped'] = matchStopped?.toJson();
+    data['matchDropped'] = matchDropped?.toJson();
     data['tournamentInfo'] = tournamentInfo;
     return data;
   }
@@ -446,10 +452,10 @@ class CurrentInning {
 }
 
 class MatchStopped {
-  bool stop;
+  bool? stop;
   String? stopReason;
 
-  MatchStopped({required this.stop, this.stopReason});
+  MatchStopped({this.stop, this.stopReason});
 
   factory MatchStopped.fromJson(Map<String, dynamic> json) {
     return MatchStopped(
@@ -463,6 +469,29 @@ class MatchStopped {
     return {
       'stop': stop,
       'stopReason': stopReason,
+    };
+  }
+}
+
+class MatchDropped {
+  bool? dropped;
+  String? droppedReason;
+
+  MatchDropped({this.dropped, this.droppedReason});
+
+  factory MatchDropped.fromJson(Map<String, dynamic> json) {
+    return MatchDropped(
+      dropped: json['dropped'],
+      droppedReason: json['droppedReason'] == null
+          ? null
+          : json['droppedReason'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'stop': dropped,
+      'stopReason': droppedReason,
     };
   }
 }

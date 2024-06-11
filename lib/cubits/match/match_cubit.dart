@@ -188,11 +188,16 @@ class MatchCubit extends Cubit<MatchState> {
     String? tournamentMatchType,
     String? groupId,
     int? totalMatches,
+    String? matchId,
   }) async {
     emit(MatchAddDetailsLoading());
     final url = (tournamentId != null && tournamentMatchType != null)
-        ? AdminUrl.addTournamentMatch
-        : AdminUrl.addMatchDetails;
+        ? matchId != null
+            ? "${AdminUrl.addTournamentMatch}/$matchId"
+            : AdminUrl.addTournamentMatch
+        : matchId != null
+            ? "${AdminUrl.addMatchDetails}/$matchId"
+            : AdminUrl.addMatchDetails;
     final adminId = await Global().getAdminId();
     final headers = {"Content-Type": "application/json"};
 
@@ -334,6 +339,25 @@ class MatchCubit extends Cubit<MatchState> {
         emit(MatchGetUpcommingError('Something went wrong'));
       } else {
         emit(MatchGetUpcommingError(err.toString()));
+      }
+    }
+  }
+
+  deleteMatch(String matchId) async {
+    emit(MatchDeleteLoading());
+    try {
+      var network = await Network.check();
+      if (network) {
+        var response = await adminController.deleteMatch(matchId);
+        emit(MatchDeleteSuccess(response));
+      } else {
+        emit(MatchDeleteError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchDeleteError('Something went wrong'));
+      } else {
+        emit(MatchDeleteError(err.toString()));
       }
     }
   }
@@ -694,6 +718,32 @@ class MatchCubit extends Cubit<MatchState> {
             "data": {
               "runsScored": runsScored,
               "extraType": extraType,
+            }
+          },
+        );
+      } else {
+        emit(MatchLiveActionError('No internet connection'));
+      }
+    } catch (err) {
+      if (err is! AppException) {
+        emit(MatchLiveActionError('Something went wrong'));
+      } else {
+        emit(MatchLiveActionError(err.toString()));
+      }
+    }
+  }
+
+  dropMatchAction(String matchId) async {
+    try {
+      emit(MatchLiveActionLoading());
+      var network = await Network.check();
+      if (network) {
+        adminController.liveMatchAction(
+          {
+            "matchId": matchId,
+            "actionType": "dropMatch",
+            "data": {
+              "droppedReason": "Match has been dropped",
             }
           },
         );

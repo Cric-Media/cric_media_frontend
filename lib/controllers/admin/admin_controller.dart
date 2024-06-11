@@ -524,6 +524,19 @@ class AdminController {
     }
   }
 
+  Future<ApiResponse> deleteMatch(String matchId) async {
+    final url = "${AdminUrl.deleteMatch}/$matchId";
+    final headers = {"Content-Type": "application/json"};
+    final response = await ApiManager.deleteWithoutBody(url, headers: headers);
+    log(response.body);
+    var resBody = jsonDecode(response.body);
+    if (resBody['success']) {
+      return ApiResponse.fromJson(resBody, (data) => null);
+    } else {
+      throw AppException(resBody['message']);
+    }
+  }
+
   // * TOURNAMENT SECTION
   Future<ApiResponse> addTournament(Map<String, dynamic> data) async {
     final url = AdminUrl.addTournament;

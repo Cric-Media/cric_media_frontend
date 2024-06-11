@@ -37,6 +37,8 @@ final class MatchBannerLiveLoading extends MatchState {}
 
 final class MatchBannerUpcomingLoading extends MatchState {}
 
+final class MatchDeleteLoading extends MatchState {}
+
 //* Success states
 final class MatchAddDetailsSuccess extends MatchState {
   final ApiResponse res;
@@ -123,6 +125,11 @@ final class MatchBannerUpcomingSuccess extends MatchState {
   MatchBannerUpcomingSuccess(this.res);
 }
 
+final class MatchDeleteSuccess extends MatchState {
+  final ApiResponse res;
+  MatchDeleteSuccess(this.res);
+}
+
 //! Failure states
 final class MatchAddDetailsError extends MatchState {
   final String message;
@@ -202,4 +209,9 @@ final class MatchStartStopError extends MatchState {
 final class MatchBannerError extends MatchState {
   final String message;
   MatchBannerError(this.message);
+}
+
+final class MatchDeleteError extends MatchState {
+  final String message;
+  MatchDeleteError(this.message);
 }

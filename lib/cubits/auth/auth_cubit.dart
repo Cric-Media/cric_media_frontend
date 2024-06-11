@@ -28,7 +28,6 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthError('No internet connection'));
       }
     } catch (err) {
-      // if exception type is not AppException then emit "Something went wrong"
       if (err is! AppException) {
         emit(AuthError('Something went wrong'));
       } else {

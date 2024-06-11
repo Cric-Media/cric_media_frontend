@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/app_images.dart';
 import 'package:cricket_app/constants/routes_names.dart';
+import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/models/match_details.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +10,9 @@ import 'package:google_fonts/google_fonts.dart';
 class UpCommingMachesCard extends StatelessWidget {
   final MatchDetails? match;
   final bool? admin;
-  const UpCommingMachesCard({super.key, this.match, this.admin});
+  final bool? tournament;
+  const UpCommingMachesCard(
+      {super.key, this.match, this.admin, this.tournament});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +26,9 @@ class UpCommingMachesCard extends StatelessWidget {
         elevation: 2,
         child: Container(
           width: screenWidth,
-          decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(25),
+          decoration: const BoxDecoration(
+            color: Color(0xffECECEC),
+            // borderRadius: BorderRadius.circular(25),
             // Apply gradient here
           ),
           child: Row(
@@ -174,6 +178,55 @@ class UpCommingMachesCard extends StatelessWidget {
                                         ),
                                       ),
                                     ),
+                                    const SizedBox(width: 4),
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: 30,
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            if (tournament != null) {
+                                              Navigator.pushNamed(
+                                                context,
+                                                addTournamentMatch,
+                                                arguments: {
+                                                  "tournament":
+                                                      TournamentCubit.get(
+                                                              context)
+                                                          .tournament,
+                                                  "groupId":
+                                                      TournamentCubit.get(
+                                                              context)
+                                                          .selectedGroupId,
+                                                  "totalMatches":
+                                                      TournamentCubit.get(
+                                                              context)
+                                                          .totalMatches,
+                                                  "matchType":
+                                                      TournamentCubit.get(
+                                                              context)
+                                                          .selectedMatchType,
+                                                  "match": match,
+                                                },
+                                              );
+                                            } else {
+                                              Navigator.pushNamed(
+                                                  context, addMatch,
+                                                  arguments: {
+                                                    "match": match,
+                                                  });
+                                            }
+                                          },
+                                          child: const Text(
+                                            "Edit",
+                                            style: TextStyle(
+                                              fontSize: 13,
+                                              color: AppColor.blueColor,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -189,6 +242,16 @@ class UpCommingMachesCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: Column(
                     children: [
+                      // delete button
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.end,
+                      //   children: [
+                      //     Visibility(
+                      //       visible: admin != null,
+                      //       child: Icon(Icons.delete, color: Colors.red),
+                      //     ),
+                      //   ],
+                      // ),
                       Container(
                         alignment: Alignment.center,
                         width: 80,

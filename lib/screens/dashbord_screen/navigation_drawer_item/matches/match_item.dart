@@ -96,7 +96,9 @@ class _MatchItemState extends State<MatchItem> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, addMatch);
+            Navigator.pushNamed(context, addMatch, arguments: {
+              "match": null,
+            });
           },
           backgroundColor: AppColor.blueColor,
           child: const Icon(

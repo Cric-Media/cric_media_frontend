@@ -76,6 +76,9 @@ class _TeamsScreenState extends State<TeamsScreen> {
           showSnack(context, message: state.message);
         } else if (state is TeamDeleteSuccess) {
           Navigator.pop(context);
+          if (teams.length == 1) {
+            teams = [];
+          }
           TeamCubit.get(context).getInitialTeams();
         } else if (state is TeamAddPlayerLoading) {
           AppDialogs.loadingDialog(context);

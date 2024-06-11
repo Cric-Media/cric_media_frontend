@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cricket_app/constants/app_color.dart';
 import 'package:cricket_app/constants/routes_names.dart';
 import 'package:cricket_app/cubits/admin/admin_cubit.dart';
+import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/cubits/tournament/tournament_cubit.dart';
 import 'package:cricket_app/custom_widgets/custom_resent_widget.dart';
@@ -1226,9 +1227,9 @@ class Upcoming extends StatefulWidget {
 class _UpcomingState extends State<Upcoming> {
   @override
   void initState() {
-    TournamentCubit.get(context).upComingMatches();
     // if (TournamentCubit.get(context).upcomingMatchDetailsList.isEmpty) {
     // }
+    TournamentCubit.get(context).upComingMatches();
     super.initState();
   }
 
@@ -1244,6 +1245,7 @@ class _UpcomingState extends State<Upcoming> {
       builder: (context, state) {
         if (state is TournamentUpcomingMatchesLoading) {
           return ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             itemBuilder: (context, index) {
               return const UpcomingMatchPlaceholder();
             },
@@ -1261,21 +1263,65 @@ class _UpcomingState extends State<Upcoming> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: TournamentCubit.get(context)
-                      .upcomingMatchDetailsList
-                      .length,
-                  itemBuilder: (ctx, index) {
-                    var match = TournamentCubit.get(ctx)
-                        .upcomingMatchDetailsList[index];
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 5),
-                      child: UpCommingMachesCard(match: match, admin: true),
-                    );
-                  },
+              BlocListener<MatchCubit, MatchState>(
+                listener: (context, state) {
+                  if (state is MatchDeleteSuccess) {
+                    TournamentCubit.get(context).upComingMatches();
+                  }
+                },
+                child: Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    itemCount: TournamentCubit.get(context)
+                        .upcomingMatchDetailsList
+                        .length,
+                    itemBuilder: (ctx, index) {
+                      var match = TournamentCubit.get(ctx)
+                          .upcomingMatchDetailsList[index];
+                      return Dismissible(
+                        key: UniqueKey(),
+                        confirmDismiss: (direction) {
+                          return showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Delete Match"),
+                                content: const Text(
+                                    "Are you sure you want to delete this match?"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Cancel"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      MatchCubit.get(context)
+                                          .deleteMatch(match.sId.toString());
+
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Delete"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        background: Container(
+                          color: Colors.red,
+                          child: const Icon(Icons.delete, color: Colors.white),
+                        ),
+                        child: UpCommingMachesCard(
+                          match: match,
+                          admin: true,
+                          tournament: true,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ],
@@ -1317,6 +1363,7 @@ class _LiveState extends State<Live> {
             builder: (context, state) {
               if (state is TournamentLiveMatchesLoading) {
                 return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   itemBuilder: (context, index) {
                     return const LiveMatchPlaceholder();
                   },
@@ -1327,30 +1374,28 @@ class _LiveState extends State<Live> {
               }
 
               return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   itemCount:
                       TournamentCubit.get(context).liveMatchDetailsList.length,
                   itemBuilder: (context, index) {
                     var match = TournamentCubit.get(context)
                         .liveMatchDetailsList[index];
 
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, setOpenings, arguments: {
-                            "matchId": match.sId.toString(),
-                            "teamABatting": match.team1Batting,
-                            "teamBBatting": match.team2Batting,
-                            "teamAId": match.team1?.id.toString(),
-                            "teamBId": match.team2?.id.toString(),
-                            "squad1": match.squad1 ?? [],
-                            "squad2": match.squad2 ?? [],
-                          });
-                        },
-                        child: Hero(
-                          tag: match.sId.toString(),
-                          child: MatchDetailsLiveCard(match: match),
-                        ),
+                    return InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, setOpenings, arguments: {
+                          "matchId": match.sId.toString(),
+                          "teamABatting": match.team1Batting,
+                          "teamBBatting": match.team2Batting,
+                          "teamAId": match.team1?.id.toString(),
+                          "teamBId": match.team2?.id.toString(),
+                          "squad1": match.squad1 ?? [],
+                          "squad2": match.squad2 ?? [],
+                        });
+                      },
+                      child: Hero(
+                        tag: match.sId.toString(),
+                        child: MatchDetailsLiveCard(match: match),
                       ),
                     );
                   });

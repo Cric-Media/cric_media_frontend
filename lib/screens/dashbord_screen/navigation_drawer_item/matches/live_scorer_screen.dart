@@ -30,9 +30,11 @@ class _ChangeBowlerWidgetState extends State<ChangeBowlerWidget> {
       value: MatchCubit.get(context).selectedBowler,
       items: MatchCubit.get(context)
           .bowlers
-          .where((element) =>
-              (widget.match?.oversCompletedPlayers?.contains(element.id) ==
-                  false))
+          .where(
+            (element) =>
+                (widget.match?.oversCompletedPlayers?.contains(element.id) ==
+                    false),
+          )
           .map((Player player) {
         return DropdownMenuItem<Player>(
           value: player,
@@ -241,6 +243,31 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
               Navigator.pop(context);
             },
             child: Text(match?.matchStopped?.stop == true ? "Resume" : "Stop"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  handleDropMatch(context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Finish Match"),
+        content: const Text("Are you sure you want to drop the match?"),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              MatchCubit.get(context).dropMatchAction(widget.matchId);
+              Navigator.pop(context);
+            },
+            child: const Text("Drop"),
           ),
         ],
       ),
@@ -1062,21 +1089,33 @@ class _LiveScorerScreenState extends State<LiveScorerScreen> {
                                           ),
                                           child: const Text("Bowler"),
                                         ),
+                                        // if (match != null)
+                                        //   ElevatedButton(
+                                        //     onPressed: () {
+                                        //       if (match!.matchStatus! > 1) {
+                                        //         handleMatchCompletion();
+                                        //       }
+                                        //     },
+                                        //     style: ElevatedButton.styleFrom(
+                                        //       backgroundColor:
+                                        //           match!.matchStatus! > 1
+                                        //               ? AppColor.blueColor
+                                        //               : Colors.grey,
+                                        //       foregroundColor: Colors.white,
+                                        //     ),
+                                        //     child: const Text("Finish"),
+                                        //   ),
                                         if (match != null)
                                           ElevatedButton(
                                             onPressed: () {
-                                              if (match!.matchStatus! > 1) {
-                                                handleMatchCompletion();
-                                              }
+                                              handleDropMatch(context);
                                             },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor:
-                                                  match!.matchStatus! > 1
-                                                      ? AppColor.blueColor
-                                                      : Colors.grey,
+                                                  AppColor.blueColor,
                                               foregroundColor: Colors.white,
                                             ),
-                                            child: const Text("Finish"),
+                                            child: const Text("Drop"),
                                           ),
                                       ],
                                     ),

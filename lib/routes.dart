@@ -356,10 +356,12 @@ class Routes {
         );
 
       case addMatch:
+        final args = settings.arguments as Map<String, dynamic>;
+        final match = args['match'];
         return MaterialPageRoute(
           builder: (context) => BlocProvider<MatchCubit>(
             create: (context) => MatchCubit(),
-            child: const AddMatchScreen(),
+            child: AddMatchScreen(match: match),
           ),
         );
 
@@ -438,6 +440,7 @@ class Routes {
         final groupId = args['groupId'];
         final totalMatches = args['totalMatches'];
         final matchType = args['matchType'];
+        final match = args['match'];
         return MaterialPageRoute(
           builder: (context) => BlocProvider<MatchCubit>(
             create: (context) => MatchCubit(),
@@ -446,6 +449,7 @@ class Routes {
               groupId: groupId,
               totalMatches: totalMatches,
               matchType: matchType,
+              match: match,
             ),
           ),
         );

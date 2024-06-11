@@ -14,6 +14,7 @@ class AppIcons {
   static final String search = 'assets/icons/Saerch.png';
   static final String pak = 'assets/icons/pak.png';
   static final String afg = 'assets/icons/afg.png';
+  static final String cup = 'assets/icons/cup.png';
   static final String cup1 = 'assets/icons/cup1.png';
   static final String cup2 = 'assets/icons/cup2.png';
   static final String match_1 = 'assets/image/match_1.png';

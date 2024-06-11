@@ -6,6 +6,7 @@ import 'package:cricket_app/cubits/match/match_cubit.dart';
 import 'package:cricket_app/cubits/player/player_cubit.dart';
 import 'package:cricket_app/cubits/teams/team_cubit.dart';
 import 'package:cricket_app/custom_widgets/dropdown_widget.dart';
+import 'package:cricket_app/models/match_details.dart';
 import 'package:cricket_app/models/team.dart';
 import 'package:cricket_app/utils/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class AddMatchScreen extends StatefulWidget {
-  const AddMatchScreen({super.key});
+  final MatchDetails? match;
+  const AddMatchScreen({super.key, this.match});
 
   @override
   State<AddMatchScreen> createState() => _AddMatchScreenState();
@@ -22,18 +24,60 @@ class AddMatchScreen extends StatefulWidget {
 
 class _AddMatchScreenState extends State<AddMatchScreen> {
   List<Country> countries = [];
-  late DateTime selectedDateTime =
-      DateTime.now(); // Initialize with current time
+  late DateTime selectedDateTime = DateTime.now();
   bool checkBoxValue = false;
 
   @override
   void initState() {
     super.initState();
+    if (widget.match != null) {
+      initDetails();
+    }
     getAllCountries().then((value) {
       setState(() {
         countries = value;
       });
     });
+  }
+
+  initDetails() {
+    countries = [];
+    MatchCubit.get(context).team1 = widget.match?.team1;
+    MatchCubit.get(context).team2 = widget.match?.team2;
+    MatchCubit.get(context).matchType = widget.match?.matchType;
+    MatchCubit.get(context).ballType = widget.match?.ballType;
+    MatchCubit.get(context).pitchType = widget.match?.pitchType;
+    MatchCubit.get(context).numberOfOvers =
+        widget.match?.numberOfOvers?.toInt();
+    MatchCubit.get(context).oversPerBowler =
+        widget.match?.oversPerBowler?.toInt();
+    MatchCubit.get(context).cityTown = widget.match?.cityOrTown;
+    MatchCubit.get(context).ground = widget.match?.ground;
+    MatchCubit.get(context).country = null;
+    MatchCubit.get(context).country = extractCountry(
+      widget.match?.matchDateTime ?? '',
+    ).trim();
+    MatchCubit.get(context).matchDateTime = widget.match?.matchDateTime
+        ?.replaceAll(
+          "${MatchCubit.get(context).country}",
+          "",
+        )
+        .trim();
+  }
+
+  String extractCountry(String dateString) {
+    // Define a regular expression to capture the country part
+    RegExp regExp = RegExp(r' - \d{2}:\d{2} (.+)$');
+
+    // Use the regular expression to find a match in the string
+    Match? match = regExp.firstMatch(dateString);
+
+    // Extract the country name if a match is found
+    if (match != null && match.groupCount == 1) {
+      return match.group(1)!;
+    } else {
+      return 'No country found';
+    }
   }
 
   Future<void> _selectDateAndTime(BuildContext context) async {
@@ -150,9 +194,7 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 5),
               width: screenWidth,
@@ -273,6 +315,12 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                                     borderRadius: BorderRadius.circular(8),
                                     color: Colors.grey.withOpacity(0.3)),
                                 child: TextField(
+                                  controller: widget.match == null
+                                      ? null
+                                      : TextEditingController()
+                                    ?..text = MatchCubit.get(context)
+                                        .numberOfOvers
+                                        .toString(),
                                   onChanged: (value) {
                                     MatchCubit.get(context).numberOfOvers =
                                         int.tryParse(value);
@@ -314,22 +362,28 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                   color: Colors.grey.withOpacity(0.3)),
                               child: TextField(
+                                controller: widget.match == null
+                                    ? null
+                                    : TextEditingController()
+                                  ?..text = MatchCubit.get(context)
+                                      .oversPerBowler
+                                      .toString(),
                                 onChanged: (value) {
                                   MatchCubit.get(context).oversPerBowler =
                                       int.tryParse(value);
                                 },
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                    hintText: '10',
-                                    hintStyle: TextStyle(
-                                      fontSize: 20,
-                                      color:
-                                          AppColor.hintColor.withOpacity(0.5),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    border: InputBorder.none),
+                                  hintText: '10',
+                                  hintStyle: TextStyle(
+                                    fontSize: 20,
+                                    color: AppColor.hintColor.withOpacity(0.5),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  border: InputBorder.none,
+                                ),
                               ),
                             )
                           ],
@@ -359,6 +413,11 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                                     borderRadius: BorderRadius.circular(8),
                                     color: Colors.grey.withOpacity(0.3)),
                                 child: TextField(
+                                  controller: widget.match == null
+                                      ? null
+                                      : TextEditingController()
+                                    ?..text =
+                                        MatchCubit.get(context).cityTown ?? '',
                                   onChanged: (value) {
                                     MatchCubit.get(context).cityTown = value;
                                   },
@@ -398,6 +457,11 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                                     borderRadius: BorderRadius.circular(8),
                                     color: Colors.grey.withOpacity(0.3)),
                                 child: TextField(
+                                  controller: widget.match == null
+                                      ? null
+                                      : TextEditingController()
+                                    ?..text =
+                                        MatchCubit.get(context).ground ?? '',
                                   onChanged: (value) {
                                     MatchCubit.get(context).ground = value;
                                   },
@@ -443,12 +507,22 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                           color: Colors.black,
                         ),
                         const SizedBox(width: 10),
-                        Text(
-                          MatchCubit.get(context).matchDateTime == null
-                              ? 'Select time'
-                              : 'Selected: ${MatchCubit.get(context).matchDateTime.toString()}',
-                          style: const TextStyle(
-                              fontSize: 15, color: Colors.black),
+                        Expanded(
+                          child: widget.match == null
+                              ? Text(
+                                  MatchCubit.get(context).matchDateTime == null
+                                      ? 'Select time'
+                                      : 'Selected: ${MatchCubit.get(context).matchDateTime.toString()}',
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.black),
+                                )
+                              : Text(
+                                  MatchCubit.get(context).matchDateTime == null
+                                      ? 'Select time'
+                                      : 'Selected: ${MatchCubit.get(context).matchDateTime.toString()}',
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.black),
+                                ),
                         ),
                       ],
                     ),
@@ -502,7 +576,13 @@ class _AddMatchScreenState extends State<AddMatchScreen> {
                         }
                         return ElevatedButton(
                           onPressed: () {
-                            MatchCubit.get(context).addMatchDetails();
+                            if (widget.match != null) {
+                              MatchCubit.get(context).addMatchDetails(
+                                matchId: widget.match?.sId,
+                              );
+                            } else {
+                              MatchCubit.get(context).addMatchDetails();
+                            }
                           },
                           child: const Text('Add'),
                         );
@@ -621,17 +701,7 @@ class _SelectTeamWidgetState extends State<SelectTeamWidget> {
                       );
                     }
 
-                    return ListView.builder(
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text('Team $index'),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        );
-                      },
-                    );
+                    return const SizedBox();
                   },
                 ),
               ),
