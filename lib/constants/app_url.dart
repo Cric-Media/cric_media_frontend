@@ -4,7 +4,8 @@ abstract class AppUrl {
   static String developmentUrl = dotenv.env['DEVELOPMENT_URL']!;
   static String productionUrl = dotenv.env['PRODUCTION_URL']!;
 
-  static String baseUrl = developmentUrl;
+  // static String baseUrl = developmentUrl;
+  static String baseUrl = productionUrl;
 }
 
 abstract class AuthUrl {
